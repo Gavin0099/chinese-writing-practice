@@ -12,6 +12,10 @@
     --primary: #4f46e5;
     /* Indigo */
     --primary-hover: #4338ca;
+    --secondary: #0ea5e9;
+    /* Sky 500 */
+    --secondary-hover: #0284c7;
+    /* Sky 600 */
     --border-input: #e2e8f0;
     --focus-ring: #3b82f6;
 
@@ -74,6 +78,23 @@ body {
     margin-bottom: 2rem;
     text-align: center;
     letter-spacing: -0.025em;
+    position: relative;
+    display: table;
+    /* Fit content for underline */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.app-title::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 4px;
+    background: var(--secondary);
+    /* Sky Blue underline */
+    margin: 4px auto 0;
+    border-radius: 2px;
+    opacity: 0.6;
 }
 
 /* Inputs & Labels */
@@ -147,18 +168,26 @@ input:focus {
 }
 
 .btn-secondary {
-    background: white;
-    color: var(--text-main);
-    border: 1px solid var(--border-input);
+    background: var(--secondary);
+    color: white;
+    /* border: 1px solid var(--border-input); */
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.3);
+    /* Sky shadow */
 }
 
 .btn-secondary:not(:disabled):hover {
-    background: #f1f5f9;
+    background: var(--secondary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px -1px rgba(14, 165, 233, 0.4);
 }
 
 .btn-secondary:disabled {
-    opacity: 0.5;
+    background: #cbd5e1;
+    color: #f1f5f9;
+    box-shadow: none;
     cursor: not-allowed;
+    transform: none;
 }
 
 

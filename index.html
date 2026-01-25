@@ -13,9 +13,43 @@
 
 <body>
     <div class="container">
-        <!-- 控制面板 -->
+        <!-- 課程選擇器 -->
+        <div class="control-panel curriculum-panel">
+            <h2 class="app-title">🏫 康軒生字選單</h2>
+            <div class="settings-group">
+                <div class="setting-item">
+                    <label for="gradeSelect">年級:</label>
+                    <select id="gradeSelect">
+                        <option value="1">一年級</option>
+                        <option value="2">二年級</option>
+                        <option value="3">三年級</option>
+                        <option value="4">四年級</option>
+                        <option value="5">五年級</option>
+                        <option value="6">六年級</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label for="semesterSelect">學期:</label>
+                    <select id="semesterSelect">
+                        <option value="A">上學期</option>
+                        <option value="B">下學期</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="lessonSelect">選擇課次:</label>
+                <select id="lessonSelect">
+                    <!-- 動態載入 -->
+                </select>
+            </div>
+            <div class="button-group">
+                <button id="loadCurriculumBtn" class="btn btn-primary">載入本課生字</button>
+            </div>
+        </div>
+
+        <!-- 控制面板 (手動輸入) -->
         <div class="control-panel">
-            <h1 class="app-title">📝 生字練習簿產生器</h1>
+            <h3 class="app-title">✍️ 手動輸入生字</h3>
 
             <div class="input-group">
                 <label for="characters">請輸入要練習的生字:</label>
@@ -51,21 +85,26 @@
         </div>
     </div>
 
-    <!-- 載入字庫資料 (必須在 script.js 之前) -->
-    <script src="char_data.js"></script>
-    <!-- 載入 HanziWriter (筆順動畫) -->
-    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5.0/dist/hanzi-writer.min.js"></script>
-    <!-- 載入 cnchar (漢字筆順庫) Fixed Versions -->
+    <!-- 載入字庫資料 (Silver Bullet Static Load) -->
+    <script src="db_core.js"></script>
+    <script src="curriculum_data.js"></script>
+
+    <!-- 載入 HanziWriter (僅使用其資料載入 API) -->
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+
+    <!-- 載入 cnchar (漢字核心與傳統字支援) -->
     <script src="https://cdn.jsdelivr.net/npm/cnchar@3.2.6/cnchar.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cnchar-order@3.2.6/cnchar.order.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cnchar-trad@3.2.6/cnchar.trad.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/cnchar-poly@3.2.6/cnchar.poly.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cnchar-draw@3.2.6/cnchar.draw.min.js"></script>
+
     <!-- 載入 jsPDF 和 html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <!-- 主要邏輯 -->
     <script src="script.js"></script>
+    <script src="curriculum.js"></script>
 </body>
 
 </html>

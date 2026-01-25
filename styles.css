@@ -290,36 +290,40 @@ input:focus {
     flex-direction: column;
 }
 
-/* STROKE SECTION (Dynamic List) */
+/* STROKE SECTION (Vertical Column Flow, Right to Left) */
 .sec-strokes {
     height: var(--h-strokes);
     border-bottom: 1px solid var(--grid-blue);
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 2px 0;
+    flex-flow: column wrap;
+    /* Stack vertically, then wrap to next column */
+    direction: rtl;
+    /* Start columns from right, wrap to left */
+    align-content: flex-start;
+    /* Align columns to the 'start' (right side in RTL) */
+    padding: 2px;
     overflow: hidden;
 }
 
-/* Stroke Steps */
+/* Stroke Steps (Compact Grid Items for 3-Col Layout) */
 .stroke-step {
-    width: 90%;
-    max-height: 25mm;
-    /* Height limiter for vertical layout balance */
-    flex: 0 0 auto;
-    aspect-ratio: 1 / 1;
+    width: 32%;
+    /* Approx 1/3 width to allow 3 columns */
+    height: 9.5%;
+    /* Approx 1/10 height to allow 10 rows */
     display: flex;
     justify-content: center;
     align-items: center;
-    border: none;
+    margin: 0;
+    padding: 1px;
+    flex: 0 0 auto;
+    /* Do not shrink */
 }
 
 .stroke-step svg {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 45px;
-    max-height: 45px;
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 .sec-practice-group {
@@ -329,17 +333,19 @@ input:focus {
 }
 
 /* INNER STYLING */
+/* INNER STYLING */
+/* INNER STYLING */
 .zhuyin-box {
-    width: 30%;
+    width: 20%;
+    /* Narrowed to give more room for the character */
     border-left: 1px solid var(--grid-blue);
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    /* Slightly smaller to fit better */
+    font-size: 14px;
     position: relative;
-    padding: 2px;
+    padding: 1px;
 }
 
 .zhuyin-symbols {
@@ -351,26 +357,28 @@ input:focus {
 }
 
 .zhuyin-symbols div {
-    line-height: 1.1;
+    line-height: 0.85;
+    /* Tight vertical stack */
 }
 
 .zhuyin-tone {
-    margin-left: 1px;
-    font-size: 14px;
-    align-self: center;
+    margin-left: 0;
+    font-size: 12px;
     display: flex;
     align-items: center;
+    width: 8px;
+    /* Fixed tone width */
 }
 
 .tone-neutral {
     position: absolute;
     top: 2px;
-    left: 50%;
+    left: 40%;
     transform: translateX(-50%);
 }
 
 .big-char-box {
-    width: 70%;
+    width: 80%;
     position: relative;
 }
 

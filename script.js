@@ -9,13 +9,14 @@ const CHARS_PER_PAGE = 6;
 // A. Global DB & Init
 let charDB = {};
 
-// Load from embedded data (no CORS issues)
+// Direct Load from db_core.js (Silver Bullet Solution)
 function loadCharDatabase() {
-    if (typeof CHAR_DATABASE !== 'undefined') {
-        charDB = CHAR_DATABASE;
-        console.log("✅ 資料庫已載入。字數:", Object.keys(charDB).length);
+    if (window.MOE_DATA) {
+        charDB = window.MOE_DATA;
+        console.log("✅ 教育部權威資料庫已掛載，字數：", Object.keys(charDB).length);
     } else {
-        console.warn("❌ 找不到內嵌資料庫 CHAR_DATABASE");
+        console.error("❌ 嚴重錯誤：找不到 window.MOE_DATA，請確認 db_core.js 有正確載入！");
+        // Fallback to empty to prevent crash
         charDB = {};
     }
 }
@@ -93,37 +94,29 @@ function createCharColumn(char) {
     const col = document.createElement('div');
     col.className = 'char-col';
 
-    // 1. Fetch Metadata (Priority: DB > cnchar)
+    // 1. Fetch Metadata (Priority: MOE > cnchar)
     let charData = { zhuyin: '', radical: '', strokeCount: '' };
 
     if (char) {
-        // Try DB first
+        // Try MOE DB first (Global Variable)
         if (charDB[char]) {
             const entry = charDB[char];
-            console.log('📚 從資料庫讀取:', char, entry);
-            // Zhuyin: First one
+            console.log('📚 使用教育部資料:', char);
+
+            // Zhuyin: Use the first pronunciation from the array
             charData.zhuyin = (Array.isArray(entry.zhuyin) && entry.zhuyin.length > 0)
                 ? entry.zhuyin[0]
                 : (typeof entry.zhuyin === 'string' ? entry.zhuyin : '');
+
             charData.radical = entry.radical || '';
             charData.strokeCount = entry.totalStrokes || '';
-            console.log('✅ 解析結果:', charData);
         } else {
-            console.log('⚠️ 資料庫中找不到:', char, '使用 cnchar 後備');
-            // Fallback to cnchar
+            console.warn(`⚠️ 資料庫無此字：${char}，使用 cnchar 備用`);
+            // Fallback to cnchar (might result in Pinyin/Hao)
             try {
                 if (window.cnchar) {
-                    // Get Zhuyin
                     const zRaw = cnchar.spell(char, 'tone');
                     charData.zhuyin = Array.isArray(zRaw) ? zRaw[0] : zRaw;
-
-                    // Radical?
-                    // cnchar.radical() returns objects often. Simplified handling:
-                    // We rely on visual for now or just skip if complex.
-                    // But user wants "Feature check".
-                    // Let's omit radical logic for fallback unless strictly needed to convert.
-
-                    // Strokes
                     charData.strokeCount = cnchar.stroke(char, 'count');
                 }
             } catch (e) { console.error('cnchar 錯誤:', e); }
@@ -209,79 +202,56 @@ function createCharColumn(char) {
     return col;
 }
 
-// Dedicated Stroke Renderer using HanziWriter
+// Dedicated Stroke Renderer using HanziWriter RAW Data (Static Mode)
 async function renderStrokeOrder(container, char) {
     if (!char) return;
+    container.innerHTML = '<div style="font-size:12px; color:#999; padding: 10px;">載入中...</div>';
 
-    if (typeof HanziWriter === 'undefined') {
-        console.error('❌ HanziWriter 未載入');
-        container.innerHTML = '<span style="font-size:10px; color:red;">函式庫錯誤</span>';
-        return;
-    }
-
-    console.log('🎨 開始渲染筆順 (HanziWriter):', char);
-
-    // Get stroke count
-    let strokeCount = 0;
     try {
-        if (window.cnchar) {
-            strokeCount = cnchar.stroke(char, 'count');
-            console.log('筆畫數:', strokeCount);
+        // 1. Fetch RAW Data (No Animation Engine overhead)
+        if (typeof HanziWriter === 'undefined') {
+            throw new Error('HanziWriter not loaded');
         }
+
+        const charData = await HanziWriter.loadCharacterData(char);
+        container.innerHTML = ''; // Clear loading
+
+        const strokes = charData.strokes;
+
+        if (!strokes || strokes.length === 0) {
+            container.innerHTML = '<span style="color:#ccc; font-size:10px;">無資料</span>';
+            return;
+        }
+
+        // 2. Render Loop (Progressive)
+        // Adjusting for 3x10 vertical grid (30 steps max)
+        const maxSteps = Math.min(strokes.length, 30);
+
+        for (let step = 0; step < maxSteps; step++) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = 'stroke-step';
+
+            // Build SVG
+            // HanziWriter data is 1024x1024 and inverted Y-axis.
+            // Using transform to correct orientation.
+            let svgHTML = `
+                <svg viewBox="0 0 1024 1024" width="100%" height="100%" style="display:block;">
+                    <g transform="scale(1, -1) translate(0, -900)">
+            `;
+
+            for (let i = 0; i <= step; i++) {
+                const color = (i === step) ? '#000000' : '#D1D5DB';
+                svgHTML += `<path d="${strokes[i]}" fill="${color}" />`;
+            }
+
+            svgHTML += `</g></svg>`;
+            stepDiv.innerHTML = svgHTML;
+            container.appendChild(stepDiv);
+        }
+
     } catch (e) {
-        console.error("❌ cnchar 錯誤:", e);
-    }
-
-    if (strokeCount === 0 || strokeCount > 30) {
-        container.innerHTML = '';
-        for (let i = 0; i < 10; i++) {
-            const f = document.createElement('div');
-            f.className = 'stroke-step';
-            f.innerHTML = `<span style="color:#ddd; font-size:12px;">${char}</span>`;
-            container.appendChild(f);
-        }
-        return;
-    }
-
-    container.innerHTML = '';
-    const displayCount = Math.min(strokeCount, 10);
-
-    for (let i = 1; i <= displayCount; i++) {
-        const stepDiv = document.createElement('div');
-        stepDiv.className = 'stroke-step';
-        const writerId = `w-${Math.floor(Math.random() * 1000000)}`;
-        stepDiv.id = writerId;
-        container.appendChild(stepDiv);
-
-        // Increased timeout to 50ms and added logging
-        setTimeout(() => {
-            const el = document.getElementById(writerId);
-            if (!el) {
-                console.warn('Stroke element not found:', writerId);
-                return;
-            }
-
-            try {
-                const writer = HanziWriter.create(writerId, char, {
-                    width: 70,
-                    height: 70,
-                    padding: 5,
-                    showOutline: false,
-                    strokeColor: '#000000',
-                    strokeAnimationSpeed: 10,
-                    delayBetweenStrokes: 0
-                });
-
-                // Cumulative strokes logic
-                for (let j = 0; j < i; j++) {
-                    writer.showStroke(j);
-                }
-                console.log(`✅ 已渲染筆順步驟 ${i}: ${writerId}`);
-            } catch (err) {
-                console.error(`❌ HanziWriter 渲染失敗(${writerId}):`, err);
-                el.innerHTML = `<span style="color:#ddd; font-size:12px;">${char}</span>`;
-            }
-        }, 50);
+        console.error("❌ 筆順資料加載失敗:", e);
+        container.innerHTML = `<span style="color:red; font-size:10px;">渲染失敗</span>`;
     }
 }
 

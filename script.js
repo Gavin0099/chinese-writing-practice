@@ -134,16 +134,32 @@ function createCharColumn(char) {
     const header = document.createElement('div');
     header.className = 'sec-header';
 
-    // Split zhuyin into individual characters for vertical display
-    let zhuyinHTML = '';
+    // Parse Zhuyin into symbols and tone for standard Taiwan layout
+    let symbolsHTML = '';
+    let toneHTML = '';
+
     if (charData.zhuyin) {
-        const zhuyinChars = charData.zhuyin.split('');
-        zhuyinHTML = zhuyinChars.map(char => `<div>${char}</div>`).join('');
+        const tones = ['ˊ', 'ˇ', 'ˋ', '˙'];
+        let symbolsList = [];
+        let toneMark = '';
+
+        for (const c of charData.zhuyin) {
+            if (tones.includes(c)) {
+                toneMark = c;
+            } else {
+                symbolsList.push(c);
+            }
+        }
+
+        symbolsHTML = symbolsList.map(s => `<div>${s}</div>`).join('');
+        // Neutral tone (dot) is usually at the top, others on the right middle
+        toneHTML = toneMark ? `<div class="zhuyin-tone ${toneMark === '˙' ? 'tone-neutral' : ''}">${toneMark}</div>` : '';
     }
 
     header.innerHTML = `
         <div class="zhuyin-box">
-             ${zhuyinHTML}
+             <div class="zhuyin-symbols">${symbolsHTML}</div>
+             ${toneHTML}
         </div>
         <div class="big-char-box tian-zi-ge">
              <span class="char-text">${char}</span>
@@ -193,19 +209,19 @@ function createCharColumn(char) {
     return col;
 }
 
-// Dedicated Stroke Renderer
+// Dedicated Stroke Renderer using HanziWriter
 async function renderStrokeOrder(container, char) {
     if (!char) return;
 
-    if (typeof cnchar === 'undefined') {
-        console.error('❌ cnchar 未載入');
+    if (typeof HanziWriter === 'undefined') {
+        console.error('❌ HanziWriter 未載入');
         container.innerHTML = '<span style="font-size:10px; color:red;">函式庫錯誤</span>';
         return;
     }
 
-    console.log('🎨 開始渲染筆順:', char);
+    console.log('🎨 開始渲染筆順 (HanziWriter):', char);
 
-    // Get stroke count for this character
+    // Get stroke count
     let strokeCount = 0;
     try {
         if (window.cnchar) {
@@ -216,29 +232,56 @@ async function renderStrokeOrder(container, char) {
         console.error("❌ cnchar 錯誤:", e);
     }
 
-    // Display stroke numbers instead of SVG paths
-    if (strokeCount > 0 && strokeCount <= 30) {
-        console.log('✅ 顯示', strokeCount, '個筆畫標記');
+    if (strokeCount === 0 || strokeCount > 30) {
         container.innerHTML = '';
-
-        const displayCount = Math.min(strokeCount, 10);
-        for (let i = 1; i <= displayCount; i++) {
-            const stepDiv = document.createElement('div');
-            stepDiv.className = 'stroke-step';
-            stepDiv.innerHTML = `<span style="font-size: 16px; font-weight: bold; color: #3B4CCA;">${i}</span>`;
-            container.appendChild(stepDiv);
+        for (let i = 0; i < 10; i++) {
+            const f = document.createElement('div');
+            f.className = 'stroke-step';
+            f.innerHTML = `<span style="color:#ddd; font-size:12px;">${char}</span>`;
+            container.appendChild(f);
         }
         return;
     }
 
-    // Fallback: show gray characters
-    console.log('使用後備顯示 (灰色字)');
     container.innerHTML = '';
-    for (let i = 0; i < 10; i++) {
-        const f = document.createElement('div');
-        f.className = 'stroke-step';
-        f.innerHTML = `<span style="color:#ddd; font-size:12px;">${char}</span>`;
-        container.appendChild(f);
+    const displayCount = Math.min(strokeCount, 10);
+
+    for (let i = 1; i <= displayCount; i++) {
+        const stepDiv = document.createElement('div');
+        stepDiv.className = 'stroke-step';
+        const writerId = `w-${Math.floor(Math.random() * 1000000)}`;
+        stepDiv.id = writerId;
+        container.appendChild(stepDiv);
+
+        // Increased timeout to 50ms and added logging
+        setTimeout(() => {
+            const el = document.getElementById(writerId);
+            if (!el) {
+                console.warn('Stroke element not found:', writerId);
+                return;
+            }
+
+            try {
+                const writer = HanziWriter.create(writerId, char, {
+                    width: 70,
+                    height: 70,
+                    padding: 5,
+                    showOutline: false,
+                    strokeColor: '#000000',
+                    strokeAnimationSpeed: 10,
+                    delayBetweenStrokes: 0
+                });
+
+                // Cumulative strokes logic
+                for (let j = 0; j < i; j++) {
+                    writer.showStroke(j);
+                }
+                console.log(`✅ 已渲染筆順步驟 ${i}: ${writerId}`);
+            } catch (err) {
+                console.error(`❌ HanziWriter 渲染失敗(${writerId}):`, err);
+                el.innerHTML = `<span style="color:#ddd; font-size:12px;">${char}</span>`;
+            }
+        }, 50);
     }
 }
 

@@ -39,7 +39,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 2. Event Listeners
-    gradeSelect.addEventListener('change', updateLessons);
+    // gradeSelect.addEventListener('change', updateLessons); // Removed: Hidden Input doesn't fire change on programmatic update
+
+    // New: Grade Card Logic
+    const gradeCards = document.querySelectorAll('.grade-card');
+    gradeCards.forEach(card => {
+        card.addEventListener('click', () => {
+            // Visual Update
+            gradeCards.forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+
+            // Data Update
+            const val = card.getAttribute('data-value');
+            gradeSelect.value = val;
+
+            // Trigger Logic
+            updateLessons();
+        });
+    });
+
     semesterSelect.addEventListener('change', updateLessons);
 
     loadBtn.addEventListener('click', () => {

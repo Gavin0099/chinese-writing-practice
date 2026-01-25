@@ -2,7 +2,7 @@
 const charactersInput = document.getElementById('characters');
 const generateBtn = document.getElementById('generateBtn');
 const downloadBtn = document.getElementById('downloadBtn');
-const previewArea = document.querySelector('.preview-section');
+const previewArea = document.getElementById('previewSection');
 
 const CHARS_PER_PAGE = 6;
 

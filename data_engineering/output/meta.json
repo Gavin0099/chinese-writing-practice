@@ -1,0 +1,11 @@
+{
+  "datasetName": "MOE Standard Core",
+  "generatedAt": "2026-01-23T19:30:20.030483",
+  "stats": {
+    "success": 4807,
+    "anomalies": 1
+  },
+  "sources": {
+    "dict_hash": "0d7593875cc7aa8de35bec446d194d076969c15ee97574c31d0f2504ca50d471"
+  }
+}

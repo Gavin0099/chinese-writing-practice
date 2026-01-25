@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>國字練習簿產生器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>國字練習簿產生器</h1>
+
+        <div class="input-section">
+            <label for="charInput">請輸入要練習的生字：</label>
+            <input type="text" id="charInput" placeholder="例如：好學生">
+            <button id="generateBtn">產生練習簿</button>
+            <button id="downloadBtn">下載 PDF</button>
+        </div>
+
+        <div id="output" class="output-section">
+            <!-- Generated content will appear here -->
+        </div>
+    </div>
+
+    <!-- 載入字庫資料 (必須在 script.js 之前) -->
+    <script src="char_data.js"></script>
+    <!-- 載入 cnchar (漢字筆順庫) -->
+    <script src="https://cdn.jsdelivr.net/npm/cnchar@3.2.6/cnchar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cnchar-order@3.2.6/cnchar.order.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cnchar-trad@3.2.6/cnchar.trad.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cnchar-poly@3.2.6/cnchar.poly.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cnchar-draw@3.2.6/cnchar.draw.min.js"></script>
+    <!-- 載入 html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- 載入主要腳本 -->
+    <script src="script.js"></script>
+</body>
+
+</html>

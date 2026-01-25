@@ -1,0 +1,13 @@
+{
+  "dataset": "char_core_4808",
+  "generatedAt": "2026-01-23T11:29:40.644Z",
+  "stats": {
+    "total": 0,
+    "success": 0,
+    "anomalies": 0
+  },
+  "sources": {
+    "scope": "ButTaiwan/cjktables (via source_4808.csv)",
+    "dict": "g0v/moedict-data-csld"
+  }
+}

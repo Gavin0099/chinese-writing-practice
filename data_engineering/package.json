@@ -1,0 +1,19 @@
+{
+  "name": "data_engineering",
+  "version": "1.0.0",
+  "description": "We need the official **Ministry of Education (MOE) Standard Character List** to proceed. I cannot generate the 4808 dataset from \"thin air\" without violating the strict \"No Guessing\" rule.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.13.2",
+    "csv-parse": "^6.1.0",
+    "csv-stringify": "^6.6.0",
+    "iconv-lite": "^0.7.2",
+    "xlsx": "^0.18.5"
+  }
+}

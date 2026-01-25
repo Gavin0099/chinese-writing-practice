@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生字練習簿產生器</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- 控制面板 -->
+        <div class="control-panel">
+            <h1 class="app-title">📝 生字練習簿產生器</h1>
+
+            <div class="input-group">
+                <label for="characters">請輸入要練習的生字:</label>
+                <input type="text" id="characters" placeholder="例如:要靜天空雲水蟲" maxlength="50">
+            </div>
+
+            <div class="settings-group">
+                <div class="setting-item">
+                    <label for="charsPerRow">每列字數:</label>
+                    <input type="number" id="charsPerRow" value="7" min="1" max="10">
+                </div>
+
+                <div class="setting-item">
+                    <label for="practiceRows">練習列數:</label>
+                    <input type="number" id="practiceRows" value="2" min="1" max="5">
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button id="generateBtn" class="btn btn-primary">產生練習簿</button>
+                <button id="downloadBtn" class="btn btn-secondary" disabled>下載 PDF</button>
+            </div>
+        </div>
+
+        <!-- 預覽區域 -->
+        <div class="preview-section" id="previewSection">
+            <div class="practice-sheet" id="practiceSheet">
+                <h1 class="sheet-title">生字練習簿</h1>
+                <div class="grid-container" id="gridContainer">
+                    <!-- 動態產生的田字格 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 載入字庫資料 (必須在 script.js 之前) -->
+    <script src="char_data.js"></script>
+    <!-- 載入 HanziWriter (筆順動畫) -->
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5.0/dist/hanzi-writer.min.js"></script>
+    <!-- 載入 cnchar (漢字筆順庫) Fixed Versions -->
+    <script src="https://cdn.jsdelivr.net/npm/cnchar@3.2.6/cnchar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cnchar-order@3.2.6/cnchar.order.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cnchar-trad@3.2.6/cnchar.trad.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cnchar-poly@3.2.6/cnchar.poly.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cnchar-draw@3.2.6/cnchar.draw.min.js"></script>
+    <!-- 載入 jsPDF 和 html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- 主要邏輯 -->
+    <script src="script.js"></script>
+</body>
+
+</html>

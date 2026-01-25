@@ -1,6 +1,6 @@
 // db_curriculum.js
-// 產生時間: 2026-01-25 23:47:50
-// 來源: 教育百科 (自動拆解詞彙模式)
+// 產生時間: 2026-01-26 00:01:15
+// 來源: 教育百科 (混合容錯模式)
 
 window.CURRICULUM_DATA = {
   "publisher": "KangHsuan",

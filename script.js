@@ -721,7 +721,12 @@ downloadBtn.addEventListener('click', async () => {
         console.log('[PDF] Blob cached for Success Screen, filename:', filename);
     } catch (err) {
         console.error("PDF Fail:", err);
+        console.error("PDF Error name:", err.name);
+        console.error("PDF Error message:", err.message);
         console.warn("PDF generation failed, but this should not block user flow");
+
+        // CRITICAL: Show error to user
+        alert(`PDF 生成失敗\n\n錯誤: ${err.message}\n\n請截圖此訊息並回報`);
     } finally {
         downloadBtn.innerText = originalText;
         downloadBtn.disabled = false;

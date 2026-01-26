@@ -290,19 +290,26 @@ function initApp() {
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {
                             heroPrintBtn.onclick = () => {
-                                console.log('[Success Screen] Triggering original download button');
+                                console.log('[Success Screen] Button clicked');
 
                                 if (window.storageManager) {
                                     window.storageManager.addHistory(progressData);
+                                    console.log('[Success Screen] History added');
                                 }
 
-                                // Simply trigger the original download button
-                                // This avoids Canvas security issues
-                                const dlBtn = document.getElementById('downloadBtn');
-                                if (dlBtn) {
-                                    dlBtn.click();
+                                // Use cached PDF Blob if available
+                                if (cachedPdfBlob) {
+                                    console.log('[Success Screen] Using cached PDF Blob');
+                                    const url = URL.createObjectURL(cachedPdfBlob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = cachedPdfFilename;
+                                    a.click();
+                                    URL.revokeObjectURL(url);
+                                    console.log('[Success Screen] Download triggered successfully');
                                 } else {
-                                    alert('找不到下載按鈕,請重新整理頁面');
+                                    console.warn('[Success Screen] No cached PDF Blob found');
+                                    alert('PDF 尚未生成,請重新整理頁面');
                                 }
                             };
                         }
@@ -544,6 +551,10 @@ generateBtn.addEventListener('click', () => {
 // v1.1 iOS State
 let iosBlobUrl = null;
 
+// v1.1 PDF Blob Cache for Success Screen
+let cachedPdfBlob = null;
+let cachedPdfFilename = "生字練習簿.pdf";
+
 // v1.1 Robust iOS Check
 function isIOS() {
     return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
@@ -671,6 +682,11 @@ downloadBtn.addEventListener('click', async () => {
         }
 
         doc.save(filename);
+
+        // Cache PDF Blob for Success Screen download
+        cachedPdfBlob = doc.output('blob');
+        cachedPdfFilename = filename;
+        console.log('[PDF] Blob cached for Success Screen, filename:', filename);
     } catch (err) {
         console.error("PDF Fail:", err);
         console.warn("PDF generation failed, but this should not block user flow");

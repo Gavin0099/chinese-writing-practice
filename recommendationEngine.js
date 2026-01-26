@@ -40,25 +40,33 @@ class RecommendationEngine {
             reason = "new-start";
         }
 
-        // 2. 邊界檢查 (是否超過該學期總課數)
-        // 取得該年級學期的課程列表
-        // CURRICULUM_DATA 結構: { "1": { "A": [lessons...], "B": [...] } }
-        const gradeData = window.CURRICULUM_DATA[targetGrade.toString()];
-
         if (gradeData && gradeData[targetSem]) {
             const lessons = gradeData[targetSem];
-
-            // Fix: Calculate actual max lesson ID (robust against duplicates/gaps)
             const maxLessonId = lessons.reduce((max, l) => l.lesson > max ? l.lesson : max, 0);
 
             if (targetLesson > maxLessonId) {
-                // 超過該學期範圍
-                console.log(`ℹ️ 學期結束判斷: ${targetGrade}${targetSem} 只有 ${maxLessonId} 課, 目標 ${targetLesson}`);
-
-                // TODO: 這裡可以做更聰明的學期切換 (A -> B, B -> Grade+1 A)
-                // 目前 MVP 策略：停在最後一課
-                targetLesson = maxLessonId;
-                reason = "semester-end";
+                // 超過該學期範圍 -> 嘗試切換學期
+                if (targetSem === 'A' && gradeData['B']) {
+                    targetSem = 'B';
+                    targetLesson = 1;
+                    reason = "semester-jump";
+                    console.log(`🚀 進度跳轉: ${targetGrade}A 結束，自動前往 ${targetGrade}B 第 1 課`);
+                } else {
+                    // 如果 B 也結束了，或者目前就是 B
+                    // 檢查是否有下一學年？
+                    const nextGrade = (parseInt(targetGrade) + 1).toString();
+                    if (window.CURRICULUM_DATA[nextGrade]) {
+                        targetGrade = nextGrade;
+                        targetSem = 'A';
+                        targetLesson = 1;
+                        reason = "grade-jump";
+                        console.log(`🎓 升年級跳轉: ${targetGrade - 1} 年級結束，前往 ${targetGrade} 年級 1A`);
+                    } else {
+                        // 都沒了，停留在原點最後一課
+                        targetLesson = maxLessonId;
+                        reason = "all-finished";
+                    }
+                }
             }
         } else {
             // 資料異常 fallback

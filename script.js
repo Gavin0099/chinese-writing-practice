@@ -50,12 +50,32 @@ document.addEventListener('DOMContentLoaded', () => {
             const cleanTitle = rec.title.split('\n')[0];
             heroTitle.innerText = `第 ${rec.lesson} 課：${cleanTitle}`;
 
+            // Dynamic Hint Logic
+            const heroHint = document.querySelector('.hero-hint');
+            if (heroHint) {
+                let hintText = "🛡 已為您準備好今日進度";
+                if (rec.reason === "new-start") hintText = "✨ 歡迎！從第一課開始練習吧";
+                if (rec.reason === "continue") hintText = `📈 接著上次 (第 ${settings.lastLesson} 課) 的進度`;
+                if (rec.reason === "semester-jump") hintText = "🚀 太棒了！上學期已完成，進入下學期";
+                if (rec.reason === "grade-jump") hintText = "🎓 恭喜晉級！開始新學年的挑戰";
+                if (rec.reason === "all-finished") hintText = "🎉 所有課程已練習完畢！";
+
+                heroHint.innerHTML = `<span class="bi bi-shield-check"></span> ${hintText}`;
+            }
+
             // Show Content
             cardLoading.style.display = 'none';
             cardContent.style.display = 'block';
 
             // Bind Actions
             heroActionBtn.onclick = async () => {
+                // Record progress data to be used in closure
+                const progressData = {
+                    grade: rec.grade,
+                    semester: rec.semester,
+                    lesson: rec.lesson,
+                    title: cleanTitle
+                };
                 // 1. Load Vocab
                 try {
                     // Check if data exists
@@ -92,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <p class="hero-subtitle" style="margin-bottom: 2rem;">第 ${rec.lesson} 課：${rec.title.split('\n')[0]}</p>
                                 
                                 <div class="hero-actions" style="flex-direction: column; gap: 1rem;">
-                                    <button onclick="window.print()" class="btn-primary-hero" style="background-color: var(--text-dark); box-shadow: 0 4px 15px rgba(44, 62, 80, 0.4);">
+                                    <button onclick="handlePrintProgress()" class="btn-primary-hero" style="background-color: var(--text-dark); box-shadow: 0 4px 15px rgba(44, 62, 80, 0.4);">
                                         <span class="icon">🖨️</span> 直接列印
                                     </button>
                                     
@@ -100,6 +120,15 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <span class="icon">📥</span> 下載 PDF
                                     </button>
                                 </div>
+                                <script>
+                                    // Local helper for the dynamically injected HTML
+                                    window.handlePrintProgress = () => {
+                                        if(window.storageManager) {
+                                            window.storageManager.addHistory(${JSON.stringify(progressData)});
+                                        }
+                                        window.print();
+                                    };
+                                </script>
                                 
                                 <style>
                                     @media print {
@@ -155,8 +184,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         // Re-bind Download Button (since we just created it)
                         document.getElementById('downloadPdfBtn').onclick = () => {
-                            // Trigger the main download button which contains the full logic
-                            // (Mobile fix, visibility toggle, html2canvas, etc.)
+                            // Record Progress
+                            if (window.storageManager) {
+                                window.storageManager.addHistory(progressData);
+                            }
+                            // Trigger hidden link
                             const mainDownloadBtn = document.getElementById('downloadBtn');
                             if (mainDownloadBtn) {
                                 mainDownloadBtn.click();
@@ -283,8 +315,14 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             // Attach Listeners for Sync
-            document.querySelectorAll('.grade-card').forEach(card => card.addEventListener('click', () => {
-                // Grade Changed -> Re-populate -> Update UI
+            document.querySelectorAll('.grade-card').forEach(card => card.addEventListener('click', function () {
+                if (this.classList.contains('disabled')) return;
+
+                // Toggle active
+                document.querySelectorAll('.grade-card').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+
+                // Sync
                 setTimeout(() => {
                     populateLessonSelect();
                     updateHeroUI();

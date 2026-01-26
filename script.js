@@ -682,6 +682,11 @@ downloadBtn.addEventListener('click', async () => {
             const blobUrl = doc.output('bloburl');
             iosBlobUrl = blobUrl;
 
+            // CRITICAL: Also cache for Success Screen
+            cachedPdfBlob = doc.output('blob');
+            cachedPdfFilename = filename;
+            console.log('[PDF] iOS Blob cached for Success Screen, filename:', filename);
+
             // Update Manual Mode Button (this button)
             downloadBtn.innerText = "👉 PDF 已就緒 (點此下載)";
             downloadBtn.disabled = false;

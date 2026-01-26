@@ -202,8 +202,8 @@ function initApp() {
                                 
                                 <div class="hero-actions" style="flex-direction: column; gap: 1rem; max-width: 320px; margin: 0 auto;">
                                     <button id="heroPrintBtn" class="btn-primary-hero" style="background-color: var(--text-dark); width: 100%;">
-                                        <span class="icon">${isDesktopLike ? '🖨️' : '📥'}</span> 
-                                        ${isIOS ? '下載 PDF (到超商列印)' : (isDesktopLike ? '下載並列印' : '現在下載 PDF')}
+                                        <span class="icon">${isIOS ? '�' : '📥'}</span> 
+                                        ${isIOS ? '已下載 PDF (到超商列印)' : '已下載 PDF'}
                                     </button>
                                     
                                     <div style="display: flex; gap: 10px; width: 100%;">
@@ -286,7 +286,7 @@ function initApp() {
                             </div>
                         `;
 
-                        // Re-bind Print Button (v1.1 Mobile Logic Fix)
+                        // Re-bind Print Button (v1.1 Platform Guard)
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {
                             heroPrintBtn.onclick = () => {
@@ -294,12 +294,16 @@ function initApp() {
                                     window.storageManager.addHistory(progressData);
                                 }
 
+                                // Trigger download for all platforms
+                                const dlBtn = document.getElementById('downloadBtn');
+                                if (dlBtn) dlBtn.click();
+
+                                // Desktop only: Optional print after download
                                 if (isDesktopLike && !isIOS) {
-                                    window.print();
-                                } else {
-                                    // Mobile/iOS: Trigger html2canvas download strictly
-                                    const dlBtn = document.getElementById('downloadBtn'); // The hidden one
-                                    if (dlBtn) dlBtn.click();
+                                    setTimeout(() => {
+                                        // window.print(); // Commented out per product decision
+                                        // Download is sufficient, print is external action
+                                    }, 500);
                                 }
                             };
                         }

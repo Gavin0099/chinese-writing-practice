@@ -93,24 +93,25 @@ def main():
         print("Failed to load JS data.")
         return
 
-    # Process XMLs
-    xml_files = glob.glob(os.path.join(BASE_DIR, "*.xml"))
+    # Process XMLs recursively
+    # Search e.g. source_xmls/康軒/一年級/*.xml
+    search_path = os.path.join(BASE_DIR, "**", "*.xml")
+    xml_files = glob.glob(search_path, recursive=True)
     print(f"Found {len(xml_files)} XML files.")
     
-    # Heuristic for Semester mapping
-    # 1A currently has L1-L5. 1B has L1-L12.
-    # Titles in 1B known from JS: 
-    # 看, 花園裡有什麼？, 媽媽的音樂會, 鞋, 小種子快長大, 奶奶的小跟班, 作夢的雲, 妹妹的紅雨鞋, 七彩的虹, 和你在一起, 生日快樂, 小黑
-    
+    # Existing heuristics preserved for Grade 1
     known_1b_titles = [
         "看", "花園裡有什麼？", "花園裡有什麼", "媽媽的音樂會", "鞋", 
         "小種子快長大", "奶奶的小跟班", "作夢的雲", "妹妹的紅雨鞋", 
         "七彩的虹", "和你在一起", "生日快樂", "小黑"
     ]
-    
-    # 1A titles: 拍拍手, 這是誰的?, 秋千, 大個子，小個子, 比一比, 小路(Guessed)
-    
-    mapping_stats = {"1A": 0, "1B": 0}
+    # Heuristics for Grade 2
+    # 2A: 新學年新希望, 一起做早餐, 走過小巷, 運動會, 水上木偶戲, 小鎮的柿餅節, 國王的新衣裳, 「聰明」的小熊, 大象有多重, 我愛冬天, 遠方來的黑皮, 新年快樂
+    known_2a_titles = [
+        "新學年新希望", "一起做早餐", "走過小巷", "運動會", "水上木偶戲",
+        "小鎮的柿餅節", "國王的新衣裳", "聰明的小熊", "「聰明」的小熊", "大象有多重", "大象有多重?",
+        "我愛冬天", "遠方來的黑皮", "新年快樂"
+    ]
 
     for xml_path in xml_files:
         info = parse_xml(xml_path)
@@ -121,27 +122,46 @@ def main():
         title = info['title']
         vocab = info['vocab']
         
-        print(f"Processing: L{lesson_num} {title} ({len(vocab)} chars)")
+    for xml_path in xml_files:
+        info = parse_xml(xml_path)
+        if not info:
+            continue
+            
+        lesson_num = info['lesson']
+        title = info['title']
+        vocab = info['vocab']
         
-        # Determine Semester
-        semester = "A"
-        # Check if title matches 1B list (fuzzy)
-        is_1b = False
-        for kto in known_1b_titles:
-            # Normalize punctuation
-            if kto.replace('？','').replace('?','') == title.replace('？','').replace('?',''):
-                is_1b = True
-                break
-        
-        if is_1b:
-            semester = "B"
-        
-        # Special case: "小路" -> 1A?
-        # If not matched 1B, default to A?
-        # Or check if lesson num collision in A?
-        
+        # 1. Determine Grade from Path
+        # Default to 1 if not found
         target_grade = "1"
-        target_sem = semester
+        if "六年級" in xml_path: target_grade = "6"
+        elif "五年級" in xml_path: target_grade = "5"
+        elif "四年級" in xml_path: target_grade = "4"
+        elif "三年級" in xml_path: target_grade = "3"
+        elif "二年級" in xml_path: target_grade = "2"
+        elif "一年級" in xml_path: target_grade = "1"
+        
+        # 2. Determine Semester from Path
+        # Default to A if not found (or based on heuristics if really needed, but folders prefered)
+        target_sem = "A"
+        if "下學期" in xml_path:
+            target_sem = "B"
+        elif "上學期" in xml_path:
+            target_sem = "A"
+        else:
+            # Fallback for unorganized files (heuristic)
+            clean_title = title.replace('？','').replace('?','')
+            # Simple check for known 1B titles if still in root (legacy)
+            if target_grade == "1":
+                for kto in known_1b_titles:
+                    if kto in clean_title:
+                         target_sem = "B"
+                         break
+            elif target_grade == "2":
+                 # If in root, assume 2A unless explicit
+                 pass
+
+        print(f"Processing: [{target_grade}{target_sem}] L{lesson_num} {title} ({len(vocab)} chars)")
         
         # Access Data
         if target_grade not in data["structure"]:
@@ -154,25 +174,35 @@ def main():
         for l in lesson_list:
             # Check Title Match (Punctuation relaxed)
             js_title_main = l['title'].split('\n')[0].strip()
-            if js_title_main.replace('？','').replace('?','') == title.replace('？','').replace('?',''):
+            # Normalize comparison
+            t1 = js_title_main.replace('？','').replace('?','')
+            t2 = title.replace('？','').replace('?','')
+            
+            if t1 == t2 or (t1 in t2 and abs(len(t1)-len(t2)) < 3):
                 l['vocab'] = vocab
+                # Ensure Lesson Number matches what we found in XML if consistent?
+                # Sometimes XML says Lesson 7 but DB thinks 8? trusting XML lesson num?
+                # Usually stick to title match.
                 print(f"  -> Updated {target_grade}{target_sem} L{l['lesson']} vocab.")
                 found = True
                 break
         
         if not found:
             # Create new lesson entry
-            # Need to format title "Title\n113學年度 | 一年級 | 國語 | 康軒版"
-            new_title = f"{title}\n113學年度 | 一年級 | 國語 | 康軒版"
+            new_title = f"{title}\n113學年度 | {target_grade}年級 | 國語 | 康軒版"
             new_entry = {
                 "lesson": lesson_num,
                 "title": new_title,
                 "vocab": vocab
             }
             lesson_list.append(new_entry)
-            # Sort by lesson
-            lesson_list.sort(key=lambda x: x['lesson'])
             print(f"  -> Added new lesson {target_grade}{target_sem} L{lesson_num} {title}.")
+            
+    # Post-Loop: Sort all lists by lesson number
+    for g_key in data["structure"]:
+        for s_key in ["A", "B"]:
+            if s_key in data["structure"][g_key]:
+                data["structure"][g_key][s_key].sort(key=lambda x: x['lesson'])
 
     # Save back
     new_json_str = json.dumps(data, indent=2, ensure_ascii=False)

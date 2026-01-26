@@ -299,7 +299,7 @@ input:focus {
     border-right: 1px solid var(--grid-blue);
 }
 
-.content-area .char-col:last-child {
+.content-area .char-col:first-child {
     border-right: none;
 }
 
@@ -338,13 +338,13 @@ input:focus {
 .stroke-step {
     width: 32%;
     /* Approx 1/3 width to allow 3 columns */
-    height: 9.5%;
-    /* Approx 1/10 height to allow 10 rows */
+    height: 9%;
+    /* Slightly reduced from 9.5% to ensure 10 items fit in one col without accidental wrap */
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0;
-    padding: 1px;
+    padding: 0px;
     flex: 0 0 auto;
     /* Do not shrink */
 }
@@ -447,22 +447,26 @@ input:focus {
     content: '';
     position: absolute;
     top: 50%;
+    left: 0;
     width: 100%;
-    height: 1px;
+    height: 0;
     border-top: 1px dashed var(--grid-blue);
     opacity: 0.8;
     pointer-events: none;
+    z-index: 1;
 }
 
 .tian-zi-ge::after {
     content: '';
     position: absolute;
     left: 50%;
+    top: 0;
     height: 100%;
-    width: 1px;
+    width: 0;
     border-left: 1px dashed var(--grid-blue);
     opacity: 0.8;
     pointer-events: none;
+    z-index: 1;
 }
 
 .char-text {
@@ -514,6 +518,7 @@ input:focus {
         print-color-adjust: exact;
     }
 }
+
 /* =========================================
    5. UI/UX PHASE 2: MODERN LAYOUT
    ========================================= */
@@ -550,7 +555,8 @@ input:focus {
 .app-layout {
     display: grid;
     grid-template-columns: 380px 1fr;
-    min-height: calc(100vh - 60px); /* Adjust for navbar */
+    min-height: calc(100vh - 60px);
+    /* Adjust for navbar */
     max-width: 1600px;
     margin: 0 auto;
 }
@@ -609,7 +615,7 @@ input:focus {
 .tab-btn.active {
     background: white;
     color: var(--primary);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Tab Panels */
@@ -623,8 +629,15 @@ input:focus {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0.8; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0.8;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* E. Sidebar Forms & Groups */
@@ -635,7 +648,8 @@ input:focus {
 .panel-section.border-top {
     border-top: 1px solid var(--border-input);
     padding-top: 1.5rem;
-    margin-top: auto; /* Push to bottom if space allows */
+    margin-top: auto;
+    /* Push to bottom if space allows */
 }
 
 .section-label {
@@ -658,7 +672,8 @@ input:focus {
     margin-bottom: 1rem;
 }
 
-.form-select, .form-input {
+.form-select,
+.form-input {
     width: 100%;
     padding: 0.6rem;
     border: 1px solid var(--border-input);
@@ -669,7 +684,9 @@ input:focus {
     transition: all 0.2s;
 }
 
-.form-select:focus, .form-input:focus, .text-input-large:focus {
+.form-select:focus,
+.form-input:focus,
+.text-input-large:focus {
     outline: none;
     border-color: var(--focus-ring);
     background: white;
@@ -683,8 +700,10 @@ input:focus {
     border: 1px solid var(--border-input);
     border-radius: 12px;
     background: var(--bg-page);
-    font-size: 1.25rem; /* Larger font for characters */
-    font-family: 'KaiTi', 'BiauKai', serif; /* Handwriting feel */
+    font-size: 1.25rem;
+    /* Larger font for characters */
+    font-family: 'KaiTi', 'BiauKai', serif;
+    /* Handwriting feel */
     resize: vertical;
     line-height: 1.6;
 }
@@ -695,13 +714,22 @@ input:focus {
     justify-content: center;
 }
 
-.mb-2 { margin-bottom: 0.5rem; }
-.mt-2 { margin-top: 0.5rem; }
-.mt-4 { margin-top: 1.5rem; }
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+.mt-4 {
+    margin-top: 1.5rem;
+}
 
 /* F. Main Preview Area */
 .app-main {
-    background: #e2e8f0; /* Darker background for contrast */
+    background: #e2e8f0;
+    /* Darker background for contrast */
     padding: 2rem;
     display: flex;
     justify-content: center;
@@ -731,8 +759,15 @@ input:focus {
 }
 
 @keyframes bounceLeft {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(-10px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(-10px);
+    }
 }
 
 .btn:disabled {
@@ -751,16 +786,21 @@ input:focus {
 }
 
 @media print {
-    .navbar, .app-sidebar {
+
+    .navbar,
+    .app-sidebar {
         display: none !important;
     }
+
     .app-main {
         padding: 0;
         background: white;
     }
+
     .app-layout {
         display: block;
     }
+
     .sheet-page {
         box-shadow: none;
         margin: 0;
@@ -802,7 +842,8 @@ input:focus {
 
 .grade-card.active {
     background: white;
-    border-color: var(--secondary); /* Sky Blue */
+    border-color: var(--secondary);
+    /* Sky Blue */
     box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.2);
 }
 
@@ -826,14 +867,16 @@ input:focus {
     padding: 2rem;
     display: flex;
     justify-content: center;
-    background-color: transparent; /* Let container bg show */
+    background-color: transparent;
+    /* Let container bg show */
 }
 
 /* The Sheet Itself */
 .sheet-page {
     /* Existing basic styles preserved */
     /* Add subtle texture overlaid */
-    background-color: #fffbf0; /* Warm rice paper tint */
+    background-color: #fffbf0;
+    /* Warm rice paper tint */
     background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmYmYwIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMwMDAiIG9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+');
     position: relative;
     /* Folded Corner Effect via Pseudo-element (Optional - keeping simple for now) */
@@ -848,4 +891,3 @@ input:focus {
     align-items: center;
     justify-content: center;
 }
-

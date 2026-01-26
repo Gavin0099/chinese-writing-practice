@@ -36,7 +36,62 @@ generateBtn.addEventListener('click', () => {
     if (!text) { alert('請輸入生字'); return; }
     renderSheets(text);
 });
-downloadBtn.addEventListener('click', () => window.print());
+downloadBtn.addEventListener('click', async () => {
+    // Check libraries
+    if (typeof html2canvas === 'undefined' || typeof jspdf === 'undefined') {
+        alert("PDF 函式庫尚未載入，請稍候再試。");
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4'); // Portrait, Millimeters, A4
+
+    const pages = document.querySelectorAll('.sheet-page');
+    if (pages.length === 0) {
+        alert('請先產生練習簿');
+        return;
+    }
+
+    // Show Loading State
+    const originalText = downloadBtn.innerText;
+    downloadBtn.innerText = "⏳ 轉檔中...";
+    downloadBtn.disabled = true;
+
+    try {
+        for (let i = 0; i < pages.length; i++) {
+            if (i > 0) doc.addPage();
+
+            const page = pages[i];
+
+            // High Quality Canvas
+            const canvas = await html2canvas(page, {
+                scale: 2, // Retain quality
+                useCORS: true,
+                logging: false,
+                windowWidth: page.scrollWidth,
+                windowHeight: page.scrollHeight
+            });
+
+            const imgData = canvas.toDataURL('image/jpeg', 0.95);
+            const imgWidth = 210; // A4 Width in mm
+            const pageHeight = 297; // A4 Height in mm
+
+            // Calculate ratio to fit exactly
+            const imgProps = doc.getImageProperties(imgData);
+            const pdfHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+            doc.addImage(imgData, 'JPEG', 0, 0, imgWidth, pdfHeight);
+        }
+
+        doc.save('生字練習簿.pdf');
+    } catch (err) {
+        console.error("PDF Fail:", err);
+        alert("轉檔失敗，請改用列印。");
+    } finally {
+        downloadBtn.innerText = originalText;
+        downloadBtn.disabled = false;
+    }
+});
 
 function renderSheets(text) {
     let container = document.getElementById('sheets-container');
@@ -54,6 +109,14 @@ function renderSheets(text) {
         const pageChars = chars.slice(i * CHARS_PER_PAGE, (i + 1) * CHARS_PER_PAGE);
         const pageDOM = createPage(pageChars);
         container.appendChild(pageDOM);
+    }
+    // Enable Download (Force update)
+    if (downloadBtn) {
+        console.log("✅ Enabling Download Button...");
+        setTimeout(() => {
+            downloadBtn.removeAttribute('disabled');
+            downloadBtn.disabled = false;
+        }, 100);
     }
 }
 

@@ -1,6 +1,6 @@
 // db_curriculum.js
-// 產生時間: 2026-01-26 00:01:15
-// 來源: 教育百科 (混合容錯模式)
+// 產生時間: 2026-01-26 10:40:20
+// 來源: 教育百科 (Headers 偽裝模式)
 
 window.CURRICULUM_DATA = {
   "publisher": "KangHsuan",
@@ -10,7 +10,7 @@ window.CURRICULUM_DATA = {
     "A": [
       {
         "lesson": 1,
-        "title": "拍拍手\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "拍拍手",
         "vocab": [
           "手",
           "拍",
@@ -20,7 +20,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 2,
-        "title": "這是誰的?\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "這是誰的?",
         "vocab": [
           "誰",
           "這",
@@ -31,7 +31,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 3,
-        "title": "秋千\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "秋千",
         "vocab": [
           "陪",
           "好",
@@ -44,7 +44,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 4,
-        "title": "大個子，小個子\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "大個子，小個子",
         "vocab": [
           "隻",
           "子",
@@ -55,7 +55,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 5,
-        "title": "比一比\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "比一比",
         "vocab": [
           "裡",
           "主",
@@ -67,7 +67,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 6,
-        "title": "小路\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "小路",
         "vocab": [
           "一",
           "頭",
@@ -83,7 +83,7 @@ window.CURRICULUM_DATA = {
     "B": [
       {
         "lesson": 1,
-        "title": "看\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "看",
         "vocab": [
           "靜",
           "要",
@@ -97,7 +97,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 2,
-        "title": "花園裡有什麼？\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "花園裡有什麼？",
         "vocab": [
           "快",
           "身",
@@ -111,7 +111,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 3,
-        "title": "媽媽的音樂會\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "媽媽的音樂會",
         "vocab": [
           "音",
           "媽",
@@ -125,7 +125,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 4,
-        "title": "鞋\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "鞋",
         "vocab": [
           "口",
           "享",
@@ -136,7 +136,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 5,
-        "title": "小種子快長大\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "小種子快長大",
         "vocab": [
           "公",
           "陪",
@@ -149,7 +149,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 6,
-        "title": "奶奶的小跟班\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "奶奶的小跟班",
         "vocab": [
           "奶",
           "跟",
@@ -160,7 +160,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 7,
-        "title": "作夢的雲\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "作夢的雲",
         "vocab": [
           "黑",
           "糖",
@@ -171,7 +171,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 8,
-        "title": "妹妹的紅雨鞋\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "妹妹的紅雨鞋",
         "vocab": [
           "妹",
           "雙",
@@ -183,7 +183,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 9,
-        "title": "七彩的虹\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "七彩的虹",
         "vocab": [
           "刷",
           "低",
@@ -194,7 +194,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 10,
-        "title": "和你在一起\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "和你在一起",
         "vocab": [
           "說",
           "笑",
@@ -206,7 +206,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 11,
-        "title": "生日快樂\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "生日快樂",
         "vocab": [
           "福",
           "第",
@@ -218,7 +218,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 12,
-        "title": "小黑\n113學年度 | 一年級 | 國語 | 康軒版",
+        "title": "小黑",
         "vocab": [
           "幫",
           "加",
@@ -238,7 +238,7 @@ window.CURRICULUM_DATA = {
     "A": [
       {
         "lesson": 1,
-        "title": "新學年新希望\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "新學年新希望",
         "vocab": [
           "老",
           "師",
@@ -252,7 +252,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 2,
-        "title": "一起做早餐\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "一起做早餐",
         "vocab": [
           "畫",
           "司",
@@ -263,7 +263,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 3,
-        "title": "走過小巷\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "走過小巷",
         "vocab": [
           "叔",
           "巷",
@@ -277,7 +277,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 4,
-        "title": "運動會\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "運動會",
         "vocab": [
           "最",
           "可",
@@ -290,7 +290,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 5,
-        "title": "水上木偶戲\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "水上木偶戲",
         "vocab": [
           "簾",
           "站",
@@ -304,7 +304,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 6,
-        "title": "小鎮的柿餅節\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "小鎮的柿餅節",
         "vocab": [
           "如",
           "意",
@@ -316,7 +316,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 7,
-        "title": "國王的新衣裳\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "國王的新衣裳",
         "vocab": [
           "滿",
           "街",
@@ -327,7 +327,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 8,
-        "title": "「聰明」的小熊\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "「聰明」的小熊",
         "vocab": [
           "口",
           "渴",
@@ -341,7 +341,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 9,
-        "title": "大象有多重?\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "大象有多重?",
         "vocab": [
           "然",
           "沿",
@@ -352,7 +352,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 10,
-        "title": "我愛冬天\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "我愛冬天",
         "vocab": [
           "冒",
           "火",
@@ -363,7 +363,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 11,
-        "title": "遠方來的黑皮\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "遠方來的黑皮",
         "vocab": [
           "等",
           "念",
@@ -375,7 +375,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 12,
-        "title": "新年快樂\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "新年快樂",
         "vocab": [
           "相",
           "反",
@@ -389,7 +389,7 @@ window.CURRICULUM_DATA = {
     "B": [
       {
         "lesson": 1,
-        "title": "春天的顏色\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "春天的顏色",
         "vocab": [
           "蜜",
           "蜂",
@@ -405,7 +405,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 2,
-        "title": "花衣裳\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "花衣裳",
         "vocab": [
           "剪",
           "合",
@@ -418,7 +418,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 3,
-        "title": "彩色王國\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "彩色王國",
         "vocab": [
           "互",
           "換",
@@ -434,7 +434,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 4,
-        "title": "爸爸\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "爸爸",
         "vocab": [
           "窗",
           "避",
@@ -448,7 +448,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 5,
-        "title": "我的家人\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "我的家人",
         "vocab": [
           "寶",
           "貝",
@@ -461,7 +461,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 6,
-        "title": "愛笑的大樹\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "愛笑的大樹",
         "vocab": [
           "腳",
           "踏",
@@ -475,7 +475,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 7,
-        "title": "月光河\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "月光河",
         "vocab": [
           "吸",
           "鼻",
@@ -486,7 +486,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 8,
-        "title": "黃狗生蛋\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "黃狗生蛋",
         "vocab": [
           "相",
           "信",
@@ -500,7 +500,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 9,
-        "title": "神筆馬良\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "神筆馬良",
         "vocab": [
           "銀",
           "派",
@@ -511,7 +511,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 10,
-        "title": "快樂的探險家\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "快樂的探險家",
         "vocab": [
           "航",
           "行",
@@ -524,7 +524,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 11,
-        "title": "小讀者樂園\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "小讀者樂園",
         "vocab": [
           "索",
           "奧",
@@ -539,7 +539,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 12,
-        "title": "巨人山\n113學年度 | 二年級 | 國語 | 康軒版",
+        "title": "巨人山",
         "vocab": [
           "量",
           "到",
@@ -555,7 +555,7 @@ window.CURRICULUM_DATA = {
     "A": [
       {
         "lesson": 1,
-        "title": "心的悄悄話\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "心的悄悄話",
         "vocab": [
           "舟",
           "字",
@@ -569,7 +569,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 2,
-        "title": "妙故事點點名\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "妙故事點點名",
         "vocab": [
           "喊",
           "名",
@@ -580,7 +580,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 3,
-        "title": "繞口令村\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "繞口令村",
         "vocab": [
           "機",
           "葡",
@@ -592,7 +592,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 4,
-        "title": "小丑魚和海葵\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "小丑魚和海葵",
         "vocab": [
           "葵",
           "擺",
@@ -605,7 +605,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 5,
-        "title": "飛舞的絲帶\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "飛舞的絲帶",
         "vocab": [
           "通",
           "朝",
@@ -616,7 +616,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 6,
-        "title": "小女生\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "小女生",
         "vocab": [
           "肚",
           "子",
@@ -630,7 +630,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 7,
-        "title": "淡水小鎮\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "淡水小鎮",
         "vocab": [
           "憶",
           "坡",
@@ -641,7 +641,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 8,
-        "title": "安平古堡參觀記\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "安平古堡參觀記",
         "vocab": [
           "敗",
           "守",
@@ -652,7 +652,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 9,
-        "title": "馬太鞍的巴拉告\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "馬太鞍的巴拉告",
         "vocab": [
           "智",
           "慧",
@@ -663,7 +663,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 10,
-        "title": "狐狸的故事\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "狐狸的故事",
         "vocab": [
           "妙",
           "計",
@@ -676,7 +676,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 11,
-        "title": "巨人的花園\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "巨人的花園",
         "vocab": [
           "隨",
           "築",
@@ -688,7 +688,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 12,
-        "title": "奇特的朋友\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "奇特的朋友",
         "vocab": [
           "蛇",
           "驚",
@@ -704,7 +704,7 @@ window.CURRICULUM_DATA = {
     "B": [
       {
         "lesson": 1,
-        "title": "許願\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "許願",
         "vocab": [
           "晨",
           "願",
@@ -718,7 +718,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 2,
-        "title": "下雨的時候\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "下雨的時候",
         "vocab": [
           "各",
           "式",
@@ -736,7 +736,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 3,
-        "title": "遇見美如奶奶\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "遇見美如奶奶",
         "vocab": [
           "腦",
           "子",
@@ -752,7 +752,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 4,
-        "title": "工匠之祖\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "工匠之祖",
         "vocab": [
           "鋸",
           "左",
@@ -769,7 +769,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 5,
-        "title": "學田鼠開路\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "學田鼠開路",
         "vocab": [
           "頭",
           "痛",
@@ -784,7 +784,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 6,
-        "title": "神奇密碼\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "神奇密碼",
         "vocab": [
           "科",
           "技",
@@ -796,7 +796,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 7,
-        "title": "油桐花．五月雪\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "油桐花．五月雪",
         "vocab": [
           "肩",
           "禮",
@@ -807,7 +807,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 8,
-        "title": "大自然的美術館\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "大自然的美術館",
         "vocab": [
           "野",
           "香",
@@ -824,7 +824,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 9,
-        "title": "臺灣的山椒魚\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "臺灣的山椒魚",
         "vocab": [
           "球",
           "伐",
@@ -835,7 +835,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 10,
-        "title": "漁夫和金魚\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "漁夫和金魚",
         "vocab": [
           "盆",
           "濤",
@@ -846,7 +846,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 11,
-        "title": "聰明的鼠鹿\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "聰明的鼠鹿",
         "vocab": [
           "不",
           "懷",
@@ -864,7 +864,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 12,
-        "title": "還要跌幾次\n113學年度 | 三年級 | 國語 | 康軒版",
+        "title": "還要跌幾次",
         "vocab": [
           "心",
           "驚",
@@ -889,7 +889,7 @@ window.CURRICULUM_DATA = {
     "A": [
       {
         "lesson": 1,
-        "title": "水陸小高手\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "水陸小高手",
         "vocab": [
           "串",
           "泳",
@@ -903,7 +903,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 2,
-        "title": "放學後\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "放學後",
         "vocab": [
           "警",
           "偷",
@@ -914,7 +914,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 3,
-        "title": "我的籃球夢\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "我的籃球夢",
         "vocab": [
           "喧",
           "優",
@@ -930,7 +930,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 4,
-        "title": "永遠的馬偕\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "永遠的馬偕",
         "vocab": [
           "濃",
           "馬",
@@ -945,7 +945,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 5,
-        "title": "假如給我三天光明\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "假如給我三天光明",
         "vocab": [
           "注",
           "意",
@@ -959,7 +959,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 6,
-        "title": "攀登生命的高峰\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "攀登生命的高峰",
         "vocab": [
           "谷",
           "底",
@@ -973,7 +973,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 7,
-        "title": "美味的一堂課\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "美味的一堂課",
         "vocab": [
           "郁",
           "麵",
@@ -984,7 +984,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 8,
-        "title": "建築界的長頸鹿\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "建築界的長頸鹿",
         "vocab": [
           "經",
           "濟",
@@ -998,7 +998,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 9,
-        "title": "請到我的家鄉來\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "請到我的家鄉來",
         "vocab": [
           "鬱",
           "防",
@@ -1009,7 +1009,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 10,
-        "title": "奇幻旋律\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "奇幻旋律",
         "vocab": [
           "臉",
           "龐",
@@ -1024,7 +1024,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 11,
-        "title": "兔子先生等等我\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "兔子先生等等我",
         "vocab": [
           "遲",
           "背",
@@ -1039,7 +1039,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 12,
-        "title": "老鞋匠和小精靈\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "老鞋匠和小精靈",
         "vocab": [
           "蹦",
           "內",
@@ -1058,7 +1058,7 @@ window.CURRICULUM_DATA = {
     "B": [
       {
         "lesson": 1,
-        "title": "一束鮮花\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "一束鮮花",
         "vocab": [
           "環",
           "潔",
@@ -1074,7 +1074,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 2,
-        "title": "心動不如行動\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "心動不如行動",
         "vocab": [
           "為",
           "難",
@@ -1089,7 +1089,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 3,
-        "title": "選拔動物之星\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "選拔動物之星",
         "vocab": [
           "眉",
           "拭",
@@ -1105,7 +1105,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 4,
-        "title": "米食飄香\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "米食飄香",
         "vocab": [
           "陳",
           "溫",
@@ -1123,7 +1123,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 5,
-        "title": "讀書報告-藍色小洋裝\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "讀書報告-藍色小洋裝",
         "vocab": [
           "淺",
           "讚",
@@ -1139,7 +1139,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 6,
-        "title": "我愛鹿港\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "我愛鹿港",
         "vocab": [
           "家",
           "喻",
@@ -1154,7 +1154,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 7,
-        "title": "未來的模樣\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "未來的模樣",
         "vocab": [
           "惡",
           "致",
@@ -1165,7 +1165,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 8,
-        "title": "動物老師的智慧\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "動物老師的智慧",
         "vocab": [
           "厚",
           "身",
@@ -1183,7 +1183,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 9,
-        "title": "向太空出發\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "向太空出發",
         "vocab": [
           "測",
           "億",
@@ -1194,7 +1194,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 10,
-        "title": "小青蛙想看海\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "小青蛙想看海",
         "vocab": [
           "耗",
           "盡",
@@ -1206,7 +1206,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 11,
-        "title": "窗前的月光\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "窗前的月光",
         "vocab": [
           "孤",
           "翻",
@@ -1223,7 +1223,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 12,
-        "title": "如來佛的手掌心\n113學年度 | 四年級 | 國語 | 康軒版",
+        "title": "如來佛的手掌心",
         "vocab": [
           "日",
           "夜",
@@ -1245,7 +1245,7 @@ window.CURRICULUM_DATA = {
     "A": [
       {
         "lesson": 1,
-        "title": "蚊帳大使\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "蚊帳大使",
         "vocab": [
           "帳",
           "蚊",
@@ -1260,7 +1260,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 2,
-        "title": "從空中看臺灣\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "從空中看臺灣",
         "vocab": [
           "德",
           "國",
@@ -1275,7 +1275,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 3,
-        "title": "憧憬\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "憧憬",
         "vocab": [
           "藉",
           "由",
@@ -1288,7 +1288,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 4,
-        "title": "恆久的美\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "恆久的美",
         "vocab": [
           "慨",
           "滋",
@@ -1302,7 +1302,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 5,
-        "title": "它抓得住你—商標的故事\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "它抓得住你—商標的故事",
         "vocab": [
           "銷",
           "項",
@@ -1316,7 +1316,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 6,
-        "title": "故事「動」起來\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "故事「動」起來",
         "vocab": [
           "屬",
           "於",
@@ -1328,7 +1328,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 7,
-        "title": "為生命找到出口\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "為生命找到出口",
         "vocab": [
           "競",
           "刀",
@@ -1339,7 +1339,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 8,
-        "title": "最勇敢的女孩\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "最勇敢的女孩",
         "vocab": [
           "坦",
           "震",
@@ -1352,7 +1352,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 9,
-        "title": "在挫折中成長\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "在挫折中成長",
         "vocab": [
           "予",
           "減",
@@ -1363,7 +1363,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 10,
-        "title": "山中寄情\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "山中寄情",
         "vocab": [
           "隱",
           "居",
@@ -1376,7 +1376,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 11,
-        "title": "與達駭黑熊走入山林\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "與達駭黑熊走入山林",
         "vocab": [
           "吼",
           "喉",
@@ -1389,7 +1389,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 12,
-        "title": "荒島上的國王\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "荒島上的國王",
         "vocab": [
           "烤",
           "爐",
@@ -1407,7 +1407,7 @@ window.CURRICULUM_DATA = {
     "B": [
       {
         "lesson": 1,
-        "title": "你會怎麼回答\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "你會怎麼回答",
         "vocab": [
           "博",
           "士",
@@ -1426,7 +1426,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 2,
-        "title": "智救養馬人\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "智救養馬人",
         "vocab": [
           "大",
           "禍",
@@ -1447,7 +1447,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 3,
-        "title": "真正的「聰明」\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "真正的「聰明」",
         "vocab": [
           "競",
           "逐",
@@ -1467,7 +1467,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 4,
-        "title": "小記者，出動！\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "小記者，出動！",
         "vocab": [
           "英",
           "雄",
@@ -1482,7 +1482,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 5,
-        "title": "奇幻光芒的祕密\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "奇幻光芒的祕密",
         "vocab": [
           "沉",
           "浸",
@@ -1495,7 +1495,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 6,
-        "title": "人「聲」就是戲\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "人「聲」就是戲",
         "vocab": [
           "咳",
           "詮",
@@ -1506,7 +1506,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 7,
-        "title": "真相？真相！\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "真相？真相！",
         "vocab": [
           "柢",
           "圈",
@@ -1517,7 +1517,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 8,
-        "title": "你想做人魚嗎？\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "你想做人魚嗎？",
         "vocab": [
           "噴",
           "抹",
@@ -1534,7 +1534,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 9,
-        "title": "海洋的殺手\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "海洋的殺手",
         "vocab": [
           "殼",
           "孔",
@@ -1545,7 +1545,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 10,
-        "title": "玉米人的奇蹟\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "玉米人的奇蹟",
         "vocab": [
           "栩",
           "剔",
@@ -1556,7 +1556,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 11,
-        "title": "幸福的火苗\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "幸福的火苗",
         "vocab": [
           "規",
           "定",
@@ -1572,7 +1572,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 12,
-        "title": "神農嘗百草\n113學年度 | 五年級 | 國語 | 康軒版",
+        "title": "神農嘗百草",
         "vocab": [
           "內",
           "臟",
@@ -1596,7 +1596,7 @@ window.CURRICULUM_DATA = {
     "A": [
       {
         "lesson": 1,
-        "title": "跑道\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "跑道",
         "vocab": [
           "軸",
           "級",
@@ -1614,7 +1614,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 2,
-        "title": "朱子治家格言選\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "朱子治家格言選",
         "vocab": [
           "稱",
           "心",
@@ -1639,7 +1639,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 3,
-        "title": "談遇見更好的自己\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "談遇見更好的自己",
         "vocab": [
           "耕",
           "茁",
@@ -1650,7 +1650,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 4,
-        "title": "臺灣美食詩選\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "臺灣美食詩選",
         "vocab": [
           "饗",
           "宴",
@@ -1661,7 +1661,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 5,
-        "title": "最好的味覺禮物\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "最好的味覺禮物",
         "vocab": [
           "熄",
           "混",
@@ -1672,7 +1672,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 6,
-        "title": "珍珠奶茶\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "珍珠奶茶",
         "vocab": [
           "添",
           "歐",
@@ -1683,7 +1683,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 7,
-        "title": "大小剛好的鞋子\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "大小剛好的鞋子",
         "vocab": [
           "仰",
           "緬",
@@ -1694,7 +1694,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 8,
-        "title": "狐假虎威\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "狐假虎威",
         "vocab": [
           "窟",
           "猾",
@@ -1705,7 +1705,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 9,
-        "title": "空城計\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "空城計",
         "vocab": [
           "僮",
           "崗",
@@ -1716,7 +1716,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 10,
-        "title": "耶誕節\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "耶誕節",
         "vocab": [
           "點",
           "醒",
@@ -1729,7 +1729,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 11,
-        "title": "下午茶風波\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "下午茶風波",
         "vocab": [
           "某",
           "諒",
@@ -1741,7 +1741,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 12,
-        "title": "祕密花園\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "祕密花園",
         "vocab": [
           "敬",
           "意",
@@ -1760,7 +1760,7 @@ window.CURRICULUM_DATA = {
     "B": [
       {
         "lesson": 1,
-        "title": "馬達加斯加，出發！\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "馬達加斯加，出發！",
         "vocab": [
           "瀕",
           "危",
@@ -1778,7 +1778,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 2,
-        "title": "沉睡的天空之城\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "沉睡的天空之城",
         "vocab": [
           "梯",
           "田",
@@ -1790,7 +1790,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 3,
-        "title": "走進太陽之城\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "走進太陽之城",
         "vocab": [
           "鬆",
           "政",
@@ -1808,7 +1808,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 4,
-        "title": "送友人\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "送友人",
         "vocab": [
           "別",
           "出",
@@ -1826,7 +1826,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 5,
-        "title": "蚵鄉風情\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "蚵鄉風情",
         "vocab": [
           "靠",
           "攏",
@@ -1838,7 +1838,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 6,
-        "title": "童年‧夏日‧棉花糖\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "童年‧夏日‧棉花糖",
         "vocab": [
           "裊",
           "祥",
@@ -1853,7 +1853,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 7,
-        "title": "我的少年夢\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "我的少年夢",
         "vocab": [
           "宙",
           "浩",
@@ -1866,7 +1866,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 8,
-        "title": "如何張開追夢的翅膀\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "如何張開追夢的翅膀",
         "vocab": [
           "公",
           "斤",
@@ -1882,7 +1882,7 @@ window.CURRICULUM_DATA = {
       },
       {
         "lesson": 9,
-        "title": "成為人生的開拓者\n113學年度 | 六年級 | 國語 | 康軒版",
+        "title": "成為人生的開拓者",
         "vocab": [
           "慎",
           "思",

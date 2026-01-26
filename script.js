@@ -289,12 +289,19 @@ function initApp() {
                         // CRITICAL: Auto-trigger PDF generation before showing Success Screen
                         // This ensures cachedPdfBlob is populated
                         setTimeout(() => {
+                            console.log('[Hero] Attempting to auto-trigger PDF generation');
                             const dlBtn = document.getElementById('downloadBtn');
+                            console.log('[Hero] downloadBtn found:', !!dlBtn);
+
                             if (dlBtn) {
-                                console.log('[Hero] Auto-triggering PDF generation');
+                                console.log('[Hero] Triggering downloadBtn.click()');
                                 dlBtn.click();
+                                console.log('[Hero] downloadBtn.click() completed');
+                            } else {
+                                console.error('[Hero] downloadBtn not found!');
+                                alert('自動下載失敗:找不到下載按鈕\n請手動點擊下方按鈕下載');
                             }
-                        }, 500);
+                        }, 1000); // Increased from 500ms to 1000ms
 
                         // Re-bind Print Button (v1.1 Direct Download - Fixed)
                         const heroPrintBtn = document.getElementById('heroPrintBtn');

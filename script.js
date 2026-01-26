@@ -367,10 +367,18 @@ function initApp() {
 
                                 } catch (err) {
                                     console.error('[Success Screen] PDF generation error:', err);
+                                    console.error('[Success Screen] Error name:', err.name);
+                                    console.error('[Success Screen] Error message:', err.message);
                                     console.error('[Success Screen] Error stack:', err.stack);
 
-                                    // Show detailed error to user
-                                    alert(`PDF 生成失敗\n錯誤: ${err.message}\n\n請開啟 Console (F12) 查看詳細資訊`);
+                                    // Show very detailed error to user
+                                    const errorDetails = `錯誤名稱: ${err.name}
+錯誤訊息: ${err.message}
+
+完整堆疊:
+${err.stack || '無堆疊資訊'}`;
+
+                                    alert(`PDF 生成失敗\n\n${errorDetails}\n\n請截圖此訊息`);
 
                                     heroPrintBtn.innerHTML = '❌ 下載失敗';
                                     heroPrintBtn.disabled = false;

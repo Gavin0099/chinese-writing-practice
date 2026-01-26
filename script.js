@@ -302,8 +302,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (lessonSelect && lessonSelect.value) {
                     rec.lesson = parseInt(lessonSelect.value);
                     const selectedOption = lessonSelect.options[lessonSelect.selectedIndex];
+
+                    // --- Sync Vocab to Input Box ---
+                    const gradeKey = rec.grade.toString();
+                    const semKey = rec.semester;
+                    const lessonData = window.CURRICULUM_DATA[gradeKey]?.[semKey]?.find(l => l.lesson == rec.lesson);
+                    if (lessonData && lessonData.vocab && charactersInput) {
+                        charactersInput.value = lessonData.vocab.join('');
+                    }
+
                     if (selectedOption) {
-                        // Use text from populated dropdown directly, simpler
                         rec.title = selectedOption.text.split('：')[1] || selectedOption.text;
                     }
                 } else {
@@ -313,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const hSub = document.getElementById('heroSubTitle');
                 const hTitle = document.getElementById('heroTitle');
                 if (hSub) hSub.innerText = `${rec.grade}年級 ${rec.semester === 'A' ? '上學期' : '下學期'}`;
-                if (hTitle) hTitle.innerText = rec.title || `第 ${rec.lesson} 課`;
+                if (hTitle) hTitle.innerText = `第 ${rec.lesson} 課：${rec.title}`;
             };
 
             // Attach Listeners for Sync

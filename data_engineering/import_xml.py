@@ -13,25 +13,25 @@ def load_js_data(filepath):
         content = f.read()
     
     # Extract JSON part
-    # Look for window.CURRICULUM_KANGHSUAN = { ... }
-    match = re.search(r"window\.CURRICULUM_KANGHSUAN\s*=\s*(\{.*?\})\s*$", content, re.DOTALL)
-    if not match:
-        # Maybe semicolon at end
-        match = re.search(r"window\.CURRICULUM_KANGHSUAN\s*=\s*(\{.*?\});\s*$", content, re.DOTALL)
+    # Look for window.CURRICULUM_KANGHSUAN = { ... };
+    # Relaxed regex: remove anchor to end of file '$' to allow wrapper code
+    match = re.search(r"window\.CURRICULUM_KANGHSUAN\s*=\s*(\{.*?\});", content, re.DOTALL)
     
     if match:
         json_str = match.group(1)
-        # JS object keys might not be quoted? The file usually is valid JSON structure inside.
-        # Let's hope it's valid JSON.
         try:
             data = json.loads(json_str)
             return data, content
         except json.JSONDecodeError as e:
             print(f"JSON Decode Error: {e}")
-            # Fallback: using a simple manual parser or assume it's mostly valid
-            # In the file viewed earlier, it was valid JSON syntax (keys quoted).
-            return None, content
-    return None, content
+            # Fallback to fresh structure
+    
+    print("Warning: Could not parse existing JS. Starting with fresh structure.")
+    return {
+      "publisher": "KangHsuan",
+      "version": "113_Academic_Year", 
+      "structure": {}
+    }, content
 
 def parse_xml(filepath):
     try:
@@ -211,7 +211,7 @@ def main():
     # Only replace the object part
     
     # We'll just overwrite efficiently
-    output_content = f"// db_curriculum.js\n// 自動抓取自教育部教育百科 (學年度: 113)\n// Updated by Agent\n\nwindow.CURRICULUM_KANGHSUAN = {new_json_str};\n"
+    output_content = f"// db_curriculum.js\n// 自動抓取自教育部教育百科 (學年度: 113)\n// Updated by Agent\n\nwindow.CURRICULUM_KANGHSUAN = {new_json_str};\n\n// Wrapper for compatibility\nwindow.CURRICULUM_DATA = window.CURRICULUM_KANGHSUAN.structure;\n"
     
     with open(JS_FILE, 'w', encoding='utf-8') as f:
         f.write(output_content)

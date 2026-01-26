@@ -674,7 +674,7 @@ downloadBtn.addEventListener('click', async () => {
         doc.save(filename);
     } catch (err) {
         console.error("PDF Fail:", err);
-        alert("轉檔失敗，請改用列印。");
+        console.warn("PDF generation failed, but this should not block user flow");
     } finally {
         downloadBtn.innerText = originalText;
         downloadBtn.disabled = false;

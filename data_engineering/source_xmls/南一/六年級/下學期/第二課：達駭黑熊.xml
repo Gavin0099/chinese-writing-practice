@@ -1,0 +1,795 @@
+<GLOSSARY>
+  <INFO>
+    <NAME>第二課：達駭黑熊</NAME>
+    <INTRO>教育百科-生字詞彙表-第二課：達駭黑熊</INTRO>
+    <INTROFORMAT>1</INTROFORMAT>
+    <ALLOWDUPLICATEDENTRIES>0</ALLOWDUPLICATEDENTRIES>
+    <DISPLAYFORMAT>encyclopedia</DISPLAYFORMAT>
+    <SHOWSPECIAL>0</SHOWSPECIAL>
+    <SHOWALPHABET>1</SHOWALPHABET>
+    <SHOWALL>1</SHOWALL>
+    <ALLOWCOMMENTS>1</ALLOWCOMMENTS>
+    <USEDYNALINK>1</USEDYNALINK>
+    <DEFAULTAPPROVAL>0</DEFAULTAPPROVAL>
+    <GLOBALGLOSSARY>0</GLOBALGLOSSARY>
+    <ENTBYPAGE>10</ENTBYPAGE>
+    <ENTRIES>
+      <ENTRY>
+        <CONCEPT>獵</CONCEPT>
+        <DEFINITION>捕取野獸。如：「打獵」。
+打獵的。如：「獵槍」、「獵戶」、「獵犬」。
+追求、求取。如：「獵取」、「涉獵」、「獵豔」。
+1.捕捉禽獸。[例]打獵、狩獵
+2.打獵的。[例]獵犬、獵人、獵槍
+3.探尋、求取。[例]獵才、獵取
+1.追捕禽獸。《詩經．魏風．伐檀》：「不狩不獵，胡瞻爾庭有縣貆兮。」
+2.探求、尋求。南朝梁．劉勰《文心雕龍．辨騷》：「中巧者獵其豔辭，吟諷者銜其山川。」唐．李白〈大獵賦〉：「頓天網以掩之，獵賢俊以御極。」
+3.吹拂、掠過。東周戰國．宋玉〈風賦〉：「獵蕙草，離秦衡，概新夷，被荑楊。」宋．歐陽修〈漁家傲．昨日採花花欲盡〉詞：「隔花聞道潮來近，風獵紫荷聲又緊。」
+4.踐踏。通「躐」。《荀子．議兵》：「不殺老弱，不獵禾稼。」唐．楊倞．注：「獵與躐同，踐也。」
+打獵的。如：「獵人」、「獵犬」、「獵鷹」。
+模擬風聲。南朝宋．鮑照〈還都道中作〉詩：「鱗鱗夕雲起，獵獵曉風遒。」
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>尚</CONCEPT>
+        <DEFINITION>還。如：「尚未」、「尚小」、「尚且」、「尚可」。
+尊貴不俗。如：「高尚」。
+尊崇、注重。如：「崇尚」、「尚文」、「尚武」、「尚仁」、「明理尚義」。
+所崇尚的風氣或格調。如：「風尚」、「時尚」。
+1.猶、還。[例]尚未
+2.推崇、重視。[例]崇尚、尚文、尚武
+3.姓。
+1.尊崇、仰慕。如：「尚文」、「尚武」。《墨子．尚賢上》：「不能以尚賢事能為政也。」
+2.主管其事。通「掌」。《史記．卷九．呂太后本紀》：「襄平侯通尚符節，乃令持節矯內太尉北軍。」
+3.仰攀婚姻。《史記．卷八七．李斯傳》：「諸男皆尚秦公主，女悉嫁秦諸公子。」
+1.猶、還。如：「他至今尚未結婚。」《詩經．大雅．蕩》：「雖無老成人，尚有典型。」
+2.尚且、況且。《老子》第二三章：「天地尚不能久，而況於人乎？」
+3.希望，表示祈求。如：「尚饗」。唐．韓愈〈汴州東西水門記〉：「乃伐山石，刻之日月，尚俾來者知作之所始。」
+ 姓。如漢代有尚長。
+附錄－百家姓
+1.尊崇、重視。例：尚武。
+2.囂張、跋扈。例：尚勝。
+3.胡語的音譯。泛稱男性僧侶。例：和尚。
+4.姓。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>括</CONCEPT>
+        <DEFINITION>包含。如：「包括」、「概括」。
+搜求。如：「搜括」。
+1.包含。[例]總括、概括
+2.搜尋、搜求。[例]搜括、括求
+→括約肌
+1.捆束、收攏。《禮記．喪大記》：「括髮以麻，婦人髽帶麻于房中。」明．謝良《中山狼傳》：「入狼於囊，遂括囊口，肩舉驢上。」
+2.包含。如：「總括」、「概括」。《文選．揚雄．羽獵賦》：「野盡山窮，囊括其雌雄。」唐．白居易〈初授拾遺〉詩：「杜甫陳子昂，才名括天地。」
+3.搜尋、搜求。如：「搜括」。《新唐書．卷二○二．文藝傳中．蕭穎士傳》：「奉使括遺書趙、衛間。」
+箭末端搭扣弦的部分。同「栝」。《書經．太甲上》：「若虞機張，往省括於度，則釋。」唐．孔穎達．正義：「括，謂矢末。」《孔子家語．卷五．子路初見》：「括而羽之，鏃而礪之，其入之不亦深乎？」
+1.(一)之又音。
+2.參見「括約肌」條。
+成群的人。
+總括之義。例：包括。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>糞</CONCEPT>
+        <DEFINITION>屎，動物的肛門排泄物。如：「鳥糞」、「牛糞」、「馬糞」。
+汙穢的。如：「糞土」。
+屎，動物的肛門排泄物。[例]鳥糞、牛糞
+1.掃、棄。《說文解字．𠦒部》：「糞，棄除也。」《左傳．昭公三年》：「自子之歸也，小人糞除先人之敝廬，曰子其將來。」宋．陸游〈智者寺興造記〉：「事廢不舉，地茀不糞，棟撓柱腐。」
+2.施肥。《禮記．月令》：「可以糞田疇，可以美土疆。」
+1.屎，動物的肛門排泄物。如：「鳥糞」、「牛糞」。元．馬致遠〈耍孩兒．近來時買得匹蒲梢騎套．四煞〉：「拋糞時教乾處拋，尿綽時教淨處尿。」
+2.肥料。明．徐光啟《農政全書．卷六．農事．營治上》：「劚起宿土，雜以蒿草，火燎之，以絕蟲類，併得為糞。」
+排泄物，引申為肥料。
+指垃圾。
+糞便。例：糞堆
+糞便。例：糞土
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>寮</CONCEPT>
+        <DEFINITION>簡陋的屋舍。如：「菜寮」、「工寮」、「菇寮」、「寮房」。
+簡陋的屋舍。[例]菜寮、工寮、菇寮
+1.小窗。南朝梁．簡文帝〈序愁賦〉：「玩飛花之入戶，看斜暉之度寮。」清．孔尚任《桃花扇》第四○齣：「問秦淮舊日窗寮，破紙迎風，壞檻當潮。」
+2.簡陋的屋舍。如：「菜寮」、「工寮」、「菇寮」。宋．陸游〈貧居〉詩：「囊空如客路，屋窄似僧寮。」
+3.官吏。通「僚」。唐．皮日休〈何武傳〉：「雖劇寮貴吏，皆得辱殺之。」
+臨時搭建的、簡陋的小屋或棚子。
+1.簡單鄙陋的屋舍。例：搭寮仔。
+2.國名。位於中南半島，是一個內陸國。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>狩</CONCEPT>
+        <DEFINITION>打獵。如：「狩獵」。
+巡狩：古代天子出巡視察。
+打獵。[例]狩獵
+1.打獵。《詩經．魏風．伐檀》：「不狩不獵，胡瞻爾庭有縣貆兮。」《列子．黃帝》：「趙襄子率徒十萬，狩於中山。」
+2.參見「巡狩」條。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>迫</CONCEPT>
+        <DEFINITION>硬逼、用權勢使人做事。如：「逼迫」、「壓迫」、「迫害」。
+緊急、急切。如：「迫切」、「迫不及待」、「從容不迫」。
+接近。如：「迫近」。
+1.接近。[例]迫近
+2.強逼。[例]強迫、壓迫、迫使
+3.危急、緊急。[例]迫不及待、迫切需要、迫在眉睫
+4.摧殘、殘害。[例]迫害、煎迫
+5.催促。[例]催迫、迫促
+6.困窘。[例]窘迫
+7.狹窄。[例]迫隘、地勢局迫
+1.接近。《說文解字．辵部》：「迫，近也。」《楚辭．屈原．離騷》：「吾令羲和弭節令，望崦嵫而勿迫。」《文選．司馬遷．報任少卿書》：「涉旬月，迫冬季。」
+2.強逼。如：「壓迫」、「被迫投降」。《左傳．哀公十五年》：「迫孔悝於廁，強盟之。」《莊子．刻意》：「感而後應，迫而後動。」
+3.催促。晉．陶淵明〈雜詩〉：「日月不肯遲，四時相催迫。」唐．杜甫〈戲題畫山水圖歌〉：「能事不受相促迫，王宰始肯留真跡。」
+4.摧殘、殘害。《呂氏春秋．仲春紀．貴生》：「辱莫大於不義，故不義迫生也。」
+1.狹窄。《後漢書．卷二三．竇融傳》：「當今西州地埶局迫，人兵離散，易以輔人，難以自建。」
+2.困窘。宋．蘇軾〈杭州上執政書〉二首之一：「計窮理迫，須至控告。」
+危急、緊急。如：「迫不及待」、「迫切需要」。《莊子．山木》：「夫以利合者，迫窮禍患相棄。」
+緊迫。
+指空間上的壓迫。
+1.接近。例：迫近。
+2.用暴力強逼。例：強迫。
+3.緊急、急促。例：緊迫。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>脅</CONCEPT>
+        <DEFINITION>胸部兩側，由腋下到肋骨盡頭的部位。亦指肋骨。如：「兩脅」。
+逼迫。如：「威脅」、「要脅」、「脅迫」、「脅持」。
+1.胸部兩側，由腋下至肋骨盡處的部位。亦指肋骨。[例]兩脅
+2.逼迫。[例]威脅
+1.胸部兩側，由腋下至肋骨盡處的部位。亦指肋骨。《說文解字．肉部》：「脅，兩膀也。」《楚辭．屈原．天問》：「平脅曼膚，何以肥之？」《史記．卷七九．范雎蔡澤傳》：「魏齊大怒，使舍人笞擊睢，折脅摺齒。」
+2.側、旁邊。漢．劉熙《釋名．釋車》：「脅驅，在服馬外脅也。」唐．顧況〈廣陵白沙大雲寺碑〉：「滄海之脅，有白沙之墟焉。」
+1.以威力逼迫。如：「威脅」。《禮記．樂記》：「強者脅弱，眾者暴寡。」《漢書．卷七○．常惠傳》：「使使脅求公主。」
+2.收斂、收縮。《墨子．兼愛中》：「楚靈王好士細要，故靈王之臣，皆以一飯為節，脅息然後帶。」《文選．司馬相如．長門賦》：「翡翠脅翼而來萃兮，鷥鳳翔而北南。」
+1.人體胸部兩側，亦指肋骨。例：脅下。
+2.強迫、逼迫。例：威脅。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>殺</CONCEPT>
+        <DEFINITION>以器械使人致傷或死亡。如：「殺人」、「殺傷」、「殺生」、「殺身成仁」、「殺人不眨眼」。
+戰鬥。如：「殺出重圍」、「殺進城裡」。
+敗壞。如：「殺風景」。
+削減、壓低。如：「殺價」。
+極度，到了極點。如：「煞」。如：「氣殺人」、「笑殺人」。
+1.使人或動物等失去生命。[例]殺人、殺雞、殺蟲
+2.戰鬥。[例]殺出重圍
+3.敗壞。[例]殺風景
+4.削減。[例]殺價
+5.極甚，到了極點。[例]氣殺、愁殺
+等差。[例]其族食世降一等，親親之殺也。（《禮記．文王世子》）
+1.以刀或武器使人或禽獸等失去生命。如：「殺人放火」、「殺豬宰羊」。
+2.戰鬥。如：「殺出重圍」。《三國演義》第五回：「殺至天明，雄方引兵上關。」
+3.敗壞。如：「殺風景」。
+4.減省。如：「殺價」。
+甚、極。同「煞」。如：「愁殺人」。元．張養浩〈詠江南．一江煙水照晴嵐〉曲：「畫船兒天邊至，酒旗兒風外颭，愛殺江南。」
+等差。《禮記．文王世子》：「其族食世降一等，親親之殺也。」漢．鄭玄．注：「殺，差也。」
+1.減、削。《周禮．地官．廩人》：「若食不能人二釜，則令邦移民就穀，詔王殺邦用。」漢．鄭玄．注：「殺，猶減也。」
+2.衰微。《呂氏春秋．恃君覽．長利》：「是故地日削，子孫彌殺。」漢．高誘．注：「殺，衰也。」
+細小。《呂氏春秋．士容論．審時》：「先時者，大本而華，莖殺而不遂，葉稿短穗。後時者，小莖而麻長，短穗而厚糠，小米鉗而不香。」
+使喪失生命。
+比喻狠、兇、極度。
+捨得。
+用刀或武器使人或動物失去生命。例：殺人。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>遵</CONCEPT>
+        <DEFINITION>服從、謹守。如：「遵守」、「遵循」、「遵照」、「遵命」。
+依照、按照。[例]遵命、遵奉、遵守
+1.順著、循著。《楚辭．屈原．九章．哀郢》：「去故鄉而就遠兮，遵江夏以流亡。」《文選．陸機．文賦》：「遵四時以歎逝，瞻萬物而思紛。」
+2.依照。如：「遵命」。《書經．洪範》：「無偏無陂，遵王之義。」《史記．卷四．周本紀》：「西伯曰文王，遵后稷、公劉之業，則古公、公季之法。」
+按照、依循。例：遵照。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>骸</CONCEPT>
+        <DEFINITION>骨的通稱。如：「骨骸」。
+身體、軀體。如：「形骸」、「遺骸」。
+1.骨的通稱。[例]骨骸
+2.身體、軀體。[例]形骸、屍骸、遺骸
+1.脛骨、小腿骨。《說文解字．骨部》：「骸，脛骨也。」清．段玉裁．注：「膝解為骸關，俠膝之骨為連胲。然則正謂脛骨為骸矣。」
+2.骨的通稱。《公羊傳．宣公十五年》：「易子而食之，析骸而炊之。」漢．何休．解詁：「骸，人骨也。」唐．李白〈南奔書懷〉詩：「舟中指可掬，城上骸爭爨。」
+3.身體、軀體。如：「形骸」、「屍骸」、「遺骸」。《呂氏春秋．孟春紀．重己》：「其為輿馬衣裘也，足以逸身暖骸而已矣。」《列子．黃帝》：「有七尺之骸，手足之異，戴髮含齒，倚而趣者，謂之人。」
+骨頭的通稱。例：骨骸。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>窩</CONCEPT>
+        <DEFINITION>鳥獸、昆蟲等的巢穴。如：「鳥窩」、「蜂窩」、「雞窩」、「豬窩」。
+比喻人聚集或居住的地方。如：「賊窩」、「土匪窩」、「安樂窩」。
+窩一樣凹陷的地方。如：「酒窩」、「腋窩」、「胳肢窩」。
+止留、縮伏。如：「別整天窩在家中，出去透透氣吧！」
+窩藏：暗藏、藏匿。如：「窩藏人犯」。
+窩心：心裡欣慰快樂。如：「他親切的問候讓人感到十分窩心。」
+1.鳥獸、昆蟲等的巢穴。[例]鳥窩、蜂窩、狗窩
+2.人聚集或居住的地方。[例]賊窩、土匪窩、安樂窩
+3.凹陷的地方。[例]酒窩、腋窩、胳肢窩
+4.藏匿。[例]窩贓
+1.鳥獸昆蟲等的巢穴。如：「鳥窩」、「蜂窩」、「雞窩」、「豬窩」。
+2.人聚集或居住的地方。如：「賊窩」、「土匪窩」。《儒林外史》第一四回：「馬二先生身子又長，戴一頂高方巾，一幅烏黑的臉，捵著個肚子，穿著一雙厚底破靴，橫著身子亂跑，只管在人窩子裡撞。」
+3.凹陷的地方。如：「酒窩」、「胳肢窩」。
+4.量詞。計算窩巢的單位。如：「一窩螞蟻」、「家裡的母狗昨晚生了一窩小狗。」
+1.藏匿。如：「窩藏罪犯」。《警世通言．卷一五．金令史美婢酬秀童》：「你偷庫內這四錠元寶，藏於何處？窩在那家？」
+2.停留、蜷伏。如：「別整天窩在家裡，到外頭透透氣吧！」《兒女英雄傳》第六回：「那三兒只叫得一聲：『我的媽呀！』鏜，把個銅鏇了扔了，咕咭也窩在那裡了。」
+3.捲、繞。如：「把鐵絲窩個圈圈兒。」《西遊記》第四六回：「須臾，剃下髮來，窩作一團，塞在那櫃腳紇絡裡。」
+4.鬱積。如：「窩了一肚子氣。」
+1.低窪的地方。例：山窩。
+2.指人聚集的居所。例：安樂窩。
+3.藏。例：窩藏。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>杉</CONCEPT>
+        <DEFINITION>常綠喬木。樹幹筆直。木材可供建築和製造器具用。如：「紅豆杉」、「臺灣杉」。
+植物名。杉科杉屬，常綠大喬木。樹皮紅褐色，縱向溝裂。葉螺旋狀著生，呈鑿形，具龍骨，兩側具白色氣孔帶。雌雄同株。結球形木質毬果。可供建築及製造器具。
+(一)之語音。
+杉科杉屬，「杉木」之簡稱，參見「杉木」條。
+見「杉仔樹」。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>翼</CONCEPT>
+        <DEFINITION>翅膀。如：「鳥翼」、「羽翼」。
+軍隊或球隊的左右兩側。如：「兩翼」、「左翼」、「右翼」。
+輔助。如：「輔翼」。
+掩護、保護。如：「卵翼」。
+翼翼：小心謹慎的樣子。如：「小心翼翼」。
+1.翅膀。[例]蟬翼、鳥翼
+2.外型或功能近似翅膀的東西。[例]機翼
+3.側、旁邊。[例]左翼、右翼
+4.輔助、庇護。[例]卵翼、覆翼
+1.翅膀。如：「蟬翼」、「鳥翼」。《易經．明夷．初九》：「明夷于飛，垂其翼。」《戰國策．楚策四》：「王獨不見夫蜻蛉乎，六足四翼，飛翔乎天地之間。」
+2.分布於左右兩側的軍隊。《史記．卷八一．廉頗藺相如傳》：「李牧多為奇陳，張左右翼擊之，大破殺匈奴十餘萬騎。」
+3.船。《文選．張協．七命》：「爾乃浮三翼，戲中沚。」
+4.地名。春秋時晉邑，故城約在今大陸地區山西省翼城縣東南。
+5.姓。如漢代有翼奉。
+1.輔助。《書經．益稷謨》：「予欲左右有民，汝翼。」《禮記．文王世子》：「保也者，慎其身以輔翼之，而歸諸道者也。」
+2.掩蔽、保護。《詩經．大雅．生民》：「誕寘之寒冰，鳥覆翼之。」《漢書．卷一．高帝紀上》：「項伯亦起舞，常以身翼蔽沛公。」
+1.恭謹。《詩經．小雅．六月》：「有嚴有翼，共武之服。」《論語．鄉黨》：「沒階趨進，翼如也。」
+2.第二的、次的。通「翌」。《書經．武成》：「越翼日，癸巳。」
+　　翼是飛機的主要構件，功用是產生支持飛機重量以及飛行所需的升力。機翼的空氣動力特性取決於機翼外形、飛行狀況、飛行速度和高度等。翼的外形如下圖所示，圖中所繪翼的剖面形狀稱為翼剖面(airfoil)。翼上各位置的翼剖面一般是不同的，其弦線也不一定在同一平面中。機翼的上視圖稱為機翼的平面形狀，稱為翼面(planform)，常見約有矩形、梯形、後掠梯形、三角形等。翼從一端至另一端的垂直距離稱為翼展b。翼的面積為S，平均弦長為S/b。翼展與平均弦長之比稱為展弦(AR＝b2/S)。
+翅膀。
+1.翅膀。例：鳥翼。
+2.一側、旁邊。例：左翼。
+3.幫助、庇護。例：覆翼。
+4.姓。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>奄</CONCEPT>
+        <DEFINITION>奄奄：形容氣息微弱、快要斷氣的樣子。如：「奄奄一息」。
+覆，涵蓋。如：「奄有」。
+忽然。如：「奄忽」。
+1.覆蓋、涵蓋。[例]奄有四海
+2.急遽、匆促。[例]奄忽經秋
+1.古代指被割掉生殖器的男人。通「閹」。[例]奄侍、奄兒
+2.久。通「淹」。[例]奄留、奄觀
+覆蓋、涵蓋。《詩經．周頌．執競》：「自彼成康，奄有四方。」《淮南子．脩務》：「萬物至眾，而知不足以奄之。」
+急遽、匆促、忽然。如：「奄忽」。《三國志．卷四四．蜀書．蔣琬傳》：「先主嘗因游觀，奄至廣都，琬眾事不理，時又沉醉，先主大怒，將加罪戮。」北周．庾信〈楊柳歌〉：「百年霜露奄離披，一旦功名不可為。」
+被割掉生殖器的人。通「閹」。如：「奄豎」。《新唐書．卷一三六．李光弼傳．贊曰》：「及困於口舌，不能以忠自明，奄侍內構，遂陷嫌隙。」
+滯留。通「淹」。南朝宋．謝靈運〈登永嘉綠嶂山詩〉：「踐夕奄昏曙，蔽翳皆周悉。」
+久。通「淹」。如：「奄留」。《詩經．周頌．臣工》：「命我眾人，庤乃錢鎛，奄觀銍艾。」
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>黎</CONCEPT>
+        <DEFINITION>眾多的。如：「黎民」、「黎首」、「黎庶」。
+即將、接近。如：「黎明」。
+中國少數民族之一。分布於廣東、廣西兩省，而以海南島黎母嶺下人數最多。
+姓。
+1.眾多的。[例]黎民、黎庶
+2.即將、接近。[例]黎明
+3.中國少數民族之一。分布於中國大陸廣東、廣西兩省，而以海南島黎母嶺下人數最多。 △黎族、黎人
+4.姓。
+1.眾多的。如：「黎庶」。《詩經．大雅．雲漢》：「周餘黎民，靡有孑遺。」
+2.黑色的。通「黧」。《荀子．堯問》：「舍佚而為勞，顏色黎黑而不失其所。」
+及、將。參見「黎明」條。
+1.中國少數民族之一。分布於大陸地區廣東、廣西兩省，而以海南島黎母嶺下人數最多。《國語．楚語下》：「及少皞之衰也，九黎亂德。」
+2.古國名。殷商時的諸侯國，商末為周文王所滅。故城在今大陸地區山西省長治縣西南。
+3.姓。如北周時有黎景熙。
+附錄－百家姓
+姓。
+1.眾多的。例：黎民。
+2.我國少數民族之一，分布於廣東、廣西兩省。
+3.接近、將要。例：黎明。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>喉</CONCEPT>
+        <DEFINITION>舌根與氣管相接的部分。如：「喉嚨」、「喉頭」、「咽喉」、「喉結」。
+指咽頭以下，氣管以上的部分。由甲狀軟骨、會厭軟骨、環狀軟骨等構成。為呼吸器官的一部分，內有聲帶，具發音功能。　△喉頭、喉嚨　◎
+指咽頭以下，氣管以上的部分。由甲狀軟骨、會厭軟骨、環狀軟骨等構成。為呼吸器官的一部分，內有聲帶，具發音功能。也稱為「喉頭」。
+　　一個收縮管道中最窄的部分，例如在擴散器或超音速噴嘴的喉部。
+是指咽頭以下，氣管以上的部分。由甲狀軟骨、會厭軟骨、環狀軟骨等構成。為呼吸器官的一部分，內有聲帶，具有發音功能。例：喉嗹。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>嚨</CONCEPT>
+        <DEFINITION>喉嚨：咽喉的俗稱。
+→喉嚨
+參見「喉嚨」條。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>吟</CONCEPT>
+        <DEFINITION>拉長聲音，帶有節奏的誦讀。如：「吟唱」、「低吟」、「吟詩」、「吟誦」、「吟詠」、「吟風弄月」。
+呻吟：身心苦痛所發出的呼喊聲。如：「車禍現場一片呻吟聲。」
+啼叫、鳴叫。如：「猿吟」、「蟬吟」。
+體會、玩味。如：「吟味」。
+古代一種詩體的名稱。如：「遊子吟」、「梁甫吟」、「白頭吟」、「隴頭吟」。
+1.身心痛苦發出的聲音。[例]呻吟
+2.詠、誦。[例]吟詠、低吟、吟哦
+3.啼叫、鳴叫。[例]蟬吟、猿吟
+4.古代一種詩體的名稱。如卓文君的〈白頭吟〉、孟郊的〈遊子吟〉。
+1.痛苦時發出的聲音。元．戴侗《六書故．卷一一．吟》：「痛為呻吟。」
+2.嘆息。《戰國策．楚策一》：「雀立不轉，晝吟宵哭。」
+3.詠、誦。如：「吟詠」。《莊子．德充符》：「倚樹而吟，據槁梧而瞑。」
+4.啼叫、鳴叫。《文選．司馬相如．長門賦》：「孔雀集而相存兮，玄猿肅而長吟。」《文選．曹植．雜詩六首之二》：「孤雁飛南遊，過庭長哀吟。」
+5.口吃、話說不清楚。通「唫」。《後漢書．卷三十四．梁統傳》：「為人鳶肩豺目，洞精矘眄，口吟舌言。」
+古代一種詩體的名稱。宋．嚴羽《滄浪詩話．詩體》：「古詞有〈隴頭吟〉，孔明有〈梁父吟〉，文君有〈白頭吟〉。」
+詠、誦。
+1.詠、誦。例：吟詩作對。
+2.啼叫、鳴叫。例：蟬吟。
+3.古代一種詩體的名稱。如孟郊的《遊子吟》等。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>獵人</CONCEPT>
+        <DEFINITION>以狩獵為業的人。[例]他的槍法準、反應快，是一個相當出色的獵人。
+打獵的人。《宋書．卷一．武帝本紀上》：「孟昶勸弘其日出獵，未明開門，出獵人。」《老殘遊記二編》第六回：「六祖隱於四會獵人中，常吃肉邊菜，請問肉鍋裡煮的菜算葷算素？」
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>尚未</CONCEPT>
+        <DEFINITION>還沒有。[例]事情尚未到不可收拾的地步，何必氣餒呢？
+還沒有。《儒林外史》第一回：「從清早晨牽牛出去飲水，尚未回來。」《紅樓夢》第七回：「家父又年紀老邁，殘疾在身，公務繁冗，因此尚未講及再延師一事，目下不過在家溫習舊課而已。」
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>包括</CONCEPT>
+        <DEFINITION>包含、涵蓋。[例]包括五院院長在內，均出席了這次會議。
+包含、總括。如：「你支付的這個金額，已經包括了稅金。」晉．左思〈吳都賦〉：「包括干越，跨躡蠻荊。」《三國演義》第一一○回：「文帝、明帝有包括宇宙之志，併吞八荒之心。」
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>糞便</CONCEPT>
+        <DEFINITION>大便。[例]對於農家而言，糞便是一種天然肥料。
+屎尿。今專指大便。清．陳夢雷《醫部全錄．卷四二七．王肯堂證治準繩》：「小兒時時扎眼，糞便青白沫，有時乾硬。」
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>狩獵</CONCEPT>
+        <DEFINITION>利用獵具或獵狗等捕捉野生鳥獸。[例]任意狩獵是違法的。
+利用獵具或鷹犬捕捉野生鳥獸。漢．劉向《列女傳．卷二．賢明傳》：「莊王即位，好狩獵。」《元史．卷二二．武宗本紀一》：「辛巳，罷益都諸處合剌赤等狩獵。」
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>威脅</CONCEPT>
+        <DEFINITION>以權勢威力脅迫。[例]他無視於威脅利誘，始終堅持自己的原則。
+以威力脅迫。《晉書．卷九八．王敦傳》：「而敦曾無臣子追遠之誠，……將以威脅朝廷，傾危宗社。」《聊齋志異．卷二．聶小倩》：「小倩，姓聶氏，十八夭殂，葬寺側，輒被妖物威脅，歷役賤務。」
+以強大的力量逼人屈服。
+1.以力量加以脅迫。例：佢分壞人威脅，還係出面檢舉這件事。（他被壞人威脅，還是出面檢舉這件事。）
+2.威脅。例：面對恐怖分子个威脅，政府當頭那痛。（面對恐怖分子的威脅，政府很頭痛。）
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>遵照</CONCEPT>
+        <DEFINITION>遵奉依照。[例]對於此事，我們一切遵照上級的指示來辦理。
+遵奉依照。《儒林外史》第四三回：「看上臺如何批下來，我們遵照辦理就是了。」也作「遵依」。
+遵奉依照。例：阿爸遵照先生个吩咐，逐隻月去醫院檢查身體。（爸爸遵照醫生的吩咐，每個月去醫院檢查身體。）
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>骸骨</CONCEPT>
+        <DEFINITION>骨的通稱。一般指屍骨。[例]飛機不幸失事，罹難者的家屬，望著一堆堆難以辨識的骸骨，不禁悲從中來。
+1.骨的通稱，一般指屍骨。《儒林外史》第三九回：「我本是湖廣人，而今把先君骸骨背到故鄉去歸葬。」
+2.形骸、軀體。《史記．卷七．項羽本紀》：「天下大事定矣，君王自為之。願賜骸骨歸卒伍。」
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>杉木</CONCEPT>
+        <DEFINITION>植物名。杉科杉木屬，常綠大喬木。樹幹挺直，樹皮縱裂，外皮呈棕褐色，內皮為赤色。葉旋生而扭成二列，螺旋狀著生，線狀披針形，邊緣有細鋸齒。花單性，雌雄同株。果實為卵圓形毬果，有短柄，種子下垂。材質堅硬細緻，可供建築和製造器具，亦可製作棺木。[例]高山地區普遍可栽植耐寒的杉木。
+植物名。杉科杉木屬，常綠大喬木。樹幹挺直，樹皮縱裂，外皮呈棕褐色，內皮為赤色，高可達三十公尺以上。葉旋生而扭成二列，螺旋狀著生，線狀披針形，背面具二條白色氣孔帶，邊緣有細鋸齒。雌雄同株。毬果卵圓形，有短柄，下垂。材質細緻，可供建築和製造器具，亦可製作棺木。也稱為「福州杉」、「廣葉杉」。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>小心翼翼</CONCEPT>
+        <DEFINITION>形容非常小心謹慎，不敢疏忽。[例]我小心翼翼地將熱湯端上桌，深怕湯汁溢出燙傷手。
+非常謹慎，不敢疏忽。《詩經．大雅．大明》：「維此文王，小心翼翼。昭事上帝，聿懷多福。」《隋書．卷五七．薛道衡傳》：「左右絕諂諛之路，縉紳無勢力之門，小心翼翼，敬事於天地，終日乾乾，誡慎於亢極。」也作「翼翼小心」。
+形容舉止十分謹慎，不敢懈怠疏忽。◎語出《詩經．大雅．大明》。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>奄奄一息</CONCEPT>
+        <DEFINITION>僅存微弱的一口氣。形容生命垂危。[例]車禍傷患被送到醫院時已奄奄一息，最後終告不治。
+僅存微弱的一口氣。形容生命或事物已到了最後時刻。《警世通言．卷一五．金令史美婢酬秀童》：「此時秀童奄奄一息，爬走不動了。」《紅樓夢》第一○六回：「賈璉走近旁邊，見鳳姐奄奄一息，就有多少怨言一時也說不出來。」也作「一息奄奄」、「淹淹一息」。
+僅存微弱的一口氣。形容生命已到了最後時刻。語本晉．李密〈陳情表〉。
+△「日薄西山」
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>黎明</CONCEPT>
+        <DEFINITION>天快亮的時候。[例]他每天黎明時分便到附近的公園運動健身。
+天將明而未明的時候。指天快亮的時候。《史記．卷八．高祖本紀》：「於是沛公乃夜引兵從他道還，更旗幟。黎明，圍宛城三帀。」唐．司馬貞．索隱：「黎，猶比也，謂比至天明。」《老殘遊記》第一九回：「一夜沒睡，黎明即雇了挂車子在黃河邊伺候，也是十里長亭送別的意思。」也作「犁明」。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>喉嚨</CONCEPT>
+        <DEFINITION>→咽喉
+咽喉的俗稱。參見「咽喉」條。
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+      <ENTRY>
+        <CONCEPT>吟唱</CONCEPT>
+        <DEFINITION>吟詠歌唱。[例]她藉由吟唱詩詞，更深刻體會到作品的韻律和美感。
+吟詠歌唱。如：「詩詞吟唱」。宋．梅堯臣〈依韻和永叔澄心堂紙荅劉原甫〉：「曼卿子美人不識，昔嘗吟唱同樽罍。」
+</DEFINITION>
+        <FORMAT>0</FORMAT>
+        <USEDYNALINK>1</USEDYNALINK>
+        <CASESENSITIVE>0</CASESENSITIVE>
+        <FULLMATCH>0</FULLMATCH>
+        <TEACHERENTRY>1</TEACHERENTRY>
+        <CATEGORIES>
+          <CATEGORY>
+            <NAME>教育百科-eduPedia</NAME>
+            <USEDYNALINK>1</USEDYNALINK>
+          </CATEGORY>
+        </CATEGORIES>
+      </ENTRY>
+    </ENTRIES>
+  </INFO>
+</GLOSSARY>

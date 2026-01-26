@@ -286,6 +286,16 @@ function initApp() {
                             </div>
                         `;
 
+                        // CRITICAL: Auto-trigger PDF generation before showing Success Screen
+                        // This ensures cachedPdfBlob is populated
+                        setTimeout(() => {
+                            const dlBtn = document.getElementById('downloadBtn');
+                            if (dlBtn) {
+                                console.log('[Hero] Auto-triggering PDF generation');
+                                dlBtn.click();
+                            }
+                        }, 500);
+
                         // Re-bind Print Button (v1.1 Direct Download - Fixed)
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {

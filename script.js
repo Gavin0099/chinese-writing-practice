@@ -50,6 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const cleanTitle = rec.title.split('\n')[0];
             heroTitle.innerText = `第 ${rec.lesson} 課：${cleanTitle}`;
 
+            // Result-oriented Button Text
+            heroActionBtn.innerHTML = `<span class="icon">✨</span> 下載第 ${rec.lesson} 課練習簿 (10秒)`;
+
             // Dynamic Hint Logic
             const heroHint = document.querySelector('.hero-hint');
             if (heroHint) {
@@ -113,11 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                 
                                 <div class="hero-actions" style="flex-direction: column; gap: 1rem;">
                                     <button id="heroPrintBtn" class="btn-primary-hero" style="background-color: var(--text-dark); box-shadow: 0 4px 15px rgba(44, 62, 80, 0.4);">
-                                        <span class="icon">🖨️</span> 直接列印
+                                        <span class="icon">🖨️</span> 直接列印 第 ${rec.lesson} 課
                                     </button>
                                     
                                     <button id="downloadPdfBtn" class="btn-primary-hero" style="background-color: white; color: var(--text-dark); border: 2px solid #eee;">
-                                        <span class="icon">📥</span> 下載 PDF
+                                        <span class="icon">📥</span> 下載第 ${rec.lesson} 課 PDF
                                     </button>
                                 </div>
                                 
@@ -223,11 +226,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // Toggle Custom Controls
             if (toggleCustomBtn && legacyControls) {
                 toggleCustomBtn.onclick = () => {
-                    if (legacyControls.classList.contains('show-controls')) {
-                        legacyControls.classList.remove('show-controls');
-                    } else {
-                        legacyControls.classList.add('show-controls');
+                    if (legacyControls.style.display === 'none') {
+                        legacyControls.style.display = 'block';
+                        toggleCustomBtn.innerHTML = '📂 收合自訂設定 (進階)';
                         legacyControls.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        legacyControls.style.display = 'none';
+                        toggleCustomBtn.innerHTML = '想練習別課？前往自訂設定';
                     }
                 }
             }

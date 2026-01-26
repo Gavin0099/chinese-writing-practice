@@ -52,135 +52,144 @@
                 </button>
             </div>
         </div>
-    </main>
 
-    <!-- 3. Legacy Controls (Hidden by default) -->
-    <div id="legacyControls" class="container hidden-controls mt-4">
-        <div class="row g-4">
-            <!-- Left: Settings Panel -->
-            <div class="col-lg-4">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header bg-white border-0 pt-4 px-4">
-                        <h5 class="mb-0 fw-bold">自訂設定</h5>
-                    </div>
-                    <div class="card-body p-4">
-                        <!-- Grade Selection (Grid) -->
-                        <div class="mb-4">
-                            <label class="form-label text-muted small mb-2">年級</label>
-                            <div class="grade-selector">
-                                <div class="grade-card active" data-value="1">一年級</div>
-                                <div class="grade-card" data-value="2">二年級</div>
-                                <div class="grade-card disabled" title="尚未整理"
-                                    style="opacity: 0.5; cursor: not-allowed;">三年級</div>
-                                <div class="grade-card disabled" title="尚未整理"
-                                    style="opacity: 0.5; cursor: not-allowed;">四年級</div>
-                                <div class="grade-card disabled" title="尚未整理"
-                                    style="opacity: 0.5; cursor: not-allowed;">五年級</div>
-                                <div class="grade-card disabled" title="尚未整理"
-                                    style="opacity: 0.5; cursor: not-allowed;">六年級</div>
-                            </div>
+        <!-- 3. Legacy Controls (Hidden by default) -->
+        <div id="legacyControls" class="container mt-4" style="display: none;">
+            <div class="row g-4">
+                <!-- Left: Settings Panel -->
+                <div class="col-lg-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-white border-0 pt-4 px-4">
+                            <h5 class="mb-0 fw-bold">自訂設定</h5>
                         </div>
+                        <div class="card-body p-4">
+                            <!-- Grade Selection (Grid) -->
+                            <div class="mb-4">
+                                <label class="form-label text-muted small mb-2">年級</label>
+                                <div class="grade-selector">
+                                    <div class="grade-card active" data-value="1">一年級</div>
+                                    <div class="grade-card" data-value="2">二年級</div>
+                                    <div class="grade-card disabled" title="尚未整理"
+                                        style="opacity: 0.5; cursor: not-allowed;">三年級</div>
+                                    <div class="grade-card disabled" title="尚未整理"
+                                        style="opacity: 0.5; cursor: not-allowed;">四年級</div>
+                                    <div class="grade-card disabled" title="尚未整理"
+                                        style="opacity: 0.5; cursor: not-allowed;">五年級</div>
+                                    <div class="grade-card disabled" title="尚未整理"
+                                        style="opacity: 0.5; cursor: not-allowed;">六年級</div>
+                                </div>
+                            </div>
 
-                        <!-- Semester & Lesson -->
-                        <div class="row mb-3">
-                            <div class="col-6">
-                                <label class="form-label text-muted small">學期</label>
-                                <select id="semesterSelect" class="form-select form-select-sm">
-                                    <option value="A">上學期</option>
-                                    <option value="B">下學期</option>
+                            <!-- Semester & Lesson -->
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label class="form-label text-muted small">學期</label>
+                                    <select id="semesterSelect" class="form-select form-select-sm">
+                                        <option value="A">上學期</option>
+                                        <option value="B">下學期</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label text-muted small">課程</label>
+                                    <select id="lessonSelect" class="form-select form-select-sm">
+                                        <option value="1">第 1 課</option>
+                                        <!-- Dynamic Population -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Manual Input -->
+                            <div class="mb-3">
+                                <label for="characters" class="form-label text-muted small">手動輸入生字</label>
+                                <textarea id="characters" class="form-control" rows="3"
+                                    placeholder="在此貼上生字..."></textarea>
+                            </div>
+
+                            <!-- Grid Settings -->
+                            <div class="mb-3">
+                                <label class="form-label text-muted small">格線</label>
+                                <select id="gridType" class="form-select form-select-sm">
+                                    <option value="tian">田字格</option>
+                                    <option value="mi">米字格</option>
+                                    <option value="square">方格</option>
                                 </select>
                             </div>
-                            <div class="col-6">
-                                <label class="form-label text-muted small">課程</label>
-                                <select id="lessonSelect" class="form-select form-select-sm">
-                                    <option value="1">第 1 課</option>
-                                    <!-- Dynamic Population -->
-                                </select>
+
+                            <!-- Actions -->
+                            <div class="d-grid gap-2">
+                                <!-- Align with primary color -->
+                                <button id="generateBtn" class="btn btn-primary"
+                                    style="background-color: var(--primary-sage); border: none;">
+                                    更新預覽
+                                </button>
                             </div>
-                        </div>
-
-                        <!-- Manual Input -->
-                        <div class="mb-3">
-                            <label for="characters" class="form-label text-muted small">手動輸入生字</label>
-                            <textarea id="characters" class="form-control" rows="3" placeholder="在此貼上生字..."></textarea>
-                        </div>
-
-                        <!-- Grid Settings -->
-                        <div class="mb-3">
-                            <label class="form-label text-muted small">格線</label>
-                            <select id="gridType" class="form-select form-select-sm">
-                                <option value="tian">田字格</option>
-                                <option value="mi">米字格</option>
-                                <option value="square">方格</option>
-                            </select>
-                        </div>
-
-                        <!-- Actions -->
-                        <div class="d-grid gap-2">
-                            <!-- Align with primary color -->
-                            <button id="generateBtn" class="btn btn-primary"
-                                style="background-color: var(--primary-sage); border: none;">
-                                更新預覽
-                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Right: Preview Panel -->
-            <div class="col-lg-8">
-                <div class="card shadow-sm border-0 h-100">
-                    <div
-                        class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 fw-bold">預覽與列印</h5>
-                        <!-- Real Download Button (Hidden/Programmatic but visible here for manual flow) -->
-                        <button id="downloadBtn" class="btn btn-outline-success btn-sm">
-                            <i class="bi bi-download"></i> 下載 PDF
-                        </button>
-                    </div>
-                    <div class="card-body p-4 bg-light">
-                        <div id="previewSection" class="preview-container text-center" style="min-height: 500px;">
-                            <!-- Sheets will be rendered here -->
-                            <!-- Target container for JS logic -->
-                            <div id="sheets-container"></div>
+                <!-- Right: Preview Panel -->
+                <div class="col-lg-8">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div
+                            class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 fw-bold">預覽與列印</h5>
+                            <!-- Real Download Button (Hidden/Programmatic but visible here for manual flow) -->
+                            <button id="downloadBtn" class="btn btn-outline-success btn-sm">
+                                <i class="bi bi-download"></i> 下載 PDF
+                            </button>
+                        </div>
+                        <div class="card-body p-4 bg-light">
+                            <div id="previewSection" class="preview-container text-center" style="min-height: 500px;">
+                                <!-- Sheets will be rendered here -->
+                                <!-- Target container for JS logic -->
+                                <div id="sheets-container"></div>
 
-                            <div class="text-center text-muted py-5 empty-state">
-                                請點選「產生練習簿」開始預覽
+                                <div class="empty-state py-5">
+                                    <div style="font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.3;">📋</div>
+                                    <h5 style="color: var(--text-dark); margin-bottom: 1rem;">練習簿配置已準備就緒</h5>
+                                    <ul
+                                        style="text-align: left; display: inline-block; list-style: none; padding: 0; color: #666; font-size: 0.9rem; line-height: 1.8;">
+                                        <li>● 格式：標準 A4 尺寸</li>
+                                        <li>● 教材：康軒 113 學年度</li>
+                                        <li>● 內容：筆順教學 + 描紅練習 + 自行書寫</li>
+                                        <li>● 樣式：標準田字格</li>
+                                    </ul>
+                                    <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #999;">按下列印即可取得純淨 A4 格式</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Scripts -->
-    <script src="db_core.js"></script>
-    <script src="curriculum_data.js"></script>
-    <script src="storageManager.js"></script>
-    <script src="recommendationEngine.js"></script>
+        <!-- Scripts -->
+        <script src="db_core.js"></script>
+        <script src="curriculum_data.js"></script>
+        <script src="storageManager.js"></script>
+        <script src="recommendationEngine.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/cnchar@3.2.6/cnchar.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/cnchar-order@3.2.6/cnchar.order.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/cnchar-trad@3.2.6/cnchar.trad.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/cnchar-draw@3.2.6/cnchar.draw.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/cnchar@3.2.6/cnchar.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/cnchar-order@3.2.6/cnchar.order.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/cnchar-trad@3.2.6/cnchar.trad.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/cnchar-draw@3.2.6/cnchar.draw.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <script src="script.js"></script>
+        <script src="script.js"></script>
 
-    <script>
-        // Inline UI logic to hide empty state when generated
-        const genBtn = document.getElementById('generateBtn');
-        if (genBtn) {
-            genBtn.addEventListener('click', () => {
-                const empty = document.querySelector('.empty-state');
-                if (empty) empty.style.display = 'none';
-            });
-        }
-    </script>
+        <script>
+            // Inline UI logic to hide empty state when generated
+            const genBtn = document.getElementById('generateBtn');
+            if (genBtn) {
+                genBtn.addEventListener('click', () => {
+                    const empty = document.querySelector('.empty-state');
+                    if (empty) empty.style.display = 'none';
+                });
+            }
+        </script>
 </body>
 
 </html>

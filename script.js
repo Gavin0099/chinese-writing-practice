@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (heroHint) {
                 let hintText = "🛡 已為您準備好今日進度";
                 if (rec.reason === "new-start") hintText = "✨ 歡迎！從第一課開始練習吧";
-                if (rec.reason === "continue") hintText = `📈 接著上次 (第 ${settings.lastLesson} 課) 的進度`;
+                if (rec.reason === "continue") hintText = `🛡 已為您準備好今天的練習，不用再想了`;
                 if (rec.reason === "semester-jump") hintText = "🚀 太棒了！上學期已完成，進入下學期";
                 if (rec.reason === "grade-jump") hintText = "🎓 恭喜晉級！開始新學年的挑戰";
                 if (rec.reason === "all-finished") hintText = "🎉 所有課程已練習完畢！";
@@ -109,18 +109,30 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Save original content for "Back/Edit" functionality (optional enhancement for later)
                         // For now, simple swap
                         cardContent.innerHTML = `
-                            <div class="success-state" style="animation: fadeIn 0.5s;">
-                                <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
-                                <h2 class="hero-title" style="margin-bottom: 0.5rem; font-size: 2rem;">練習簿製作完成！</h2>
-                                <p class="hero-subtitle" style="margin-bottom: 2rem;">第 ${rec.lesson} 課：${rec.title.split('\n')[0]}</p>
+                            <div class="success-state" style="animation: fadeIn 0.5s; padding: 2rem 0;">
+                                <div style="font-size: 4rem; margin-bottom: 1.5rem;">✅</div>
+                                <h2 class="hero-title" style="margin-bottom: 0.5rem; font-size: 2.2rem; color: var(--primary-sage);">今日任務已達成！</h2>
+                                <p class="hero-subtitle" style="margin-bottom: 2.5rem; opacity: 0.8;">
+                                    第 ${rec.lesson} 課 練習簿已準備好打印<br>
+                                    辛苦了，今天就到這裡吧！
+                                </p>
                                 
-                                <div class="hero-actions" style="flex-direction: column; gap: 1rem;">
-                                    <button id="heroPrintBtn" class="btn-primary-hero" style="background-color: var(--text-dark); box-shadow: 0 4px 15px rgba(44, 62, 80, 0.4);">
-                                        <span class="icon">🖨️</span> 直接列印 第 ${rec.lesson} 課
+                                <div class="hero-actions" style="flex-direction: column; gap: 1rem; max-width: 320px; margin: 0 auto;">
+                                    <button onclick="handlePrintProgress()" class="btn-primary-hero" style="background-color: var(--text-dark); width: 100%;">
+                                        <span class="icon">🖨️</span> 現在列印
                                     </button>
                                     
-                                    <button id="downloadPdfBtn" class="btn-primary-hero" style="background-color: white; color: var(--text-dark); border: 2px solid #eee;">
-                                        <span class="icon">📥</span> 下載第 ${rec.lesson} 課 PDF
+                                    <div style="display: flex; gap: 10px; width: 100%;">
+                                        <button onclick="location.reload()" class="btn-primary-hero" style="background-color: white; color: var(--text-dark); border: 2px solid #eee; flex: 1; font-size: 0.9rem;">
+                                            明天再來
+                                        </button>
+                                        <button onclick="location.reload()" class="btn-primary-hero" style="background-color: var(--primary-sage); flex: 1; font-size: 0.9rem;">
+                                            下一課
+                                        </button>
+                                    </div>
+                                    
+                                    <button id="downloadPdfBtn" class="btn-text" style="margin-top: 1rem; font-size: 0.85rem; text-decoration: underline;">
+                                        或是下載 PDF 備份
                                     </button>
                                 </div>
                                 

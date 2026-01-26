@@ -1236,3 +1236,41 @@ body {
 .card-content {
     animation: fadeIn 0.8s ease-out forwards;
 }
+
+/* =========================================
+   7. 95+ PRODUCT POLISH: RITUAL SCREEN
+   ========================================= */
+.btn-text {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: all 0.2s;
+}
+
+.btn-text:hover {
+    color: var(--text-main);
+    text-decoration: underline;
+}
+
+.success-state h2 {
+    letter-spacing: -0.01em;
+}
+
+.success-state .hero-actions .btn-primary-hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.success-state .hero-actions .btn-primary-hero:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}

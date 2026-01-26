@@ -452,7 +452,9 @@ downloadBtn.addEventListener('click', async () => {
     }
 
     try {
-        for (let i = 0; i < pages.length; i++) {
+        const totalPages = pages.length;
+        for (let i = 0; i < totalPages; i++) {
+            downloadBtn.innerText = `⏳ 轉檔中 (${i + 1}/${totalPages})...`;
             if (i > 0) doc.addPage();
 
             const page = pages[i];
@@ -477,7 +479,17 @@ downloadBtn.addEventListener('click', async () => {
             doc.addImage(imgData, 'JPEG', 0, 0, imgWidth, pdfHeight);
         }
 
-        doc.save('生字練習簿.pdf');
+        // Construct dynamic filename
+        let filename = "生字練習簿.pdf";
+        const hSub = document.getElementById('heroSubTitle');
+        const hTitle = document.getElementById('heroTitle');
+        if (hSub && hTitle) {
+            const subText = hSub.innerText.replace(/\s+/g, '-'); // 一年級-上學期
+            const titleText = hTitle.innerText.replace(/[:：\s]+/g, '-'); // 第-1-課-名稱
+            filename = `康軒-${subText}-${titleText}.pdf`;
+        }
+
+        doc.save(filename);
     } catch (err) {
         console.error("PDF Fail:", err);
         alert("轉檔失敗，請改用列印。");

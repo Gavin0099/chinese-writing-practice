@@ -13,6 +13,7 @@ build/
 
 # OS
 .DS_Store
+thumbs.db
 Thumbs.db
 
 # Backup files
@@ -23,3 +24,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.log
+
+# Large Data Sources (CF Pages Limit <25MB)
+data_engineering/sources/dict-csld.json
+*.csv

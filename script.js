@@ -537,7 +537,27 @@ generateBtn.addEventListener('click', () => {
 
     renderSheets(text);
 });
+
+// v1.1 iOS State
+let iosBlobUrl = null;
+
 downloadBtn.addEventListener('click', async () => {
+    // v1.1 iOS Two-Step Download Check
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    // Step 2: Trigger Download (Sync)
+    if (isIOS && iosBlobUrl) {
+        window.location.href = iosBlobUrl;
+
+        // Optional: Reset after delay
+        setTimeout(() => {
+            // Reset UI if needed, but staying "Ready" is fine for repeated clicks.
+            // If user changes lesson, renderSheets will reset everything (including iosBlobUrl potentially) 
+            // but we need to ensure renderSheets or similar clears this state if needed.
+            // For now, simple flow is enough.
+        }, 1000);
+        return;
+    }
     // Check libraries
     if (typeof html2canvas === 'undefined' || typeof jspdf === 'undefined') {
         alert("PDF 函式庫尚未載入，請稍候再試。");
@@ -612,6 +632,26 @@ downloadBtn.addEventListener('click', async () => {
             const subText = hSub.innerText.replace(/\s+/g, '-'); // 一年級-上學期
             const titleText = hTitle.innerText.replace(/[:：\s]+/g, '-'); // 第-1-課-名稱
             filename = `康軒-${subText}-${titleText}.pdf`;
+        }
+
+        if (isIOS) {
+            // Step 1: Generate & Store Blob
+            const blobUrl = doc.output('bloburl');
+            iosBlobUrl = blobUrl;
+
+            // Update Manual Mode Button (this button)
+            downloadBtn.innerText = "👉 PDF 已就緒 (點此下載)";
+            downloadBtn.disabled = false;
+
+            // Update Success Mode Button (if visible)
+            const heroBtn = document.getElementById('heroPrintBtn');
+            if (heroBtn) {
+                heroBtn.innerHTML = "👉 PDF 已就緒 (點此下載)";
+                heroBtn.style.backgroundColor = "#22c55e"; // Success Green
+                // No need to change onclick, subsequent click triggers downloadBtn.click() 
+                // which hits the "isIOS && iosBlobUrl" block above synchronously.
+            }
+            return;
         }
 
         doc.save(filename);

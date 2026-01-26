@@ -289,99 +289,20 @@ function initApp() {
                         // Re-bind Print Button (v1.1 Direct Download - Fixed)
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {
-                            heroPrintBtn.onclick = async () => {
-                                console.log('[Success Screen] Download button clicked');
+                            heroPrintBtn.onclick = () => {
+                                console.log('[Success Screen] Triggering original download button');
 
                                 if (window.storageManager) {
                                     window.storageManager.addHistory(progressData);
                                 }
 
-                                // Direct PDF generation and download
-                                try {
-                                    // Check libraries
-                                    if (typeof html2canvas === 'undefined' || typeof jspdf === 'undefined') {
-                                        alert("PDF 函式庫尚未載入，請稍候再試。");
-                                        return;
-                                    }
-
-                                    const { jsPDF } = window.jspdf;
-                                    const doc = new jsPDF('p', 'mm', 'a4');
-
-                                    const pages = document.querySelectorAll('.sheet-page');
-                                    if (pages.length === 0) {
-                                        alert('請先產生練習簿');
-                                        return;
-                                    }
-
-                                    // CRITICAL: Force visibility for html2canvas
-                                    const legacyControls = document.getElementById('legacyControls');
-                                    const wasHidden = legacyControls && getComputedStyle(legacyControls).display === 'none';
-
-                                    if (wasHidden) {
-                                        legacyControls.classList.add('show-controls');
-                                    }
-
-                                    // Show loading
-                                    heroPrintBtn.innerHTML = '⏳ 下載中...';
-                                    heroPrintBtn.disabled = true;
-
-                                    // Generate PDF
-                                    for (let i = 0; i < pages.length; i++) {
-                                        if (i > 0) doc.addPage();
-
-                                        const page = pages[i];
-                                        const canvas = await html2canvas(page, {
-                                            scale: 2,
-                                            allowTaint: true,
-                                            logging: false,
-                                            windowWidth: page.scrollWidth,
-                                            windowHeight: page.scrollHeight
-                                        });
-
-                                        const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                                        const imgWidth = 210;
-                                        const imgProps = doc.getImageProperties(imgData);
-                                        const pdfHeight = (imgProps.height * imgWidth) / imgProps.width;
-                                        doc.addImage(imgData, 'JPEG', 0, 0, imgWidth, pdfHeight);
-                                    }
-
-                                    // Construct filename
-                                    let filename = "生字練習簿.pdf";
-                                    const hSub = document.getElementById('heroSubTitle');
-                                    const hTitle = document.getElementById('heroTitle');
-                                    if (hSub && hTitle) {
-                                        const subText = hSub.innerText.replace(/\s+/g, '-');
-                                        const titleText = hTitle.innerText.replace(/[:：\s]+/g, '-');
-                                        filename = `康軒-${subText}-${titleText}.pdf`;
-                                    }
-
-                                    // Download
-                                    doc.save(filename);
-
-                                    // Restore button
-                                    heroPrintBtn.innerHTML = '✅ 已下載';
-                                    setTimeout(() => {
-                                        heroPrintBtn.innerHTML = '📥 已下載 PDF (到超商列印)';
-                                        heroPrintBtn.disabled = false;
-                                    }, 2000);
-
-                                } catch (err) {
-                                    console.error('[Success Screen] PDF generation error:', err);
-                                    console.error('[Success Screen] Error name:', err.name);
-                                    console.error('[Success Screen] Error message:', err.message);
-                                    console.error('[Success Screen] Error stack:', err.stack);
-
-                                    // Show very detailed error to user
-                                    const errorDetails = `錯誤名稱: ${err.name}
-錯誤訊息: ${err.message}
-
-完整堆疊:
-${err.stack || '無堆疊資訊'}`;
-
-                                    alert(`PDF 生成失敗\n\n${errorDetails}\n\n請截圖此訊息`);
-
-                                    heroPrintBtn.innerHTML = '❌ 下載失敗';
-                                    heroPrintBtn.disabled = false;
+                                // Simply trigger the original download button
+                                // This avoids Canvas security issues
+                                const dlBtn = document.getElementById('downloadBtn');
+                                if (dlBtn) {
+                                    dlBtn.click();
+                                } else {
+                                    alert('找不到下載按鈕,請重新整理頁面');
                                 }
                             };
                         }

@@ -286,7 +286,7 @@ function initApp() {
                             </div>
                         `;
 
-                        // Re-bind Print Button (v1.1 Platform Guard)
+                        // Re-bind Print Button (v1.1 Direct Download)
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {
                             heroPrintBtn.onclick = () => {
@@ -294,16 +294,12 @@ function initApp() {
                                     window.storageManager.addHistory(progressData);
                                 }
 
-                                // Trigger download for all platforms
+                                // Direct download: Trigger the hidden download button
+                                // which will re-generate and download the PDF
                                 const dlBtn = document.getElementById('downloadBtn');
-                                if (dlBtn) dlBtn.click();
-
-                                // Desktop only: Optional print after download
-                                if (isDesktopLike && !isIOS) {
-                                    setTimeout(() => {
-                                        // window.print(); // Commented out per product decision
-                                        // Download is sufficient, print is external action
-                                    }, 500);
+                                if (dlBtn) {
+                                    console.log('Triggering download button from Success Screen');
+                                    dlBtn.click();
                                 }
                             };
                         }

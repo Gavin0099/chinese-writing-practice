@@ -313,6 +313,14 @@ function initApp() {
                                         return;
                                     }
 
+                                    // CRITICAL: Force visibility for html2canvas
+                                    const legacyControls = document.getElementById('legacyControls');
+                                    const wasHidden = legacyControls && getComputedStyle(legacyControls).display === 'none';
+
+                                    if (wasHidden) {
+                                        legacyControls.classList.add('show-controls');
+                                    }
+
                                     // Show loading
                                     heroPrintBtn.innerHTML = '⏳ 下載中...';
                                     heroPrintBtn.disabled = true;

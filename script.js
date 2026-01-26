@@ -333,6 +333,7 @@ function initApp() {
                                         const canvas = await html2canvas(page, {
                                             scale: 2,
                                             useCORS: true,
+                                            allowTaint: true,
                                             logging: false,
                                             windowWidth: page.scrollWidth,
                                             windowHeight: page.scrollHeight

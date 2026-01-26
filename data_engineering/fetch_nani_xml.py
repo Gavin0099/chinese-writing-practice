@@ -4,66 +4,54 @@ import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# 目標：一年級 下學期
-URL = "https://pedia.cloud.edu.tw/Bookmark/Textword?year=113_2&degree=1&category=%E5%9C%8B%E8%AA%9E"
+# 目標：南一版 114上 第一課 "魔法文字"
+TARGET_ID = "0102011140100"
+DETAIL_URL = f"https://pedia.cloud.edu.tw/Bookmark/TCollection?TextNameId={TARGET_ID}"
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-    "Referer": "https://pedia.cloud.edu.tw/Bookmark/Textword"
 }
 
-def xray_scan():
-    print(f"🩻 正在對網頁進行 X 光掃描: {URL}")
+def find_js_logic():
+    print(f"🕵️ 正在尋找控制 btnExport 的 JavaScript 代碼...")
+    print(f"🔗 來源頁面: {DETAIL_URL}")
     print("=" * 60)
     
     try:
-        resp = requests.get(URL, headers=HEADERS, verify=False, timeout=10)
+        session = requests.Session()
+        resp = session.get(DETAIL_URL, headers=HEADERS, verify=False, timeout=10)
         soup = BeautifulSoup(resp.text, 'html.parser')
         
-        table = soup.find('table')
-        if not table:
-            print("❌ 找不到表格")
-            return
-
-        rows = table.find_all('tr')[1:] # 跳過標題
+        # 抓取所有 <script> 標籤
+        scripts = soup.find_all('script')
+        found = False
         
-        # 我們只看第一筆南一版的資料就好，不用全部看
-        target_row = None
-        for row in rows:
-            if "南一" in row.get_text():
-                target_row = row
-                break
+        print(f"🔍 掃描了 {len(scripts)} 個腳本區塊...\n")
         
-        if not target_row:
-            print("❌ 沒找到南一版的資料列")
-            return
-
-        print("✅ 鎖定第一筆「南一版」資料列，開始掃描...")
-        cols = target_row.find_all('td')
-        
-        # 掃描所有欄位，因為按鈕可能在第2欄，也可能在第3欄
-        for col_idx, col in enumerate(cols):
-            links = col.find_all('a')
-            if not links: continue
-            
-            print(f"\n🔍 在第 {col_idx+1} 欄找到了 {len(links)} 個連結:")
-            
-            for i, link in enumerate(links):
-                print(f"   --- 🔗 Link {i+1} ---")
-                print(f"   [顯示文字]: {link.get_text().strip()}")
-                print(f"   [所有屬性]: {link.attrs}")
+        for i, script in enumerate(scripts):
+            if script.string and "btnExport" in script.string:
+                print(f"✅ 在第 {i+1} 個腳本中找到了關鍵字！內容如下：")
+                print("-" * 40)
                 
-                # 幫您重點檢查 onclick
-                if 'onclick' in link.attrs:
-                    print(f"   👉 發現 onclick: {link.attrs['onclick']}")
+                # 只印出包含關鍵字的附近幾行，方便閱讀
+                lines = script.string.split('\n')
+                for line in lines:
+                    if "btnExport" in line or "location.href" in line or "window.open" in line:
+                        # 移除多餘空白，印出關鍵程式碼
+                        print(f"👉 {line.strip()}")
                 
-                # 幫您重點檢查 href
-                if 'href' in link.attrs:
-                    print(f"   👉 發現 href: {link.attrs['href']}")
+                print("-" * 40)
+                # 印出原始完整區塊 (如果上面看不懂，我們還可以看下面)
+                # print(script.string) 
+                found = True
+
+        if not found:
+            print("❌ 沒在頁面上找到 'btnExport' 的相關程式碼。")
+            print("   可能代碼是寫在外部的 .js 檔案裡 (例如 site.js)。")
 
     except Exception as e:
         print(f"❌ 發生錯誤: {e}")
 
 if __name__ == "__main__":
-    xray_scan()
+    find_js_logic()

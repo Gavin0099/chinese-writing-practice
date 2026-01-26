@@ -138,51 +138,62 @@ document.addEventListener('DOMContentLoaded', () => {
                                 
                                 <style>
                                     @media print {
-                                        /* Hide everything by default first */
-                                        body > * { display: none !important; }
+                                        /* Hide non-printable UI elements */
+                                        .minimal-header, .hero-section > .container, .secondary-actions, .success-state, .hero-hint {
+                                            display: none !important;
+                                        }
                                         
-                                        /* Only show the Legacy Controls container (wrapper for our sheets) */
+                                        /* Reset main wrapper for printing */
+                                        .hero-section {
+                                            display: block !important;
+                                            margin: 0 !important;
+                                            padding: 0 !important;
+                                            background: white !important;
+                                        }
+
+                                        /* Force show the workbook container regardless of previous state */
                                         #legacyControls { 
                                             display: block !important; 
-                                            position: absolute; 
-                                            left: 0; 
-                                            top: 0; 
-                                            width: 100%;
-                                            margin: 0; 
-                                            padding: 0;
                                             visibility: visible !important;
                                             opacity: 1 !important;
+                                            position: static !important;
+                                            width: 100% !important;
+                                            margin: 0 !important;
+                                            padding: 0 !important;
                                             background: white !important;
                                         }
                                         
-                                        /* Hide UI elements inside legacy controls */
-                                        #legacyControls .row > div:first-child,
-                                        .card-header,
-                                        .empty-state,
-                                        .btn,
-                                        #downloadBtn { 
+                                        /* Hide the settings panel (left column) */
+                                        #legacyControls .row > div:first-child { 
                                             display: none !important; 
                                         }
                                         
-                                        /* Ensure the Preview Column spans full width */
+                                        /* Expand preview panel to full width */
                                         #legacyControls .row > div:last-child { 
                                             width: 100% !important; 
-                                            flex: 0 0 100%; 
-                                            max-width: 100%; 
+                                            flex: 0 0 100% !important; 
+                                            max-width: 100% !important; 
                                             padding: 0 !important;
                                             margin: 0 !important;
                                         }
+
+                                        /* Hide noise inside the preview card */
+                                        .card-header, .empty-state, .btn-text, .btn { 
+                                            display: none !important; 
+                                        }
                                         
-                                        /* Ensure Content is visible */
-                                        #sheets-container, #sheets-container * {
+                                        /* Ensure sheets are visible and clear */
+                                        #sheets-container, .sheet-page {
+                                            display: block !important;
                                             visibility: visible !important;
                                             opacity: 1 !important;
                                         }
-                                        
-                                        /* Remove margins/padding from container for max print area */
-                                        .container-fluid, .container { padding: 0 !important; margin: 0 !important; max-width: none !important; }
-                                        .card { border: none !important; box-shadow: none !important; background: transparent !important; }
-                                        .card-body { padding: 0 !important; }
+
+                                        /* Reset A4 layout for browser print */
+                                        .sheet-page {
+                                            margin: 0 auto !important;
+                                            box-shadow: none !important;
+                                        }
                                     }
                                 </style>
                             </div>

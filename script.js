@@ -541,13 +541,26 @@ generateBtn.addEventListener('click', () => {
 // v1.1 iOS State
 let iosBlobUrl = null;
 
+// v1.1 Robust iOS Check
+function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
 downloadBtn.addEventListener('click', async () => {
     // v1.1 iOS Two-Step Download Check
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const iosDetected = isIOS();
 
     // Step 2: Trigger Download (Sync)
-    if (isIOS && iosBlobUrl) {
-        window.location.href = iosBlobUrl;
+    if (iosDetected && iosBlobUrl) {
+        // iOS: Anchor click simulation for reliable download
+        const a = document.createElement("a");
+        a.href = iosBlobUrl;
+        a.download = "生字練習簿.pdf";
+        a.click();
+
+        // UX Hint
+        alert("✅ 下載已開始\n請至「檔案 App」查看");
 
         // Optional: Reset after delay
         setTimeout(() => {
@@ -634,7 +647,7 @@ downloadBtn.addEventListener('click', async () => {
             filename = `康軒-${subText}-${titleText}.pdf`;
         }
 
-        if (isIOS) {
+        if (iosDetected) {
             // Step 1: Generate & Store Blob
             const blobUrl = doc.output('bloburl');
             iosBlobUrl = blobUrl;

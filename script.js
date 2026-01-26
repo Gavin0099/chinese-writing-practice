@@ -103,8 +103,9 @@ function initApp() {
         if (rec && smartCard) {
             console.log(`🎯 [Smart Core] 推薦: ${rec.grade}年級 ${rec.semester}學期 第${rec.lesson}課 (${rec.title})`);
 
-            // v1.1 Platform Check (Updated: Add width fallback for touch laptops)
-            const isDesktopLike = window.matchMedia("(hover: hover) and (pointer: fine)").matches || window.innerWidth > 1024;
+            // v1.1 Platform Check (Updated: iOS Patch + Width Fallback)
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isDesktopLike = (window.matchMedia("(hover: hover) and (pointer: fine)").matches || window.innerWidth > 1024) && !isIOS;
 
             // v1.1 Today Finished Check
             const isToday = settings.updatedAt && new Date(settings.updatedAt).toDateString() === new Date().toDateString();
@@ -201,7 +202,8 @@ function initApp() {
                                 
                                 <div class="hero-actions" style="flex-direction: column; gap: 1rem; max-width: 320px; margin: 0 auto;">
                                     <button id="heroPrintBtn" class="btn-primary-hero" style="background-color: var(--text-dark); width: 100%;">
-                                        <span class="icon">🖨️</span> ${isDesktopLike ? '現在列印' : '現在下載 PDF'}
+                                        <span class="icon">${isDesktopLike ? '🖨️' : '📥'}</span> 
+                                        ${isIOS ? '下載 PDF (到超商列印)' : (isDesktopLike ? '下載並列印' : '現在下載 PDF')}
                                     </button>
                                     
                                     <div style="display: flex; gap: 10px; width: 100%;">
@@ -292,10 +294,10 @@ function initApp() {
                                     window.storageManager.addHistory(progressData);
                                 }
 
-                                if (isDesktopLike) {
+                                if (isDesktopLike && !isIOS) {
                                     window.print();
                                 } else {
-                                    // Mobile: Trigger html2canvas download
+                                    // Mobile/iOS: Trigger html2canvas download strictly
                                     const dlBtn = document.getElementById('downloadBtn'); // The hidden one
                                     if (dlBtn) dlBtn.click();
                                 }

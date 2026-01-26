@@ -300,13 +300,29 @@ function initApp() {
                                 // Use cached PDF Blob if available
                                 if (cachedPdfBlob) {
                                     console.log('[Success Screen] Using cached PDF Blob');
+
+                                    // Visual feedback
+                                    heroPrintBtn.innerHTML = '⏳ 下載中...';
+                                    heroPrintBtn.disabled = true;
+
                                     const url = URL.createObjectURL(cachedPdfBlob);
                                     const a = document.createElement('a');
                                     a.href = url;
                                     a.download = cachedPdfFilename;
+                                    document.body.appendChild(a);
                                     a.click();
+                                    document.body.removeChild(a);
                                     URL.revokeObjectURL(url);
                                     console.log('[Success Screen] Download triggered successfully');
+
+                                    // Update button
+                                    setTimeout(() => {
+                                        heroPrintBtn.innerHTML = '✅ 下載完成';
+                                        setTimeout(() => {
+                                            heroPrintBtn.innerHTML = '📥 已下載 PDF (到超商列印)';
+                                            heroPrintBtn.disabled = false;
+                                        }, 2000);
+                                    }, 500);
                                 } else {
                                     console.warn('[Success Screen] No cached PDF Blob found');
                                     alert('PDF 尚未生成,請重新整理頁面');

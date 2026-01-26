@@ -325,7 +325,18 @@ function initApp() {
                                     }, 500);
                                 } else {
                                     console.warn('[Success Screen] No cached PDF Blob found');
-                                    alert('PDF 尚未生成,請重新整理頁面');
+
+                                    // Detailed debug info
+                                    const debugInfo = `
+除錯資訊:
+- cachedPdfBlob: ${cachedPdfBlob ? '存在' : 'null'}
+- cachedPdfFilename: ${cachedPdfFilename}
+- iosBlobUrl: ${iosBlobUrl ? '存在' : 'null'}
+
+請截圖此訊息給開發者
+                                    `.trim();
+
+                                    alert(`PDF 尚未生成\n\n${debugInfo}`);
                                 }
                             };
                         }

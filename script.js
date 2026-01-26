@@ -332,7 +332,6 @@ function initApp() {
                                         const page = pages[i];
                                         const canvas = await html2canvas(page, {
                                             scale: 2,
-                                            useCORS: true,
                                             allowTaint: true,
                                             logging: false,
                                             windowWidth: page.scrollWidth,

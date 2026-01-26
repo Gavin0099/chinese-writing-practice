@@ -213,7 +213,7 @@ function initApp() {
                                         </button>
                                     </div>
                                     
-                                    <button id="downloadPdfBtn" class="btn-text" style="margin-top: 1rem; font-size: 0.85rem; text-decoration: underline;">
+                                    <button id="downloadPdfBtn" class="btn-text" style="margin-top: 1rem; font-size: 0.85rem; text-decoration: underline; ${!isDesktopLike ? 'display: none;' : ''}">
                                         或是下載 PDF 備份
                                     </button>
                                 </div>

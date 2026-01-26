@@ -18,18 +18,25 @@
 
 .onboarding-card {
     background: white;
-    padding: 2.5rem;
-    border-radius: 24px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-    max-width: 450px;
+    padding: 3.5rem;
+    border-radius: 32px;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.12);
+    max-width: 550px;
     width: 100%;
     text-align: center;
 }
 
 .onboarding-card h2 {
-    font-weight: 700;
-    margin-bottom: 0.5rem;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
     color: #1e293b;
+}
+
+.onboarding-card p {
+    font-size: 1.1rem;
+    opacity: 0.7;
+    margin-bottom: 1rem;
 }
 
 .onboarding-q {
@@ -40,9 +47,9 @@
 .onboarding-q label {
     display: block;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     color: #64748b;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
 }
 
 .grade-grid {
@@ -59,9 +66,10 @@
 .ob-btn {
     border: 2px solid #e2e8f0;
     background: white;
-    padding: 12px 10px;
-    border-radius: 12px;
-    font-size: 0.9rem;
+    padding: 16px 10px;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -184,10 +192,10 @@ body {
 
 label {
     display: block;
-    font-size: 0.875rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--text-main);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 
 input[type="text"],
@@ -235,9 +243,22 @@ input:focus {
     border: none;
 }
 
+.form-select,
+select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1.1rem;
+    border: 1px solid var(--border-input);
+    border-radius: 8px;
+    background-color: #f8fafc;
+    color: var(--text-dark);
+}
+
 .btn-primary {
     background: var(--primary);
     color: white;
+    font-size: 1.1rem;
+    padding: 1rem 2rem;
     box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
 }
 

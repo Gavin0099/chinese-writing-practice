@@ -487,6 +487,17 @@ function initApp() {
                 updateHeroUI();
             }
 
+            // Bind Reset App (v1.1)
+            const resetBtn = document.getElementById('resetAppBtn');
+            if (resetBtn) {
+                resetBtn.onclick = () => {
+                    if (confirm("⚠️ 確定要重新啟動嗎？這將會重置您的年級與進度。")) {
+                        localStorage.clear();
+                        location.reload();
+                    }
+                };
+            }
+
         } else {
             // Fallback: No recommendation? Show manual controls
             if (legacyControls) legacyControls.classList.add('show-controls');

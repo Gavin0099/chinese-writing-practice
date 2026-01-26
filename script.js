@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <p class="hero-subtitle" style="margin-bottom: 2rem;">第 ${rec.lesson} 課：${rec.title.split('\n')[0]}</p>
                                 
                                 <div class="hero-actions" style="flex-direction: column; gap: 1rem;">
-                                    <button onclick="handlePrintProgress()" class="btn-primary-hero" style="background-color: var(--text-dark); box-shadow: 0 4px 15px rgba(44, 62, 80, 0.4);">
+                                    <button id="heroPrintBtn" class="btn-primary-hero" style="background-color: var(--text-dark); box-shadow: 0 4px 15px rgba(44, 62, 80, 0.4);">
                                         <span class="icon">🖨️</span> 直接列印
                                     </button>
                                     
@@ -120,15 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <span class="icon">📥</span> 下載 PDF
                                     </button>
                                 </div>
-                                <script>
-                                    // Local helper for the dynamically injected HTML
-                                    window.handlePrintProgress = () => {
-                                        if(window.storageManager) {
-                                            window.storageManager.addHistory(${JSON.stringify(progressData)});
-                                        }
-                                        window.print();
-                                    };
-                                </script>
                                 
                                 <style>
                                     @media print {
@@ -181,6 +172,17 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </style>
                             </div>
                         `;
+
+                        // Re-bind Print Button
+                        const heroPrintBtn = document.getElementById('heroPrintBtn');
+                        if (heroPrintBtn) {
+                            heroPrintBtn.onclick = () => {
+                                if (window.storageManager) {
+                                    window.storageManager.addHistory(progressData);
+                                }
+                                window.print();
+                            };
+                        }
 
                         // Re-bind Download Button (since we just created it)
                         document.getElementById('downloadPdfBtn').onclick = () => {

@@ -40,6 +40,8 @@ class RecommendationEngine {
             reason = "new-start";
         }
 
+        const gradeData = window.CURRICULUM_DATA[targetGrade.toString()];
+
         if (gradeData && gradeData[targetSem]) {
             const lessons = gradeData[targetSem];
             const maxLessonId = lessons.reduce((max, l) => l.lesson > max ? l.lesson : max, 0);

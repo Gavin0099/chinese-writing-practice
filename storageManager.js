@@ -28,6 +28,7 @@ const DEFAULT_DATA = {
         grade: 1,
         semester: "A", // 上學期
         lastLesson: 0, // 0 代表尚未開始
+        pinnedLesson: null, // v1.1: User manual selection
         paperSize: "A4",
         directDownload: false,
         updatedAt: new Date().toISOString()
@@ -54,8 +55,8 @@ class StorageManager {
                 console.log("✅ StorageManager: 資料載入成功", this.data);
             } else {
                 this.data = JSON.parse(JSON.stringify(DEFAULT_DATA));
-                this.save();
-                console.log("✨ StorageManager: 建立預設資料", this.data);
+                // Do not save yet, wait for onboarding if needed
+                console.log("✨ StorageManager: 建立預設資料 (待初始化)");
             }
         } catch (e) {
             console.error("❌ StorageManager Init Error:", e);
@@ -99,17 +100,24 @@ class StorageManager {
         this.data.history.unshift(record);
         if (this.data.history.length > 50) this.data.history.pop();
 
-        // 自動更新 lastLesson
-        // 只有當練習的是「進度之後」的課程，才更新 lastLesson？
-        // 策略：永遠更新 lastLesson 為最新下載的這一課，除非它是「複習」(遠小於 current?)
-        // 目前原則：簡單化，下載哪課，那課就是最新的 lastLesson
+        // v1.1 Success Rule:
+        // onSuccess() {
+        //   profile.lastLessonDownloaded = current.lesson;
+        //   profile.pinnedLesson = null;
+        // }
         this.updateSettings({
             lastLesson: lessonInfo.lesson,
             grade: lessonInfo.grade,
-            semester: lessonInfo.semester
+            semester: lessonInfo.semester,
+            pinnedLesson: null // Clear pin after success
         });
 
         this.save();
+    }
+
+    // Check if first time
+    isNewUser() {
+        return !localStorage.getItem(STORAGE_KEY);
     }
 }
 

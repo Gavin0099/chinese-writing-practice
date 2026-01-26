@@ -14,6 +14,38 @@
 </head>
 
 <body>
+    <!-- 0. Onboarding Modal (Spec v1.1) -->
+    <div id="onboardingModal" class="onboarding-overlay" style="display: none;">
+        <div class="onboarding-card">
+            <h2>✨ 歡迎使用生字小幫手</h2>
+            <p>只需 2 個問題，系統將為您自動準備進度</p>
+
+            <div class="onboarding-q">
+                <label>1. 孩子的年級是？</label>
+                <div class="grade-grid" id="obGradeGrid">
+                    <button class="ob-btn" data-value="1">一年級</button>
+                    <button class="ob-btn" data-value="2">二年級</button>
+                    <button class="ob-btn" data-value="3">三年級</button>
+                    <button class="ob-btn" data-value="4">四年級</button>
+                    <button class="ob-btn" data-value="5">五年級</button>
+                    <button class="ob-btn" data-value="6">六年級</button>
+                </div>
+            </div>
+
+            <div class="onboarding-q">
+                <label>2. 目前學期是？</label>
+                <div class="sem-toggle" id="obSemToggle">
+                    <button class="ob-btn" data-value="A">上學期</button>
+                    <button class="ob-btn" data-value="B">下學期</button>
+                </div>
+            </div>
+
+            <button id="obStartBtn" class="btn-primary-hero" style="width: 100%; margin-top: 1rem;" disabled>
+                開始練習
+            </button>
+        </div>
+    </div>
+
     <!-- 1. Minimal Header -->
     <header class="minimal-header">
         <div class="brand">

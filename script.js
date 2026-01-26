@@ -22,11 +22,70 @@ function loadCharDatabase() {
 }
 // Init immediately when DOM loads
 // Init immediately when DOM loads
+// --- Spec v1.1 Implementation Start ---
 document.addEventListener('DOMContentLoaded', () => {
     loadCharDatabase();
 
-    // --- Smart Core Integration ---
-    if (window.storageManager && window.recommendationEngine) {
+    // 0. Handle Onboarding (Spec v1.1)
+    if (window.storageManager && window.storageManager.isNewUser()) {
+        const modal = document.getElementById('onboardingModal');
+        const startBtn = document.getElementById('obStartBtn');
+        if (modal) {
+            modal.style.display = 'flex';
+
+            let selectedGrade = null;
+            let selectedSem = null;
+
+            // Auto-detect semester based on month (v1.1 Step 1.1)
+            const month = new Date().getMonth() + 1;
+            const defaultSem = (month >= 2 && month <= 6) ? 'B' : 'A';
+
+            document.querySelectorAll('#obSemToggle .ob-btn').forEach(b => {
+                if (b.dataset.value === defaultSem) {
+                    b.classList.add('active');
+                    selectedSem = defaultSem;
+                }
+                b.onclick = () => {
+                    document.querySelectorAll('#obSemToggle .ob-btn').forEach(x => x.classList.remove('active'));
+                    b.classList.add('active');
+                    selectedSem = b.dataset.value;
+                    checkValid();
+                };
+            });
+
+            document.querySelectorAll('#obGradeGrid .ob-btn').forEach(b => {
+                b.onclick = () => {
+                    document.querySelectorAll('#obGradeGrid .ob-btn').forEach(x => x.classList.remove('active'));
+                    b.classList.add('active');
+                    selectedGrade = parseInt(b.dataset.value);
+                    checkValid();
+                };
+            });
+
+            function checkValid() {
+                if (selectedGrade && selectedSem) startBtn.disabled = false;
+            }
+
+            startBtn.onclick = () => {
+                window.storageManager.updateSettings({
+                    grade: selectedGrade,
+                    semester: selectedSem,
+                    lastLesson: 0,
+                    pinnedLesson: null
+                });
+                modal.style.display = 'none';
+                initApp(); // Start the app
+            };
+            return; // Stop here, initApp will be called by startBtn
+        }
+    }
+
+    // Normal Start
+    initApp();
+});
+
+function initApp() {
+    const mainScript = () => {
         // 1. Init Storage
         const settings = window.storageManager.getSettings();
 
@@ -44,26 +103,43 @@ document.addEventListener('DOMContentLoaded', () => {
         if (rec && smartCard) {
             console.log(`🎯 [Smart Core] 推薦: ${rec.grade}年級 ${rec.semester}學期 第${rec.lesson}課 (${rec.title})`);
 
-            // UI Update
-            heroSubTitle.innerText = `${rec.grade}年級 ${rec.semester === 'A' ? '上學期' : '下學期'}`;
-            // Clean up title (remove metadata after \n)
-            const cleanTitle = rec.title.split('\n')[0];
-            heroTitle.innerText = `第 ${rec.lesson} 課：${cleanTitle}`;
+            // v1.1 Platform Check
+            const isDesktopLike = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-            // Result-oriented Button Text
-            heroActionBtn.innerHTML = `<span class="icon">✨</span> 下載第 ${rec.lesson} 課練習簿 (10秒)`;
+            // v1.1 Today Finished Check
+            const isToday = settings.updatedAt && new Date(settings.updatedAt).toDateString() === new Date().toDateString();
+            const isThisLesson = settings.lastLesson === rec.lesson;
+            const todayFinished = isToday && isThisLesson && settings.lastLesson > 0;
 
-            // Dynamic Hint Logic
+            // UI Update (v1.1 Special Titles)
+            if (rec.isNewSemester) {
+                heroSubTitle.innerText = `準備開始 ${rec.grade} 年級 ${rec.semester === 'A' ? '上學期' : '下學期'}`;
+                heroTitle.innerText = "✨ 新的開始";
+            } else {
+                heroSubTitle.innerText = `${rec.grade} 年級 ${rec.semester === 'A' ? '上學期' : '下學期'}`;
+                const cleanTitle = rec.title.split('\n')[0];
+                heroTitle.innerText = `第 ${rec.lesson} 課：${cleanTitle}`;
+            }
+
+            // CTA Button Logic (v1.1)
+            if (todayFinished) {
+                heroActionBtn.innerHTML = `<span class="icon">✅</span> 今天已完成 (可重印)`;
+                heroActionBtn.style.backgroundColor = 'var(--text-dark)';
+            } else {
+                heroActionBtn.innerHTML = `<span class="icon">✨</span> 下載第 ${rec.lesson} 課練習簿 (10秒)`;
+                heroActionBtn.style.backgroundColor = 'var(--primary-sage)';
+            }
+
+            // Dynamic Hint Logic (Spec v1.1)
             const heroHint = document.querySelector('.hero-hint');
             if (heroHint) {
                 let hintText = "🛡 已為您準備好今日進度";
-                if (rec.reason === "new-start") hintText = "✨ 歡迎！從第一課開始練習吧";
-                if (rec.reason === "continue") hintText = `🛡 已為您準備好今天的練習，不用再想了`;
-                if (rec.reason === "semester-jump") hintText = "🚀 太棒了！上學期已完成，進入下學期";
-                if (rec.reason === "grade-jump") hintText = "🎓 恭喜晉級！開始新學年的挑戰";
-                if (rec.reason === "all-finished") hintText = "🎉 所有課程已練習完畢！";
+                if (rec.isNewSemester) hintText = "恭喜完成一個學期 🎉";
+                else if (settings.pinnedLesson) hintText = "依你的選擇準備";
+                else if (settings.lastLesson > 0) hintText = `接著上次（第 ${settings.lastLesson} 課）的進度`;
+                else hintText = "從第一課開始練習";
 
-                heroHint.innerHTML = `<span class="bi bi-shield-check"></span> ${hintText}`;
+                heroHint.innerHTML = `<span class="icon-shield">🛡</span> ${hintText}`;
             }
 
             // Show Content
@@ -123,14 +199,14 @@ document.addEventListener('DOMContentLoaded', () => {
                                 
                                 <div class="hero-actions" style="flex-direction: column; gap: 1rem; max-width: 320px; margin: 0 auto;">
                                     <button id="heroPrintBtn" class="btn-primary-hero" style="background-color: var(--text-dark); width: 100%;">
-                                        <span class="icon">🖨️</span> 現在列印
+                                        <span class="icon">🖨️</span> ${isDesktopLike ? '現在列印' : '現在下載 PDF'}
                                     </button>
                                     
                                     <div style="display: flex; gap: 10px; width: 100%;">
                                         <button onclick="location.reload()" class="btn-primary-hero" style="background-color: white; color: var(--text-dark); border: 2px solid #eee; flex: 1; font-size: 0.9rem;">
                                             明天再來
                                         </button>
-                                        <button onclick="location.reload()" class="btn-primary-hero" style="background-color: var(--primary-sage); flex: 1; font-size: 0.9rem;">
+                                        <button id="nextLessonBtn" class="btn-primary-hero" style="background-color: var(--primary-sage); flex: 1; font-size: 0.9rem;">
                                             下一課
                                         </button>
                                     </div>
@@ -214,6 +290,15 @@ document.addEventListener('DOMContentLoaded', () => {
                                     window.storageManager.addHistory(progressData);
                                 }
                                 window.print();
+                            };
+                        }
+
+                        // Re-bind Next Lesson (Spec v1.1)
+                        const nextBtn = document.getElementById('nextLessonBtn');
+                        if (nextBtn) {
+                            nextBtn.onclick = () => {
+                                window.storageManager.updateSettings({ pinnedLesson: null });
+                                location.reload();
                             };
                         }
 
@@ -406,7 +491,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Fallback: No recommendation? Show manual controls
             if (legacyControls) legacyControls.classList.add('show-controls');
         }
-    }
+    }; // Close mainScript
+    mainScript();
 });
 
 // Initial Setup - Register Plugins
@@ -420,6 +506,13 @@ if (window.cnchar) {
 generateBtn.addEventListener('click', () => {
     const text = charactersInput.value.replace(/\s+/g, '');
     if (!text) { alert('請輸入生字'); return; }
+
+    // v1.1 Custom Screen behavior: update pinnedLesson
+    const lesSel = document.getElementById('lessonSelect');
+    if (lesSel && window.storageManager) {
+        window.storageManager.updateSettings({ pinnedLesson: parseInt(lesSel.value) });
+    }
+
     renderSheets(text);
 });
 downloadBtn.addEventListener('click', async () => {

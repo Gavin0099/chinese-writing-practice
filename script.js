@@ -493,7 +493,7 @@ function initApp() {
         }
     }; // Close mainScript
     mainScript();
-});
+}
 
 // Initial Setup - Register Plugins
 if (window.cnchar) {

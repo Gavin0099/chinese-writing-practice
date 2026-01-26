@@ -1,4 +1,84 @@
 /* =========================================
+   0. ONBOARDING (v1.1)
+   ========================================= */
+.onboarding-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 1);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.onboarding-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    max-width: 450px;
+    width: 100%;
+    text-align: center;
+}
+
+.onboarding-card h2 {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #1e293b;
+}
+
+.onboarding-q {
+    text-align: left;
+    margin-top: 1.5rem;
+}
+
+.onboarding-q label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+}
+
+.grade-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.sem-toggle {
+    display: flex;
+    gap: 10px;
+}
+
+.ob-btn {
+    border: 2px solid #e2e8f0;
+    background: white;
+    padding: 12px 10px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ob-btn:hover {
+    border-color: #4f46e5;
+    color: #4f46e5;
+}
+
+.ob-btn.active {
+    background: #4f46e5;
+    border-color: #4f46e5;
+    color: white;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+/* =========================================
    1. GLOBAL & RESET (Modern SaaS Style)
    ========================================= */
 :root {

@@ -203,7 +203,7 @@ function initApp() {
                                 <div class="hero-actions" style="flex-direction: column; gap: 1rem; max-width: 320px; margin: 0 auto;">
                                     <button id="heroPrintBtn" class="btn-primary-hero" style="background-color: var(--text-dark); width: 100%;">
                                         <span class="icon">${isIOS ? '�' : '📥'}</span> 
-                                        ${isIOS ? '已下載 PDF (到超商列印)' : '已下載 PDF'}
+                                        ${isIOS ? '已下載 PDF (到超商列印)' : (isDesktopLike ? '下載並列印' : '已下載 PDF')}
                                     </button>
                                     
                                     <div style="display: flex; gap: 10px; width: 100%;">
@@ -329,7 +329,8 @@ function initApp() {
                                     setTimeout(() => {
                                         heroPrintBtn.innerHTML = '✅ 下載完成';
                                         setTimeout(() => {
-                                            heroPrintBtn.innerHTML = '📥 已下載 PDF (到超商列印)';
+                                            const finalText = (typeof isDesktopLike !== 'undefined' && isDesktopLike) ? '🖨️ 下載並列印' : '📥 已下載 PDF (到超商列印)';
+                                            heroPrintBtn.innerHTML = finalText;
                                             heroPrintBtn.disabled = false;
                                         }, 2000);
                                     }, 500);

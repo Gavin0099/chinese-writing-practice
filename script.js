@@ -112,12 +112,14 @@ function initApp() {
             const todayFinished = isToday && isThisLesson && settings.lastLesson > 0;
 
             // UI Update (v1.1 Special Titles)
+            let cleanTitle = rec.title ? rec.title.split('\n')[0] : "";
+
             if (rec.isNewSemester) {
                 heroSubTitle.innerText = `準備開始 ${rec.grade} 年級 ${rec.semester === 'A' ? '上學期' : '下學期'}`;
                 heroTitle.innerText = "✨ 新的開始";
+                cleanTitle = "新的開始";
             } else {
                 heroSubTitle.innerText = `${rec.grade} 年級 ${rec.semester === 'A' ? '上學期' : '下學期'}`;
-                const cleanTitle = rec.title.split('\n')[0];
                 heroTitle.innerText = `第 ${rec.lesson} 課：${cleanTitle}`;
             }
 

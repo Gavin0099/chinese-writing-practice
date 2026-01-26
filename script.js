@@ -21,7 +21,310 @@ function loadCharDatabase() {
     }
 }
 // Init immediately when DOM loads
-document.addEventListener('DOMContentLoaded', loadCharDatabase);
+// Init immediately when DOM loads
+document.addEventListener('DOMContentLoaded', () => {
+    loadCharDatabase();
+
+    // --- Smart Core Integration ---
+    if (window.storageManager && window.recommendationEngine) {
+        // 1. Init Storage
+        const settings = window.storageManager.getSettings();
+
+        // 2. Get Recommendation
+        const rec = window.recommendationEngine.getRecommendation(settings);
+        const smartCard = document.getElementById('smartCard');
+        const heroTitle = document.getElementById('heroTitle');
+        const heroSubTitle = document.getElementById('heroSubTitle');
+        const heroActionBtn = document.getElementById('heroActionBtn');
+        const cardLoading = document.querySelector('.card-loading');
+        const cardContent = document.querySelector('.card-content');
+        const legacyControls = document.getElementById('legacyControls');
+        const toggleCustomBtn = document.getElementById('toggleCustomBtn');
+
+        if (rec && smartCard) {
+            console.log(`🎯 [Smart Core] 推薦: ${rec.grade}年級 ${rec.semester}學期 第${rec.lesson}課 (${rec.title})`);
+
+            // UI Update
+            heroSubTitle.innerText = `${rec.grade}年級 ${rec.semester === 'A' ? '上學期' : '下學期'}`;
+            // Clean up title (remove metadata after \n)
+            const cleanTitle = rec.title.split('\n')[0];
+            heroTitle.innerText = `第 ${rec.lesson} 課：${cleanTitle}`;
+
+            // Show Content
+            cardLoading.style.display = 'none';
+            cardContent.style.display = 'block';
+
+            // Bind Actions
+            heroActionBtn.onclick = async () => {
+                // 1. Load Vocab
+                try {
+                    // Check if data exists
+                    if (!window.CURRICULUM_DATA) {
+                        throw new Error("課綱資料未載入 (CURRICULUM_DATA)");
+                    }
+
+                    const gradeKey = rec.grade.toString();
+                    const semKey = rec.semester;
+                    const rawLessons = window.CURRICULUM_DATA[gradeKey]?.[semKey];
+
+                    if (!rawLessons) {
+                        throw new Error(`找不到該年級/學期的課程資料 (G${gradeKey}-${semKey})`);
+                    }
+
+                    const lessonData = rawLessons.find(l => l.lesson == rec.lesson);
+
+                    if (lessonData && lessonData.vocab) {
+                        const vocabStr = lessonData.vocab.join('');
+                        charactersInput.value = vocabStr;
+
+                        // 2. Render (This logic still depends on charDB/MOE_DATA which is fine)
+                        renderSheets(vocabStr);
+
+                        // 3. UI Feedback: Success State (In-place replacement)
+                        const cardContent = document.querySelector('.card-content');
+
+                        // Save original content for "Back/Edit" functionality (optional enhancement for later)
+                        // For now, simple swap
+                        cardContent.innerHTML = `
+                            <div class="success-state" style="animation: fadeIn 0.5s;">
+                                <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                                <h2 class="hero-title" style="margin-bottom: 0.5rem; font-size: 2rem;">練習簿製作完成！</h2>
+                                <p class="hero-subtitle" style="margin-bottom: 2rem;">第 ${rec.lesson} 課：${rec.title.split('\n')[0]}</p>
+                                
+                                <div class="hero-actions" style="flex-direction: column; gap: 1rem;">
+                                    <button onclick="window.print()" class="btn-primary-hero" style="background-color: var(--text-dark); box-shadow: 0 4px 15px rgba(44, 62, 80, 0.4);">
+                                        <span class="icon">🖨️</span> 直接列印
+                                    </button>
+                                    
+                                    <button id="downloadPdfBtn" class="btn-primary-hero" style="background-color: white; color: var(--text-dark); border: 2px solid #eee;">
+                                        <span class="icon">📥</span> 下載 PDF
+                                    </button>
+                                </div>
+                                
+                                <style>
+                                    @media print {
+                                        /* Hide everything by default first */
+                                        body > * { display: none !important; }
+                                        
+                                        /* Only show the Legacy Controls container (wrapper for our sheets) */
+                                        #legacyControls { 
+                                            display: block !important; 
+                                            position: absolute; 
+                                            left: 0; 
+                                            top: 0; 
+                                            width: 100%;
+                                            margin: 0; 
+                                            padding: 0;
+                                            visibility: visible !important;
+                                            opacity: 1 !important;
+                                            background: white !important;
+                                        }
+                                        
+                                        /* Hide UI elements inside legacy controls */
+                                        #legacyControls .row > div:first-child,
+                                        .card-header,
+                                        .empty-state,
+                                        .btn,
+                                        #downloadBtn { 
+                                            display: none !important; 
+                                        }
+                                        
+                                        /* Ensure the Preview Column spans full width */
+                                        #legacyControls .row > div:last-child { 
+                                            width: 100% !important; 
+                                            flex: 0 0 100%; 
+                                            max-width: 100%; 
+                                            padding: 0 !important;
+                                            margin: 0 !important;
+                                        }
+                                        
+                                        /* Ensure Content is visible */
+                                        #sheets-container, #sheets-container * {
+                                            visibility: visible !important;
+                                            opacity: 1 !important;
+                                        }
+                                        
+                                        /* Remove margins/padding from container for max print area */
+                                        .container-fluid, .container { padding: 0 !important; margin: 0 !important; max-width: none !important; }
+                                        .card { border: none !important; box-shadow: none !important; background: transparent !important; }
+                                        .card-body { padding: 0 !important; }
+                                    }
+                                </style>
+                            </div>
+                        `;
+
+                        // Re-bind Download Button (since we just created it)
+                        document.getElementById('downloadPdfBtn').onclick = () => {
+                            // Trigger the main download button which contains the full logic
+                            // (Mobile fix, visibility toggle, html2canvas, etc.)
+                            const mainDownloadBtn = document.getElementById('downloadBtn');
+                            if (mainDownloadBtn) {
+                                mainDownloadBtn.click();
+                            } else {
+                                alert("系統錯誤：找不到下載功能模組");
+                            }
+                        };
+
+                        // Reveal "Edit" option below
+                        const toggleBtn = document.getElementById('toggleCustomBtn');
+                        if (toggleBtn) toggleBtn.innerText = "預覽 / 進階修改";
+
+                        // 4. Update Storage (History)
+                        window.storageManager.addHistory({
+                            grade: rec.grade,
+                            semester: rec.semester,
+                            lesson: rec.lesson,
+                            title: rec.title
+                        });
+
+                    } else {
+                        alert(`找不到這課的生字資料，請嘗試手動輸入。`);
+                    }
+                } catch (e) {
+                    console.error("❌ Lesson Load Error:", e);
+                    alert(`系統錯誤：${e.message}`);
+                }
+            };
+
+            // Toggle Custom Controls
+            if (toggleCustomBtn && legacyControls) {
+                toggleCustomBtn.onclick = () => {
+                    if (legacyControls.classList.contains('show-controls')) {
+                        legacyControls.classList.remove('show-controls');
+                    } else {
+                        legacyControls.classList.add('show-controls');
+                        legacyControls.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            }
+
+            // Dynamic Lesson Population
+            const populateLessonSelect = () => {
+                const activeGradeBtn = document.querySelector('.grade-card.active');
+                const grade = activeGradeBtn ? parseInt(activeGradeBtn.dataset.value) : 1;
+
+                const semesterSelect = document.getElementById('semesterSelect');
+                const semester = semesterSelect ? semesterSelect.value : "A";
+
+                const lessonSelect = document.getElementById('lessonSelect');
+                if (!lessonSelect) return;
+
+                // Save current selection to restore if possible
+                const currentVal = parseInt(lessonSelect.value) || 1;
+
+                // Clear existing
+                lessonSelect.innerHTML = "";
+
+                try {
+                    const rawLessons = window.CURRICULUM_DATA[grade.toString()]?.[semester];
+                    if (rawLessons && rawLessons.length > 0) {
+                        // Filter duplicates (some lessons might be split, we usually want unique lesson numbers)
+                        // Use Map to keep first occurrence or merge? 
+                        // For dropdown, just unique Lesson IDs.
+                        const uniqueLessons = new Map();
+                        rawLessons.forEach(l => {
+                            if (!uniqueLessons.has(l.lesson)) {
+                                uniqueLessons.set(l.lesson, l.title.split('\n')[0]);
+                            }
+                        });
+
+                        // Sort keys just in case
+                        const sortedKeys = Array.from(uniqueLessons.keys()).sort((a, b) => a - b);
+
+                        sortedKeys.forEach(lessonId => {
+                            const title = uniqueLessons.get(lessonId);
+                            const opt = document.createElement('option');
+                            opt.value = lessonId;
+                            opt.text = title.includes(`第 ${lessonId} 課`) ? title : `第 ${lessonId} 課：${title}`;
+                            lessonSelect.appendChild(opt);
+                        });
+
+                        // Restore selection or default to 1 (or max)
+                        if (sortedKeys.includes(currentVal)) {
+                            lessonSelect.value = currentVal;
+                        } else {
+                            lessonSelect.value = sortedKeys[0];
+                        }
+                    } else {
+                        // Fallback if no data
+                        const opt = document.createElement('option');
+                        opt.text = "無課程資料";
+                        lessonSelect.appendChild(opt);
+                    }
+                } catch (e) {
+                    console.error("Populate List Error", e);
+                }
+            };
+
+            // Sync Logic: Legacy Controls -> Smart Card
+            const updateHeroUI = () => {
+                const activeGradeBtn = document.querySelector('.grade-card.active');
+                if (activeGradeBtn) rec.grade = parseInt(activeGradeBtn.dataset.value);
+
+                const semesterSelect = document.getElementById('semesterSelect');
+                if (semesterSelect) rec.semester = semesterSelect.value;
+
+                const lessonSelect = document.getElementById('lessonSelect');
+                if (lessonSelect && lessonSelect.value) {
+                    rec.lesson = parseInt(lessonSelect.value);
+                    const selectedOption = lessonSelect.options[lessonSelect.selectedIndex];
+                    if (selectedOption) {
+                        // Use text from populated dropdown directly, simpler
+                        rec.title = selectedOption.text.split('：')[1] || selectedOption.text;
+                    }
+                } else {
+                    rec.title = "無課程";
+                }
+
+                const hSub = document.getElementById('heroSubTitle');
+                const hTitle = document.getElementById('heroTitle');
+                if (hSub) hSub.innerText = `${rec.grade}年級 ${rec.semester === 'A' ? '上學期' : '下學期'}`;
+                if (hTitle) hTitle.innerText = rec.title || `第 ${rec.lesson} 課`;
+            };
+
+            // Attach Listeners for Sync
+            document.querySelectorAll('.grade-card').forEach(card => card.addEventListener('click', () => {
+                // Grade Changed -> Re-populate -> Update UI
+                setTimeout(() => {
+                    populateLessonSelect();
+                    updateHeroUI();
+                }, 100);
+            }));
+
+            const semSel = document.getElementById('semesterSelect');
+            if (semSel) semSel.addEventListener('change', () => {
+                populateLessonSelect();
+                updateHeroUI();
+            });
+
+            const lesSel = document.getElementById('lessonSelect');
+            if (lesSel) lesSel.addEventListener('change', updateHeroUI);
+
+            // Initial Population based on Recommendation
+            // Wait for initial render? 
+            // Better: update inputs to match 'rec' then populate
+            // But we can do a lazy init:
+            if (rec) {
+                // Set legacy controls to match rec
+                document.querySelectorAll('.grade-card').forEach(b => {
+                    if (parseInt(b.dataset.value) == rec.grade) b.classList.add('active');
+                    else b.classList.remove('active');
+                });
+                if (semSel) semSel.value = rec.semester;
+                // Then populate
+                populateLessonSelect();
+                // Then set Lesson
+                if (lesSel) lesSel.value = rec.lesson;
+                // Double check UI
+                updateHeroUI();
+            }
+
+        } else {
+            // Fallback: No recommendation? Show manual controls
+            if (legacyControls) legacyControls.classList.add('show-controls');
+        }
+    }
+});
 
 // Initial Setup - Register Plugins
 if (window.cnchar) {
@@ -57,6 +360,18 @@ downloadBtn.addEventListener('click', async () => {
     downloadBtn.innerText = "⏳ 轉檔中...";
     downloadBtn.disabled = true;
 
+    // FORCE VISIBILITY for html2canvas
+    const legacyControls = document.getElementById('legacyControls');
+    const wasHidden = legacyControls && getComputedStyle(legacyControls).display === 'none';
+
+    if (wasHidden) {
+        // Temporarily reveal but keep off-screen/transparent if preferred, 
+        // but 'block' is safest logic. 
+        // User might see a flash, but better than broken PDF.
+        legacyControls.classList.add('show-controls');
+        // Optional: legacyControls.style.opacity = '0'; // If we wanted to hide the flash
+    }
+
     try {
         for (let i = 0; i < pages.length; i++) {
             if (i > 0) doc.addPage();
@@ -90,6 +405,11 @@ downloadBtn.addEventListener('click', async () => {
     } finally {
         downloadBtn.innerText = originalText;
         downloadBtn.disabled = false;
+
+        // RESTORE VISIBILITY
+        if (wasHidden && legacyControls) {
+            legacyControls.classList.remove('show-controls');
+        }
     }
 });
 

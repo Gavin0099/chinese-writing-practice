@@ -10,192 +10,176 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Icon for Tabs (Optional, using text for now or emojis) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 
 <body>
-    <!-- 1. Top Navbar -->
-    <header class="navbar">
-        <div class="navbar-brand">
-            <span class="brand-icon">🏫</span>
-            <span class="brand-text">生字練習簿產生器</span>
-        </div>
-        <div class="navbar-actions">
-            <!-- Future: User Login or Settings -->
+    <!-- 1. Minimal Header -->
+    <header class="minimal-header">
+        <div class="brand">
+            <span class="icon">🏫</span>
+            <span class="text">生字練習簿小幫手</span>
         </div>
     </header>
 
-    <!-- 2. Main Layout (Grid) -->
-    <div class="app-layout">
+    <!-- 2. Main Hero Section (The Brain) -->
+    <main class="hero-section">
+        <div class="container">
+            <div class="smart-card" id="smartCard">
+                <!-- Loading State -->
+                <div class="card-loading" id="cardLoading">正在為您準備今日課程...</div>
 
-        <!-- LEFT: Control Sidebar -->
-        <aside class="app-sidebar">
+                <!-- Content State -->
+                <div class="card-content" style="display: none;">
+                    <h2 id="heroSubTitle" class="hero-subtitle">一年級 上學期</h2>
+                    <h1 id="heroTitle" class="hero-title">第 1 課：初始課程</h1>
 
-            <!-- Tabs Navigation -->
-            <div class="tab-nav">
-                <button class="tab-btn active" data-target="panel-curriculum">
-                    <span>📚</span> 康軒選單
-                </button>
-                <button class="tab-btn" data-target="panel-manual">
-                    <span>✍️</span> 手動輸入
-                </button>
+                    <div class="hero-actions">
+                        <button id="heroActionBtn" class="btn-primary-hero">
+                            <span class="icon">✨</span> 下載練習簿 (10秒)
+                        </button>
+                        <p class="hero-hint">
+                            <span class="icon-shield">🛡</span> 已為您準備好今日進度
+                        </p>
+                    </div>
+                </div>
             </div>
 
-            <div class="sidebar-content">
-                <!-- Panel A: Curriculum -->
-                <div id="panel-curriculum" class="tab-panel active">
-                    <div class="panel-section">
-                        <label class="section-label">選擇課程</label>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="gradeSelect">年級</label>
-                                <!-- Hidden Input to Store Value -->
-                                <input type="hidden" id="gradeSelect" value="1">
-                                <!-- Visual Grid -->
-                                <div class="grade-grid">
-                                    <div class="grade-card active" data-value="1">
-                                        <div class="grade-icon">🌱</div>
-                                        <div class="grade-label">一年級</div>
-                                    </div>
-                                    <div class="grade-card" data-value="2">
-                                        <div class="grade-icon">🌿</div>
-                                        <div class="grade-label">二年級</div>
-                                    </div>
-                                    <div class="grade-card" data-value="3">
-                                        <div class="grade-icon">🌳</div>
-                                        <div class="grade-label">三年級</div>
-                                    </div>
-                                    <div class="grade-card" data-value="4">
-                                        <div class="grade-icon">🌲</div>
-                                        <div class="grade-label">四年級</div>
-                                    </div>
-                                    <div class="grade-card" data-value="5">
-                                        <div class="grade-icon">🍎</div>
-                                        <div class="grade-label">五年級</div>
-                                    </div>
-                                    <div class="grade-card" data-value="6">
-                                        <div class="grade-icon">🎓</div>
-                                        <div class="grade-label">六年級</div>
-                                    </div>
-                                </div>
+            <div class="secondary-actions">
+                <!-- Fallback / Advanced Toggle -->
+                <button id="toggleCustomBtn" class="btn-text">
+                    想練習別課？前往自訂設定
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 3. Legacy Controls (Hidden by default) -->
+    <div id="legacyControls" class="container hidden-controls mt-4">
+        <div class="row g-4">
+            <!-- Left: Settings Panel -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white border-0 pt-4 px-4">
+                        <h5 class="mb-0 fw-bold">自訂設定</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Grade Selection (Grid) -->
+                        <div class="mb-4">
+                            <label class="form-label text-muted small mb-2">年級</label>
+                            <div class="grade-selector">
+                                <div class="grade-card active" data-value="1">一年級</div>
+                                <div class="grade-card" data-value="2">二年級</div>
+                                <div class="grade-card disabled" title="尚未整理"
+                                    style="opacity: 0.5; cursor: not-allowed;">三年級</div>
+                                <div class="grade-card disabled" title="尚未整理"
+                                    style="opacity: 0.5; cursor: not-allowed;">四年級</div>
+                                <div class="grade-card disabled" title="尚未整理"
+                                    style="opacity: 0.5; cursor: not-allowed;">五年級</div>
+                                <div class="grade-card disabled" title="尚未整理"
+                                    style="opacity: 0.5; cursor: not-allowed;">六年級</div>
                             </div>
-                            <div class="form-group">
-                                <label for="semesterSelect">學期</label>
-                                <select id="semesterSelect" class="form-select">
+                        </div>
+
+                        <!-- Semester & Lesson -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="form-label text-muted small">學期</label>
+                                <select id="semesterSelect" class="form-select form-select-sm">
                                     <option value="A">上學期</option>
                                     <option value="B">下學期</option>
                                 </select>
                             </div>
+                            <div class="col-6">
+                                <label class="form-label text-muted small">課程</label>
+                                <select id="lessonSelect" class="form-select form-select-sm">
+                                    <option value="1">第 1 課</option>
+                                    <!-- Dynamic Population -->
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-group mt-2">
-                            <label for="lessonSelect">課次</label>
-                            <select id="lessonSelect" class="form-select">
-                                <!-- Dynamic -->
+
+                        <!-- Manual Input -->
+                        <div class="mb-3">
+                            <label for="characters" class="form-label text-muted small">手動輸入生字</label>
+                            <textarea id="characters" class="form-control" rows="3" placeholder="在此貼上生字..."></textarea>
+                        </div>
+
+                        <!-- Grid Settings -->
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">格線</label>
+                            <select id="gridType" class="form-select form-select-sm">
+                                <option value="tian">田字格</option>
+                                <option value="mi">米字格</option>
+                                <option value="square">方格</option>
                             </select>
                         </div>
-                        <button id="loadCurriculumBtn" class="btn btn-secondary full-width mt-4">
-                            載入本課生字
+
+                        <!-- Actions -->
+                        <div class="d-grid gap-2">
+                            <!-- Align with primary color -->
+                            <button id="generateBtn" class="btn btn-primary"
+                                style="background-color: var(--primary-sage); border: none;">
+                                更新預覽
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Preview Panel -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0 h-100">
+                    <div
+                        class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold">預覽與列印</h5>
+                        <!-- Real Download Button (Hidden/Programmatic but visible here for manual flow) -->
+                        <button id="downloadBtn" class="btn btn-outline-success btn-sm">
+                            <i class="bi bi-download"></i> 下載 PDF
                         </button>
                     </div>
-                </div>
+                    <div class="card-body p-4 bg-light">
+                        <div id="previewSection" class="preview-container text-center" style="min-height: 500px;">
+                            <!-- Sheets will be rendered here -->
+                            <!-- Target container for JS logic -->
+                            <div id="sheets-container"></div>
 
-                <!-- Panel B: Manual -->
-                <div id="panel-manual" class="tab-panel">
-                    <div class="panel-section">
-                        <label class="section-label" for="characters">輸入生字</label>
-                        <textarea id="characters" class="text-input-large" placeholder="請輸入想要練習的國字...&#10;例如：天、地、玄、黃"
-                            rows="5"></textarea>
-                    </div>
-                </div>
-
-                <!-- Shared Settings (Always Visible) -->
-                <div class="panel-section border-top">
-                    <label class="section-label">練習格設定</label>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="charsPerRow">每列字數</label>
-                            <input type="number" id="charsPerRow" value="7" min="1" max="10" class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <label for="practiceRows">練習列數</label>
-                            <input type="number" id="practiceRows" value="2" min="1" max="5" class="form-input">
+                            <div class="text-center text-muted py-5 empty-state">
+                                請點選「產生練習簿」開始預覽
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Primary Actions -->
-                <div class="sidebar-actions">
-                    <button id="generateBtn" class="btn btn-primary full-width mb-2">
-                        ✨ 產生練習簿
-                    </button>
-                    <button id="downloadBtn" class="btn btn-secondary full-width" disabled>
-                        📥 下載 PDF
-                    </button>
-                </div>
             </div>
-        </aside>
-
-        <!-- RIGHT: Preview Area -->
-        <main class="app-main">
-            <div class="preview-wrapper">
-                <div class="practice-sheet-container" id="previewSection">
-                    <!-- Content generated by JS -->
-                    <div class="empty-state">
-                        <div class="empty-icon">👈</div>
-                        <p>請在左側選擇課程或輸入生字</p>
-                        <p class="sub-text">點擊「產生練習簿」後在此預覽</p>
-                    </div>
-                </div>
-            </div>
-        </main>
+        </div>
     </div>
 
-    <!-- Hidden / Utility Elements -->
-    <!-- (Optional) Hidden containers if needed, but we refactored IDs to stay valid -->
-
     <!-- Scripts -->
-    <!-- 載入字庫資料 (Silver Bullet Static Load) -->
     <script src="db_core.js"></script>
     <script src="curriculum_data.js"></script>
+    <script src="storageManager.js"></script>
+    <script src="recommendationEngine.js"></script>
 
-    <!-- 載入 HanziWriter -->
     <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
-
-    <!-- 載入 cnchar -->
     <script src="https://cdn.jsdelivr.net/npm/cnchar@3.2.6/cnchar.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cnchar-order@3.2.6/cnchar.order.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cnchar-trad@3.2.6/cnchar.trad.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cnchar-draw@3.2.6/cnchar.draw.min.js"></script>
 
-    <!-- 載入 jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <!-- Logic -->
     <script src="script.js"></script>
-    <script src="curriculum.js"></script>
 
-    <!-- Tab & UI Logic (Inline for simplicity or append to script.js) -->
     <script>
-        // Simple Tab Logic
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Remove active class
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-
-                // Add active class
-                btn.classList.add('active');
-                const targetId = btn.getAttribute('data-target');
-                document.getElementById(targetId).classList.add('active');
+        // Inline UI logic to hide empty state when generated
+        const genBtn = document.getElementById('generateBtn');
+        if (genBtn) {
+            genBtn.addEventListener('click', () => {
+                const empty = document.querySelector('.empty-state');
+                if (empty) empty.style.display = 'none';
             });
-        });
-
-        // Hide empty state when generated
-        document.getElementById('generateBtn').addEventListener('click', () => {
-            const emptyState = document.querySelector('.empty-state');
-            if (emptyState) emptyState.style.display = 'none';
-        });
+        }
     </script>
 </body>
 

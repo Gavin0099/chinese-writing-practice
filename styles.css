@@ -873,10 +873,10 @@ input:focus {
 
 /* The Sheet Itself */
 .sheet-page {
+
     /* Existing basic styles preserved */
     /* Add subtle texture overlaid */
-    background-color: #fffbf0;
-    /* Warm rice paper tint */
+    /* Textured background */
     background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmYmYwIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMwMDAiIG9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+');
     position: relative;
     /* Folded Corner Effect via Pseudo-element (Optional - keeping simple for now) */
@@ -890,4 +890,349 @@ input:focus {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+/* =========================================
+   7. UI Pro Max: HERO SECTION & THEME
+   ========================================= */
+
+/* Pro Max Theme: Earth Tones */
+:root {
+    --primary-sage: #8DA399;
+    /* Sage Green */
+    --primary-sage-dark: #6C8279;
+    --bg-beige: #F5F5F0;
+    /* Beige */
+    --text-dark: #2C3E50;
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+body {
+    background-color: var(--bg-beige);
+    font-family: 'Noto Sans TC', sans-serif;
+    color: var(--text-dark);
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.5s ease;
+}
+
+/* Smart Card */
+.smart-card {
+    background: white;
+    padding: 3rem 4rem;
+    border-radius: 24px;
+    box-shadow: var(--card-shadow);
+    max-width: 600px;
+    width: 100%;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.smart-card:hover {
+    transform: translateY(-5px);
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--primary-sage-dark);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+    color: var(--text-dark);
+}
+
+.card-loading {
+    font-size: 1.2rem;
+    color: #999;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.6;
+    }
+}
+
+/* Hero Actions */
+.btn-primary-hero {
+    background-color: var(--primary-sage);
+    color: white;
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1.3rem;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(141, 163, 153, 0.4);
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.btn-primary-hero:hover {
+    background-color: var(--primary-sage-dark);
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(141, 163, 153, 0.6);
+}
+
+.hero-hint {
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Secondary Actions */
+.btn-text {
+    background: none;
+    border: none;
+    color: #999;
+    border-bottom: 1px solid transparent;
+    cursor: pointer;
+    margin: 0 1rem;
+    transition: color 0.3s;
+}
+
+.btn-text:hover {
+    color: var(--primary-sage-dark);
+    border-bottom: 1px solid var(--primary-sage-dark);
+}
+
+/* Legacy Controls Visibility */
+.hidden-controls {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.show-controls {
+    display: block;
+    opacity: 1;
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Legacy Controls Visibility - HIDDEN BY DEFAULT */
+.hidden-controls {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+/* Only show when explicitly toggled */
+.show-controls {
+    display: block;
+    opacity: 1;
+    animation: fadeIn 0.5s forwards;
+}
+
+/* Ensure Settings Panel looks better when it IS shown */
+.settings-panel {
+    border-right: 1px solid #eee !important;
+    background-color: white !important;
+    border-radius: 12px;
+}
+
+.grade-card.active {
+    border-color: var(--primary-sage);
+    background-color: rgba(141, 163, 153, 0.1);
+}
+
+/* Ensure empty state looks good in grid */
+.empty-state {
+    grid-column: 1 / -1;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =========================================
+   NEW PRODUCT LAYOUT STYLES
+   ========================================= */
+
+/* 1. Minimal Header */
+.minimal-header {
+    padding: 1rem 2rem;
+    background: transparent;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.minimal-header .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* 2. Hero Section */
+.hero-section {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    text-align: center;
+}
+
+/* 3. Smart Card */
+.smart-card {
+    background: white;
+    padding: 3rem;
+    border-radius: 24px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05),
+        0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 450px;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.smart-card:hover {
+    transform: translateY(-5px);
+}
+
+.hero-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+.hero-title {
+    font-family: "Noto Serif TC", serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--text-main);
+    margin-bottom: 2.5rem;
+}
+
+/* 4. Action Buttons */
+.btn-primary-hero {
+    background-color: #8fa298;
+    /* Muted Sage Green from screenshot concept */
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 99px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(143, 162, 152, 0.3);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-primary-hero:hover {
+    background-color: #7b8e84;
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(143, 162, 152, 0.4);
+}
+
+.hero-hint {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: #a0aec0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* 5. Secondary Actions */
+.secondary-actions {
+    margin-top: 1rem;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: #a0aec0;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    transition: color 0.2s ease;
+}
+
+.btn-text:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+/* 6. Hidden Controls Logic Re-fix */
+.hidden-controls {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.show-controls {
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-content {
+    animation: fadeIn 0.8s ease-out forwards;
 }

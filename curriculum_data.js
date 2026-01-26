@@ -1756,3 +1756,7 @@ window.CURRICULUM_KANGHSUAN = {
     }
   }
 };
+
+// Wrapper for compatibility
+window.CURRICULUM_DATA = window.CURRICULUM_KANGHSUAN.structure;
+console.log("✅ CURRICULUM_DATA Aliased successfully (Defined AFTER source).");

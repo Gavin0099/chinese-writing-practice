@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </p>
                                 
                                 <div class="hero-actions" style="flex-direction: column; gap: 1rem; max-width: 320px; margin: 0 auto;">
-                                    <button onclick="handlePrintProgress()" class="btn-primary-hero" style="background-color: var(--text-dark); width: 100%;">
+                                    <button id="heroPrintBtn" class="btn-primary-hero" style="background-color: var(--text-dark); width: 100%;">
                                         <span class="icon">🖨️</span> 現在列印
                                     </button>
                                     

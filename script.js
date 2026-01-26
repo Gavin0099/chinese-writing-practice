@@ -367,6 +367,11 @@ function initApp() {
 
                                 } catch (err) {
                                     console.error('[Success Screen] PDF generation error:', err);
+                                    console.error('[Success Screen] Error stack:', err.stack);
+
+                                    // Show detailed error to user
+                                    alert(`PDF 生成失敗\n錯誤: ${err.message}\n\n請開啟 Console (F12) 查看詳細資訊`);
+
                                     heroPrintBtn.innerHTML = '❌ 下載失敗';
                                     heroPrintBtn.disabled = false;
                                 }

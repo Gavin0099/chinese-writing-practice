@@ -111,9 +111,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         cardContent.innerHTML = `
                             <div class="success-state" style="animation: fadeIn 0.5s; padding: 2rem 0;">
                                 <div style="font-size: 4rem; margin-bottom: 1.5rem;">✅</div>
-                                <h2 id="heroTitle" class="hero-title" style="margin-bottom: 0.5rem; font-size: 2.2rem; color: var(--primary-sage);">今日任務已達成！</h2>
+                                <h2 class="hero-title" style="margin-bottom: 0.5rem; font-size: 2.2rem; color: var(--primary-sage);">今日任務已達成！</h2>
                                 <p class="hero-subtitle" style="margin-bottom: 2.5rem; opacity: 0.8;">
+                                    <!-- Hidden Metadata for PDF Filename Engine -->
                                     <span id="heroSubTitle" style="display:none;">${rec.grade}年級 ${rec.semester === 'A' ? '上學期' : '下學期'}</span>
+                                    <span id="heroTitle" style="display:none;">第 ${rec.lesson} 課：${rec.title.split('\n')[0]}</span>
+                                    
                                     第 ${rec.lesson} 課 練習簿已準備好打印<br>
                                     辛苦了，今天就到這裡吧！
                                 </p>

@@ -702,8 +702,8 @@ async function renderStrokeOrder(container, char) {
             `;
 
             for (let i = 0; i <= step; i++) {
-                const color = (i === step) ? '#000000' : '#D1D5DB';
-                svgHTML += `<path d="${strokes[i]}" fill="${color}" />`;
+                // All strokes in the sequence should be black for maximum print clarity
+                svgHTML += `<path d="${strokes[i]}" fill="#000000" />`;
             }
 
             svgHTML += `</g></svg>`;

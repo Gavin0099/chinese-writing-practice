@@ -103,8 +103,8 @@ function initApp() {
         if (rec && smartCard) {
             console.log(`🎯 [Smart Core] 推薦: ${rec.grade}年級 ${rec.semester}學期 第${rec.lesson}課 (${rec.title})`);
 
-            // v1.1 Platform Check
-            const isDesktopLike = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+            // v1.1 Platform Check (Updated: Add width fallback for touch laptops)
+            const isDesktopLike = window.matchMedia("(hover: hover) and (pointer: fine)").matches || window.innerWidth > 1024;
 
             // v1.1 Today Finished Check
             const isToday = settings.updatedAt && new Date(settings.updatedAt).toDateString() === new Date().toDateString();
@@ -284,14 +284,21 @@ function initApp() {
                             </div>
                         `;
 
-                        // Re-bind Print Button
+                        // Re-bind Print Button (v1.1 Mobile Logic Fix)
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {
                             heroPrintBtn.onclick = () => {
                                 if (window.storageManager) {
                                     window.storageManager.addHistory(progressData);
                                 }
-                                window.print();
+
+                                if (isDesktopLike) {
+                                    window.print();
+                                } else {
+                                    // Mobile: Trigger html2canvas download
+                                    const dlBtn = document.getElementById('downloadBtn'); // The hidden one
+                                    if (dlBtn) dlBtn.click();
+                                }
                             };
                         }
 

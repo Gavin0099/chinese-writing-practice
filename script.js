@@ -183,8 +183,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                         }
                                         
                                         /* Ensure sheets are visible and clear */
-                                        #sheets-container, .sheet-page {
+                                        #sheets-container {
                                             display: block !important;
+                                        }
+                                        .sheet-page {
+                                            display: flex !important; /* CRITICAL: Restore flex for vertical layout */
                                             visibility: visible !important;
                                             opacity: 1 !important;
                                         }

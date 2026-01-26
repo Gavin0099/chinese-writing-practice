@@ -1,0 +1,7 @@
+# Exclude large data engineering files from Cloudflare Pages deployment
+# This allows keeping files on GitHub while bypassing the 25MB file size limit.
+
+data_engineering/
+.agent/
+.shared/
+node_modules/

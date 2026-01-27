@@ -273,13 +273,15 @@ function initApp() {
                                 }
 
                                 // Trigger Native Print
+                                document.body.classList.add('is-printing-now');
                                 setTimeout(() => {
                                     window.print();
                                     setTimeout(() => {
+                                        document.body.classList.remove('is-printing-now');
                                         heroPrintBtn.innerHTML = originalInner;
                                         heroPrintBtn.disabled = false;
                                     }, 1500);
-                                }, 350);
+                                }, 400); // 400ms buffer for Chrome/Safari to apply class
                             };
                         }
 

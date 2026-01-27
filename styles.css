@@ -583,10 +583,8 @@ select {
     color: #ccc;
 }
 
-/* PRINT OVERRIDES: The Isolator Strategy (v2.0) */
+/* PRINT OVERRIDES: The Scaling & Specificity Strategy (v4.0) */
 @media print {
-
-    /* 1. Reset Page & Body basics */
     @page {
         size: A4 portrait;
         margin: 0mm;
@@ -598,17 +596,48 @@ select {
         padding: 0 !important;
         background: white !important;
         width: 210mm !important;
-        /* height: auto !important; */
         overflow: visible !important;
     }
 
-    /* 2. THE ISOLATOR: Hide everything by default */
-    body>* {
+    /* 1. Explicit Hiding: No more :not() for safety */
+    .minimal-header,
+    #smartCard,
+    .secondary-actions,
+    .navbar,
+    footer,
+    .card-header,
+    .card-footer,
+    .empty-state,
+    .btn,
+    .btn-text,
+    .hero-hint,
+    .hero-subtitle,
+    .hero-title,
+    #heroActionBtn,
+    #heroSubTitle,
+    .line-guide-overlay,
+    .sidebar-block-top,
+    .sidebar-block-strokes,
+    #legacyControls .col-lg-4 {
         display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
     }
 
-    /* 3. REVEAL PATH: Only show the tree leading to the sheets */
-    body>main.hero-section {
+    /* 2. Nuclear Path: Flatten everything leading to sheets */
+    .hero-section,
+    .container,
+    .row,
+    .col-lg-8,
+    .card,
+    .card-body,
+    #legacyControls,
+    #previewSection,
+    #sheets-container {
         display: block !important;
         position: absolute !important;
         top: 0 !important;
@@ -616,76 +645,44 @@ select {
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
-    }
-
-    /* Hide the UI container inside hero-section */
-    main.hero-section>.container:first-of-type {
-        display: none !important;
-    }
-
-    /* Re-enable the legacy controls tree */
-    #legacyControls,
-    #legacyControls .row,
-    #legacyControls .col-lg-8,
-    #legacyControls .card,
-    #legacyControls .card-body,
-    #previewSection,
-    #sheets-container {
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        margin: 0 !important;
-        padding: 0 !important;
         border: none !important;
         box-shadow: none !important;
-        background: transparent !important;
-        width: 100% !important;
+        background: white !important;
         min-height: 0 !important;
-        max-width: none !important;
         float: none !important;
     }
 
-    /* Specifically hide the settings column and unwanted elements */
-    #legacyControls .col-lg-4,
-    .card-header,
-    .empty-state,
-    .btn,
-    .hero-hint,
-    .line-guide-overlay {
-        display: none !important;
-    }
-
-    /* 4. ZERO GAP SETTINGS */
-    #sheets-container {
-        font-size: 0 !important;
-        line-height: 0 !important;
-    }
-
+    /* 3. The Sheets: Scaling Fix */
     .sheet-page {
         display: flex !important;
-        /* Restore flex layout for the page internals */
         flex-direction: row-reverse !important;
         margin: 0 !important;
         padding: 10mm !important;
-        box-shadow: none !important;
-        border: none !important;
+        background: white !important;
+        position: relative !important;
+        box-sizing: border-box !important;
 
-        /* Strict A4 boundaries */
+        /* Standard A4 */
         width: 210mm !important;
         height: 297mm !important;
 
-        /* Prevent overflow spilling into next page */
+        /* SAFETY: Scale down slightly to ensure NO browser margin artifacts cause spillover */
+        transform: scale(0.98) !important;
+        transform-origin: top left !important;
+
         overflow: hidden !important;
         page-break-after: always !important;
         break-after: page !important;
         page-break-inside: avoid !important;
-
-        /* Background fix */
-        background: white !important;
-        position: relative !important;
     }
 
-    /* 5. COLOR FIDELITY */
+    /* Prevent final empty page */
+    .sheet-page:last-child {
+        page-break-after: unset !important;
+        break-after: unset !important;
+    }
+
+    /* Color fidelity */
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;

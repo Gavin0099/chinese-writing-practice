@@ -289,24 +289,24 @@ function initApp() {
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {
                             heroPrintBtn.onclick = () => {
-                                console.log('[Success Screen] Button clicked');
+                                alert('按鈕點擊成功！');
 
                                 if (window.storageManager) {
                                     window.storageManager.addHistory(progressData);
                                 }
 
-                                if (isIOS()) {
-                                    console.log('[Success Screen] iOS detected, triggering window.print()');
-                                    // Native Print is the most reliable "Open PDF" strategy for mobile
+                                const isMobile = isIOS() || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+                                if (isMobile) {
+                                    alert('偵測到行動裝置，嘗試開啟列印...');
                                     window.print();
                                 } else {
-                                    console.log('[Success Screen] Desktop detected, triggering downloadBtn');
-                                    // Simply trigger the original download button for desktop
+                                    alert('偵測到電腦，觸發下載...');
                                     const dlBtn = document.getElementById('downloadBtn');
                                     if (dlBtn) {
                                         dlBtn.click();
                                     } else {
-                                        alert('找不到下載按鈕,請重新整理頁面');
+                                        alert('找不到下載按鈕，請重新整理頁面');
                                     }
                                 }
                             };

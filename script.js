@@ -211,7 +211,12 @@ function initApp() {
                         charactersInput.value = vocabStr;
 
                         // 2. Render (This logic still depends on charDB/MOE_DATA which is fine)
-                        renderSheets(vocabStr);
+                        renderSheets(vocabStr, {
+                            grade: rec.grade,
+                            semester: rec.semester,
+                            lesson: rec.lesson,
+                            title: cleanTitle
+                        });
 
                         // 3. UI Feedback: Success State (In-place replacement)
                         const cardContent = document.querySelector('.card-content');
@@ -290,12 +295,18 @@ function initApp() {
                                     try { window.storageManager.addHistory(progressData); } catch (e) { }
                                 }
 
+                                // Prepare Dynamic Filename (v1.6)
+                                const originalTitle = document.title;
+                                const filename = `康軒-${rec.grade}年級-${rec.semester === 'A' ? '上' : '下'}-第${rec.lesson}課-${rec.title.split('\n')[0]}`;
+                                document.title = filename;
+
                                 // Trigger Native Print
                                 document.body.classList.add('is-printing-now');
                                 setTimeout(() => {
                                     window.print();
                                     setTimeout(() => {
                                         document.body.classList.remove('is-printing-now');
+                                        document.title = originalTitle; // Restore
                                         heroPrintBtn.innerHTML = originalInner;
                                         heroPrintBtn.disabled = false;
                                     }, 1500);
@@ -307,7 +318,8 @@ function initApp() {
                         const nextBtn = document.getElementById('nextLessonBtn');
                         if (nextBtn) {
                             nextBtn.onclick = () => {
-                                window.storageManager.updateSettings({ pinnedLesson: null });
+                                // Update sequence to next lesson
+                                window.storageManager.updateSettings({ pinnedLesson: rec.lesson + 1 });
                                 location.reload();
                             };
                         }
@@ -674,7 +686,7 @@ downloadBtn.addEventListener('click', async () => {
     }
 });
 
-function renderSheets(text) {
+function renderSheets(text, metadata = null) {
     let container = document.getElementById('sheets-container');
     if (!container) {
         container = document.createElement('div');
@@ -691,9 +703,11 @@ function renderSheets(text) {
     const chars = Array.from(cleanText);
     const totalPages = Math.ceil(chars.length / CHARS_PER_PAGE);
 
+    container.innerHTML = ''; // Clear only after sanitization check
+
     for (let i = 0; i < totalPages; i++) {
         const pageChars = chars.slice(i * CHARS_PER_PAGE, (i + 1) * CHARS_PER_PAGE);
-        const pageDOM = createPage(pageChars);
+        const pageDOM = createPage(pageChars, metadata);
         container.appendChild(pageDOM);
     }
     // Enable Download (Force update)
@@ -706,9 +720,28 @@ function renderSheets(text) {
     }
 }
 
-function createPage(chars) {
+function createPage(chars, metadata = null) {
     const page = document.createElement('div');
     page.className = 'sheet-page';
+
+    // 0. Page Header (Metadata Block v1.6)
+    if (metadata) {
+        const header = document.createElement('div');
+        header.className = 'sheet-header';
+        header.innerHTML = `
+            <div class="sheet-title-main">生字練習簿</div>
+            <div class="sheet-info-meta">
+                康軒版 | ${metadata.grade}年級${metadata.semester === 'A' ? '上' : '下'} | 第${metadata.lesson}課：${metadata.title}
+            </div>
+            <div class="sheet-info-student">姓名：__________</div>
+        `;
+        page.appendChild(header);
+    }
+
+    // Wrap Sidebar and Content in a Body Container
+    const pageBody = document.createElement('div');
+    pageBody.className = 'sheet-body';
+    page.appendChild(pageBody);
 
     // 1. Sidebar (Simplified)
     const sidebar = document.createElement('div');
@@ -724,12 +757,12 @@ function createPage(chars) {
             <span>生字練習</span>
         </div>
     `;
-    page.appendChild(sidebar);
+    pageBody.appendChild(sidebar);
 
     // 2. Content
     const content = document.createElement('div');
     content.className = 'content-area';
-    page.appendChild(content);
+    pageBody.appendChild(content);
 
     for (let i = 0; i < CHARS_PER_PAGE; i++) {
         const char = chars[i] || '';

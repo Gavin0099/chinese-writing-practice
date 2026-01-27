@@ -286,75 +286,23 @@ function initApp() {
                             </div>
                         `;
 
-                        // CRITICAL: Auto-trigger PDF generation before showing Success Screen
-                        // This ensures cachedPdfBlob is populated
-                        setTimeout(() => {
-                            console.log('[Hero] Attempting to auto-trigger PDF generation');
-                            const dlBtn = document.getElementById('downloadBtn');
-                            console.log('[Hero] downloadBtn found:', !!dlBtn);
-
-                            if (dlBtn) {
-                                console.log('[Hero] Triggering downloadBtn.click()');
-                                dlBtn.click();
-                                console.log('[Hero] downloadBtn.click() completed');
-                            } else {
-                                console.error('[Hero] downloadBtn not found!');
-                                alert('自動下載失敗:找不到下載按鈕\n請手動點擊下方按鈕下載');
-                            }
-                        }, 1000); // Increased from 500ms to 1000ms
-
-                        // Re-bind Print Button (v1.1 Direct Download - Fixed)
+                        // Re-bind Print Button (v1.2 Simple & Reliable)
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {
                             heroPrintBtn.onclick = () => {
-                                console.log('[Success Screen] Button clicked');
+                                console.log('[Success Screen] Button clicked - triggering downloadBtn');
 
                                 if (window.storageManager) {
                                     window.storageManager.addHistory(progressData);
-                                    console.log('[Success Screen] History added');
                                 }
 
-                                // Use cached PDF Blob if available
-                                if (cachedPdfBlob) {
-                                    console.log('[Success Screen] Using cached PDF Blob');
-
-                                    // Visual feedback
-                                    heroPrintBtn.innerHTML = '⏳ 下載中...';
-                                    heroPrintBtn.disabled = true;
-
-                                    const url = URL.createObjectURL(cachedPdfBlob);
-                                    const a = document.createElement('a');
-                                    a.href = url;
-                                    a.download = cachedPdfFilename;
-                                    document.body.appendChild(a);
-                                    a.click();
-                                    document.body.removeChild(a);
-                                    URL.revokeObjectURL(url);
-                                    console.log('[Success Screen] Download triggered successfully');
-
-                                    // Update button
-                                    setTimeout(() => {
-                                        heroPrintBtn.innerHTML = '✅ 下載完成';
-                                        setTimeout(() => {
-                                            const finalText = (typeof isDesktopLike !== 'undefined' && isDesktopLike) ? '🖨️ 下載並列印' : '📥 已下載 PDF (到超商列印)';
-                                            heroPrintBtn.innerHTML = finalText;
-                                            heroPrintBtn.disabled = false;
-                                        }, 2000);
-                                    }, 500);
+                                // Simply trigger the original download button
+                                // This is the most reliable approach
+                                const dlBtn = document.getElementById('downloadBtn');
+                                if (dlBtn) {
+                                    dlBtn.click();
                                 } else {
-                                    console.warn('[Success Screen] No cached PDF Blob found');
-
-                                    // Detailed debug info
-                                    const debugInfo = `
-除錯資訊:
-- cachedPdfBlob: ${cachedPdfBlob ? '存在' : 'null'}
-- cachedPdfFilename: ${cachedPdfFilename}
-- iosBlobUrl: ${iosBlobUrl ? '存在' : 'null'}
-
-請截圖此訊息給開發者
-                                    `.trim();
-
-                                    alert(`PDF 尚未生成\n\n${debugInfo}`);
+                                    alert('找不到下載按鈕,請重新整理頁面');
                                 }
                             };
                         }

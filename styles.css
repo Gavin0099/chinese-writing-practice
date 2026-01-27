@@ -603,7 +603,7 @@ select {
     /* Aggressive Hiding: Remove all UI wrappers and headers */
     #smartCard,
     .minimal-header,
-    .hero-section>.container,
+    .hero-section>.container:first-of-type,
     .secondary-actions,
     .card-header,
     .success-state,

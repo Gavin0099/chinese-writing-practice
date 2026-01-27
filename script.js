@@ -201,8 +201,8 @@ function initApp() {
                                 
                                 <div class="hero-actions" style="flex-direction: column; gap: 1rem; max-width: 320px; margin: 0 auto;">
                                     <button id="heroPrintBtn" class="btn-primary-hero" style="background-color: var(--text-dark); width: 100%;">
-                                        <span class="icon">${isDesktopLike ? '🖨️' : '📄'}</span> 
-                                        ${isDesktopLike ? '下載並列印' : '開啟 PDF (準備列印)'}
+                                        <span class="icon">🖨️</span> 
+                                        列印 / 儲存為 PDF
                                     </button>
                                     
                                     <div style="display: flex; gap: 10px; width: 100%;">
@@ -285,27 +285,20 @@ function initApp() {
                             </div>
                         `;
 
-                        // Re-bind Print Button (v1.3 Native Print for Mobile)
+                        // Re-bind Print Button (v1.4 Unified Native Print)
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {
                             heroPrintBtn.onclick = () => {
+                                console.log('[Success Screen] Printing workbook');
+
+                                // Record history
                                 if (window.storageManager) {
                                     window.storageManager.addHistory(progressData);
                                 }
 
-                                const isMobile = isIOS() || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-                                if (isMobile) {
-                                    console.log('[Success Screen] Mobile - Triggering print directly');
-                                    window.print();
-                                } else {
-                                    const dlBtn = document.getElementById('downloadBtn');
-                                    if (dlBtn) {
-                                        dlBtn.click();
-                                    } else {
-                                        alert('找不到下載按鈕，請重新整理頁面');
-                                    }
-                                }
+                                // Trigger Native Print
+                                // Direct call from user gesture is required for mobile browsers
+                                window.print();
                             };
                         }
 
@@ -557,10 +550,11 @@ function isIOS() {
 }
 
 downloadBtn.addEventListener('click', async () => {
-    const iosDetected = isIOS();
-    // v1.1 iOS Strategy (v1.3 Updated to Native Print)
-    if (iosDetected) {
-        console.log('[Main] iOS detected, triggering window.print()');
+    const isMobile = isIOS() || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    // v1.1 Mobile Strategy (v1.4 Updated to Native Print for all mobile)
+    if (isMobile) {
+        console.log('[Main] Mobile detected, triggering window.print()');
         window.print();
         return;
     }
@@ -646,30 +640,8 @@ downloadBtn.addEventListener('click', async () => {
             filename = `康軒-${subText}-${titleText}.pdf`;
         }
 
-        if (iosDetected) {
-            // Mobile Strategy: Open PDF in new tab instead of forcing download
-            // Users can then choose: Save to Files / Share via Line / AirDrop / Print
-            const blobUrl = doc.output('bloburl');
-            iosBlobUrl = blobUrl;
-
-            // CRITICAL: Also cache for Success Screen
-            cachedPdfBlob = doc.output('blob');
-            cachedPdfFilename = filename;
-            console.log('[PDF] Mobile Blob cached, opening in new tab');
-
-            // Open PDF in new tab
-            window.open(blobUrl, '_blank');
-
-            // Update Manual Mode Button (this button)
-            downloadBtn.innerText = "✅ PDF 已開啟";
-            downloadBtn.disabled = false;
-
-            // Update Success Mode Button (if visible)
-            const heroBtn = document.getElementById('heroPrintBtn');
-            if (heroBtn) {
-                heroBtn.innerHTML = "✅ PDF 已開啟";
-                heroBtn.style.backgroundColor = "#22c55e"; // Success Green
-            }
+        if (isMobile) {
+            // Mobile Strategy: Handled by window.print() at start
             return;
         }
 

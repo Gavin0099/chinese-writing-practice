@@ -589,19 +589,29 @@ select {
         background: white;
     }
 
-    .control-panel,
-    .container>h1,
+    /* Hide UI selectively but keep parents visible for content */
+    .smart-card,
     .minimal-header,
-    .hero-section,
-    .success-state,
+    .hero-section>.container,
     .secondary-actions,
-    #downloadPdfBtn {
+    .card-header,
+    .card-body:not(:has(#sheets-container)),
+    #downloadPdfBtn,
+    #toggleCustomBtn {
         display: none !important;
     }
 
-    /* Override workbook container to be visible */
-    #legacyControls,
-    #workbookContainer {
+    /* Force the workbook area to be visible */
+    #legacyControls {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    #previewSection,
+    #sheets-container {
         display: block !important;
     }
 

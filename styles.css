@@ -590,12 +590,11 @@ select {
     }
 
     /* Hide UI selectively but keep parents visible for content */
-    .smart-card,
+    #smartCard,
     .minimal-header,
     .hero-section>.container,
     .secondary-actions,
     .card-header,
-    .card-body:not(:has(#sheets-container)),
     #downloadPdfBtn,
     #toggleCustomBtn {
         display: none !important;

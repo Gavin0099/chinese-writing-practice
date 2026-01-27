@@ -202,8 +202,8 @@ function initApp() {
                                 
                                 <div class="hero-actions" style="flex-direction: column; gap: 1rem; max-width: 320px; margin: 0 auto;">
                                     <button id="heroPrintBtn" class="btn-primary-hero" style="background-color: var(--text-dark); width: 100%;">
-                                        <span class="icon">${isIOS ? '�' : '📥'}</span> 
-                                        ${isIOS ? '已下載 PDF (到超商列印)' : (isDesktopLike ? '下載並列印' : '已下載 PDF')}
+                                        <span class="icon">${isDesktopLike ? '🖨️' : '📄'}</span> 
+                                        ${isDesktopLike ? '下載並列印' : '開啟 PDF (準備列印)'}
                                     </button>
                                     
                                     <div style="display: flex; gap: 10px; width: 100%;">
@@ -627,13 +627,17 @@ downloadBtn.addEventListener('click', async () => {
             // High Quality Canvas
             const canvas = await html2canvas(page, {
                 scale: 2, // Retain quality
-                useCORS: true,
                 logging: false,
                 windowWidth: page.scrollWidth,
                 windowHeight: page.scrollHeight
             });
 
-            const imgData = canvas.toDataURL('image/jpeg', 0.95);
+            // Use toBlob instead of toDataURL to avoid security errors
+            const blob = await new Promise((resolve) => {
+                canvas.toBlob(resolve, 'image/jpeg', 0.95);
+            });
+
+            const imgData = URL.createObjectURL(blob);
             const imgWidth = 210; // A4 Width in mm
             const pageHeight = 297; // A4 Height in mm
 
@@ -642,6 +646,7 @@ downloadBtn.addEventListener('click', async () => {
             const pdfHeight = (imgProps.height * imgWidth) / imgProps.width;
 
             doc.addImage(imgData, 'JPEG', 0, 0, imgWidth, pdfHeight);
+            URL.revokeObjectURL(imgData); // Clean up
         }
 
         // Construct dynamic filename
@@ -655,26 +660,28 @@ downloadBtn.addEventListener('click', async () => {
         }
 
         if (iosDetected) {
-            // Step 1: Generate & Store Blob
+            // Mobile Strategy: Open PDF in new tab instead of forcing download
+            // Users can then choose: Save to Files / Share via Line / AirDrop / Print
             const blobUrl = doc.output('bloburl');
             iosBlobUrl = blobUrl;
 
             // CRITICAL: Also cache for Success Screen
             cachedPdfBlob = doc.output('blob');
             cachedPdfFilename = filename;
-            console.log('[PDF] iOS Blob cached for Success Screen, filename:', filename);
+            console.log('[PDF] Mobile Blob cached, opening in new tab');
+
+            // Open PDF in new tab
+            window.open(blobUrl, '_blank');
 
             // Update Manual Mode Button (this button)
-            downloadBtn.innerText = "👉 PDF 已就緒 (點此下載)";
+            downloadBtn.innerText = "✅ PDF 已開啟";
             downloadBtn.disabled = false;
 
             // Update Success Mode Button (if visible)
             const heroBtn = document.getElementById('heroPrintBtn');
             if (heroBtn) {
-                heroBtn.innerHTML = "👉 PDF 已就緒 (點此下載)";
+                heroBtn.innerHTML = "✅ PDF 已開啟";
                 heroBtn.style.backgroundColor = "#22c55e"; // Success Green
-                // No need to change onclick, subsequent click triggers downloadBtn.click() 
-                // which hits the "isIOS && iosBlobUrl" block above synchronously.
             }
             return;
         }

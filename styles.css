@@ -617,7 +617,9 @@ select {
     #legacyControls .btn-text,
     .btn,
     .icon-shield,
-    .hero-hint {
+    .hero-hint,
+    /* Hide the entire settings side-column */
+    #legacyControls .col-lg-4 {
         display: none !important;
         height: 0 !important;
         margin: 0 !important;

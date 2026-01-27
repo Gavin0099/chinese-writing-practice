@@ -583,12 +583,13 @@ select {
     color: #ccc;
 }
 
-/* PRINT OVERRIDES */
+/* PRINT OVERRIDES: The Isolator Strategy (v2.0) */
 @media print {
+
+    /* 1. Reset Page & Body basics */
     @page {
         size: A4 portrait;
         margin: 0mm;
-        /* Force absolute zero margin */
     }
 
     html,
@@ -597,85 +598,94 @@ select {
         padding: 0 !important;
         background: white !important;
         width: 210mm !important;
-        height: auto !important;
+        /* height: auto !important; */
+        overflow: visible !important;
     }
 
-    /* Aggressive Hiding: Remove all UI wrappers and headers */
-    #smartCard,
-    .minimal-header,
-    .hero-section>.container:first-of-type,
-    .secondary-actions,
-    .card-header,
-    .success-state,
-    #downloadPdfBtn,
-    #toggleCustomBtn,
-    .navbar,
-    footer,
-    /* Target legacy preview headers and empty states specifically */
-    #legacyControls .card-header,
-    .empty-state,
-    #legacyControls .btn-text,
-    .btn,
-    .icon-shield,
-    .hero-hint,
-    /* Hide the entire settings side-column */
-    #legacyControls .col-lg-4 {
+    /* 2. THE ISOLATOR: Hide everything by default */
+    body>* {
         display: none !important;
-        height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
     }
 
-    /* Flatten all containers */
-    .hero-section,
-    .container,
-    .row,
-    .col-lg-8,
-    .card,
-    .card-body,
-    #legacyControls,
-    #previewSection {
+    /* 3. REVEAL PATH: Only show the tree leading to the sheets */
+    body>main.hero-section {
         display: block !important;
-        background: white !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        border: none !important;
-        box-shadow: none !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
         width: 100% !important;
-        min-height: 0 !important;
-        page-break-inside: avoid !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
-    /* Ensure specific target container is visible but clean */
+    /* Hide the UI container inside hero-section */
+    main.hero-section>.container:first-of-type {
+        display: none !important;
+    }
+
+    /* Re-enable the legacy controls tree */
+    #legacyControls,
+    #legacyControls .row,
+    #legacyControls .col-lg-8,
+    #legacyControls .card,
+    #legacyControls .card-body,
+    #previewSection,
     #sheets-container {
         display: block !important;
-        padding: 0 !important;
+        visibility: visible !important;
+        opacity: 1 !important;
         margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        width: 100% !important;
+        min-height: 0 !important;
+        max-width: none !important;
+        float: none !important;
+    }
+
+    /* Specifically hide the settings column and unwanted elements */
+    #legacyControls .col-lg-4,
+    .card-header,
+    .empty-state,
+    .btn,
+    .hero-hint,
+    .line-guide-overlay {
+        display: none !important;
+    }
+
+    /* 4. ZERO GAP SETTINGS */
+    #sheets-container {
+        font-size: 0 !important;
+        line-height: 0 !important;
     }
 
     .sheet-page {
+        display: flex !important;
+        /* Restore flex layout for the page internals */
+        flex-direction: row-reverse !important;
         margin: 0 !important;
         padding: 10mm !important;
-        /* Keep internal padding for content */
         box-shadow: none !important;
         border: none !important;
+
+        /* Strict A4 boundaries */
+        width: 210mm !important;
+        height: 297mm !important;
+
+        /* Prevent overflow spilling into next page */
+        overflow: hidden !important;
         page-break-after: always !important;
         break-after: page !important;
         page-break-inside: avoid !important;
-        overflow: hidden !important;
 
-        /* EXTREME SAFETY FIX: Reduce height further (295mm)
-           to handle mobile browser sub-pixel rounding errors */
-        width: 210mm !important;
-        height: 295mm !important;
-
-        display: flex !important;
-        flex-direction: row-reverse !important;
+        /* Background fix */
         background: white !important;
+        position: relative !important;
     }
 
-    /* Print color fidelity */
+    /* 5. COLOR FIDELITY */
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;

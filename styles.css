@@ -611,9 +611,9 @@ select {
     #toggleCustomBtn,
     .navbar,
     footer,
-    /* Target legacy preview headers specifically */
+    /* Target legacy preview headers and empty states specifically */
     #legacyControls .card-header,
-    #legacyControls .card-body>.empty-state,
+    .empty-state,
     #legacyControls .btn-text,
     .btn,
     .icon-shield,
@@ -644,6 +644,7 @@ select {
         box-shadow: none !important;
         width: 100% !important;
         min-height: 0 !important;
+        page-break-inside: avoid !important;
     }
 
     /* Ensure specific target container is visible but clean */
@@ -661,12 +662,13 @@ select {
         border: none !important;
         page-break-after: always !important;
         break-after: page !important;
+        page-break-inside: avoid !important;
         overflow: hidden !important;
 
-        /* SAFETY FIX: Reduce height slightly (296mm instead of 297mm) 
-           to avoid 1px calculation errors triggering blank pages */
+        /* EXTREME SAFETY FIX: Reduce height further (295mm)
+           to handle mobile browser sub-pixel rounding errors */
         width: 210mm !important;
-        height: 296mm !important;
+        height: 295mm !important;
 
         display: flex !important;
         flex-direction: row-reverse !important;
@@ -677,7 +679,6 @@ select {
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-        color-adjust: exact !important;
     }
 }
 

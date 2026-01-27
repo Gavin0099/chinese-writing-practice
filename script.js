@@ -289,8 +289,6 @@ function initApp() {
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {
                             heroPrintBtn.onclick = () => {
-                                alert('按鈕點擊成功！');
-
                                 if (window.storageManager) {
                                     window.storageManager.addHistory(progressData);
                                 }
@@ -298,10 +296,9 @@ function initApp() {
                                 const isMobile = isIOS() || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
                                 if (isMobile) {
-                                    alert('偵測到行動裝置，嘗試開啟列印...');
+                                    console.log('[Success Screen] Mobile - Triggering print directly');
                                     window.print();
                                 } else {
-                                    alert('偵測到電腦，觸發下載...');
                                     const dlBtn = document.getElementById('downloadBtn');
                                     if (dlBtn) {
                                         dlBtn.click();

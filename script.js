@@ -289,11 +289,11 @@ function initApp() {
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {
                             heroPrintBtn.onclick = () => {
-                                console.log('[Success Screen] Printing initiated');
+                                console.log('[Success Screen] v1.7: Printing initiated');
 
                                 // Detect LINE In-App Browser
                                 if (/Line\//i.test(navigator.userAgent)) {
-                                    alert('💡 溫馨提示：LINE 內建瀏覽器限制較多，若點擊列印無反應，請點擊右下角「分享」並選擇「使用預設瀏覽器開啟」或「使用 Safari 開啟」。');
+                                    alert('💡 溫馨提示：LINE 內建瀏覽器限制較多，若點擊列印無反應，請點擊右下角「分享」按鈕，並選擇「使用預設瀏覽器開啟」或「使用 Safari 開啟」。');
                                 }
 
                                 const originalInner = heroPrintBtn.innerHTML;
@@ -304,6 +304,7 @@ function initApp() {
                                     try { window.storageManager.addHistory(progressData); } catch (e) { }
                                 }
 
+                                // Trigger Native Print
                                 setTimeout(() => {
                                     window.print();
                                     setTimeout(() => {

@@ -289,16 +289,28 @@ function initApp() {
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {
                             heroPrintBtn.onclick = () => {
-                                console.log('[Success Screen] Printing workbook');
+                                console.log('[Success Screen] Printing initiated');
 
-                                // Record history
-                                if (window.storageManager) {
-                                    window.storageManager.addHistory(progressData);
+                                // Detect LINE In-App Browser
+                                if (/Line\//i.test(navigator.userAgent)) {
+                                    alert('💡 溫馨提示：LINE 內建瀏覽器限制較多，若點擊列印無反應，請點擊右下角「分享」並選擇「使用預設瀏覽器開啟」或「使用 Safari 開啟」。');
                                 }
 
-                                // Trigger Native Print
-                                // Direct call from user gesture is required for mobile browsers
-                                window.print();
+                                const originalInner = heroPrintBtn.innerHTML;
+                                heroPrintBtn.innerHTML = "⏳ 準備中...";
+                                heroPrintBtn.disabled = true;
+
+                                if (window.storageManager) {
+                                    try { window.storageManager.addHistory(progressData); } catch (e) { }
+                                }
+
+                                setTimeout(() => {
+                                    window.print();
+                                    setTimeout(() => {
+                                        heroPrintBtn.innerHTML = originalInner;
+                                        heroPrintBtn.disabled = false;
+                                    }, 1500);
+                                }, 350);
                             };
                         }
 

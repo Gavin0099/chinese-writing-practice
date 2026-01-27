@@ -585,8 +585,19 @@ select {
 
 /* PRINT OVERRIDES */
 @media print {
+    @page {
+        size: A4 portrait;
+        margin: 0mm;
+        /* Force zero margin for browser print */
+    }
+
+    html,
     body {
-        background: white;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+        width: 210mm !important;
+        height: auto !important;
     }
 
     /* Hide UI selectively but keep parents visible for content */
@@ -595,9 +606,18 @@ select {
     .hero-section>.container,
     .secondary-actions,
     .card-header,
+    .success-state,
     #downloadPdfBtn,
     #toggleCustomBtn {
         display: none !important;
+    }
+
+    /* Reset hero section for content-only print */
+    .hero-section {
+        display: block !important;
+        background: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
     /* Force the workbook area to be visible */
@@ -609,21 +629,41 @@ select {
         padding: 0 !important;
     }
 
+    /* Hide settings column in print */
+    #legacyControls .row>div:first-child {
+        display: none !important;
+    }
+
+    /* Expand content column */
+    #legacyControls .row>div:last-child {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
     #previewSection,
     #sheets-container {
         display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
     .sheet-page {
-        margin: 0 auto;
-        box-shadow: none;
-        border: none;
-        page-break-after: always;
+        margin: 0 !important;
+        /* No margin in print to avoid spill-over */
+        box-shadow: none !important;
+        border: none !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        overflow: hidden !important;
+        /* CRITICAL: Prevent 1px overflow from triggering blank page */
+        width: 210mm !important;
+        height: 297mm !important;
     }
 
     * {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 }
 
@@ -1382,6 +1422,7 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
 /* LINE Visual Guide Overlay */
 .line-guide-overlay {
     position: fixed;
@@ -1468,6 +1509,13 @@ body {
 }
 
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

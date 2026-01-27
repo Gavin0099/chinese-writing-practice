@@ -583,11 +583,14 @@ select {
     color: #ccc;
 }
 
-/* PRINT OVERRIDES: The Scaling & Specificity Strategy (v4.0) */
+/* PRINT OVERRIDES: The Fixed Page Box Strategy (v5.0) */
 @media print {
+
+    /* 1. Page Box Specification */
     @page {
-        size: A4 portrait;
-        margin: 0mm;
+        size: A4;
+        margin: 0;
+        /* Clear browser default margins */
     }
 
     html,
@@ -596,39 +599,27 @@ select {
         padding: 0 !important;
         background: white !important;
         width: 210mm !important;
+        height: auto !important;
         overflow: visible !important;
     }
 
-    /* 1. Explicit Hiding: No more :not() for safety */
-    .minimal-header,
-    #smartCard,
-    .secondary-actions,
-    .navbar,
-    footer,
-    .card-header,
-    .card-footer,
-    .empty-state,
-    .btn,
-    .btn-text,
-    .hero-hint,
-    .hero-subtitle,
-    .hero-title,
-    #heroActionBtn,
-    #heroSubTitle,
-    .line-guide-overlay,
-    .sidebar-block-top,
-    .sidebar-block-strokes,
-    #legacyControls .col-lg-4 {
-        display: none !important;
+    /* 2. Visibility Whitelist Policy */
+    body * {
         visibility: hidden !important;
-        height: 0 !important;
-        width: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
     }
 
-    /* 2. Nuclear Path: Flatten everything leading to sheets */
+    /* Precisely whitelist the workbook path */
+    #legacyControls,
+    #legacyControls *,
+    #sheets-container,
+    #sheets-container *,
+    .sheet-page,
+    .sheet-page * {
+        visibility: visible !important;
+    }
+
+    /* 3. Layout Normalization (Flattening) */
+    /* Remove all containers' display:flex/absolute to avoid pagination artifacts */
     .hero-section,
     .container,
     .row,
@@ -639,53 +630,69 @@ select {
     #previewSection,
     #sheets-container {
         display: block !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
+        position: static !important;
         margin: 0 !important;
         padding: 0 !important;
         border: none !important;
         box-shadow: none !important;
-        background: white !important;
+        background: transparent !important;
+        width: 100% !important;
         min-height: 0 !important;
         float: none !important;
     }
 
-    /* 3. The Sheets: Scaling Fix */
+    /* Explicitly hide unwanted UI elements even in visibility whitelist path */
+    .card-header,
+    .empty-state,
+    .btn,
+    .hero-hint,
+    .line-guide-overlay,
+    #legacyControls .col-lg-4 {
+        display: none !important;
+    }
+
+    /* 4. The Page Box */
     .sheet-page {
         display: flex !important;
+        /* Restore flex ONLY for page internals */
         flex-direction: row-reverse !important;
-        margin: 0 !important;
-        padding: 10mm !important;
-        background: white !important;
-        position: relative !important;
-        box-sizing: border-box !important;
 
-        /* Standard A4 */
         width: 210mm !important;
         height: 297mm !important;
 
-        /* SAFETY: Scale down slightly to ensure NO browser margin artifacts cause spillover */
-        transform: scale(0.98) !important;
-        transform-origin: top left !important;
+        margin: 0 auto !important;
+        padding: 10mm !important;
+        /* Managed internal padding */
+
+        box-sizing: border-box !important;
+        background: white !important;
+        position: relative !important;
 
         overflow: hidden !important;
-        page-break-after: always !important;
+
+        /* Autonomous Pagination */
         break-after: page !important;
+        page-break-after: always !important;
+        break-inside: avoid !important;
         page-break-inside: avoid !important;
     }
 
-    /* Prevent final empty page */
     .sheet-page:last-child {
-        page-break-after: unset !important;
-        break-after: unset !important;
+        break-after: auto !important;
+        page-break-after: auto !important;
     }
 
-    /* Color fidelity */
+    /* 5. Print Debug Mode */
+    .print-debug .sheet-page {
+        outline: 1px solid red !important;
+    }
+
+    /* 6. Color Fidelity */
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+        transform: none !important;
+        /* Anti-scaling for stability */
     }
 }
 

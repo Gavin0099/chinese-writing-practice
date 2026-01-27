@@ -686,12 +686,14 @@ select {
         display: flex !important;
         flex-direction: row-reverse !important;
 
-        /* Hard-coded size to avoid browser guessing */
+        /* Safety Height: 285mm (Standard A4 is 297mm)
+           Leaves 12mm buffer for browser headers/footers which otherwise cause Page 2 spills */
         width: 210mm !important;
-        height: 297mm !important;
+        height: 285mm !important;
 
         margin: 0 !important;
-        padding: 10mm !important;
+        padding: 5mm 10mm !important;
+        /* Slightly reduced top/bottom padding to fit 285mm */
 
         background: white !important;
         position: relative !important;

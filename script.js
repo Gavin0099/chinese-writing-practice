@@ -681,9 +681,14 @@ function renderSheets(text) {
         container.id = 'sheets-container';
         previewArea.appendChild(container); // Reset
     }
-    container.innerHTML = '';
+    // v1.5 Sanitization: Remove all whitespace/newlines before counting pages
+    const cleanText = text.toString().replace(/\s+/g, '');
+    if (!cleanText) {
+        container.innerHTML = '<div class="empty-state">請輸入文字內容</div>';
+        return;
+    }
 
-    const chars = Array.from(text);
+    const chars = Array.from(cleanText);
     const totalPages = Math.ceil(chars.length / CHARS_PER_PAGE);
 
     for (let i = 0; i < totalPages; i++) {

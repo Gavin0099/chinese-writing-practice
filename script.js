@@ -627,6 +627,7 @@ downloadBtn.addEventListener('click', async () => {
             // High Quality Canvas
             const canvas = await html2canvas(page, {
                 scale: 2, // Retain quality
+                allowTaint: true, // CRITICAL: Allow cross-origin resources
                 logging: false,
                 windowWidth: page.scrollWidth,
                 windowHeight: page.scrollHeight

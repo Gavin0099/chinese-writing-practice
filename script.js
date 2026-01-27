@@ -104,8 +104,7 @@ function initApp() {
             console.log(`🎯 [Smart Core] 推薦: ${rec.grade}年級 ${rec.semester}學期 第${rec.lesson}課 (${rec.title})`);
 
             // v1.1 Platform Check (Updated: iOS Patch + Width Fallback)
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            const isDesktopLike = (window.matchMedia("(hover: hover) and (pointer: fine)").matches || window.innerWidth > 1024) && !isIOS;
+            const isDesktopLike = (window.matchMedia("(hover: hover) and (pointer: fine)").matches || window.innerWidth > 1024) && !isIOS();
 
             // v1.1 Today Finished Check
             const isToday = settings.updatedAt && new Date(settings.updatedAt).toDateString() === new Date().toDateString();
@@ -286,23 +285,29 @@ function initApp() {
                             </div>
                         `;
 
-                        // Re-bind Print Button (v1.2 Simple & Reliable)
+                        // Re-bind Print Button (v1.3 Native Print for Mobile)
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {
                             heroPrintBtn.onclick = () => {
-                                console.log('[Success Screen] Button clicked - triggering downloadBtn');
+                                console.log('[Success Screen] Button clicked');
 
                                 if (window.storageManager) {
                                     window.storageManager.addHistory(progressData);
                                 }
 
-                                // Simply trigger the original download button
-                                // This is the most reliable approach
-                                const dlBtn = document.getElementById('downloadBtn');
-                                if (dlBtn) {
-                                    dlBtn.click();
+                                if (isIOS()) {
+                                    console.log('[Success Screen] iOS detected, triggering window.print()');
+                                    // Native Print is the most reliable "Open PDF" strategy for mobile
+                                    window.print();
                                 } else {
-                                    alert('找不到下載按鈕,請重新整理頁面');
+                                    console.log('[Success Screen] Desktop detected, triggering downloadBtn');
+                                    // Simply trigger the original download button for desktop
+                                    const dlBtn = document.getElementById('downloadBtn');
+                                    if (dlBtn) {
+                                        dlBtn.click();
+                                    } else {
+                                        alert('找不到下載按鈕,請重新整理頁面');
+                                    }
                                 }
                             };
                         }
@@ -555,27 +560,11 @@ function isIOS() {
 }
 
 downloadBtn.addEventListener('click', async () => {
-    // v1.1 iOS Two-Step Download Check
     const iosDetected = isIOS();
-
-    // Step 2: Trigger Download (Sync)
-    if (iosDetected && iosBlobUrl) {
-        // iOS: Anchor click simulation for reliable download
-        const a = document.createElement("a");
-        a.href = iosBlobUrl;
-        a.download = "生字練習簿.pdf";
-        a.click();
-
-        // UX Hint
-        alert("✅ 下載已開始\n請至「檔案 App」查看");
-
-        // Optional: Reset after delay
-        setTimeout(() => {
-            // Reset UI if needed, but staying "Ready" is fine for repeated clicks.
-            // If user changes lesson, renderSheets will reset everything (including iosBlobUrl potentially) 
-            // but we need to ensure renderSheets or similar clears this state if needed.
-            // For now, simple flow is enough.
-        }, 1000);
+    // v1.1 iOS Strategy (v1.3 Updated to Native Print)
+    if (iosDetected) {
+        console.log('[Main] iOS detected, triggering window.print()');
+        window.print();
         return;
     }
     // Check libraries

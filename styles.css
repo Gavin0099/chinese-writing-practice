@@ -590,25 +590,23 @@ select {
     }
 
     .control-panel,
-    .container>h1 {
-        display: none;
+    .container>h1,
+    .minimal-header,
+    .hero-section,
+    .success-state,
+    .secondary-actions,
+    #downloadPdfBtn {
+        display: none !important;
     }
 
-    /* Hide UI */
-    .container {
-        padding: 0;
-        margin: 0;
-        width: auto;
-        max-width: none;
-    }
-
-    .preview-section {
-        padding: 0;
-        margin: 0;
+    /* Override workbook container to be visible */
+    #legacyControls,
+    #workbookContainer {
+        display: block !important;
     }
 
     .sheet-page {
-        margin: 0;
+        margin: 0 auto;
         box-shadow: none;
         border: none;
         page-break-after: always;

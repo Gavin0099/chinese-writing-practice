@@ -249,9 +249,27 @@ function initApp() {
                                     <button id="downloadPdfBtn" class="btn-text" style="margin-top: 1rem; font-size: 0.85rem; text-decoration: underline; ${!isDesktopLike ? 'display: none;' : ''}">
                                         或是下載 PDF 備份
                                     </button>
+
+                                    <!-- Mobile Debug Toggle -->
+                                    <div style="margin-top: 1.5rem; border-top: 1px dashed #eee; padding-top: 1rem;">
+                                        <button id="debugToggleBtn" class="btn-text" style="font-size: 0.8rem; opacity: 0.5;">
+                                            🔧 開啟列印除錯模式 (抓跳頁蟲)
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         `;
+
+                        // Bind Debug Toggle
+                        const debugBtn = document.getElementById('debugToggleBtn');
+                        if (debugBtn) {
+                            debugBtn.onclick = () => {
+                                const isDebug = document.body.classList.toggle('print-debug');
+                                debugBtn.innerHTML = isDebug ? '✅ 已開啟除錯模式 (預覽將顯示紅框)' : '🔧 開啟列印除錯模式 (抓跳頁蟲)';
+                                debugBtn.style.opacity = isDebug ? '1' : '0.5';
+                                debugBtn.style.color = isDebug ? 'red' : 'inherit';
+                            };
+                        }
 
                         // Re-bind Print Button (v1.4 Unified Native Print)
                         const heroPrintBtn = document.getElementById('heroPrintBtn');

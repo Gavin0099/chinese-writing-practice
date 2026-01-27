@@ -4,6 +4,38 @@ const generateBtn = document.getElementById('generateBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 const previewArea = document.getElementById('previewSection');
 
+// --- LINE Visual Guide Injector ---
+(function injectLineGuide() {
+    const guideHtml = `
+        <div id="lineGuide" class="line-guide-overlay">
+            <div class="line-guide-content">
+                <div class="line-guide-icon">💡</div>
+                <div class="line-guide-title">使用 Safari / Chrome 開啟</div>
+                <div class="line-guide-step">
+                    <div class="step-number">1</div>
+                    <div class="step-text">點擊右下角的 <b>「分享」</b> 按鈕 (或三個點)</div>
+                </div>
+                <div class="line-guide-step">
+                    <div class="step-number">2</div>
+                    <div class="step-text">選擇 <b>「在瀏覽器中開啟」</b> 或 <b>「使用 Safari 開啟」</b></div>
+                </div>
+                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 1rem;">
+                    LINE 內建瀏覽器限制較多，切換至系統瀏覽器即可正常列印與下載 PDF。
+                </p>
+                <button class="line-guide-close" onclick="document.getElementById('lineGuide').style.display='none'">我知道了</button>
+            </div>
+        </div>
+    `;
+    const div = document.createElement('div');
+    div.innerHTML = guideHtml;
+    document.body.appendChild(div.firstElementChild);
+})();
+
+function showLineGuide() {
+    const guide = document.getElementById('lineGuide');
+    if (guide) guide.style.display = 'flex';
+}
+
 const CHARS_PER_PAGE = 6;
 
 // A. Global DB & Init
@@ -293,7 +325,7 @@ function initApp() {
 
                                 // Detect LINE In-App Browser
                                 if (/Line\//i.test(navigator.userAgent)) {
-                                    alert('💡 溫馨提示：LINE 內建瀏覽器限制較多，若點擊列印無反應，請點擊右下角「分享」按鈕，並選擇「使用預設瀏覽器開啟」或「使用 Safari 開啟」。');
+                                    showLineGuide();
                                 }
 
                                 const originalInner = heroPrintBtn.innerHTML;

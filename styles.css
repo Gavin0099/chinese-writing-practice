@@ -1615,13 +1615,16 @@ body {
     .sec-strokes {
         height: 85mm !important;
         border-bottom: 1px solid #3B4CCA !important;
-        column-count: 3 !important;
-        /* Extremely stable for Print hardware */
-        column-gap: 0 !important;
-        column-fill: auto !important;
+        display: grid !important;
+        grid-template-rows: repeat(10, 8.5mm) !important;
+        /* 10 fixed vertical cells */
+        grid-auto-flow: column !important;
+        /* Fill columns first, Move Right-to-Left */
+        grid-auto-columns: 32% !important;
         direction: rtl !important;
-        /* Right-to-left columns */
+        /* Start first column on the RIGHT */
         padding: 2mm !important;
+        gap: 0 !important;
         overflow: hidden !important;
     }
 
@@ -1630,24 +1633,21 @@ body {
         overflow: hidden !important;
     }
 
-    /* Stroke Steps - Logic for absolute hardware alignment */
+    /* Stroke Steps - Absolute hardware locking for v8.2 */
     .stroke-step {
         width: 100% !important;
-        height: 8.2mm !important;
-        /* Fixed physical height to prevent row overlap */
+        height: 8.5mm !important;
+        /* Matches grid row height exactly */
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        break-inside: avoid !important;
-        /* Prevent hardware splitting a cell */
-        page-break-inside: avoid !important;
     }
 
     .stroke-step svg {
-        width: 85% !important;
-        height: 85% !important;
-        max-width: 85% !important;
-        max-height: 85% !important;
+        width: 90% !important;
+        height: 90% !important;
+        max-width: 90% !important;
+        max-height: 90% !important;
     }
 
     /* 4. Global Color & Driver Calibration */

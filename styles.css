@@ -621,190 +621,7 @@ select {
     color: #ccc;
 }
 
-/* PRINT OVERRIDES: The Professional Fixed-Box Strategy (v7.0) */
-@media print {
-
-    /* 1. Global Box Calibration */
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box !important;
-    }
-
-    @page {
-        size: A4 portrait;
-        margin: 0;
-    }
-
-    html,
-    body {
-        margin: 0 !important;
-        padding: 0 !important;
-        background: white !important;
-        width: 210mm !important;
-        height: auto !important;
-        overflow: visible !important;
-    }
-
-    /* 2. STRICT PATH ISOLATION (Kill sibling layout spaces) */
-    body>*:not(.hero-section) {
-        display: none !important;
-    }
-
-    .hero-section {
-        display: block !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: white !important;
-        position: static !important;
-        /* Normal Flow */
-        width: 100% !important;
-    }
-
-    .hero-section>.container:not(#legacyControls) {
-        display: none !important;
-    }
-
-    #legacyControls {
-        display: block !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-    }
-
-    #legacyControls .row>*:not(.col-lg-8) {
-        display: none !important;
-    }
-
-    #legacyControls .col-lg-8 {
-        width: 100% !important;
-        max-width: 100% !important;
-        flex: 0 0 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    /* Target the Card Structure */
-    .card {
-        border: none !important;
-        box-shadow: none !important;
-        background: transparent !important;
-    }
-
-    .card>*:not(.card-body) {
-        display: none !important;
-    }
-
-    .card-body {
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    .card-body>*:not(#previewSection) {
-        display: none !important;
-    }
-
-    #previewSection {
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    #previewSection>*:not(#sheets-container) {
-        display: none !important;
-    }
-
-    /* 3. THE FIXED PAGE BOX (Standardized A4) */
-    #sheets-container {
-        display: block !important;
-        font-size: 0 !important;
-        line-height: 0 !important;
-    }
-
-    .sheet-page {
-        display: flex !important;
-        flex-direction: column !important;
-        /* Stack Header + Body */
-
-        /* Safety Height: 285mm (Standard A4 is 297mm)
-           Leaves 12mm buffer for browser headers/footers which otherwise cause Page 2 spills */
-        width: 210mm !important;
-        height: 285mm !important;
-
-        margin: 0 !important;
-        padding: 10mm !important;
-        /* Restore standard 10mm safety margins */
-
-        background: white !important;
-        position: relative !important;
-        overflow: hidden !important;
-        /* Strict protection */
-
-        /* Fragmentation control */
-        break-after: page !important;
-        page-break-after: always !important;
-        break-inside: avoid !important;
-        page-break-inside: avoid !important;
-    }
-
-    .sheet-header {
-        display: flex !important;
-        height: 15mm !important;
-        margin-bottom: 5mm !important;
-    }
-
-    .sheet-body {
-        display: flex !important;
-        flex-direction: row-reverse !important;
-        /* Sidebar + Content */
-        flex-grow: 1 !important;
-        width: 100% !important;
-        min-height: 0 !important;
-        /* Force Chrome to propagate grew height to children percentages */
-    }
-
-    .sheet-page:last-child {
-        break-after: unset !important;
-        page-break-after: unset !important;
-    }
-
-    /* Sidebar fix: strictly contain borders */
-    .sidebar {
-        height: 100% !important;
-        overflow: hidden !important;
-    }
-
-    /* 4. Color Fidelity & Stability */
-    * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        transform: none !important;
-        /* No more scale allowed! */
-    }
-
-    /* 5. PRINT DEBUG MODE (Helpful to see boundary boxes) */
-    .is-printing-now.print-debug .sheet-page {
-        outline: 2px dashed red !important;
-    }
-
-    .is-printing-now.print-debug .sidebar {
-        outline: 2px solid blue !important;
-    }
-
-    /* Fix strokes grid in print per step 16 */
-    .sec-strokes {
-        display: grid !important;
-        grid-template-rows: repeat(10, 1fr) !important;
-        grid-auto-flow: column !important;
-        grid-auto-columns: 32% !important;
-        gap: 0 !important;
-        padding: 2px !important;
-    }
-
-    .stroke-step {
-        width: 100% !important;
-        height: 100% !important;
-    }
-}
+/* [Consolidated into v8.0 Monolith at EOF] */
 
 /* =========================================
    5. UI/UX PHASE 2: MODERN LAYOUT
@@ -1072,27 +889,7 @@ select {
     width: auto !important;
 }
 
-@media print {
-
-    .navbar,
-    .app-sidebar {
-        display: none !important;
-    }
-
-    .app-main {
-        padding: 0;
-        background: white;
-    }
-
-    .app-layout {
-        display: block;
-    }
-
-    .sheet-page {
-        box-shadow: none;
-        margin: 0;
-    }
-}
+/* Consolidated into end-of-file @media print */
 
 
 /* =========================================
@@ -1657,4 +1454,103 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
+}
+/* =========================================
+   FINAL UNIFIED PRINT MONOLITH (v8.0)
+   Consolidates all print logic for hardware & PDF stability
+   ========================================= */
+@media print {
+    /* 1. Global Box Calibration & Page Setup */
+    *, *::before, *::after { box-sizing: border-box !important; }
+    @page { size: A4 portrait; margin: 0; }
+    html, body {
+        margin: 0 !important; padding: 0 !important;
+        background: white !important; width: 210mm !important;
+        height: auto !important; overflow: visible !important;
+    }
+    
+    /* 2. Professional Isolation */
+    .navbar, .app-sidebar, .sidebar-toggle, .btn-float { display: none !important; }
+    body > *:not(.hero-section) { display: none !important; }
+    .hero-section { display: block !important; margin: 0 !important; padding: 0 !important; width: 100% !important; background: white !important; }
+    .hero-section > .container:not(#legacyControls) { display: none !important; }
+    #legacyControls { display: block !important; padding: 0 !important; }
+    #legacyControls .row > *:not(.col-lg-8) { display: none !important; }
+    #legacyControls .col-lg-8 { width: 100% !important; max-width: 100% !important; padding: 0 !important; flex: 0 0 100% !important; }
+    .card { border: none !important; box-shadow: none !important; background: transparent !important; }
+    .card-body { padding: 0 !important; }
+    #previewSection { padding: 0 !important; margin: 0 !important; }
+    #previewSection > *:not(#sheets-container) { display: none !important; }
+    #sheets-container { display: block !important; padding: 0 !important; }
+
+    /* 3. Absolute Fixed-MM Worksheet Layout (v8.0 Fix) */
+    .sheet-page {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 210mm !important;
+        height: 285mm !important;
+        margin: 0 !important;
+        padding: 10mm !important;
+        background: white !important;
+        box-shadow: none !important;
+        border: none !important;
+        overflow: hidden !important;
+        break-after: page !important;
+        page-break-after: always !important;
+        color: #000 !important;
+    }
+
+    .sheet-header {
+        display: flex !important;
+        height: 15mm !important;
+        margin-bottom: 5mm !important;
+        border-bottom: 2px solid #3B4CCA !important;
+        color: #3B4CCA !important;
+        visibility: visible !important;
+    }
+
+    .sheet-body {
+        display: flex !important;
+        flex-direction: row-reverse !important;
+        flex-grow: 1 !important;
+        width: 100% !important;
+        height: 245mm !important; /* Fixed segment for Chrome calculation safety */
+        min-height: 245mm !important;
+        overflow: hidden !important;
+    }
+
+    /* Fixed Millimeter Sections - No percentages allowed in Print */
+    .sidebar { width: 25mm !important; height: 100% !important; border: 2px solid #3B4CCA !important; border-left: 1px solid #3B4CCA !important; }
+    .content-area { flex-grow: 1 !important; height: 100% !important; border: 2px solid #3B4CCA !important; border-right: none !important; }
+    
+    .sec-header { height: 35mm !important; border-bottom: 1px solid #3B4CCA !important; overflow: hidden !important; }
+    .sec-meta { height: 15mm !important; border-bottom: 1px solid #3B4CCA !important; overflow: hidden !important; }
+    .sec-strokes {
+        height: 85mm !important;
+        border-bottom: 1px solid #3B4CCA !important;
+        display: grid !important;
+        grid-template-rows: repeat(10, 1fr) !important;
+        grid-auto-flow: column !important;
+        grid-auto-columns: 32% !important;
+        direction: rtl !important;
+        padding: 2mm !important;
+        gap: 0 !important;
+        overflow: hidden !important;
+    }
+    .sec-practice-group { height: 110mm !important; overflow: hidden !important; }
+
+    /* Stroke Step Stability */
+    .stroke-step {
+        width: 100% !important;
+        height: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+    .stroke-step svg { width: 85% !important; height: 85% !important; max-width: 85% !important; max-height: 85% !important; }
+
+    /* 4. Global Color & Driver Calibration */
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; transform: none !important; }
+    .is-printing-now.print-debug .sheet-page { outline: 2px dashed red !important; }
+    .is-printing-now.print-debug .sidebar { outline: 2px solid blue !important; }
 }

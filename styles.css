@@ -1620,10 +1620,9 @@ body {
         grid-template-rows: repeat(10, 8.5mm) !important;
         /* 10 fixed vertical cells */
         grid-auto-flow: column !important;
-        /* Fill columns first, Move Left-to-Right */
+        /* Fill columns first, Move Right-to-Left (v8.7 Request) */
         grid-auto-columns: 32% !important;
-        direction: ltr !important;
-        /* Start first column on the LEFT (v8.3 Correction) */
+        direction: rtl !important;
         padding: 2mm !important;
         gap: 0 !important;
         overflow: hidden !important;

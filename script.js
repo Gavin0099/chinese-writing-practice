@@ -36,6 +36,18 @@ function showLineGuide() {
     if (guide) guide.style.display = 'flex';
 }
 
+// --- Hybrid Print Mode Detector (v8.5) ---
+(function detectPrintMode() {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+        document.body.classList.add('mobile-print-mode');
+        console.log("📱 Mobile Print Mode Active");
+    } else {
+        document.body.classList.add('desktop-print-mode');
+        console.log("💻 Desktop Print Mode Active");
+    }
+})();
+
 const CHARS_PER_PAGE = 6;
 
 // A. Global DB & Init
@@ -913,21 +925,23 @@ async function renderStrokeOrder(container, char) {
             const stepDiv = document.createElement('div');
             stepDiv.className = 'stroke-step';
 
-            // Build SVG
-            // HanziWriter data is 1024x1024 and inverted Y-axis.
-            // Using transform to correct orientation.
-            let svgHTML = `
-                <svg viewBox="0 0 1024 1024" width="100%" height="100%" style="display:block;">
+            // Build SVG String
+            const svgString = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
                     <g transform="scale(1, -1) translate(0, -900)">
-            `;
+                        ${strokes.slice(0, step + 1).map(path => `<path d="${path}" fill="#000000" />`).join('')}
+                    </g>
+                </svg>
+            `.trim();
 
-            for (let i = 0; i <= step; i++) {
-                // All strokes in the sequence should be black for maximum print clarity
-                svgHTML += `<path d="${strokes[i]}" fill="#000000" />`;
-            }
+            // Convert to Atomic Image (Prevents print engines from "exploding" the SVG internal paths)
+            const img = document.createElement('img');
+            img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.display = 'block';
 
-            svgHTML += `</g></svg>`;
-            stepDiv.innerHTML = svgHTML;
+            stepDiv.appendChild(img);
             container.appendChild(stepDiv);
         }
 

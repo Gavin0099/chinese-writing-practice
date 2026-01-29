@@ -1455,33 +1455,98 @@ body {
         transform: translateY(0);
     }
 }
+
 /* =========================================
    FINAL UNIFIED PRINT MONOLITH (v8.0)
    Consolidates all print logic for hardware & PDF stability
    ========================================= */
 @media print {
+
     /* 1. Global Box Calibration & Page Setup */
-    *, *::before, *::after { box-sizing: border-box !important; }
-    @page { size: A4 portrait; margin: 0; }
-    html, body {
-        margin: 0 !important; padding: 0 !important;
-        background: white !important; width: 210mm !important;
-        height: auto !important; overflow: visible !important;
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box !important;
     }
-    
+
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+
+    html,
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+        width: 210mm !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
     /* 2. Professional Isolation */
-    .navbar, .app-sidebar, .sidebar-toggle, .btn-float { display: none !important; }
-    body > *:not(.hero-section) { display: none !important; }
-    .hero-section { display: block !important; margin: 0 !important; padding: 0 !important; width: 100% !important; background: white !important; }
-    .hero-section > .container:not(#legacyControls) { display: none !important; }
-    #legacyControls { display: block !important; padding: 0 !important; }
-    #legacyControls .row > *:not(.col-lg-8) { display: none !important; }
-    #legacyControls .col-lg-8 { width: 100% !important; max-width: 100% !important; padding: 0 !important; flex: 0 0 100% !important; }
-    .card { border: none !important; box-shadow: none !important; background: transparent !important; }
-    .card-body { padding: 0 !important; }
-    #previewSection { padding: 0 !important; margin: 0 !important; }
-    #previewSection > *:not(#sheets-container) { display: none !important; }
-    #sheets-container { display: block !important; padding: 0 !important; }
+    .navbar,
+    .app-sidebar,
+    .sidebar-toggle,
+    .btn-float {
+        display: none !important;
+    }
+
+    body>*:not(.hero-section) {
+        display: none !important;
+    }
+
+    .hero-section {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        background: white !important;
+    }
+
+    .hero-section>.container:not(#legacyControls) {
+        display: none !important;
+    }
+
+    #legacyControls {
+        display: block !important;
+        padding: 0 !important;
+    }
+
+    #legacyControls .row>*:not(.col-lg-8) {
+        display: none !important;
+    }
+
+    #legacyControls .col-lg-8 {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        flex: 0 0 100% !important;
+    }
+
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+
+    .card-body {
+        padding: 0 !important;
+    }
+
+    #previewSection {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    #previewSection>*:not(#sheets-container) {
+        display: none !important;
+    }
+
+    #sheets-container {
+        display: block !important;
+        padding: 0 !important;
+    }
 
     /* 3. Absolute Fixed-MM Worksheet Layout (v8.0 Fix) */
     .sheet-page {
@@ -1514,43 +1579,89 @@ body {
         flex-direction: row-reverse !important;
         flex-grow: 1 !important;
         width: 100% !important;
-        height: 245mm !important; /* Fixed segment for Chrome calculation safety */
+        height: 245mm !important;
+        /* Fixed segment for Chrome calculation safety */
         min-height: 245mm !important;
         overflow: hidden !important;
     }
 
     /* Fixed Millimeter Sections - No percentages allowed in Print */
-    .sidebar { width: 25mm !important; height: 100% !important; border: 2px solid #3B4CCA !important; border-left: 1px solid #3B4CCA !important; }
-    .content-area { flex-grow: 1 !important; height: 100% !important; border: 2px solid #3B4CCA !important; border-right: none !important; }
-    
-    .sec-header { height: 35mm !important; border-bottom: 1px solid #3B4CCA !important; overflow: hidden !important; }
-    .sec-meta { height: 15mm !important; border-bottom: 1px solid #3B4CCA !important; overflow: hidden !important; }
+    .sidebar {
+        width: 25mm !important;
+        height: 100% !important;
+        border: 2px solid #3B4CCA !important;
+        border-left: 1px solid #3B4CCA !important;
+    }
+
+    .content-area {
+        flex-grow: 1 !important;
+        height: 100% !important;
+        border: 2px solid #3B4CCA !important;
+        border-right: none !important;
+    }
+
+    .sec-header {
+        height: 35mm !important;
+        border-bottom: 1px solid #3B4CCA !important;
+        overflow: hidden !important;
+    }
+
+    .sec-meta {
+        height: 15mm !important;
+        border-bottom: 1px solid #3B4CCA !important;
+        overflow: hidden !important;
+    }
+
     .sec-strokes {
         height: 85mm !important;
         border-bottom: 1px solid #3B4CCA !important;
-        display: grid !important;
-        grid-template-rows: repeat(10, 1fr) !important;
-        grid-auto-flow: column !important;
-        grid-auto-columns: 32% !important;
+        column-count: 3 !important;
+        /* Extremely stable for Print hardware */
+        column-gap: 0 !important;
+        column-fill: auto !important;
         direction: rtl !important;
+        /* Right-to-left columns */
         padding: 2mm !important;
-        gap: 0 !important;
         overflow: hidden !important;
     }
-    .sec-practice-group { height: 110mm !important; overflow: hidden !important; }
 
-    /* Stroke Step Stability */
+    .sec-practice-group {
+        height: 110mm !important;
+        overflow: hidden !important;
+    }
+
+    /* Stroke Steps - Logic for absolute hardware alignment */
     .stroke-step {
         width: 100% !important;
-        height: 100% !important;
+        height: 8.2mm !important;
+        /* Fixed physical height to prevent row overlap */
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
+        break-inside: avoid !important;
+        /* Prevent hardware splitting a cell */
+        page-break-inside: avoid !important;
     }
-    .stroke-step svg { width: 85% !important; height: 85% !important; max-width: 85% !important; max-height: 85% !important; }
+
+    .stroke-step svg {
+        width: 85% !important;
+        height: 85% !important;
+        max-width: 85% !important;
+        max-height: 85% !important;
+    }
 
     /* 4. Global Color & Driver Calibration */
-    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; transform: none !important; }
-    .is-printing-now.print-debug .sheet-page { outline: 2px dashed red !important; }
-    .is-printing-now.print-debug .sidebar { outline: 2px solid blue !important; }
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        transform: none !important;
+    }
+
+    .is-printing-now.print-debug .sheet-page {
+        outline: 2px dashed red !important;
+    }
+
+    .is-printing-now.print-debug .sidebar {
+        outline: 2px solid blue !important;
+    }
 }

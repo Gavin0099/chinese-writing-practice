@@ -1619,10 +1619,10 @@ body {
         grid-template-rows: repeat(10, 8.5mm) !important;
         /* 10 fixed vertical cells */
         grid-auto-flow: column !important;
-        /* Fill columns first, Move Right-to-Left */
+        /* Fill columns first, Move Left-to-Right */
         grid-auto-columns: 32% !important;
-        direction: rtl !important;
-        /* Start first column on the RIGHT */
+        direction: ltr !important;
+        /* Start first column on the LEFT (v8.3 Correction) */
         padding: 2mm !important;
         gap: 0 !important;
         overflow: hidden !important;
@@ -1633,21 +1633,28 @@ body {
         overflow: hidden !important;
     }
 
-    /* Stroke Steps - Absolute hardware locking for v8.2 */
+    /* Stroke Steps - Logic for absolute hardware stability (v8.3 per User Technical Feedback) */
     .stroke-step {
         width: 100% !important;
         height: 8.5mm !important;
-        /* Matches grid row height exactly */
+        position: relative !important;
+        /* Standard Anchor */
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
     }
 
     .stroke-step svg {
-        width: 90% !important;
-        height: 90% !important;
-        max-width: 90% !important;
-        max-height: 90% !important;
+        position: absolute !important;
+        /* Force path stacking override */
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        padding: 10% !important;
+        /* Inner safety buffer */
+        max-width: 100% !important;
+        max-height: 100% !important;
     }
 
     /* 4. Global Color & Driver Calibration */

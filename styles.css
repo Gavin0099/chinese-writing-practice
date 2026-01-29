@@ -1548,15 +1548,15 @@ body {
         padding: 0 !important;
     }
 
-    /* 3. Absolute Fixed-MM Worksheet Layout (v8.4 Stability Monolith) */
+    /* 3. Absolute Fixed-MM Worksheet Layout (v8.6 Pure Stability Monolith) */
     .sheet-page {
         display: flex !important;
         flex-direction: column !important;
         width: 210mm !important;
         height: 285mm !important;
         margin: 0 !important;
-        padding: 5mm 10mm !important;
-        /* Balanced for guidance banner */
+        padding: 10mm !important;
+        /* Standard pure margins */
         background: white !important;
         box-shadow: none !important;
         border: none !important;
@@ -1564,20 +1564,6 @@ body {
         break-after: page !important;
         page-break-after: always !important;
         color: #000 !important;
-    }
-
-    /* Solution C: Professional PDF Guidance Banner (Print-Only) */
-    .sheet-page::before {
-        content: "💡 提示：若實體列印出現位移，建議使用網頁正下方的【下載 PDF】按鈕以獲得最佳品質。";
-        display: block !important;
-        width: 100% !important;
-        padding: 2mm !important;
-        margin-bottom: 2mm !important;
-        border: 1px solid #ddd !important;
-        font-size: 9px !important;
-        color: #666 !important;
-        text-align: center !important;
-        border-radius: 4px !important;
     }
 
     .sheet-header {
@@ -1594,9 +1580,9 @@ body {
         flex-direction: row-reverse !important;
         flex-grow: 1 !important;
         width: 100% !important;
-        height: 240mm !important;
-        /* Adjusted for banner offset */
-        min-height: 240mm !important;
+        height: 245mm !important;
+        /* Standard Proportions */
+        min-height: 245mm !important;
         overflow: hidden !important;
     }
 
@@ -1644,7 +1630,7 @@ body {
     }
 
     .sec-practice-group {
-        height: 105mm !important;
+        height: 110mm !important;
         overflow: hidden !important;
     }
 
@@ -1677,6 +1663,8 @@ body {
         max-height: 100% !important;
         z-index: 1 !important;
         /* Force stack context for stubborn drivers */
+        transform: translateZ(0) !important;
+        /* Trigger hardware acceleration lock (v8.6) */
     }
 
     /* Platform-Specific Force Overrides */

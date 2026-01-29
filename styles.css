@@ -462,30 +462,30 @@ select {
 .sec-strokes {
     height: var(--h-strokes);
     border-bottom: 1px solid var(--grid-blue);
-    display: flex;
-    flex-flow: column wrap;
-    /* Stack vertically, then wrap to next column */
+    display: grid;
+    grid-template-rows: repeat(10, 1fr);
+    /* 10 vertical items */
+    grid-auto-flow: column;
+    /* Fill columns from right to left */
+    grid-auto-columns: 32%;
+    /* 3 columns approx */
+    gap: 0;
     direction: rtl;
-    /* Start columns from right, wrap to left */
-    align-content: flex-start;
-    /* Align columns to the 'start' (right side in RTL) */
+    /* Start columns from the right */
     padding: 2px;
     overflow: hidden;
 }
 
 /* Stroke Steps (Compact Grid Items for 3-Col Layout) */
 .stroke-step {
-    width: 32%;
-    /* Approx 1/3 width to allow 3 columns */
-    height: 9%;
-    /* Slightly reduced from 9.5% to ensure 10 items fit in one col without accidental wrap */
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0;
     padding: 0px;
     flex: 0 0 auto;
-    /* Do not shrink */
 }
 
 .stroke-step svg {
@@ -731,7 +731,8 @@ select {
         height: 285mm !important;
 
         margin: 0 !important;
-        padding: 5mm 10mm !important;
+        padding: 10mm !important;
+        /* Restore standard 10mm safety margins */
 
         background: white !important;
         position: relative !important;
@@ -747,6 +748,8 @@ select {
 
     .sheet-header {
         display: flex !important;
+        height: 15mm !important;
+        margin-bottom: 5mm !important;
     }
 
     .sheet-body {
@@ -755,6 +758,8 @@ select {
         /* Sidebar + Content */
         flex-grow: 1 !important;
         width: 100% !important;
+        min-height: 0 !important;
+        /* Force Chrome to propagate grew height to children percentages */
     }
 
     .sheet-page:last-child {
@@ -783,6 +788,21 @@ select {
 
     .is-printing-now.print-debug .sidebar {
         outline: 2px solid blue !important;
+    }
+
+    /* Fix strokes grid in print per step 16 */
+    .sec-strokes {
+        display: grid !important;
+        grid-template-rows: repeat(10, 1fr) !important;
+        grid-auto-flow: column !important;
+        grid-auto-columns: 32% !important;
+        gap: 0 !important;
+        padding: 2px !important;
+    }
+
+    .stroke-step {
+        width: 100% !important;
+        height: 100% !important;
     }
 }
 

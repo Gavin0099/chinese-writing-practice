@@ -1692,3 +1692,14 @@ body {
         display: none !important;
     }
 }
+/* ???±è??è¦½?€??Card Header (?«é¢ + ?—å°?½æ?å¤? */
+#previewSection .card-header {
+    display: none !important;
+}
+
+/* ?—å°?‚ä?ä¿éšª?è?ä¸€?€ */
+@media print {
+    #previewSection .card-header {
+        display: none !important;
+    }
+}

@@ -1714,3 +1714,37 @@ body {
         display: none !important;
     }
 }
+/* ???‹æ??ˆä¿®æ­?ç¢ºä?ç·´ç?ç°¿å??´é¡¯ç¤?*/
+@media (max-width: 768px) {
+
+    /* ç§»é™¤?ºå?é«˜åº¦,è®“å…§å®¹è‡ª?¶å???*/
+    .sheet-page {
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+
+    /* ç¢ºä?å®¹å™¨ä¸æ?è¢«å???*/
+    .app-main,
+    #previewSection,
+    .card-body {
+        overflow: visible !important;
+        height: auto !important;
+    }
+
+    /* ç·´ç?ç°¿å…§å®¹å???*/
+    .sheet-body {
+        height: auto !important;
+        min-height: 0 !important;
+    }
+
+    /* å­—æ ¼?€??*/
+    .content-area {
+        height: auto !important;
+    }
+
+    .char-col {
+        height: auto !important;
+    }
+}

@@ -730,6 +730,19 @@ function renderSheets(text, metadata = null) {
             downloadBtn.disabled = false;
         }, 100);
     }
+
+    // ✅ 移除「練習簿預覽」標題
+    removePreviewHeader();
+}
+
+// ✅ 移除預覽區標題的函數
+function removePreviewHeader() {
+    const h = [...document.querySelectorAll('h1,h2,h3,h4,h5,h6')]
+        .find(el => el.textContent.trim() === '練習簿預覽');
+    if (h) {
+        console.log('✅ 已移除「練習簿預覽」標題');
+        h.remove();
+    }
 }
 
 function createPage(chars, metadata = null) {

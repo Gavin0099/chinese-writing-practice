@@ -1703,3 +1703,14 @@ body {
         display: none !important;
     }
 }
+/* ??ç²¾æ??±è??è¦½?€æ¨™é? (?¢å? + ?—å°?½æ?å¤? */
+#previewSection .card-header>h5.mb-0.fw-bold {
+    display: none !important;
+}
+
+/* ?—å°?‚ä?ä¿éšª?è?ä¸€?€ */
+@media print {
+    #previewSection .card-header>h5.mb-0.fw-bold {
+        display: none !important;
+    }
+}

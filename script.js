@@ -736,7 +736,8 @@ function createPage(chars, metadata = null) {
     const page = document.createElement('div');
     page.className = 'sheet-page';
 
-    // 0. Page Header (Metadata Block v1.6)
+    // 0. Page Header (Metadata Block v1.6) - 已移除以修正排版問題
+    /*
     if (metadata) {
         const header = document.createElement('div');
         header.className = 'sheet-header';
@@ -749,6 +750,7 @@ function createPage(chars, metadata = null) {
         `;
         page.appendChild(header);
     }
+    */
 
     // Wrap Sidebar and Content in a Body Container
     const pageBody = document.createElement('div');

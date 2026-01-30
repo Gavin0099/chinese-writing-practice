@@ -304,7 +304,7 @@ select {
 
 .sheet-page {
     /* Reset Font for Workbook Context */
-    font-family: "KaiTi", "BiauKai", "DFKai-SB", "æ¨™æ¥·é«”", serif;
+    font-family: "KaiTi", "BiauKai", "DFKai-SB", "æ¨™æ¥·é«?, serif;
 
     width: var(--a4-width);
     height: var(--a4-height);
@@ -322,7 +322,7 @@ select {
         0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-/* v1.6 NEW: PAGE HEADER - å·²éš±è—ä»¥ä¿®æ­£æ’ç‰ˆå•é¡Œ */
+/* v1.6 NEW: PAGE HEADER - å·²éš±?ä»¥ä¿®æ­£?’ç??é? */
 .sheet-header {
     display: none !important;
     width: 100%;
@@ -1684,5 +1684,11 @@ body {
 
     .is-printing-now.print-debug .sidebar {
         outline: 2px solid blue !important;
+    }
+}
+/* ???±è? Bootstrap Card Header (?Œç·´ç¿’ç°¿?è¦½?æ?é¡? */
+@media print {
+    .card-header {
+        display: none !important;
     }
 }

@@ -917,12 +917,30 @@ async function renderStrokeOrder(container, char) {
     container.innerHTML = '<div style="font-size:12px; color:#999; padding: 10px;">載入中...</div>';
 
     try {
-        // 1. Fetch RAW Data (No Animation Engine overhead)
+        // 1. Fetch RAW Data from Taiwan-specific source
         if (typeof HanziWriter === 'undefined') {
             throw new Error('HanziWriter not loaded');
         }
 
-        const charData = await HanziWriter.loadCharacterData(char);
+        // ✅ 使用台灣版筆順資料 (hanzi-writer-data-tw)
+        const charCode = char.charCodeAt(0).toString(16);
+        const twDataUrl = `https://cdn.jsdelivr.net/gh/flandre-scarlet/hanzi-writer-data-tw@gh-pages/data/${charCode}.json`;
+
+        let charData;
+        try {
+            // 優先使用台灣版資料
+            const response = await fetch(twDataUrl);
+            if (response.ok) {
+                charData = await response.json();
+                console.log(`✅ 使用台灣版筆順: ${char}`);
+            } else {
+                throw new Error('TW data not found');
+            }
+        } catch (e) {
+            // Fallback to default HanziWriter data
+            console.log(`⚠️ 台灣版資料不存在,使用預設資料: ${char}`);
+            charData = await HanziWriter.loadCharacterData(char);
+        }
         container.innerHTML = ''; // Clear loading
 
         const strokes = charData.strokes;

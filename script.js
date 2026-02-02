@@ -917,28 +917,33 @@ async function renderStrokeOrder(container, char) {
     container.innerHTML = '<div style="font-size:12px; color:#999; padding: 10px;">載入中...</div>';
 
     try {
-        // 1. Fetch RAW Data from Taiwan-specific source
+        // 1. Fetch RAW Data from zh-stroke-data (教育部標準)
         if (typeof HanziWriter === 'undefined') {
             throw new Error('HanziWriter not loaded');
         }
 
-        // ✅ 使用台灣版筆順資料 (hanzi-writer-data-tw)
-        const charCode = char.charCodeAt(0).toString(16);
-        const twDataUrl = `https://cdn.jsdelivr.net/gh/flandre-scarlet/hanzi-writer-data-tw@gh-pages/data/${charCode}.json`;
+        // ✅ 使用 g0v/zh-stroke-data (萌典使用的教育部標準資料)
+        const charCode = char.charCodeAt(0).toString(16).toLowerCase();
+        const zhStrokeUrl = `https://raw.githubusercontent.com/g0v/zh-stroke-data/master/data/${charCode}.json`;
 
         let charData;
         try {
-            // 優先使用台灣版資料
-            const response = await fetch(twDataUrl);
+            // 優先使用 zh-stroke-data (教育部標準)
+            const response = await fetch(zhStrokeUrl);
             if (response.ok) {
-                charData = await response.json();
-                console.log(`✅ 使用台灣版筆順: ${char}`);
+                const data = await response.json();
+                // 轉換格式以符合 HanziWriter 格式
+                charData = {
+                    character: char,
+                    strokes: data.strokes || []
+                };
+                console.log(`✅ 使用 zh-stroke-data (教育部標準): ${char}`);
             } else {
-                throw new Error('TW data not found');
+                throw new Error('zh-stroke-data not found');
             }
         } catch (e) {
             // Fallback to default HanziWriter data
-            console.log(`⚠️ 台灣版資料不存在,使用預設資料: ${char}`);
+            console.log(`⚠️ zh-stroke-data 不存在,使用 HanziWriter: ${char}`);
             charData = await HanziWriter.loadCharacterData(char);
         }
         container.innerHTML = ''; // Clear loading

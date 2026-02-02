@@ -1,0 +1,68 @@
+/* ========================================
+   資料來源說明樣式
+   ======================================== */
+
+.data-attribution {
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    padding: 24px 0;
+    margin-top: 48px;
+    font-size: 13px;
+    color: #6c757d;
+}
+
+.data-attribution .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.attribution-text {
+    margin: 0 0 8px 0;
+    line-height: 1.6;
+}
+
+.attribution-text strong {
+    color: #495057;
+}
+
+.attribution-text a {
+    color: #667eea;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.attribution-text a:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+.attribution-note {
+    margin: 0;
+    font-size: 12px;
+    color: #adb5bd;
+}
+
+/* 列印時隱藏 */
+@media print {
+    .data-attribution {
+        display: none !important;
+    }
+}
+
+/* 手機版調整 */
+@media (max-width: 768px) {
+    .data-attribution {
+        padding: 20px 0;
+        margin-top: 32px;
+    }
+
+    .attribution-text {
+        font-size: 12px;
+    }
+
+    .attribution-note {
+        font-size: 11px;
+    }
+}

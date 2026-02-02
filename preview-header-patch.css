@@ -1,0 +1,11 @@
+/* ✅ 隱藏預覽區的 Card Header (畫面 + 列印都消失) */
+#previewSection .card-header {
+    display: none !important;
+}
+
+/* 列印時也保險再補一刀 */
+@media print {
+    #previewSection .card-header {
+        display: none !important;
+    }
+}

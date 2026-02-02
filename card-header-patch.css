@@ -1,0 +1,6 @@
+/* ✅ 隱藏 Bootstrap Card Header (「練習簿預覽」標題) */
+@media print {
+    .card-header {
+        display: none !important;
+    }
+}

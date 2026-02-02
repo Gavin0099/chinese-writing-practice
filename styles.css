@@ -1,3 +1,14 @@
+/* ========================================
+   ?™è‚²?¨æ?æº–æ¥·?¸å?é«?
+   ======================================== */
+
+@font-face {
+    font-family: 'edukai';
+    src: url('./fonts/edukai-4.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 /* =========================================
    0. ONBOARDING (v1.1)
    ========================================= */

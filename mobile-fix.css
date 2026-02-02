@@ -1,0 +1,34 @@
+/* ✅ 手機版修正:確保練習簿完整顯示 */
+@media (max-width: 768px) {
+
+    /* 移除固定高度,讓內容自然展開 */
+    .sheet-page {
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+
+    /* 確保容器不會被切掉 */
+    .app-main,
+    #previewSection,
+    .card-body {
+        overflow: visible !important;
+        height: auto !important;
+    }
+
+    /* 練習簿內容區域 */
+    .sheet-body {
+        height: auto !important;
+        min-height: 0 !important;
+    }
+
+    /* 字格區域 */
+    .content-area {
+        height: auto !important;
+    }
+
+    .char-col {
+        height: auto !important;
+    }
+}

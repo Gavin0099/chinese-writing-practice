@@ -1,0 +1,11 @@
+/* ✅ 精準隱藏預覽區標題 (螢幕 + 列印都消失) */
+#previewSection .card-header>h5.mb-0.fw-bold {
+    display: none !important;
+}
+
+/* 列印時也保險再補一刀 */
+@media print {
+    #previewSection .card-header>h5.mb-0.fw-bold {
+        display: none !important;
+    }
+}

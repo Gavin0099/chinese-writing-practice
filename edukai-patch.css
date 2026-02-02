@@ -1,0 +1,11 @@
+/* ========================================
+   教育部標準楷書字體
+   ======================================== */
+
+@font-face {
+    font-family: 'edukai';
+    src: url('./fonts/edukai-4.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

@@ -917,35 +917,14 @@ async function renderStrokeOrder(container, char) {
     container.innerHTML = '<div style="font-size:12px; color:#999; padding: 10px;">載入中...</div>';
 
     try {
-        // 1. Fetch RAW Data from zh-stroke-data (教育部標準)
+        // 1. Fetch RAW Data using HanziWriter (MIT License - 可商業使用)
         if (typeof HanziWriter === 'undefined') {
             throw new Error('HanziWriter not loaded');
         }
 
-        // ✅ 使用 g0v/zh-stroke-data (萌典使用的教育部標準資料)
-        const charCode = char.charCodeAt(0).toString(16).toLowerCase();
-        const zhStrokeUrl = `https://raw.githubusercontent.com/g0v/zh-stroke-data/master/data/${charCode}.json`;
-
-        let charData;
-        try {
-            // 優先使用 zh-stroke-data (教育部標準)
-            const response = await fetch(zhStrokeUrl);
-            if (response.ok) {
-                const data = await response.json();
-                // 轉換格式以符合 HanziWriter 格式
-                charData = {
-                    character: char,
-                    strokes: data.strokes || []
-                };
-                console.log(`✅ 使用 zh-stroke-data (教育部標準): ${char}`);
-            } else {
-                throw new Error('zh-stroke-data not found');
-            }
-        } catch (e) {
-            // Fallback to default HanziWriter data
-            console.log(`⚠️ zh-stroke-data 不存在,使用 HanziWriter: ${char}`);
-            charData = await HanziWriter.loadCharacterData(char);
-        }
+        // ✅ 使用 HanziWriter (MIT License - 完全開放,可商業使用)
+        const charData = await HanziWriter.loadCharacterData(char);
+        console.log(`✅ 使用 HanziWriter 筆順資料: ${char}`);
         container.innerHTML = ''; // Clear loading
 
         const strokes = charData.strokes;

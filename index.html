@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生字練習簿產生器</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="stroke-notice.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap" rel="stylesheet">
@@ -220,6 +221,41 @@
                 });
             }
         </script>
+
+        <!-- 筆順說明 Modal -->
+        <div id="strokeNoticeModal" class="stroke-modal-overlay">
+            <div class="stroke-modal">
+                <div class="stroke-modal-header">
+                    <div class="stroke-modal-emoji">🎨✨</div>
+                    <h3 class="stroke-modal-title">漢字的寫法很有趣喔!</h3>
+                    <p class="stroke-modal-subtitle">小朋友,你知道嗎?</p>
+                </div>
+
+                <div class="stroke-modal-content">
+                    <p>有些字的寫法,<span class="stroke-notice-highlight">有時候連起來,有時候分開</span>,都是正確的喔!</p>
+
+                    <div class="stroke-modal-example">
+                        <div class="stroke-modal-example-char">草</div>
+                        <p class="stroke-modal-example-text">
+                            像「草」字的草字頭,可以寫成連在一起的 <strong>艹</strong>,<br>
+                            也可以寫成分開的 <strong>丷 丷</strong>,兩種都對!
+                        </p>
+                    </div>
+
+                    <p>📚 這個練習簿使用的是<strong>教育部標準字體</strong>,所以有些字的筆順可能跟課本稍微不一樣,但都是正確的寫法!</p>
+
+                    <p>💡 <strong>記得</strong>:最重要的是把字寫得工整漂亮,筆順只是參考喔!</p>
+                </div>
+
+                <button class="stroke-modal-button" onclick="closeStrokeNoticeModal()">
+                    我知道了!開始練習 🚀
+                </button>
+            </div>
+        </div>
+
+        <!-- 筆順說明腳本 -->
+        <script src="stroke-notice.js"></script>
+
 </body>
 
 </html>

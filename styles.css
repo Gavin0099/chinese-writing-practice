@@ -1,5 +1,5 @@
 /* ========================================
-   ?�育?��?準楷?��?�?
+   ?è²?¨æ?æºæ¥·?¸å?é«?
    ======================================== */
 
 @font-face {
@@ -315,7 +315,7 @@ select {
 
 .sheet-page {
     /* Reset Font for Workbook Context */
-    font-family: "KaiTi", "BiauKai", "DFKai-SB", "標楷�?, serif;
+    font-family: "KaiTi", "BiauKai", "DFKai-SB", "æ¨æ¥·é«?, serif;
 
     width: var(--a4-width);
     height: var(--a4-height);
@@ -333,7 +333,7 @@ select {
         0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-/* v1.6 NEW: PAGE HEADER - 已隱?�以修正?��??��? */
+/* v1.6 NEW: PAGE HEADER - å·²é±?ä»¥ä¿®æ­£?ç??é? */
 .sheet-header {
     display: none !important;
     width: 100%;
@@ -581,9 +581,7 @@ select {
     position: relative;
 }
 
-.practice-cell:last-child {
-    border-bottom: none;
-}
+/* Rule removed by Code Agent */
 
 /* SHARED */
 .tian-zi-ge {
@@ -1697,38 +1695,38 @@ body {
         outline: 2px solid blue !important;
     }
 }
-/* ???��? Bootstrap Card Header (?�練習簿?�覽?��?�? */
+/* ???±è? Bootstrap Card Header (?ç·´ç¿ç°¿?è¦½?æ?é¡? */
 @media print {
     .card-header {
         display: none !important;
     }
 }
-/* ???��??�覽?�??Card Header (?�面 + ?�印?��?�? */
+/* ???±è??è¦½???Card Header (?«é¢ + ?å°?½æ?å¤? */
 #previewSection .card-header {
     display: none !important;
 }
 
-/* ?�印?��?保險?��?一?� */
+/* ?å°?ä?ä¿éª?è?ä¸? */
 @media print {
     #previewSection .card-header {
         display: none !important;
     }
 }
-/* ??精�??��??�覽?�標�? (?��? + ?�印?��?�? */
+/* ??ç²¾æ??±è??è¦½?æ¨é? (?¢å? + ?å°?½æ?å¤? */
 #previewSection .card-header>h5.mb-0.fw-bold {
     display: none !important;
 }
 
-/* ?�印?��?保險?��?一?� */
+/* ?å°?ä?ä¿éª?è?ä¸? */
 @media print {
     #previewSection .card-header>h5.mb-0.fw-bold {
         display: none !important;
     }
 }
-/* ???��??�修�?確�?練�?簿�??�顯�?*/
+/* ???æ??ä¿®æ­?ç¢ºä?ç·´ç?ç°¿å??´é¡¯ç¤?*/
 @media (max-width: 768px) {
 
-    /* 移除?��?高度,讓內容自?��???*/
+    /* ç§»é¤?ºå?é«åº¦,è®å§å®¹èª?¶å???*/
     .sheet-page {
         height: auto !important;
         min-height: auto !important;
@@ -1736,7 +1734,7 @@ body {
         overflow: visible !important;
     }
 
-    /* 確�?容器不�?被�???*/
+    /* ç¢ºä?å®¹å¨ä¸æ?è¢«å???*/
     .app-main,
     #previewSection,
     .card-body {
@@ -1744,13 +1742,13 @@ body {
         height: auto !important;
     }
 
-    /* 練�?簿內容�???*/
+    /* ç·´ç?ç°¿å§å®¹å???*/
     .sheet-body {
         height: auto !important;
         min-height: 0 !important;
     }
 
-    /* 字格?�??*/
+    /* å­æ ¼???*/
     .content-area {
         height: auto !important;
     }
@@ -1847,4 +1845,9 @@ body {
         height: 245mm !important;
         overflow: hidden !important;
     }
+}
+
+/* Force Border Fix */
+.practice-cell {
+    border-bottom: 1px solid #3B4CCA !important;
 }

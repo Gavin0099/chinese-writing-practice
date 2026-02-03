@@ -18,3 +18,4 @@
 ## 運作規範
 - **嚴格節流**: 代理不得直接讀取整個 `/memory` 目錄，必須經由 `context_pack.md` 獲取上下文。
 - **職責分離**: 嚴禁代理跨越其 [Agent Contracts](memory/09_agent_contracts.md) 定義的邊界。
+- **提交規範**: 每次任務完成後，代理應主動執行 `git commit` 並記錄變更，以便版本溯源與使用者測試。

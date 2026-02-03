@@ -1,42 +1,20 @@
-# 生字練習簿產生器
+# 中文書寫練習 - 多代理開發工作流
 
-一個簡單易用的 Web 應用程式,用於產生帶有筆畫順序的中文生字練習簿 PDF。
+本專案採用「一個代理只做一種腦力工作」的原則，以降低 Token 消耗並提高產出質量。
 
-## 功能特色
+## 目錄結構
+- `/memory`: 長期不變的專案背景與規程。
+- `/work/tickets`: 存放開發工單。
+- `/work/outputs`: 存放各代理的階段性產出。
 
-✨ **筆畫順序顯示** - 使用 HanziWriter.js 顯示正確的筆畫順序  
-📝 **田字格設計** - 標準中文書寫田字格  
-🎨 **即時預覽** - 輸入後立即看到練習簿版面  
-📄 **PDF 匯出** - 可下載列印的 PDF 檔案  
-⚙️ **彈性設定** - 可調整每列字數和練習列數  
+## 核心流程
+1. **開票**: 在 `work/tickets/` 建立工單，明確 Goal、Non-goals 與 Acceptance Criteria。
+2. **Context Loade**: 從 memory 提取最小必要資訊，生成 `work/outputs/context_pack.md` (限制 <= 1200 tokens)。
+3. **Spec Agent**: 根據 pack 生成 `spec.md`。
+4. **角色分工**: 各代理 (Code/UX/Data) 根據 context_pack + spec 完成各自工作。
+5. **QA Agent**: 進行最後的風險評估與測試案例編寫。
+6. **合併決策**: 人類 (Orchestrator) 審核並合併產出。
 
-## 使用方式
-
-1. 在「請輸入要練習的生字」欄位輸入想要練習的中文字
-2. 調整「每列字數」和「練習列數」(可選)
-3. 點擊「產生練習簿」按鈕
-4. 預覽產生的練習簿
-5. 點擊「下載 PDF」儲存檔案並列印
-
-## 技術架構
-
-- **HTML5** - 頁面結構
-- **CSS3** - 樣式設計(包含田字格)
-- **JavaScript** - 互動邏輯
-- **HanziWriter.js** - 筆畫順序資料與渲染
-- **jsPDF** - PDF 產生
-- **html2canvas** - HTML 轉圖片
-
-## 本地執行
-
-直接在瀏覽器中開啟 `index.html` 即可使用,無需安裝任何套件。
-
-## 瀏覽器支援
-
-- Chrome / Edge (推薦)
-- Firefox
-- Safari
-
-## 授權
-
-本專案使用的筆畫順序資料來自 [HanziWriter](https://hanziwriter.org/),基於 [Make Me a Hanzi](https://github.com/skishore/makemeahanzi) 專案。
+## 運作規範
+- **嚴格節流**: 代理不得直接讀取整個 `/memory` 目錄，必須經由 `context_pack.md` 獲取上下文。
+- **職責分離**: 嚴禁代理跨越其 [Agent Contracts](memory/09_agent_contracts.md) 定義的邊界。

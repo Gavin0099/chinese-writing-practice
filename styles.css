@@ -1,5 +1,5 @@
-/* ========================================
-   ?�育?��?準楷?��?�?
+﻿/* ========================================
+   ??冽?皞扑?詨?擃?
    ======================================== */
 
 @font-face {
@@ -315,7 +315,7 @@ select {
 
 .sheet-page {
     /* Reset Font for Workbook Context */
-    font-family: "KaiTi", "BiauKai", "DFKai-SB", "標楷�?, serif;
+    font-family: "KaiTi", "BiauKai", "DFKai-SB", "璅扑擃?, serif;
 
     width: var(--a4-width);
     height: var(--a4-height);
@@ -333,7 +333,7 @@ select {
         0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-/* v1.6 NEW: PAGE HEADER - 已隱?�以修正?��??��? */
+/* v1.6 NEW: PAGE HEADER - 撌脤?誑靽格迤???? */
 .sheet-header {
     display: none !important;
     width: 100%;
@@ -1697,38 +1697,38 @@ body {
         outline: 2px solid blue !important;
     }
 }
-/* ???��? Bootstrap Card Header (?�練習簿?�覽?��?�? */
+/* ???梯? Bootstrap Card Header (?毀蝧倏?汗??憿? */
 @media print {
     .card-header {
         display: none !important;
     }
 }
-/* ???��??�覽?�??Card Header (?�面 + ?�印?��?�? */
+/* ???梯??汗???Card Header (?恍 + ??賣?憭? */
 #previewSection .card-header {
     display: none !important;
 }
 
-/* ?�印?��?保險?��?一?� */
+/* ???靽??銝? */
 @media print {
     #previewSection .card-header {
         display: none !important;
     }
 }
-/* ??精�??��??�覽?�標�? (?��? + ?�印?��?�? */
+/* ??蝎暹??梯??汗?璅? (?Ｗ? + ??賣?憭? */
 #previewSection .card-header>h5.mb-0.fw-bold {
     display: none !important;
 }
 
-/* ?�印?��?保險?��?一?� */
+/* ???靽??銝? */
 @media print {
     #previewSection .card-header>h5.mb-0.fw-bold {
         display: none !important;
     }
 }
-/* ???��??�修�?確�?練�?簿�??�顯�?*/
+/* ?????耨甇?蝣箔?蝺渡?蝪踹??湧＊蝷?*/
 @media (max-width: 768px) {
 
-    /* 移除?��?高度,讓內容自?��???*/
+    /* 蝘駁?箏?擃漲,霈摰寡?嗅???*/
     .sheet-page {
         height: auto !important;
         min-height: auto !important;
@@ -1736,7 +1736,7 @@ body {
         overflow: visible !important;
     }
 
-    /* 確�?容器不�?被�???*/
+    /* 蝣箔?摰孵銝?鋡怠???*/
     .app-main,
     #previewSection,
     .card-body {
@@ -1744,13 +1744,13 @@ body {
         height: auto !important;
     }
 
-    /* 練�?簿內容�???*/
+    /* 蝺渡?蝪踹摰孵???*/
     .sheet-body {
         height: auto !important;
         min-height: 0 !important;
     }
 
-    /* 字格?�??*/
+    /* 摮???*/
     .content-area {
         height: auto !important;
     }

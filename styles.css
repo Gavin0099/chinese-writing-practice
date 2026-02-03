@@ -1851,3 +1851,22 @@ body {
 .practice-cell {
     border-bottom: 1px solid #3B4CCA !important;
 }
+
+/* Force Cross Lines Fix (Tian Zi Ge) for Last Child */
+.practice-cell:last-child .tian-zi-ge::before {
+    content: '' !important;
+    display: block !important;
+    width: 100% !important;
+    border-top: 1px dashed #3B4CCA !important;
+    opacity: 0.8 !important;
+    visibility: visible !important;
+}
+
+.practice-cell:last-child .tian-zi-ge::after {
+    content: '' !important;
+    display: block !important;
+    height: 100% !important;
+    border-left: 1px dashed #3B4CCA !important;
+    opacity: 0.8 !important;
+    visibility: visible !important;
+}

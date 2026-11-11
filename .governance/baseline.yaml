@@ -11,18 +11,18 @@
 # ── PROVENANCE ────────────────────────────────────────────────────────────────
 schema_version: "1"
 baseline_version: 1.0.0
-source_commit: b9e77918efac4888178594af0db8ecfccf200e0b
+source_commit: ce62d759600c5c94a91feee22dda01d61eb1c48a
 framework_root: E:\BackUp\Git_EE\chinese-writing-practice\ai-governance-framework
-initialized_at: 2026-11-11T06:12:07Z
+initialized_at: 2026-11-11T06:19:12Z
 initialized_by: governance_tools/adopt_governance.py
 
 # ── INTEGRITY ─────────────────────────────────────────────────────────────────
 # sha256.<file>: canonical-LF hash recorded at init/refresh time; "protected" files are hash-verified
 # overridable.<file>: protected = must not change | overridable = repo may extend freely
 sha256.AGENTS.base.md: ee6c36aa1e22a7aec7c5970bbcaca3ed76fcb9ce14500b7b220f1576f6f9fb47
-sha256.PLAN.md: 53d8cc5869c85fa54e59fc1c677eb05349d84cc148870b0096a4c34ce0a5f1a3
-sha256.contract.yaml: 70c731d59d0ef6dc2b93a5189699670c5d07c66f2fbd5f14757a25900edbd8da
-sha256.AGENTS.md: 253700f45b8bcfe79fcc57790063babd94b2431b1d987961ccd3829b0320d120
+sha256.PLAN.md: 3ada9314f5fd0d74066dd462841029c0174e9614b366be4b855c0f647f946308
+sha256.contract.yaml: 3453830801af084a4d093d644e106e4361e8a4c00b7aff02c1a92ca28355ae55
+sha256.AGENTS.md: 50da4c74667a86d8ceff74380de0c8494416bfe7ef7b4a7299404fccb166e3df
 overridable.AGENTS.base.md: protected
 overridable.PLAN.md: overridable
 overridable.contract.yaml: overridable

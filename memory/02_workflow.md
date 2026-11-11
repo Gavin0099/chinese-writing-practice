@@ -10,3 +10,4 @@
 
 - 工單與階段產出繼續放在 `work/tickets/` 與 `work/outputs/`。依 `AGENTS.md` 按需取得上下文。
 - 框架由 Git submodule 固定版本。新 clone 安裝及驗證見 [AI Governance 導入指南](../docs/GOVERNANCE_ONBOARDING.md)。
+- Owner 於 2026-11-11 確認中文書寫練習與列印教材生成屬低風險。各工單按變更內容決定驗收範圍。

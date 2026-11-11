@@ -6,18 +6,19 @@
 
 ## Current Phase
 
-- [>] 完成 AI Governance 初始接線與本機驗證，專案領域與風險分級待 owner 確認。
+- [x] 完成 AI Governance 初始導入與本機驗證。
 - 專案是一個讓家長與老師製作中文練習紙的靜態網站。既有工單保留在 `work/tickets/`。
 
 ## Active Sprint
 
 - [x] 固定共用框架版本，套用框架 baseline 與專案規則。
 - [x] 安裝 Git hooks，驗證治理設定、版本一致性及 runtime fixtures。
-- [ ] 由 owner 確認契約領域及 repo 風險分級。
+- [x] Owner 確認契約領域為中文書寫練習與列印教材生成，repo 風險分級為低風險。
 
 ## Decision Log
 
 - 2026-11-11 採用 Git submodule 固定共用治理框架版本，既有專案事實沿用 `memory/` 中的文件。
+- 2026-11-11 採用 owner 確認的低風險契約，依變更內容保留各工單的驗收要求。
 
 ## Known Risks
 

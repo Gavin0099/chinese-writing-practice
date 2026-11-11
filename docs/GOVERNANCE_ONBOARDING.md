@@ -2,7 +2,7 @@
 
 本 repo 透過 `ai-governance-framework/` Git submodule 使用共用治理框架。`governance/framework.lock.json` 記錄固定的版本與 commit。`AGENTS.md` 補充本專案的列印、瀏覽器儲存和教材資料驗收方式。
 
-目前 `contract.yaml` 使用專案名稱作為初始領域識別，領域與 repo 風險分級待 owner 確認。
+Owner 確認 `contract.yaml` 的領域為中文書寫練習與列印教材生成，repo 風險分級為低風險。各工單仍依變更內容評估風險與驗收範圍。固定版本的 runtime 內建領域表尚未收錄此領域，該欄位仍會顯示 `unknown`。
 
 ## 安裝與驗證
 
@@ -27,3 +27,4 @@ python -X utf8 scripts/check_governance.py
 - 工單與階段產出仍使用 `work/tickets/`、`work/outputs/`。接手工作時從 [PLAN.md](../PLAN.md) 與 [AGENTS.md](../AGENTS.md) 開始，依工單讀取相關專案知識。
 - 產品驗收依各工單進行。列印變更的 Chrome 與 iOS Safari 驗收見[既有列印工單](../work/tickets/2026-02-03-stabilize-print.md)。
 - 更新治理框架時，從 [框架更新協議](../governance/AI_GOVERNANCE_UPDATE_PROTOCOL.md) 進入 F-7 流程。
+- `PLAN.md` 採 `Phase (30d)`。接續工作時核對 phase 與更新日期，供框架的新鮮度檢查使用。

@@ -201,7 +201,7 @@ Prompt yourself:
 - What changes are safe enough to keep in a fast path?
 -->
 
-一般文件與工單整理只需驗證文件。改動產生、列印、PDF 或課綱資料時，依工單驗收範圍保留可重現的檢查結果。跨到部署、資料授權或瀏覽器儲存格式時，先確認影響與操作授權。
+專案契約的風險分級為低風險。一般文件與工單整理只需驗證文件。改動產生、列印、PDF 或課綱資料時，依工單驗收範圍保留可重現的檢查結果。跨到部署、資料授權或瀏覽器儲存格式時，先確認影響與操作授權。
 
 ## Must-Test Paths
 <!-- governance:key=must_test_paths -->

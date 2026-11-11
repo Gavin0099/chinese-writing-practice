@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f8f3">
+    <title>詞語考卷｜生字練習簿</title>
+    <link rel="stylesheet" href="learning.css">
+    <link rel="stylesheet" href="exam.css">
+    <script type="module" src="exam.mjs"></script>
+</head>
+<body>
+    <header class="page-header"><a id="backToBook" href="vocabulary.html">← 回到老師詞庫</a></header>
+    <main>
+        <section id="examControls" class="panel" aria-labelledby="previewHeading" hidden>
+            <h1 id="previewHeading">考卷與解答預覽</h1>
+            <p class="intro" id="examSummary"></p>
+            <div class="actions" aria-label="選擇頁面">
+                <a id="both">考卷與解答</a>
+                <a id="questions">只看考卷</a>
+                <a id="answers">只看解答</a>
+            </div>
+            <button id="printExam" type="button" class="primary">列印／儲存 PDF</button>
+        </section>
+        <p id="previewError" class="notice" role="status"></p>
+        <div id="examPages"></div>
+    </main>
+</body>
+</html>

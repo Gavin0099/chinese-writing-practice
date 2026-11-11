@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f8f3">
+    <title>老師詞庫與出卷｜生字練習簿</title>
+    <link rel="stylesheet" href="learning.css">
+    <link rel="stylesheet" href="vocabulary.css">
+    <script type="module" src="vocabulary.mjs"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main">跳到詞庫</a>
+    <header class="page-header">
+        <nav aria-label="工具">
+            <a href="index.html">生字練習簿</a>
+            <a href="learning.html">國字學習查詢</a>
+        </nav>
+    </header>
+    <main id="main">
+        <h1>老師詞庫與出卷</h1>
+        <p class="intro">按班級和課次儲存老師指定的詞語，確認注音後就能抽題。詞庫和考卷存在這個瀏覽器。</p>
+
+        <section class="panel book-bar" aria-labelledby="bookHeading">
+            <h2 id="bookHeading">班級詞庫</h2>
+            <label for="bookSelect">目前班級</label>
+            <select id="bookSelect" name="book" disabled></select>
+            <details id="bookDetails" class="subpanel">
+                <summary>新增班級詞庫</summary>
+                <form id="bookForm" class="entry-form" autocomplete="off">
+                    <label class="wide">班級名稱<input name="name" required maxlength="40" placeholder="例如 二年三班…"></label>
+                    <label>出版社<input name="publisher" list="publishers" maxlength="24" required placeholder="例如 康軒…"></label>
+                    <datalist id="publishers"><option value="康軒"></option><option value="翰林"></option><option value="南一"></option></datalist>
+                    <label>學年度<input name="year" type="number" min="1" max="999" required></label>
+                    <div><label for="bookGrade">年級</label><select id="bookGrade" name="grade" required><option value="1">一年級</option><option value="2">二年級</option><option value="3">三年級</option><option value="4">四年級</option><option value="5">五年級</option><option value="6">六年級</option></select></div>
+                    <div><label for="bookSemester">學期</label><select id="bookSemester" name="semester" required><option value="1">上學期</option><option value="2">下學期</option></select></div>
+                    <label class="wide">教材版次（選填）<input name="edition" maxlength="40" placeholder="例如 修訂版…"></label>
+                    <div class="wide"><button type="submit" class="primary">建立詞庫</button></div>
+                </form>
+            </details>
+            <p class="notice" id="bookNotice" role="status"></p>
+            <a href="#examHeading" id="goToExam" hidden>前往隨機出卷 ↓</a>
+        </section>
+
+        <div id="bookWorkspace" hidden>
+            <div class="vocabulary-columns">
+                <section class="panel" aria-labelledby="wordHeading">
+                    <h2 id="wordHeading">新增詞語</h2>
+                    <form id="wordForm" class="entry-form" autocomplete="off">
+                        <label class="wide">課次<input name="lesson" type="number" min="1" max="60" value="1" required></label>
+                        <label class="wide">詞語<input name="word" required maxlength="20" placeholder="例如 放晴…" spellcheck="false"></label>
+                        <label class="wide">逐字注音<input name="pronunciation" maxlength="90" placeholder="ㄈㄤˋ ㄑㄧㄥˊ…" aria-describedby="readingHelp" spellcheck="false"></label>
+                        <p class="hint wide" id="readingHelp">每字一組，以空格分隔。可先儲存，確認讀音後再出題。</p>
+                        <fieldset class="wide"><legend>挖空字</legend><div id="blankChoices" class="blank-choices">輸入詞語後選擇。</div></fieldset>
+                        <label class="wide check"><input name="confirmed" type="checkbox">我已核對這個詞語的注音</label>
+                        <div class="actions wide">
+                            <button type="submit" class="primary" id="saveWord">儲存詞語</button>
+                            <button type="button" id="cancelEdit" hidden>取消編輯</button>
+                        </div>
+                        <p class="notice wide" id="wordNotice" role="status"></p>
+                    </form>
+                    <details id="batchDetails" class="subpanel">
+                        <summary>批次貼上詞語</summary>
+                        <form id="batchForm" class="entry-form" autocomplete="off">
+                            <label class="wide">批次匯入課次<input name="lesson" type="number" min="1" max="60" value="1" required></label>
+                            <label class="wide">每行一個詞語<textarea name="words" rows="4" maxlength="16000" required aria-describedby="batchHelp" placeholder="晴天&#10;放晴…"></textarea></label>
+                            <p class="hint wide" id="batchHelp">可只貼詞語，或從試算表貼上三欄：詞語、逐字注音、挖空位置（從 1 起算）。省略位置時預選第一字。</p>
+                            <div class="wide"><button type="submit">預覽匯入</button></div>
+                            <p class="notice wide" id="batchNotice" role="status"></p>
+                            <ol id="batchRows" class="batch-rows wide"></ol>
+                            <label id="batchConfirmLabel" class="wide check" hidden><input id="batchConfirm" name="confirmed" type="checkbox">我已核對清單中有填寫注音的詞語</label>
+                            <div class="wide" id="batchCommitAction" hidden><button type="button" id="commitBatch" class="primary">儲存可匯入的詞語</button></div>
+                        </form>
+                    </details>
+                </section>
+
+                <section class="panel" aria-labelledby="listHeading">
+                    <h2 id="listHeading">班級詞語</h2>
+                    <div class="list-controls">
+                        <div><label for="lessonFilter">篩選課次</label><select id="lessonFilter" name="lesson-filter"></select></div>
+                        <p class="notice" id="listCount" role="status"></p>
+                    </div>
+                    <ul id="wordList" class="word-list"></ul>
+                </section>
+            </div>
+
+            <section class="panel exam-panel" aria-labelledby="examHeading">
+                <h2 id="examHeading">隨機出卷</h2>
+                <form id="examForm" class="exam-form" autocomplete="off">
+                    <label>起始課次<input name="from" type="number" min="1" max="60" value="1" required></label>
+                    <label>結束課次<input name="to" type="number" min="1" max="60" value="8" required></label>
+                    <label>抽題數<input name="count" type="number" min="1" max="60" value="15" required></label>
+                    <label class="seed-field">亂數種子（選填）<input name="seed" maxlength="48" spellcheck="false" placeholder="留空會產生新種子…"></label>
+                    <p class="hint" id="examPool" role="status"></p>
+                    <div class="actions"><button type="submit" class="primary">產生考卷與解答</button></div>
+                    <p class="notice" id="examNotice" role="status"></p>
+                </form>
+                <div id="examHistory" hidden>
+                    <h3>已儲存的考卷</h3>
+                    <ul id="examList" class="word-list"></ul>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

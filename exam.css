@@ -1,0 +1,70 @@
+@font-face {
+    font-family: 'Worksheet Kai';
+    src: url('fonts/edukai-4.0.ttf') format('truetype');
+    font-display: swap;
+}
+
+#examControls h1 { font-size: 1.6rem; }
+#examControls .intro { overflow-wrap: anywhere; margin-bottom: .6rem; }
+#examControls .actions a { display: inline-flex; padding: .5rem .45rem; min-height: 2.75rem; align-items: center; }
+#examControls a[aria-current] { font-weight: 700; text-decoration-thickness: .13em; }
+#printExam { margin-top: .55rem; min-height: 2.75rem; }
+#examPages { display: grid; gap: 1rem; margin-top: 1rem; }
+.exam-page { color: #151915; background: white; border: 1px solid var(--line); padding: clamp(.85rem, 3vw, 2rem); }
+.exam-sheet-header { margin-bottom: 3mm; }
+.exam-sheet-header h2 { margin-bottom: 1mm; font-size: 18pt; }
+.exam-metadata { font-size: 10pt; overflow-wrap: anywhere; }
+.exam-name { font-size: 11pt; margin-top: 1mm; }
+.exam-questions { display: grid; gap: 2mm; margin: 0; padding-left: 8mm; }
+.short-questions { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 10mm; row-gap: 4mm; grid-auto-flow: column; grid-template-rows: repeat(var(--column-rows), auto); }
+.exam-question { padding-left: 1mm; line-height: 1; }
+.exam-question::marker { font: 11pt system-ui, sans-serif; }
+.exam-word { display: inline-flex; vertical-align: middle; flex-wrap: wrap; gap: .8mm 1mm; }
+.exam-cell { display: inline-flex; align-items: center; }
+.exam-grid {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 11mm;
+    height: 11mm;
+    border: .24mm solid #272d27;
+    font: 23pt / 1 'Worksheet Kai', 'Microsoft JhengHei', serif;
+    isolation: isolate;
+}
+.exam-grid::before, .exam-grid::after { content: ''; position: absolute; z-index: -1; }
+.exam-grid::before { inset: 50% 0 auto; border-top: .17mm dashed #858a84; }
+.exam-grid::after { inset: 0 auto 0 50%; border-left: .17mm dashed #858a84; }
+.exam-zhuyin {
+    position: relative;
+    display: inline-grid;
+    align-content: center;
+    width: 4mm;
+    height: 10.2mm;
+    padding-right: 1mm;
+    text-align: center;
+    font: 7pt / 1.1 'Worksheet Kai', 'Microsoft JhengHei', serif;
+}
+.exam-tone { position: absolute; right: 0; top: 49%; font: 7pt / 1 Arial, sans-serif; }
+.exam-tone.neutral { right: 1mm; left: 0; top: 0; }
+.exam-sources { display: inline-block; margin: 0 0 0 2mm; color: #4e574d; font-size: 8pt; overflow-wrap: anywhere; }
+.short-questions .exam-grid { width: 15mm; height: 15mm; font-size: 30pt; }
+.short-questions .exam-zhuyin { width: 4.5mm; height: 13mm; font-size: 8pt; }
+.short-questions .exam-sources { display: block; margin: 1mm 0 0; }
+.exam-footer { display: flex; justify-content: space-between; border-top: .2mm solid #a4a9a2; margin-top: 4mm; padding-top: 1.2mm; font-size: 9pt; }
+
+@media screen and (max-width: 50rem) {
+    .short-questions { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-auto-flow: row; }
+}
+
+@page { size: A4 portrait; margin: 10mm; }
+@media print {
+    .page-header, #examControls, #previewError { display: none !important; }
+    html, body { background: white; }
+    main, #examPages { display: block; width: auto; margin: 0; padding: 0; }
+    .exam-page { display: flex; flex-direction: column; min-height: 273mm; border: 0; padding: 0; break-after: page; }
+    .exam-page:last-child { break-after: auto; }
+    .exam-question { break-inside: avoid; }
+    .exam-word { flex-wrap: nowrap; }
+    .exam-sources { white-space: nowrap; }
+    .exam-footer { margin-top: auto; }
+}

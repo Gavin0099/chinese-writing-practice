@@ -1190,6 +1190,20 @@ body {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    flex-wrap: wrap;
+    gap: .4rem 1rem;
+}
+
+.minimal-header .main-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1rem;
+    margin-inline-start: auto;
+}
+
+@media screen and (max-width: 36rem) {
+    .minimal-header { padding-inline: 1rem; }
+    .minimal-header .main-tools { margin-inline-start: 0; }
 }
 
 .minimal-header .brand {
@@ -1803,6 +1817,18 @@ body {
         margin: 0 !important;
     }
 
+    /* Print the sheet boxes directly, outside the Bootstrap preview layout. */
+    .hero-section,
+    #legacyControls,
+    #legacyControls > .row,
+    #legacyControls .col-lg-8,
+    #legacyControls .col-lg-8 > .card,
+    #legacyControls .col-lg-8 > .card > .card-body,
+    #previewSection,
+    #sheets-container {
+        display: contents !important;
+    }
+
     @page {
         size: A4 portrait;
         margin: 0;
@@ -1831,6 +1857,11 @@ body {
         border: none !important;
         background: white !important;
         overflow: hidden !important;
+    }
+
+    .sheet-page:last-child {
+        page-break-after: auto !important;
+        break-after: auto !important;
     }
 
     .sheet-header {

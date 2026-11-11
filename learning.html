@@ -9,7 +9,10 @@
 </head>
 <body>
     <header class="page-header">
-        <a href="index.html">← 生字練習簿</a>
+        <nav aria-label="工具" class="actions">
+            <a href="index.html">← 生字練習簿</a>
+            <a href="vocabulary.html">老師詞庫與出卷</a>
+        </nav>
     </header>
     <main>
         <h1>國字學習查詢</h1>
@@ -22,7 +25,7 @@
                     <summary>匯入本機教材</summary>
                     <label for="curriculumFiles">選擇教材 JSON</label>
                     <input id="curriculumFiles" type="file" accept=".json,application/json" multiple aria-describedby="importHelp">
-                    <p id="importHelp" class="hint">選取資料工具產生的 candidate JSON。可一併選取同批 comparison JSON，核對完整課次。檔案內容只存於此瀏覽器。</p>
+                    <p id="importHelp" class="hint">選取已備妥的教材資料檔（JSON）。如有同批課次比對報告，可一起選取。教材只存於此瀏覽器。</p>
                 </details>
                 <p class="notice" id="importNotice" role="status"></p>
                 <form id="progressForm">

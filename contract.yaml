@@ -1,0 +1,24 @@
+name: chinese-writing-practice-contract
+plugin_version: "1.0.0"
+framework_interface_version: "1"
+framework_compatible: ">=1.0.0,<2.0.0"
+domain: chinese-writing-practice-and-printable-worksheets
+risk: low
+risk_tier: low
+risk_rationale: "Owner 於 2026-11-11 確認低風險。主要流程在瀏覽器內產生並輸出練習紙，變更須依工單驗證版面、教材來源及瀏覽器相容性。"
+language: JavaScript
+oversight: review-required
+documents:
+  - AGENTS.base.md
+  - PLAN.md
+  - governance/TESTING.md
+  - governance/ARCHITECTURE.md
+  - memory/01_constraints.md
+  - memory/07_quality_bar.md
+ai_behavior_override:
+  - AGENTS.base.md
+rule_roots:
+  - governance/rules
+validators: []
+evidence_roots:
+  - artifacts

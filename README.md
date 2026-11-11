@@ -2,6 +2,8 @@
 
 本專案採用「一個代理只做一種腦力工作」的原則，以降低 Token 消耗並提高產出質量。
 
+共用 AI Governance 框架由 Git submodule 固定版本。安裝與驗證步驟見 [AI Governance 導入指南](docs/GOVERNANCE_ONBOARDING.md)，專案規則見 [AGENTS.md](AGENTS.md)。
+
 ## 目錄結構
 - `/memory`: 長期不變的專案背景與規程。
 - `/work/tickets`: 存放開發工單。
@@ -9,7 +11,7 @@
 
 ## 核心流程
 1. **開票**: 在 `work/tickets/` 建立工單，明確 Goal、Non-goals 與 Acceptance Criteria。
-2. **Context Loade**: 從 memory 提取最小必要資訊，生成 `work/outputs/context_pack.md` (限制 <= 1200 tokens)。
+2. **Context Loader**: 從 memory 提取最小必要資訊，生成 `work/outputs/context_pack.md` (限制 <= 800 tokens)。
 3. **Spec Agent**: 根據 pack 生成 `spec.md`。
 4. **角色分工**: 各代理 (Code/UX/Data) 根據 context_pack + spec 完成各自工作。
 5. **QA Agent**: 進行最後的風險評估與測試案例編寫。

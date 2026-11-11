@@ -1,0 +1,31 @@
+name: Governance
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime dependency
+        run: python -m pip install -r requirements-governance.txt
+      - name: Install Git hooks on the runner
+        working-directory: ai-governance-framework
+        run: python -X utf8 -m governance_tools.hook_installer --repo .. --framework-root . --hooks-only
+      - name: Check governance
+        run: python -X utf8 scripts/check_governance.py

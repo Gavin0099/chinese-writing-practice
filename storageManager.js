@@ -94,7 +94,11 @@ class StorageManager {
 
     getTeachingProgress() {
         try {
-            const progress = JSON.parse(localStorage.getItem(TEACHING_PROGRESS_KEY));
+            const saved = JSON.parse(localStorage.getItem(TEACHING_PROGRESS_KEY));
+            const progress = Array.isArray(saved?.records)
+                ? saved.records.find(record => record && JSON.stringify([record.academicYear, record.publisher,
+                    record.grade, record.semester, record.sourceVersion]) === saved.activeKey)
+                : saved;
             return progress?.confirmed === true ? progress : null;
         } catch (e) {
             return null;

@@ -77,3 +77,11 @@ test('starts empty and ignores invalid or unconfirmed progress records', () => {
         assert.deepEqual(writes, []);
     }
 });
+
+test('reads the active progress record from a saved multi-term history', () => {
+    const earlier = { ...confirmed, academicYear: 114, grade: 1, semester: 2, lesson: 12 };
+    const activeKey = JSON.stringify([confirmed.academicYear, confirmed.publisher, confirmed.grade,
+        confirmed.semester, confirmed.sourceVersion]);
+    const values = new Map([[progressKey, JSON.stringify({ activeKey, records: [earlier, confirmed] })]]);
+    assert.equal(boot(values).storage.getTeachingProgress().lesson, 3);
+});

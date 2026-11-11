@@ -2,7 +2,7 @@ const HAN = /^\p{Script=Han}$/u;
 const CHARACTER_TYPES = new Set(["writing", "recognition"]);
 const WRITING_STATUSES = new Set(["can_write", "cannot_write", "uses_zhuyin", "missing_strokes", "not_assessed"]);
 
-function courseKey(course) {
+export function courseKey(course) {
     if (!course || !Number.isInteger(course.academicYear) || course.academicYear < 1 ||
         typeof course.publisher !== "string" || !course.publisher.trim() ||
         !Number.isInteger(course.grade) || course.grade < 1 || course.grade > 6 ||
@@ -12,7 +12,7 @@ function courseKey(course) {
     return JSON.stringify([course.academicYear, course.publisher, course.grade, course.semester, course.sourceVersion]);
 }
 
-function isVerified(lesson) {
+export function isVerifiedLesson(lesson) {
     if (lesson?.status !== "verified" || typeof lesson.source !== "string" || !lesson.source.trim() ||
         !Array.isArray(lesson.characters) || !lesson.characters.length) return false;
 
@@ -41,7 +41,7 @@ function readCourse(course) {
 
     const verified = expectedLessons.slice().sort((a, b) => a - b).flatMap(number => {
         const lesson = byNumber.get(number);
-        if (ambiguous.has(number) || !isVerified(lesson)) return [];
+        if (ambiguous.has(number) || !isVerifiedLesson(lesson)) return [];
         return [lesson];
     });
 

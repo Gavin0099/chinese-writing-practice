@@ -1,0 +1,2 @@
+# Runtime dependency of the pinned AI Governance Framework.
+PyYAML==6.0.3

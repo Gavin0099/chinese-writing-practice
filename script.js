@@ -3,6 +3,7 @@ const charactersInput = document.getElementById('characters');
 const generateBtn = document.getElementById('generateBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 const previewArea = document.getElementById('previewSection');
+let renderedWorksheetLesson = null;
 
 // --- LINE Visual Guide Injector ---
 (function injectLineGuide() {
@@ -114,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.storageManager.updateSettings({
                     grade: selectedGrade,
                     semester: selectedSem,
-                    lastLesson: 0,
+                    lastOutputLesson: 0,
                     pinnedLesson: null
                 });
                 modal.style.display = 'none';
@@ -150,11 +151,6 @@ function initApp() {
             // v1.1 Platform Check (Updated: iOS Patch + Width Fallback)
             const isDesktopLike = (window.matchMedia("(hover: hover) and (pointer: fine)").matches || window.innerWidth > 1024) && !isIOS();
 
-            // v1.1 Today Finished Check
-            const isToday = settings.updatedAt && new Date(settings.updatedAt).toDateString() === new Date().toDateString();
-            const isThisLesson = settings.lastLesson === rec.lesson;
-            const todayFinished = isToday && isThisLesson && settings.lastLesson > 0;
-
             // UI Update (v1.1 Special Titles)
             let cleanTitle = rec.title ? rec.title.split('\n')[0] : "";
 
@@ -167,22 +163,13 @@ function initApp() {
                 heroTitle.innerText = `第 ${rec.lesson} 課：${cleanTitle}`;
             }
 
-            // CTA Button Logic (v1.1)
-            if (todayFinished) {
-                heroActionBtn.innerHTML = `<span class="icon">✅</span> 今天已完成 (可重印)`;
-                heroActionBtn.style.backgroundColor = 'var(--text-dark)';
-            } else {
-                heroActionBtn.innerHTML = `<span class="icon">✨</span> 下載第 ${rec.lesson} 課練習簿 (10秒)`;
-                heroActionBtn.style.backgroundColor = 'var(--primary-sage)';
-            }
-
             // Dynamic Hint Logic (Spec v1.1)
             const heroHint = document.querySelector('.hero-hint');
             if (heroHint) {
-                let hintText = "🛡 已為您準備好今日進度";
-                if (rec.isNewSemester) hintText = "恭喜完成一個學期 🎉";
+                let hintText = "已為您準備好練習紙";
+                if (rec.isNewSemester) hintText = "準備下一學期的練習紙";
                 else if (settings.pinnedLesson) hintText = "依你的選擇準備";
-                else if (settings.lastLesson > 0) hintText = `接著上次（第 ${settings.lastLesson} 課）的進度`;
+                else if (settings.lastOutputLesson > 0) hintText = `依上次選用的第 ${settings.lastOutputLesson} 課推薦`;
                 else hintText = "從第一課開始練習";
 
                 heroHint.innerHTML = `<span class="icon-shield">🛡</span> ${hintText}`;
@@ -194,13 +181,6 @@ function initApp() {
 
             // Bind Actions
             heroActionBtn.onclick = async () => {
-                // Record progress data to be used in closure
-                const progressData = {
-                    grade: rec.grade,
-                    semester: rec.semester,
-                    lesson: rec.lesson,
-                    title: cleanTitle
-                };
                 // 1. Load Vocab
                 try {
                     // Check if data exists
@@ -227,7 +207,7 @@ function initApp() {
                             grade: rec.grade,
                             semester: rec.semester,
                             lesson: rec.lesson,
-                            title: cleanTitle
+                            title: lessonData.title.split('\n')[0]
                         });
 
                         // 3. UI Feedback: Success State (In-place replacement)
@@ -238,14 +218,13 @@ function initApp() {
                         cardContent.innerHTML = `
                             <div class="success-state" style="animation: fadeIn 0.5s; padding: 2rem 0;">
                                 <div style="font-size: 4rem; margin-bottom: 1.5rem;">✅</div>
-                                <h2 class="hero-title" style="margin-bottom: 0.5rem; font-size: 2.2rem; color: var(--primary-sage);">今日任務已達成！</h2>
+                                <h2 class="hero-title" style="margin-bottom: 0.5rem; font-size: 2.2rem; color: var(--primary-sage);">練習簿已準備好</h2>
                                 <p class="hero-subtitle" style="margin-bottom: 2.5rem; opacity: 0.8;">
                                     <!-- Hidden Metadata for PDF Filename Engine -->
                                     <span id="heroSubTitle" style="display:none;">${rec.grade}年級 ${rec.semester === 'A' ? '上學期' : '下學期'}</span>
                                     <span id="heroTitle" style="display:none;">第 ${rec.lesson} 課：${rec.title.split('\n')[0]}</span>
                                     
-                                    第 ${rec.lesson} 課 練習簿已準備好打印<br>
-                                    辛苦了，今天就到這裡吧！
+                                    第 ${rec.lesson} 課
                                 </p>
                                 
                                 <div class="hero-actions" style="flex-direction: column; gap: 1rem; max-width: 320px; margin: 0 auto;">
@@ -303,9 +282,7 @@ function initApp() {
                                 heroPrintBtn.innerHTML = "⏳ 準備中...";
                                 heroPrintBtn.disabled = true;
 
-                                if (window.storageManager) {
-                                    try { window.storageManager.addHistory(progressData); } catch (e) { }
-                                }
+                                const outputLesson = renderedWorksheetLesson;
 
                                 // Prepare Dynamic Filename (v1.6)
                                 const originalTitle = document.title;
@@ -315,6 +292,7 @@ function initApp() {
                                 // Trigger Native Print
                                 document.body.classList.add('is-printing-now');
                                 setTimeout(() => {
+                                    recordWorksheetOutput(outputLesson);
                                     window.print();
                                     setTimeout(() => {
                                         document.body.classList.remove('is-printing-now');
@@ -338,10 +316,6 @@ function initApp() {
 
                         // Re-bind Download Button (since we just created it)
                         document.getElementById('downloadPdfBtn').onclick = () => {
-                            // Record Progress
-                            if (window.storageManager) {
-                                window.storageManager.addHistory(progressData);
-                            }
                             // Trigger hidden link
                             const mainDownloadBtn = document.getElementById('downloadBtn');
                             if (mainDownloadBtn) {
@@ -354,14 +328,6 @@ function initApp() {
                         // Reveal "Edit" option below
                         const toggleBtn = document.getElementById('toggleCustomBtn');
                         if (toggleBtn) toggleBtn.innerText = "預覽 / 進階修改";
-
-                        // 4. Update Storage (History)
-                        window.storageManager.addHistory({
-                            grade: rec.grade,
-                            semester: rec.semester,
-                            lesson: rec.lesson,
-                            title: rec.title
-                        });
 
                     } else {
                         alert(`找不到這課的生字資料，請嘗試手動輸入。`);
@@ -476,6 +442,14 @@ function initApp() {
                 const hTitle = document.getElementById('heroTitle');
                 if (hSub) hSub.innerText = `${rec.grade}年級 ${rec.semester === 'A' ? '上學期' : '下學期'}`;
                 if (hTitle) hTitle.innerText = `第 ${rec.lesson} 課：${rec.title}`;
+
+                const isToday = settings.lastOutputAt && new Date(settings.lastOutputAt).toDateString() === new Date().toDateString();
+                const isThisLesson = settings.grade === rec.grade && settings.semester === rec.semester && settings.lastOutputLesson === rec.lesson;
+                const outputToday = isToday && isThisLesson;
+                heroActionBtn.innerHTML = outputToday
+                    ? '<span class="icon">✅</span> 今天已開啟輸出（可重印）'
+                    : `<span class="icon">✨</span> 下載第 ${rec.lesson} 課練習簿 (10秒)`;
+                heroActionBtn.style.backgroundColor = outputToday ? 'var(--text-dark)' : 'var(--primary-sage)';
             };
 
             // Attach Listeners for Sync
@@ -525,8 +499,8 @@ function initApp() {
             const resetBtn = document.getElementById('resetAppBtn');
             if (resetBtn) {
                 resetBtn.onclick = () => {
-                    if (confirm("⚠️ 確定要重新啟動嗎？這將會重置您的年級與進度。")) {
-                        localStorage.clear();
+                    if (confirm("確定要重設練習紙設定與輸出紀錄嗎？")) {
+                        window.storageManager.resetWorksheetData();
                         location.reload();
                     }
                 };
@@ -574,12 +548,23 @@ function isIOS() {
         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 }
 
+function recordWorksheetOutput(lesson) {
+    if (lesson) window.storageManager?.addHistory(lesson);
+}
+
 downloadBtn.addEventListener('click', async () => {
+    const pages = document.querySelectorAll('.sheet-page');
+    if (pages.length === 0) {
+        alert('請先產生練習簿');
+        return;
+    }
+    const outputLesson = renderedWorksheetLesson;
     const isMobile = isIOS() || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     // v1.1 Mobile Strategy (v1.4 Updated to Native Print for all mobile)
     if (isMobile) {
         console.log('[Main] Mobile detected, triggering window.print()');
+        recordWorksheetOutput(outputLesson);
         window.print();
         return;
     }
@@ -591,12 +576,6 @@ downloadBtn.addEventListener('click', async () => {
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4'); // Portrait, Millimeters, A4
-
-    const pages = document.querySelectorAll('.sheet-page');
-    if (pages.length === 0) {
-        alert('請先產生練習簿');
-        return;
-    }
 
     // Show Loading State
     const originalText = downloadBtn.innerText;
@@ -671,6 +650,7 @@ downloadBtn.addEventListener('click', async () => {
         }
 
         doc.save(filename);
+        recordWorksheetOutput(outputLesson);
 
         // Cache PDF Blob for Success Screen download
         cachedPdfBlob = doc.output('blob');
@@ -699,6 +679,7 @@ downloadBtn.addEventListener('click', async () => {
 });
 
 function renderSheets(text, metadata = null) {
+    renderedWorksheetLesson = null;
     let container = document.getElementById('sheets-container');
     if (!container) {
         container = document.createElement('div');
@@ -722,6 +703,7 @@ function renderSheets(text, metadata = null) {
         const pageDOM = createPage(pageChars, metadata);
         container.appendChild(pageDOM);
     }
+    renderedWorksheetLesson = metadata;
     // Enable Download (Force update)
     if (downloadBtn) {
         console.log("✅ Enabling Download Button...");

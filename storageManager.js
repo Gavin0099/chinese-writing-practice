@@ -8,7 +8,8 @@
  *   "settings": {
  *     "grade": 1,
  *     "semester": "A",
- *     "lastLesson": 0,
+ *     "lastOutputLesson": 0,
+ *     "lastOutputAt": null,
  *     "paperSize": "A4",
  *     "directDownload": false,
  *     "updatedAt": "ISOString"
@@ -18,6 +19,7 @@
  */
 
 const STORAGE_KEY = "write_practice_data";
+const TEACHING_PROGRESS_KEY = "write_practice_teaching_progress";
 
 const DEFAULT_DATA = {
     profile: {
@@ -27,7 +29,8 @@ const DEFAULT_DATA = {
     settings: {
         grade: 1,
         semester: "A", // 上學期
-        lastLesson: 0, // 0 代表尚未開始
+        lastOutputLesson: 0,
+        lastOutputAt: null,
         pinnedLesson: null, // v1.1: User manual selection
         paperSize: "A4",
         directDownload: false,
@@ -47,11 +50,16 @@ class StorageManager {
         try {
             const raw = localStorage.getItem(STORAGE_KEY);
             if (raw) {
-                this.data = JSON.parse(raw);
-                // 簡單的 Schema 檢查，若缺少 key 則補上預設值 (Migration 概念)
-                this.data = { ...DEFAULT_DATA, ...this.data };
-                this.data.settings = { ...DEFAULT_DATA.settings, ...this.data.settings };
-                this.data.profile = { ...DEFAULT_DATA.profile, ...this.data.profile };
+                const saved = JSON.parse(raw);
+                const { lastLesson, ...settings } = saved?.settings ?? {};
+                this.data = {
+                    ...DEFAULT_DATA,
+                    ...saved,
+                    // Older values could come from a preview. Retain the recommendation only.
+                    settings: { ...DEFAULT_DATA.settings, lastOutputLesson: lastLesson ?? 0, ...settings },
+                    profile: { ...DEFAULT_DATA.profile, ...saved?.profile },
+                    history: Array.isArray(saved?.history) ? saved.history : []
+                };
                 console.log("✅ StorageManager: 資料載入成功", this.data);
             } else {
                 this.data = JSON.parse(JSON.stringify(DEFAULT_DATA));
@@ -84,35 +92,42 @@ class StorageManager {
         return this.data.profile;
     }
 
+    getTeachingProgress() {
+        try {
+            const progress = JSON.parse(localStorage.getItem(TEACHING_PROGRESS_KEY));
+            return progress?.confirmed === true ? progress : null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    resetWorksheetData() {
+        localStorage.removeItem(STORAGE_KEY);
+    }
+
     updateSettings(partialSettings) {
         this.data.settings = { ...this.data.settings, ...partialSettings };
         this.save();
         console.log("💾 Settings Updated:", this.data.settings);
     }
 
-    // 紀錄下載歷史
+    // 記錄練習紙輸出，供首頁推薦使用。
     addHistory(lessonInfo) {
         const record = {
-            timestamp: new Date().toISOString(),
-            ...lessonInfo // { grade, semester, lesson, title }
+            ...lessonInfo,
+            timestamp: new Date().toISOString()
         };
         // 只保留最近 50 筆
         this.data.history.unshift(record);
         if (this.data.history.length > 50) this.data.history.pop();
 
-        // v1.1 Success Rule:
-        // onSuccess() {
-        //   profile.lastLessonDownloaded = current.lesson;
-        //   profile.pinnedLesson = null;
-        // }
         this.updateSettings({
-            lastLesson: lessonInfo.lesson,
+            lastOutputLesson: lessonInfo.lesson,
+            lastOutputAt: record.timestamp,
             grade: lessonInfo.grade,
             semester: lessonInfo.semester,
             pinnedLesson: null // Clear pin after success
         });
-
-        this.save();
     }
 
     // Check if first time

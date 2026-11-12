@@ -1,6 +1,10 @@
 import { courseKey, lookupCharacters } from './characterLookup.mjs';
-import { confirmCourse, curriculumStorageKey, importCourses, isPediaSource, lookupScope, progressStorageKey,
+import { confirmCourse, curriculumStorageKey, importCourses, isPediaSource, isWritingHistory, lookupScope, progressStorageKey,
     readProgress, writingStorageKey } from './learningData.mjs';
+import { openPageStorage } from './cloudStorage.mjs';
+
+const cloud = await openPageStorage();
+const recordStorage = cloud ?? localStorage;
 
 const byId = id => document.getElementById(id);
 const fields = Object.fromEntries(['academicYear', 'publisher', 'grade', 'semester', 'edition', 'lesson'].map(id => [id, byId(id)]));
@@ -13,7 +17,7 @@ const importLimit = 2_000_000;
 
 function readLocal(key) {
     try {
-        return JSON.parse(localStorage.getItem(key));
+        return JSON.parse((key === curriculumStorageKey ? localStorage : recordStorage).getItem(key));
     } catch {
         return null;
     }
@@ -25,8 +29,7 @@ let courses = Array.isArray(savedCourses) ? savedCourses.filter(course => course
 let progress = readProgress(readLocal(progressStorageKey));
 function readWriting() {
     return Object.fromEntries(Object.entries(readLocal(writingStorageKey) ?? {}).filter(([char, records]) =>
-        /^\p{Script=Han}$/u.test(char) && Array.isArray(records) && records.length && records.every(record =>
-            Object.hasOwn(writingLabels, record?.status) && typeof record.at === 'string' && Number.isFinite(Date.parse(record.at)))));
+        isWritingHistory(char, records)));
 }
 
 let writing = readWriting();
@@ -72,7 +75,10 @@ function updateLessonPicker() {
         return [number, title ? `第 ${number} 課　${title}` : `第 ${number} 課${verified ? '' : '（字表待核對）'}`];
     }) ?? [];
     setOptions(fields.lesson, [['', '選擇課次'], [0, '尚未開始'], ...lessons], cutoff);
-    showNotice(byId('progressNotice'), !course ? '匯入教材後即可設定課次。' : !fields.lesson.value
+    const missingCourse = progress.records.length > 0 && !courses.some(item => courseKey(item) === progress.activeKey);
+    const restoredNotice = '已保留確認過的課次。匯入相同版本的教材後，可查看對應進度。';
+    showNotice(byId('progressNotice'), missingCourse && cutoff === null ? restoredNotice : !course
+        ? '匯入教材後即可設定課次。' : !fields.lesson.value
         ? '這個教材版本的教學進度尚未確認。'
         : cutoff === 0 ? '已確認這學期尚未開始。' : `已確認教到第 ${cutoff} 課。`);
     renderResults();
@@ -134,21 +140,24 @@ function renderResult(result) {
     writingField.value = writingStatus;
     writingField.setAttribute('aria-label', `${char}的習寫狀態`);
     updateWritingHistory(card, writing[char] ?? []);
-    writingField.addEventListener('change', () => {
+    writingField.addEventListener('change', async () => {
         const current = readWriting();
         const records = current[char] ?? [];
         const next = [...records, { status: writingField.value, at: new Date().toISOString() }];
         const updated = { ...current, [char]: next };
         const notice = card.querySelector('.writing-notice');
         try {
-            localStorage.setItem(writingStorageKey, JSON.stringify(updated));
+            writingField.disabled = true;
+            await recordStorage.setItem(writingStorageKey, JSON.stringify(updated));
             writing = updated;
             byId('showRecords').hidden = false;
             updateWritingHistory(card, next);
-            showNotice(notice, '已儲存');
-        } catch {
+            showNotice(notice, cloud ? '已同步' : '已儲存');
+        } catch (error) {
             writingField.value = records.at(-1)?.status ?? 'not_assessed';
-            showNotice(notice, '儲存失敗，請檢查瀏覽器儲存空間。', true);
+            showNotice(notice, cloud ? error.message : '儲存失敗，請檢查瀏覽器儲存空間。', true);
+        } finally {
+            writingField.disabled = false;
         }
     });
     return card;
@@ -202,16 +211,19 @@ for (const field of [fields.academicYear, fields.publisher, fields.grade, fields
 }
 fields.edition.addEventListener('change', updateLessonPicker);
 
-byId('progressForm').addEventListener('submit', event => {
+byId('progressForm').addEventListener('submit', async event => {
     event.preventDefault();
     if (!fields.lesson.value) return;
     try {
         const updated = confirmCourse(readProgress(readLocal(progressStorageKey)), currentCourse(), Number(fields.lesson.value));
-        localStorage.setItem(progressStorageKey, JSON.stringify(updated));
+        byId('progressFields').disabled = true;
+        await recordStorage.setItem(progressStorageKey, JSON.stringify(updated));
         progress = updated;
         updateLessonPicker();
     } catch (error) {
         showNotice(byId('progressNotice'), error instanceof DOMException ? '儲存失敗，請檢查瀏覽器儲存空間。' : error.message, true);
+    } finally {
+        byId('progressFields').disabled = !courses.length;
     }
 });
 

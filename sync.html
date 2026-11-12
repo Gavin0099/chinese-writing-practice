@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f8f3">
+    <meta name="referrer" content="no-referrer">
+    <title>雲端同步｜生字練習簿</title>
+    <link rel="stylesheet" href="learning.css">
+    <link rel="stylesheet" href="vocabulary.css">
+    <script type="module" src="sync.mjs"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到主要內容</a>
+    <header class="page-header">
+        <nav aria-label="學習工具">
+            <a href="vocabulary.html">本機老師詞庫</a>
+            <a href="learning.html">本機學習查詢</a>
+            <a href="backup.html">本機備份與還原</a>
+        </nav>
+    </header>
+    <main id="main-content">
+        <h1>雲端同步</h1>
+        <p class="intro">在手機和電腦使用同一個帳號，開啟家庭的詞庫、考卷與學習紀錄。</p>
+        <div class="panels">
+            <section class="panel" aria-labelledby="loginHeading">
+                <h2 id="loginHeading">家庭帳號</h2>
+                <div id="googleSignIn" hidden>
+                    <button type="button" class="primary" id="googleButton">使用 Google 登入</button>
+                    <p class="hint">已有雲端紀錄時，請選擇與原帳號相同的電子郵件，或先在原帳號內連結 Google。</p>
+                </div>
+                <details id="localEmailTest" class="subpanel" hidden>
+                    <summary>Email 驗證碼（本機測試）</summary>
+                    <form id="emailForm" class="entry-form" hidden>
+                        <label class="wide">Email<input name="email" type="email" required autocomplete="email"></label>
+                        <div class="wide"><button type="submit" class="primary">寄送驗證碼</button></div>
+                    </form>
+                    <form id="codeForm" class="entry-form" hidden>
+                        <label class="wide">Email 驗證碼<input name="code" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required autocomplete="one-time-code"></label>
+                        <div class="actions wide">
+                            <button type="submit" class="primary">登入</button>
+                            <button type="button" id="changeEmail">重新輸入 Email</button>
+                        </div>
+                    </form>
+                </details>
+                <p id="loginNotice" class="notice" role="status">正在確認登入狀態…</p>
+                <noscript><p class="hint">請啟用 JavaScript，或使用上方的本機工具。</p></noscript>
+                <div class="actions" id="accountActions" hidden>
+                    <button type="button" id="linkGoogle" hidden>連結 Google 帳號</button>
+                    <button type="button" id="signOut">登出此瀏覽器</button>
+                </div>
+                <button type="button" id="retrySync" hidden>重新連線</button>
+            </section>
+            <section class="panel" id="cloudWorkspace" aria-labelledby="workspaceHeading" hidden>
+                <h2 id="workspaceHeading">家庭資料</h2>
+                <p class="notice" id="workspaceNotice" role="status"></p>
+                <div class="actions">
+                    <a href="vocabulary.html?cloud=1">開啟雲端詞庫</a>
+                    <a href="learning.html?cloud=1">開啟雲端學習紀錄</a>
+                    <button type="button" id="backupCloud">下載雲端備份</button>
+                </div>
+                <p class="hint" id="migrationHelp"></p>
+                <button type="button" id="migrateLocal" hidden>上傳本機紀錄到這個家庭</button>
+            </section>
+        </div>
+        <details id="projectSettings" class="panel subpanel" hidden>
+            <summary>開發環境連線設定</summary>
+            <form id="settingsForm" class="entry-form" autocomplete="off">
+                <label class="wide">專案網址<input name="url" type="url" required></label>
+                <label class="wide">Publishable Key<input name="key" type="text" spellcheck="false" required></label>
+                <div class="wide"><button type="submit">儲存連線設定</button></div>
+                <p id="settingsNotice" class="notice wide" role="status"></p>
+            </form>
+        </details>
+    </main>
+</body>
+</html>

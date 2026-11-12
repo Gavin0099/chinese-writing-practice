@@ -1,4 +1,5 @@
 import { bookLabel, readVocabulary } from './vocabularyData.mjs';
+import { cloudPageUrl, openPageStorage } from './cloudStorage.mjs';
 
 const byId = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -66,13 +67,16 @@ function renderPage(exam, offset, perPage, answer) {
 }
 
 try {
-    const exam = readVocabulary().exams.find(record => record.id === params.get('id'));
+    const cloud = await openPageStorage();
+    const exam = (cloud ? readVocabulary(cloud) : readVocabulary()).exams.find(record => record.id === params.get('id'));
     if (!exam) throw new Error('這個瀏覽器找不到該份考卷。請從老師詞庫的考卷紀錄開啟。');
     const selected = ['questions', 'answers'].includes(params.get('part')) ? params.get('part') : 'both';
-    byId('backToBook').href = `vocabulary.html?${new URLSearchParams({ book: exam.book.id })}`;
+    const bookPath = `vocabulary.html?${new URLSearchParams({ book: exam.book.id })}`;
+    byId('backToBook').href = cloud ? cloudPageUrl(bookPath) : bookPath;
     for (const part of ['both', 'questions', 'answers']) {
         const link = byId(part);
-        link.href = `?${new URLSearchParams({ id: exam.id, part })}`;
+        const path = `?${new URLSearchParams({ id: exam.id, part })}`;
+        link.href = cloud ? cloudPageUrl(path) : path;
         if (part === selected) link.setAttribute('aria-current', 'page');
     }
     const title = selected === 'questions' ? '考卷預覽' : selected === 'answers' ? '解答預覽' : '考卷與解答預覽';

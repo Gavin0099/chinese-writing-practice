@@ -2,6 +2,9 @@
 # This allows keeping files on GitHub while bypassing the 25MB file size limit.
 
 data_engineering/
+artifacts/runtime/
+supabase/
+chinese-writing-practice_backup_*.json
 .agent/
 .shared/
 node_modules/

@@ -1,8 +1,13 @@
-import { courseKey, isVerifiedLesson } from './characterLookup.mjs';
+import { courseKey, isVerifiedLesson, isWritingStatus } from './characterLookup.mjs';
 
 export const curriculumStorageKey = 'write_practice_lookup_curricula';
 export const progressStorageKey = 'write_practice_teaching_progress';
 export const writingStorageKey = 'write_practice_writing_records';
+
+export function isWritingHistory(character, records) {
+    return /^\p{Script=Han}$/u.test(character) && Array.isArray(records) && records.length > 0 && records.every(record =>
+        isWritingStatus(record?.status) && typeof record.at === 'string' && Number.isFinite(Date.parse(record.at)));
+}
 
 export function isPediaSource(url) {
     return typeof url === 'string' && /^https:\/\/pedia\.cloud\.edu\.tw\/Bookmark\/TCollection\?TextNameId=\d+$/.test(url);

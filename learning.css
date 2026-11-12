@@ -42,6 +42,9 @@ button:disabled { cursor: default; }
 .hint, .notice { margin-top: .5rem; font-size: .92rem; color: var(--muted); }
 .notice:empty { margin: 0; }
 .notice[data-error] { color: #902f29; }
+.cloud-mode-status { width: min(calc(100% - 2rem), 64rem); margin: .65rem auto 0; }
+.cloud-draft { position: sticky; top: .5rem; z-index: 2; padding: .65rem .8rem; }
+.cloud-draft .notice { margin: 0 0 .5rem; }
 .results-section { margin-top: 1.4rem; }
 .results { display: grid; gap: .65rem; }
 .result-card { display: grid; grid-template-columns: 4.5rem 1.25fr 1fr; gap: 1rem; }

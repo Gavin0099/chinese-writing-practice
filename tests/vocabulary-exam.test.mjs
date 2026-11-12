@@ -31,6 +31,18 @@ test('confirmation requires one structurally valid contextual reading per Unicod
     assert.deepEqual(entry({ word: '𠮷天', pronunciation: 'ㄐㄧˊ ㄊㄧㄢ', blanks: [2] }).blanks, [2]);
 });
 
+test('explicit first-tone marks from mobile input are omitted from saved readings', () => {
+    const fields = { word: '紙風車', blanks: [1, 2, 3] };
+    for (const mark of ['\u00af', '\u02c9', '\u0304', '\uffe3']) {
+        const pronunciation = `ㄓˇ ㄈㄥ${mark} ㄔㄜ${mark}`;
+        assert.deepEqual(entry({ ...fields, pronunciation }).pronunciation, ['ㄓˇ', 'ㄈㄥ', 'ㄔㄜ']);
+        assert.deepEqual(previewBatch(`紙風車\t${pronunciation}`, book.id, 8, [])[0].entry.pronunciation,
+            ['ㄓˇ', 'ㄈㄥ', 'ㄔㄜ']);
+    }
+    assert.throws(() => entry({ ...fields, pronunciation: 'ㄓˇˉ ㄈㄥ ㄔㄜ' }), /多打了其他符號/);
+    assert.throws(() => entry({ ...fields, pronunciation: 'ㄓˇ ˉ ㄔㄜ' }), /多打了其他符號/);
+});
+
 test('book and exam storage survives reopen and does not write a failed mutation', () => {
     const values = new Map();
     const storage = { getItem: name => values.get(name) ?? null, setItem: (name, data) => values.set(name, data) };

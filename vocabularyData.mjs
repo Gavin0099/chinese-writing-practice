@@ -1,9 +1,10 @@
-const key = 'write_practice_vocabulary_v1';
+export const vocabularyStorageKey = 'write_practice_vocabulary_v1';
 const han = /^\p{Script=Han}{1,10}$/u;
 const zhuyin = /^(?:˙[ㄅ-ㄙ]?[ㄧ-ㄩ]?[ㄚ-ㄦ]?|[ㄅ-ㄙ]?[ㄧ-ㄩ]?[ㄚ-ㄦ]?[ˊˇˋ˙]?)$/u;
+const explicitFirstTone = /([ㄅ-ㄩ])[\u00af\u02c9\u0304\uffe3]$/u;
 
 export function readVocabulary(storage = localStorage) {
-    const raw = storage.getItem(key);
+    const raw = storage.getItem(vocabularyStorageKey);
     if (raw === null) return { books: [], words: [], exams: [] };
     let data;
     try {
@@ -20,7 +21,7 @@ export function readVocabulary(storage = localStorage) {
 export function updateVocabulary(update, storage = localStorage) {
     const data = readVocabulary(storage);
     update(data);
-    storage.setItem(key, JSON.stringify(data));
+    storage.setItem(vocabularyStorageKey, JSON.stringify(data));
     return data;
 }
 
@@ -51,17 +52,20 @@ export function makeWord({ id, bookId, lesson, word, pronunciation, blanks, conf
         throw new Error('請選擇至少一個挖空字，位置須在詞語內。');
     }
 
-    const syllables = pronunciation.trim() ? pronunciation.trim().split(/\s+/u) : [];
-    if ((syllables.length || confirmed) && (syllables.length !== characters.length || syllables.some(syllable =>
-        !zhuyin.test(syllable) || !/[ㄅ-ㄩ]/u.test(syllable)))) {
+    const reading = pronunciation.trim();
+    const syllables = reading ? reading.split(/\s+/u).map(syllable => syllable.replace(explicitFirstTone, '$1')) : [];
+    if ((syllables.length || confirmed) && syllables.length !== characters.length) {
         throw new Error('每個國字需要一組注音，請用空格分開，例如 ㄑㄧㄥˊ ㄊㄧㄢ。');
+    }
+    if (syllables.some(syllable => !zhuyin.test(syllable) || !/[ㄅ-ㄩ]/u.test(syllable))) {
+        throw new Error('每個國字的注音只能包含注音符號與聲調，請檢查是否多打了其他符號。');
     }
     return { id, bookId, lesson: lessonNumber, word: text,
         pronunciation: syllables.map(syllable => syllable.endsWith('˙') ? `˙${syllable.slice(0, -1)}` : syllable),
         blanks: targets, confirmed: Boolean(confirmed) };
 }
 
-const wordIdentity = entry => JSON.stringify([entry.bookId, entry.lesson, entry.word]);
+export const wordIdentity = entry => JSON.stringify([entry.bookId, entry.lesson, entry.word]);
 
 export function saveWord(data, entry) {
     if (!data.books.some(book => book.id === entry.bookId)) throw new Error('請重新選擇班級詞庫。');

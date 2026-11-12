@@ -1,5 +1,8 @@
-import { bookLabel, makeBook, makeWord, previewBatch, readVocabulary, saveWord, updateVocabulary } from './vocabularyData.mjs';
+import { bookLabel, makeBook, makeWord, previewBatch, readVocabulary, saveWord, updateVocabulary, vocabularyStorageKey } from './vocabularyData.mjs';
 import { makeExam, questionPool } from './examData.mjs';
+import { cloudPageUrl, openPageStorage } from './cloudStorage.mjs';
+
+const cloud = await openPageStorage();
 
 const byId = id => document.getElementById(id);
 const bookForm = byId('bookForm');
@@ -11,6 +14,7 @@ const examForm = byId('examForm');
 const dateFormat = new Intl.DateTimeFormat('zh-TW', { dateStyle: 'short', timeStyle: 'short' });
 const filter = byId('lessonFilter');
 const query = new URL(location.href);
+const main = document.querySelector('main');
 let data = { books: [], words: [], exams: [] };
 let activeId = query.searchParams.get('book');
 let editingId = null;
@@ -23,13 +27,27 @@ function notice(id, message = '', error = false) {
     element.toggleAttribute('data-error', error);
 }
 
-function persist(update, messageId) {
+async function persist(update, messageId) {
     try {
-        data = updateVocabulary(update);
+        if (cloud) {
+            main.inert = true;
+            main.setAttribute('aria-busy', 'true');
+            const next = readVocabulary(cloud);
+            update(next);
+            await cloud.setItem(vocabularyStorageKey, JSON.stringify(next));
+            data = next;
+        } else {
+            data = updateVocabulary(update);
+        }
         return true;
     } catch (error) {
         notice(messageId, error instanceof DOMException ? '無法儲存。請檢查瀏覽器是否允許儲存網站資料。' : error.message, true);
         return false;
+    } finally {
+        if (cloud) {
+            main.inert = false;
+            main.removeAttribute('aria-busy');
+        }
     }
 }
 
@@ -122,9 +140,9 @@ function renderWords() {
         remove.className = 'delete';
         remove.textContent = '刪除';
         remove.setAttribute('aria-label', `刪除第 ${entry.lesson} 課 ${entry.word}`);
-        remove.addEventListener('click', () => {
+        remove.addEventListener('click', async () => {
             if (!window.confirm(`刪除第 ${entry.lesson} 課的「${entry.word}」？`)) return;
-            if (!persist(state => { state.words = state.words.filter(word => word.id !== entry.id); }, 'listCount')) return;
+            if (!await persist(state => { state.words = state.words.filter(word => word.id !== entry.id); }, 'listCount')) return;
             if (editingId === entry.id) clearEditor();
             renderWords();
             filter.focus();
@@ -164,12 +182,12 @@ function clearBatch() {
 }
 
 bookForm.elements.year.value = new Date().getFullYear() - 1911 - Number(new Date().getMonth() < 7);
-bookForm.addEventListener('submit', event => {
+bookForm.addEventListener('submit', async event => {
     event.preventDefault();
     if (!discardEditor(true)) return;
     try {
         const book = makeBook({ ...Object.fromEntries(new FormData(bookForm)), id: crypto.randomUUID() });
-        if (!persist(state => state.books.push(book), 'bookNotice')) return;
+        if (!await persist(state => state.books.push(book), 'bookNotice')) return;
         activeId = book.id;
         bookForm.elements.name.value = '';
         byId('bookDetails').open = false;
@@ -205,16 +223,16 @@ wordForm.addEventListener('input', event => {
     if (event.target === wordFields.word || event.target === wordFields.pronunciation) wordFields.confirmed.checked = false;
     if (event.target === wordFields.word) fillBlanks([1]);
 });
-wordForm.addEventListener('submit', event => {
+wordForm.addEventListener('submit', async event => {
     event.preventDefault();
     try {
         const entry = makeWord({ ...Object.fromEntries(new FormData(wordForm)),
             id: editingId ?? crypto.randomUUID(), bookId: activeId, blanks: selectedBlanks(), confirmed: wordFields.confirmed.checked });
-        if (!persist(state => saveWord(state, entry), 'wordNotice')) return;
+        if (!await persist(state => saveWord(state, entry), 'wordNotice')) return;
         filter.value = '';
         clearEditor(entry.lesson);
         renderWords();
-        notice('wordNotice', `已儲存「${entry.word}」。`);
+        notice('wordNotice', `${cloud ? '已同步' : '已儲存'}「${entry.word}」。`);
         wordFields.word.focus();
     } catch (error) {
         notice('wordNotice', error.message, true);
@@ -249,11 +267,11 @@ batchForm.addEventListener('submit', event => {
         return item;
     }));
 });
-byId('commitBatch').addEventListener('click', () => {
+byId('commitBatch').addEventListener('click', async () => {
     const accepted = batch.filter(row => row.entry);
     const confirmed = byId('batchConfirm').checked;
     const ready = confirmed ? accepted.filter(row => row.entry.pronunciation.length).length : 0;
-    if (!accepted.length || !persist(state => {
+    if (!accepted.length || !await persist(state => {
         for (const { entry } of accepted) saveWord(state, { ...entry, id: crypto.randomUUID(),
             confirmed: confirmed && Boolean(entry.pronunciation.length) });
     }, 'batchNotice')) return;
@@ -297,7 +315,8 @@ function renderExams() {
         meta.append(dateFormat.format(new Date(exam.createdAt)), ' · 種子 ', seed);
         details.append(heading, meta);
         const link = document.createElement('a');
-        link.href = `exam.html?${new URLSearchParams({ id: exam.id })}`;
+        const path = `exam.html?${new URLSearchParams({ id: exam.id })}`;
+        link.href = cloud ? cloudPageUrl(path) : path;
         link.textContent = '開啟考卷與解答';
         link.setAttribute('aria-label', `開啟第 ${exam.from} 至 ${exam.to} 課 ${exam.count} 題考卷，種子 ${exam.seed}`);
         item.append(details, link);
@@ -309,28 +328,28 @@ examForm.addEventListener('input', () => {
     notice('examNotice');
     renderPool();
 });
-examForm.addEventListener('submit', event => {
+examForm.addEventListener('submit', async event => {
     event.preventDefault();
     const seed = examForm.elements.seed.value.trim() || crypto.randomUUID().replaceAll('-', '').slice(0, 16);
-    if (!persist(state => {
+    if (!await persist(state => {
         const book = state.books.find(candidate => candidate.id === activeId);
         if (!book) throw new Error('請重新選擇班級詞庫。');
         state.exams.push(makeExam({ ...examSettings(), id: crypto.randomUUID(), createdAt: new Date().toISOString(),
             book, words: state.words, seed }));
     }, 'examNotice')) return;
     renderExams();
-    notice('examNotice', `已儲存 ${examSettings().count} 題。可在下方開啟考卷與解答。`);
+    notice('examNotice', `${cloud ? '已同步' : '已儲存'} ${examSettings().count} 題。可在下方開啟考卷與解答。`);
     byId('examList').querySelector('a')?.focus();
 });
 
 window.addEventListener('beforeunload', event => {
-    if (!dirty && !batchForm.elements.words.value.trim()) return;
+    if (!dirty && !batchForm.elements.words.value.trim() && !main.hasAttribute('aria-busy')) return;
     event.preventDefault();
     event.returnValue = true;
 });
 
 try {
-    data = readVocabulary();
+    data = cloud ? readVocabulary(cloud) : readVocabulary();
     renderBooks();
 } catch (error) {
     notice('bookNotice', error.message, true);

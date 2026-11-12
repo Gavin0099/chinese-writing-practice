@@ -58,7 +58,7 @@
 
 @page { size: A4 portrait; margin: 10mm; }
 @media print {
-    .page-header, #examControls, #previewError { display: none !important; }
+    .page-header, #examControls, #previewError, .cloud-mode-status { display: none !important; }
     html, body { background: white; }
     main, #examPages { display: block; width: auto; margin: 0; padding: 0; }
     .exam-page { display: flex; flex-direction: column; min-height: 273mm; border: 0; padding: 0; break-after: page; }

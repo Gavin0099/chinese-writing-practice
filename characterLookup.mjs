@@ -2,6 +2,10 @@ const HAN = /^\p{Script=Han}$/u;
 const CHARACTER_TYPES = new Set(["writing", "recognition"]);
 const WRITING_STATUSES = new Set(["can_write", "cannot_write", "uses_zhuyin", "missing_strokes", "not_assessed"]);
 
+export function isWritingStatus(status) {
+    return WRITING_STATUSES.has(status);
+}
+
 export function courseKey(course) {
     if (!course || !Number.isInteger(course.academicYear) || course.academicYear < 1 ||
         typeof course.publisher !== "string" || !course.publisher.trim() ||

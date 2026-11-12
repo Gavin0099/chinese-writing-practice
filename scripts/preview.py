@@ -4,6 +4,7 @@ import argparse
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,12 +13,16 @@ ROOT = Path(__file__).resolve().parents[1]
 class PreviewHandler(SimpleHTTPRequestHandler):
     extensions_map = {**SimpleHTTPRequestHandler.extensions_map, ".mjs": "text/javascript"}
 
+    def log_request(self, code="-", size="-"):
+        self.log_message('"%s %s %s" %s %s', self.command, urlsplit(self.path).path,
+                         self.request_version, str(code), str(size))
+
     def send_head(self):
         target = Path(self.translate_path(self.path)).resolve()
         relative = target.relative_to(ROOT) if target.is_relative_to(ROOT) else None
         parts = tuple(part.casefold() for part in relative.parts) if relative is not None else ()
         if relative is None or any(part.startswith(".") for part in parts) or (
-            parts and parts[0] in {"artifacts", "data_engineering", "memory", "ai-governance-framework"}
+            parts and parts[0] in {"artifacts", "data_engineering", "memory", "ai-governance-framework", "supabase"}
         ):
             self.send_error(404)
             return None

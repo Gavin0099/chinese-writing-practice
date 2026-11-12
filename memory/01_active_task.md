@@ -8,4 +8,4 @@
 
 - Update this file when task state changes.
 
-- PR #1 的治理導入已通過工程審查，程式碼審查基準 e355a7c 無阻擋問題。 <!-- memory_record_projection:active-task-summary:526e4dda5d07cca32d73d4733f3043c02b7f2c5a0b5bdc5f5aed0973ef834c3b -->
+- AUTH-07 開發環境驗收通過；已準備 codex/ux-review 交接版，含完整新版程式、合成資料和 UX／UI 審查入口。正式教材仍等待授權。 <!-- memory_record_projection:active-task-summary:6f67fd49fbd8f8f5026f41ddcfb6b0bd949dcc4baaf00bcce19b12519d3b6352 -->

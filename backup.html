@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f8f3">
+    <title>備份與還原｜生字練習簿</title>
+    <link rel="stylesheet" href="learning.css">
+    <script type="module" src="backup.mjs"></script>
+</head>
+<body>
+    <header class="page-header">
+        <nav class="actions" aria-label="學習工具">
+            <a href="vocabulary.html">老師詞庫與出卷</a>
+            <a href="learning.html">國字學習查詢</a>
+        </nav>
+    </header>
+    <main>
+        <h1>備份與還原</h1>
+        <p class="intro">把班級詞庫、考卷、教學進度和習寫紀錄存成一個檔案。換裝置後，可在同一頁選檔還原。</p>
+        <div class="panels">
+            <section class="panel" aria-labelledby="exportHeading">
+                <h2 id="exportHeading">下載備份</h2>
+                <p id="currentSummary" class="notice"></p>
+                <p class="hint">備份含有私人詞庫與學習紀錄，請保存在自己的裝置。</p>
+                <p class="hint">教材資料檔請另外保留。還原後匯入相同版本的教材，就能繼續查詢先前的教學進度。</p>
+                <div class="actions">
+                    <button type="button" class="primary" id="downloadBackup">下載備份檔</button>
+                </div>
+                <p class="notice" id="exportNotice" role="status"></p>
+            </section>
+            <section class="panel" aria-labelledby="restoreHeading">
+                <h2 id="restoreHeading">還原備份</h2>
+                <label for="backupFile">選擇備份檔（JSON）</label>
+                <input id="backupFile" name="backup-file" type="file" accept=".json,application/json" aria-describedby="restoreNotice">
+                <p class="notice" id="restoreNotice" role="status"></p>
+                <div class="actions">
+                    <button type="button" class="primary" id="restoreBackup" hidden>還原這份備份</button>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

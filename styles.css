@@ -2003,3 +2003,231 @@ body {
     }
     #legacyControls .col-lg-4 :is(button, select, textarea) { min-height: 44px; min-width: 44px; font-size: 1rem; }
 }
+
+/* Warm paper / deep teal: colors only, scoped away from worksheet ancestors. */
+@media screen {
+    html body { background-color: var(--ui-page); }
+
+    .minimal-header, .home-task-entry, .smart-card, #onboardingModal,
+    #toggleCustomBtn, #legacyControls .col-lg-4, #previewSection .empty-state,
+    #lineGuide, #strokeNoticeModal, .ui-pro-footer, .data-attribution {
+        --bg-page: var(--ui-page);
+        --bg-beige: var(--ui-page);
+        --bg-card: var(--ui-surface);
+        --text-main: var(--ui-text);
+        --text-dark: var(--ui-text);
+        --text-muted: var(--ui-muted);
+        --primary: var(--ui-primary);
+        --secondary: var(--ui-primary);
+        --primary-sage: var(--ui-primary);
+        --primary-hover: var(--ui-primary-hover);
+        --secondary-hover: var(--ui-primary-hover);
+        --primary-sage-dark: var(--ui-primary-hover);
+        --border-input: var(--ui-border);
+        --focus-ring: var(--ui-focus);
+        --card-shadow: 0 10px 30px rgba(var(--ui-shadow-rgb), 0.08);
+        color: var(--ui-text);
+    }
+
+    .minimal-header .main-tools a, #toggleCustomBtn, #onboardingModal .btn-text,
+    .smart-card .btn-text { color: var(--ui-primary); }
+    .minimal-header .main-tools a:hover, #toggleCustomBtn:hover,
+    #onboardingModal .btn-text:hover, .smart-card .btn-text:hover {
+        color: var(--ui-primary-hover);
+        border-bottom-color: var(--ui-primary-hover);
+    }
+    .home-task-entry { border-bottom-color: var(--ui-divider); }
+    .home-task-entry h2, #onboardingModal h2,
+    #onboardingModal .onboarding-q label { color: var(--ui-text); }
+    .home-task-entry p, #onboardingModal p,
+    .smart-card .hero-hint { color: var(--ui-muted); }
+    .smart-card .card-loading { color: var(--ui-opacity-ink); }
+    /* The success subtitle has an existing inline opacity of .8. */
+    .smart-card .success-state .hero-subtitle { color: var(--ui-text); }
+
+    .smart-card {
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+        box-shadow: 0 10px 25px -5px rgba(var(--ui-shadow-rgb), 0.05),
+            0 8px 10px -6px rgba(var(--ui-shadow-rgb), 0.05);
+    }
+    #onboardingModal { background-color: var(--ui-surface); }
+    #onboardingModal .onboarding-card {
+        background-color: var(--ui-surface);
+        box-shadow: 0 40px 100px rgba(var(--ui-shadow-rgb), 0.12);
+    }
+    #onboardingModal .onboarding-section-title { border-top-color: var(--ui-divider); }
+    #onboardingModal .ob-btn {
+        color: var(--ui-text);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+    }
+    #onboardingModal .ob-btn:hover {
+        color: var(--ui-primary);
+        border-color: var(--ui-primary);
+    }
+    #onboardingModal .ob-btn.active {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+        border-color: var(--ui-primary);
+        box-shadow: 0 4px 12px rgba(var(--ui-shadow-rgb), 0.3);
+    }
+    .home-task-entry .task-primary, #onboardingModal .task-primary,
+    #onboardingModal #obStartBtn, .smart-card .btn-primary-hero {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+    }
+    .home-task-entry .task-primary:hover, #onboardingModal .task-primary:hover,
+    #onboardingModal #obStartBtn:hover, .smart-card .btn-primary-hero:hover {
+        background-color: var(--ui-primary-hover);
+    }
+    #onboardingModal .btn-primary-hero, .smart-card .btn-primary-hero {
+        box-shadow: 0 4px 15px rgba(var(--ui-shadow-rgb), 0.3);
+    }
+    #onboardingModal .btn-primary-hero:hover, .smart-card .btn-primary-hero:hover {
+        box-shadow: 0 6px 20px rgba(var(--ui-shadow-rgb), 0.4);
+    }
+    .smart-card .success-state .hero-actions .btn-primary-hero:hover {
+        box-shadow: 0 4px 12px rgba(var(--ui-shadow-rgb), 0.1);
+    }
+    #onboardingModal #obStartBtn:disabled {
+        color: var(--ui-muted);
+        background-color: var(--ui-disabled-bg);
+    }
+    #legacyControls .col-lg-4 .card {
+        color: var(--ui-text);
+        background-color: var(--ui-surface);
+    }
+    #legacyControls .col-lg-4 .text-muted { color: var(--ui-muted) !important; }
+    #legacyControls .col-lg-4 .grade-card {
+        color: var(--ui-text);
+        background-color: var(--ui-page);
+        border-color: var(--ui-border);
+    }
+    #legacyControls .col-lg-4 .grade-card:hover {
+        background-color: var(--ui-surface);
+        box-shadow: 0 4px 6px -1px rgba(var(--ui-shadow-rgb), 0.1);
+    }
+    #legacyControls .col-lg-4 .grade-card.active {
+        border-color: var(--ui-primary);
+        background-color: var(--ui-selected);
+        box-shadow: 0 4px 6px -1px rgba(var(--ui-shadow-rgb), 0.2);
+    }
+    #legacyControls .col-lg-4 :is(.form-control, .form-select) {
+        color: var(--ui-text);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+        caret-color: var(--ui-primary);
+    }
+    #legacyControls .col-lg-4 :is(.form-control, .form-select):disabled {
+        color: var(--ui-muted);
+        background-color: var(--ui-disabled-bg);
+    }
+    #legacyControls .col-lg-4 :is(.form-control, .form-select):focus {
+        border-color: var(--ui-focus);
+        box-shadow: 0 0 0 .25rem var(--ui-focus);
+    }
+    #legacyControls .col-lg-4 .form-control::placeholder { color: var(--ui-muted); }
+    #legacyControls .col-lg-4 .btn-primary {
+        --bs-btn-color: var(--ui-on-primary);
+        --bs-btn-bg: var(--ui-primary);
+        --bs-btn-border-color: var(--ui-primary);
+        --bs-btn-hover-color: var(--ui-on-primary);
+        --bs-btn-hover-bg: var(--ui-primary-hover);
+        --bs-btn-hover-border-color: var(--ui-primary-hover);
+        --bs-btn-active-color: var(--ui-on-primary);
+        --bs-btn-active-bg: var(--ui-primary-hover);
+        --bs-btn-active-border-color: var(--ui-primary-hover);
+        --bs-btn-disabled-color: var(--ui-muted);
+        --bs-btn-disabled-bg: var(--ui-disabled-bg);
+        --bs-btn-disabled-border-color: var(--ui-disabled-bg);
+    }
+    #legacyControls .col-lg-4 .btn {
+        --bs-btn-focus-box-shadow: 0 0 0 .25rem var(--ui-focus);
+    }
+    #legacyControls .col-lg-4 .btn-primary:not(:disabled):not(:focus-visible) {
+        box-shadow: 0 4px 6px -1px rgba(var(--ui-shadow-rgb), 0.3);
+    }
+    #legacyControls .col-lg-4 .btn-primary:not(:disabled):not(:focus-visible):hover {
+        box-shadow: 0 6px 8px -1px rgba(var(--ui-shadow-rgb), 0.4);
+    }
+    #legacyControls .col-lg-4 #resetAppBtn {
+        color: var(--ui-opacity-ink) !important;
+        --bs-btn-focus-box-shadow: 0 0 0 .25rem var(--ui-opacity-ink);
+    }
+    #legacyControls .col-lg-4 #resetAppBtn:focus-visible { outline-color: var(--ui-opacity-ink); }
+
+    /* Only the preview header and background change; no inherited sheet colors. */
+    #legacyControls .col-lg-8 > .card > .card-header { color: var(--ui-text); }
+    #legacyControls .col-lg-8 > .card > .card-body.bg-light { background-color: var(--ui-soft) !important; }
+    #previewSection .empty-state {
+        color: var(--ui-muted);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+    }
+    #previewSection .empty-state > :is(ul, p) { color: var(--ui-muted) !important; }
+
+    #lineGuide { background-color: var(--ui-scrim-strong); }
+    #lineGuide .line-guide-content {
+        background-color: var(--ui-surface);
+        box-shadow: 0 20px 25px -5px rgba(var(--ui-shadow-rgb), 0.2);
+    }
+    #lineGuide .line-guide-title, #lineGuide .step-text { color: var(--ui-text); }
+    #lineGuide .line-guide-step {
+        background-color: var(--ui-soft);
+        border-color: var(--ui-divider);
+    }
+    #lineGuide .step-number { color: var(--ui-on-primary); background-color: var(--ui-primary); }
+    #lineGuide .line-guide-close { color: var(--ui-muted); background-color: var(--ui-soft); }
+
+    /* Higher specificity than the unchanged footer's inline <style> block. */
+    #appFooter.ui-pro-footer {
+        background-image: linear-gradient(to bottom, var(--ui-page), var(--ui-soft));
+        border-top-color: var(--ui-divider);
+        color: var(--ui-text);
+    }
+    #appFooter .source-credit, #appFooter .author-text p,
+    #appFooter .feedback-hint, #appFooter .footer-copyright { color: var(--ui-muted); }
+    #appFooter .source-credit a { color: var(--ui-primary); }
+    #appFooter .source-credit a:hover { color: var(--ui-primary-hover); }
+    #appFooter .license-badge {
+        color: var(--ui-success);
+        background-color: var(--ui-selected);
+        border-color: var(--ui-success);
+    }
+    #appFooter .footer-divider {
+        background-image: linear-gradient(90deg, transparent, var(--ui-divider), transparent);
+    }
+    #appFooter .footer-main-card {
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+        box-shadow: 0 4px 6px -1px rgba(var(--ui-shadow-rgb), 0.05),
+            0 2px 4px -1px rgba(var(--ui-shadow-rgb), 0.03);
+    }
+    #appFooter .author-icon { background-color: var(--ui-soft); }
+    #appFooter .author-text h4 { color: var(--ui-text); }
+    #appFooter .feedback-btn {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+        box-shadow: 0 4px 6px -1px rgba(var(--ui-shadow-rgb), 0.2);
+    }
+    #appFooter .feedback-btn:hover {
+        background-color: var(--ui-primary-hover);
+        box-shadow: 0 10px 15px -3px rgba(var(--ui-shadow-rgb), 0.3);
+    }
+    #appFooter .feedback-btn .btn-text, #appFooter .feedback-btn .btn-text:hover {
+        color: var(--ui-on-primary);
+    }
+
+    .minimal-header :focus-visible, .home-task-entry :focus-visible, #toggleCustomBtn:focus-visible,
+    #onboardingModal :focus-visible, #strokeNoticeModal :focus-visible, #lineGuide :focus-visible,
+    #legacyControls .col-lg-4 :focus-visible, .smart-card :focus-visible,
+    #heroActionBtn:focus-visible, #appFooter :focus-visible { outline-color: var(--ui-focus); }
+
+    :is(.minimal-header, .home-task-entry, .smart-card, #onboardingModal,
+        #legacyControls .col-lg-4, #previewSection .empty-state, #lineGuide,
+        #strokeNoticeModal, #appFooter) ::selection {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+    }
+}

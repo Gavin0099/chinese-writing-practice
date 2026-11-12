@@ -191,3 +191,35 @@
         display: none !important;
     }
 }
+
+/* Screen-only colors; the original gradients and shadows retain their geometry. */
+@media screen {
+    .stroke-notice, #strokeNoticeModal .stroke-modal-button {
+        background-image: linear-gradient(135deg, var(--ui-primary) 0%, var(--ui-primary-hover) 100%);
+        color: var(--ui-on-primary);
+    }
+    .stroke-notice { box-shadow: 0 4px 12px rgba(var(--ui-shadow-rgb), 0.3); }
+    .stroke-notice-highlight { background-color: var(--ui-highlight); }
+    .stroke-tip {
+        color: var(--ui-warning);
+        background-color: var(--ui-warning-bg);
+        border-left-color: var(--ui-warning);
+    }
+    #strokeNoticeModal { background-color: var(--ui-scrim); }
+    #strokeNoticeModal .stroke-modal {
+        color: var(--ui-text);
+        background-color: var(--ui-surface);
+        box-shadow: 0 20px 60px rgba(var(--ui-shadow-rgb), 0.3);
+    }
+    #strokeNoticeModal .stroke-modal-title, #strokeNoticeModal .stroke-modal-content {
+        color: var(--ui-text);
+    }
+    #strokeNoticeModal .stroke-modal-subtitle, #strokeNoticeModal .stroke-modal-example-text {
+        color: var(--ui-muted);
+    }
+    #strokeNoticeModal .stroke-modal-content > p[style] { color: var(--ui-muted) !important; }
+    #strokeNoticeModal .stroke-modal-example { background-color: var(--ui-soft); }
+    #strokeNoticeModal .stroke-modal-button:hover {
+        box-shadow: 0 8px 20px rgba(var(--ui-shadow-rgb), 0.4);
+    }
+}

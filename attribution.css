@@ -66,3 +66,16 @@
         font-size: 11px;
     }
 }
+
+/* Screen attribution shares the interface palette; print remains untouched. */
+@media screen {
+    .data-attribution {
+        background-color: var(--ui-soft);
+        border-top-color: var(--ui-divider);
+        color: var(--ui-muted);
+    }
+    .data-attribution .attribution-text strong { color: var(--ui-text); }
+    .data-attribution .attribution-text a { color: var(--ui-primary); }
+    .data-attribution .attribution-text a:hover { color: var(--ui-primary-hover); }
+    .data-attribution .attribution-note { color: var(--ui-muted); }
+}

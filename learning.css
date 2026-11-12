@@ -132,3 +132,63 @@ button:disabled { cursor: default; }
 @media screen and (min-width: 48rem) {
     .storage-explainer { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 }
+
+/* Shared screen palette. Exam content keeps the original root tokens. */
+@media screen {
+    html body { background-color: var(--ui-page); }
+    .tool-page > main, .tool-page > .skip-link, .page-header,
+    #examControls, #previewError, .cloud-mode-status, .tool-page > .cloud-draft {
+        --ink: var(--ui-text);
+        --muted: var(--ui-muted);
+        --paper: var(--ui-page);
+        --line: var(--ui-divider);
+        --accent: var(--ui-primary);
+        color: var(--ui-text);
+    }
+    .page-header { border-bottom-color: var(--ui-divider); }
+    .tool-page .panel, .tool-page .result-card, #examControls {
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+    }
+    .tool-page :is(select, textarea), #examControls select {
+        color: var(--ui-text);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+    }
+    .tool-page :is(input, textarea) { caret-color: var(--ui-primary); }
+    .tool-page :is(input, textarea)::placeholder { color: var(--ui-muted); }
+    .tool-page input[type='checkbox'] { accent-color: var(--ui-primary); }
+    .tool-page input[type='file'] { color: var(--ui-text); }
+    .tool-page input[type='file']::file-selector-button {
+        color: var(--ui-primary);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+    }
+    .tool-page button, #examControls button {
+        color: var(--ui-primary);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-primary);
+    }
+    .tool-page button.primary, .tool-page .primary-link, #examControls button.primary {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+        border-color: var(--ui-primary);
+    }
+    .tool-page button:hover, #examControls button:hover { background-color: var(--ui-soft); }
+    .tool-page button.primary:hover, #examControls button.primary:hover {
+        background-color: var(--ui-primary-hover);
+    }
+    .tool-page .primary-link:hover { background-color: var(--ui-primary-hover); }
+    .tool-page .skip-link { background-color: var(--ui-surface); color: var(--ui-primary); }
+    .tool-page .teaching-status[data-state='taught'] { color: var(--ui-success); }
+    #previewError, .cloud-mode-status { color: var(--ui-muted); }
+    .tool-page .notice[data-error], #previewError[data-error], .cloud-mode-status[data-error] {
+        color: var(--ui-danger);
+    }
+    .tool-page :focus-visible, .page-header a:focus-visible,
+    #examControls :focus-visible { outline-color: var(--ui-focus); }
+    :is(.tool-page > main, .page-header, #examControls, #previewError, .cloud-mode-status) ::selection {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+    }
+}

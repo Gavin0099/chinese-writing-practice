@@ -7,10 +7,20 @@
     <title>詞語考卷｜生字練習簿</title>
     <link rel="stylesheet" href="learning.css">
     <link rel="stylesheet" href="exam.css">
+    <link rel="stylesheet" href="site-nav.css" media="screen">
     <script type="module" src="exam.mjs"></script>
 </head>
 <body>
-    <header class="page-header"><a id="backToBook" href="vocabulary.html">← 回到老師詞庫</a></header>
+    <header class="page-header site-header">
+        <nav class="site-nav" aria-label="學習工具">
+            <a href="index.html">生字練習簿</a>
+            <a href="vocabulary.html" aria-current="location">老師詞庫與出卷</a>
+            <a href="learning.html">國字學習查詢</a>
+            <a href="backup.html">備份與還原</a>
+            <a href="sync.html">雲端同步</a>
+        </nav>
+        <a id="backToBook" class="site-back" href="vocabulary.html">← 回到老師詞庫</a>
+    </header>
     <main>
         <section id="examControls" class="panel" aria-labelledby="previewHeading" hidden>
             <h1 id="previewHeading">考卷與解答預覽</h1>

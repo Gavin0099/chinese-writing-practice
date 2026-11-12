@@ -1,46 +1,11 @@
-// ========================================
-// 筆順說明提示功能
-// ========================================
-
-/**
- * 顯示筆順說明 Modal
- */
+// 筆順說明改為常駐的原生 details，不再計時彈出或讀寫首次提示紀錄。
+// 保留既有入口，供需要直接開啟／收合說明的連結使用。
 function showStrokeNoticeModal() {
-    const overlay = document.getElementById('strokeNoticeModal');
-    if (overlay) {
-        overlay.classList.add('active');
-    }
+    const notice = document.getElementById('strokeNoticeModal');
+    if (notice) notice.open = true;
 }
 
-/**
- * 關閉筆順說明 Modal
- */
 function closeStrokeNoticeModal() {
-    const overlay = document.getElementById('strokeNoticeModal');
-    if (overlay) {
-        overlay.classList.remove('active');
-    }
-}
-
-/**
- * 初始化筆順說明
- */
-function initStrokeNotice() {
-    // 檢查是否已經顯示過
-    const hasShown = localStorage.getItem('strokeNoticeShown');
-
-    if (!hasShown) {
-        // 首次使用,3秒後顯示提示
-        setTimeout(() => {
-            showStrokeNoticeModal();
-            localStorage.setItem('strokeNoticeShown', 'true');
-        }, 3000);
-    }
-}
-
-// 頁面載入時初始化
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initStrokeNotice);
-} else {
-    initStrokeNotice();
+    const notice = document.getElementById('strokeNoticeModal');
+    if (notice) notice.open = false;
 }

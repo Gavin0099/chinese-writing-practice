@@ -59,6 +59,7 @@
         <nav class="main-tools" aria-label="學習工具">
             <a class="btn-text" href="learning.html">國字學習查詢</a>
             <a class="btn-text" href="vocabulary.html">老師詞庫與出卷</a>
+            <a class="btn-text" id="worksheetAccount" href="sync.html" hidden>登入同步</a>
         </nav>
     </header>
 
@@ -83,11 +84,24 @@
                         </p>
                     </div>
                 </div>
+                <section id="currentWorksheet" aria-labelledby="worksheetTitle" hidden>
+                    <p class="hero-subtitle" id="worksheetContext"></p>
+                    <h1 class="hero-title" id="worksheetTitle"></h1>
+                    <p class="hero-hint" id="worksheetNotice" role="status"></p>
+                    <div id="worksheetLessons" hidden>
+                        <label for="worksheetLesson">練習課次</label>
+                        <select id="worksheetLesson" class="form-select"></select>
+                    </div>
+                    <div class="worksheet-actions">
+                        <button id="prepareWorksheet" class="btn-primary-hero" type="button" hidden>準備練習簿</button>
+                        <a id="worksheetSettings" class="btn-text" href="learning.html">設定學校教材</a>
+                    </div>
+                </section>
             </div>
 
             <div class="secondary-actions">
                 <!-- Fallback / Advanced Toggle -->
-                <button id="toggleCustomBtn" class="btn-text">
+                <button id="toggleCustomBtn" class="btn-text" disabled>
                     想練習別課？前往自訂設定
                 </button>
             </div>
@@ -104,7 +118,7 @@
                         </div>
                         <div class="card-body p-4">
                             <!-- Grade Selection (Grid) -->
-                            <div class="mb-4">
+                            <div class="mb-4 legacy-course-field">
                                 <label class="form-label text-muted small mb-2">年級</label>
                                 <div class="grade-selector">
                                     <div class="grade-card active" data-value="1">一年級</div>
@@ -117,7 +131,7 @@
                             </div>
 
                             <!-- Semester & Lesson -->
-                            <div class="row mb-3">
+                            <div class="row mb-3 legacy-course-field">
                                 <div class="col-6">
                                     <label class="form-label text-muted small">學期</label>
                                     <select id="semesterSelect" class="form-select form-select-sm">
@@ -177,6 +191,10 @@
                             <button id="downloadBtn" style="display: none;"></button>
                         </div>
                         <div class="card-body p-4 bg-light">
+                            <div class="worksheet-actions" id="worksheetPreviewActions" hidden>
+                                <button id="worksheetPrint" class="btn-primary-hero" type="button">列印 / 儲存為 PDF</button>
+                                <button id="worksheetPdf" class="btn-text" type="button">下載 PDF</button>
+                            </div>
                             <div id="previewSection" class="preview-container text-center" style="min-height: 500px;">
                                 <!-- Sheets will be rendered here -->
                                 <!-- Target container for JS logic -->
@@ -188,7 +206,7 @@
                                     <ul
                                         style="text-align: left; display: inline-block; list-style: none; padding: 0; color: #666; font-size: 0.9rem; line-height: 1.8;">
                                         <li>● 格式：標準 A4 尺寸</li>
-                                        <li>● 教材：康軒 113 學年度</li>
+                                        <li id="legacyWorksheetEdition">● 教材：康軒 113 學年度</li>
                                         <li>● 內容：筆順教學 + 描紅練習 + 自行書寫</li>
                                         <li>● 樣式：標準田字格</li>
                                     </ul>
@@ -201,6 +219,7 @@
             </div>
         </div>
 
+    </main>
 
 
         <!-- Scripts -->

@@ -47,10 +47,13 @@ test('the sign-in return preserves cloud exam context and rejects destinations o
     const expected = 'https://app.example.test/preview/exam.html?cloud=1&id=exam-a&part=answers';
     assert.equal(cloudReturnUrl(target, page), expected);
     assert.equal(new URL(syncPageUrl(expected)).searchParams.get('returnTo'), expected);
+    assert.equal(cloudReturnUrl('index.html?cloud=1&code=irrelevant', page),
+        'https://app.example.test/preview/index.html?cloud=1');
     for (const unsafe of [
         'https://external.example.test/exam.html?cloud=1', '//external.example.test/exam.html?cloud=1',
         '/exam.html?cloud=1', 'another/exam.html?cloud=1', 'exam.html?cloud=0',
-        'sync.html?cloud=1', 'javascript:alert(1)', 'https://other@app.example.test/preview/exam.html?cloud=1'
+        'sync.html?cloud=1', '../index.html?cloud=1', 'javascript:alert(1)',
+        'https://other@app.example.test/preview/exam.html?cloud=1'
     ]) assert.equal(cloudReturnUrl(unsafe, page), null);
 });
 

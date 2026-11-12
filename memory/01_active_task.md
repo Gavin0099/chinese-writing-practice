@@ -8,4 +8,4 @@
 
 - Update this file when task state changes.
 
-- AUTH-07 開發環境驗收通過；已準備 codex/ux-review 交接版，含完整新版程式、合成資料和 UX／UI 審查入口。正式教材仍等待授權。 <!-- memory_record_projection:active-task-summary:6f67fd49fbd8f8f5026f41ddcfb6b0bd949dcc4baaf00bcce19b12519d3b6352 -->
+- 首頁開發驗收完成。帳號進度、教材字表和既有練習簿列印已接通。 <!-- memory_record_projection:active-task-summary:dcb3ea7a2945fdd99fad9143ab76325095f7f91560d2373493f547bee25e27d2 -->

@@ -4,6 +4,27 @@ export const curriculumStorageKey = 'write_practice_lookup_curricula';
 export const progressStorageKey = 'write_practice_teaching_progress';
 export const writingStorageKey = 'write_practice_writing_records';
 
+export function readStoredValue(storage, key) {
+    try {
+        return JSON.parse(storage.getItem(key));
+    } catch {
+        return null;
+    }
+}
+
+export function mergeCourses(...sources) {
+    const courses = new Map();
+    for (const source of sources) {
+        if (!Array.isArray(source)) continue;
+        for (const course of source) {
+            const key = courseKey(course);
+            if (key && typeof course.versionLabel === 'string' &&
+                Array.isArray(course.expectedLessons) && Array.isArray(course.lessons)) courses.set(key, course);
+        }
+    }
+    return [...courses.values()];
+}
+
 export function isWritingHistory(character, records) {
     return /^\p{Script=Han}$/u.test(character) && Array.isArray(records) && records.length > 0 && records.every(record =>
         isWritingStatus(record?.status) && typeof record.at === 'string' && Number.isFinite(Date.parse(record.at)));

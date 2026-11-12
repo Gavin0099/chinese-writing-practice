@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { validateBackup } from '../backupData.mjs';
+import { courseKey } from '../characterLookup.mjs';
 import { confirmCourse, importCourses, readProgress } from '../learningData.mjs';
 import { makeBook, makeWord } from '../vocabularyData.mjs';
 
@@ -42,4 +43,10 @@ for (const [name, value] of [['sample-backup.json', backup], ['sample-candidate.
     ['sample-comparison.json', comparison]]) {
     await writeFile(new URL(name, output), `${JSON.stringify(value, null, 2)}\n`);
 }
+const sqlLiteral = value => "'" + value.replaceAll("'", "''") + "'";
+await writeFile(new URL('sample-catalog.sql', output), `-- Synthetic UX fixture for a separate review database.
+insert into public.curriculum_catalog (course_key, course, approval_reference)
+values (${sqlLiteral(courseKey(course))}, ${sqlLiteral(JSON.stringify(course))}::jsonb, 'Synthetic UX fixture')
+on conflict (course_key) do nothing;
+`);
 console.log('Review fixtures written to artifacts/runtime/ux-review/.');

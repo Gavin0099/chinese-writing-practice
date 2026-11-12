@@ -1,13 +1,14 @@
 import { courseKey, lookupCharacters } from './characterLookup.mjs';
-import { confirmCourse, curriculumStorageKey, importCourses, isPediaSource, isWritingHistory, lookupScope, progressStorageKey,
-    readProgress, writingStorageKey } from './learningData.mjs';
-import { openPageStorage } from './cloudStorage.mjs';
+import { confirmCourse, curriculumStorageKey, importCourses, isPediaSource, isWritingHistory, lookupScope, mergeCourses,
+    progressStorageKey, readProgress, readStoredValue, writingStorageKey } from './learningData.mjs';
+import { connectCloud, openPageStorage, readCloudSettings, readCurriculumCatalog } from './cloudStorage.mjs';
 
 const cloud = await openPageStorage();
 const recordStorage = cloud ?? localStorage;
 
 const byId = id => document.getElementById(id);
-const fields = Object.fromEntries(['academicYear', 'publisher', 'grade', 'semester', 'edition', 'lesson'].map(id => [id, byId(id)]));
+const fields = Object.fromEntries(['publisher', 'academicYear', 'grade', 'semester', 'edition', 'lesson'].map(id => [id, byId(id)]));
+const publishers = ['康軒', '南一', '翰林'];
 const input = byId('query');
 const statusLabels = { taught: '推估已教', not_yet_taught: '尚未教到', insufficient_data: '資料不足' };
 const writingLabels = { not_assessed: '尚未評估', can_write: '會寫', cannot_write: '不會寫',
@@ -16,16 +17,12 @@ const dateLabel = new Intl.DateTimeFormat('zh-TW', { dateStyle: 'medium', timeSt
 const importLimit = 2_000_000;
 
 function readLocal(key) {
-    try {
-        return JSON.parse((key === curriculumStorageKey ? localStorage : recordStorage).getItem(key));
-    } catch {
-        return null;
-    }
+    return readStoredValue(key === curriculumStorageKey ? localStorage : recordStorage, key);
 }
 
-const savedCourses = readLocal(curriculumStorageKey);
-let courses = Array.isArray(savedCourses) ? savedCourses.filter(course => courseKey(course) &&
-    Array.isArray(course.expectedLessons) && Array.isArray(course.lessons)) : [];
+let localCourses = mergeCourses(readLocal(curriculumStorageKey));
+let cloudCourses = [];
+let courses = localCourses;
 let progress = readProgress(readLocal(progressStorageKey));
 function readWriting() {
     return Object.fromEntries(Object.entries(readLocal(writingStorageKey) ?? {}).filter(([char, records]) =>
@@ -47,19 +44,28 @@ function setOptions(field, entries, wanted) {
 
 function fillPicker(preferred) {
     const path = [
-        ['academicYear', value => `${value} 學年度`], ['publisher', value => `${value}版`],
-        ['grade', value => `${value} 年級`], ['semester', value => value === 1 ? '上學期' : '下學期']
+        ['publisher', '選擇出版社', value => value],
+        ['academicYear', '選擇學年度', value => `${value} 學年度`],
+        ['grade', '選擇年級', value => `${value} 年級`],
+        ['semester', '選擇學期', value => value === 1 ? '上學期' : '下學期']
     ];
     let choices = courses;
-    for (const [key, label] of path) {
-        const values = [...new Set(choices.map(course => course[key]))].sort((a, b) =>
-            typeof a === 'number' ? a - b : a.localeCompare(b, 'zh-TW'));
-        setOptions(fields[key], values.map(value => [value, label(value)]), preferred?.[key] ?? fields[key].value);
+    for (const [key, placeholder, label] of path) {
+        const available = choices.map(course => course[key]);
+        const values = key === 'publisher' ? [...new Set([...publishers, ...available])]
+            : [...new Set(available)].sort((a, b) => a - b);
+        const entries = values.map(value => [value, label(value)]);
+        if (key === 'publisher' || values.length !== 1) entries.unshift(['', placeholder]);
+        setOptions(fields[key], entries, preferred?.[key] ?? fields[key].value);
+        fields[key].disabled = !values.length;
         choices = choices.filter(course => String(course[key]) === fields[key].value);
     }
-    setOptions(fields.edition, choices.map(course => [courseKey(course),
-        `${course.versionLabel} · ${course.sourceVersion.slice(0, 8)}`]), preferred ? courseKey(preferred) : fields.edition.value);
-    byId('progressFields').disabled = !courses.length;
+    const editions = choices.map(course => [courseKey(course), choices.length === 1 ? course.versionLabel
+        : `${course.versionLabel} · ${course.sourceVersion.slice(0, 8)}`]);
+    if (editions.length !== 1) editions.unshift(['', '選擇教材版本']);
+    setOptions(fields.edition, editions, preferred ? courseKey(preferred) : fields.edition.value);
+    fields.edition.disabled = !choices.length;
+    byId('progressFields').disabled = false;
     updateLessonPicker();
 }
 
@@ -75,12 +81,18 @@ function updateLessonPicker() {
         return [number, title ? `第 ${number} 課　${title}` : `第 ${number} 課${verified ? '' : '（字表待核對）'}`];
     }) ?? [];
     setOptions(fields.lesson, [['', '選擇課次'], [0, '尚未開始'], ...lessons], cutoff);
+    fields.lesson.disabled = !course;
+    byId('confirmProgress').disabled = !course || fields.lesson.value === '';
     const missingCourse = progress.records.length > 0 && !courses.some(item => courseKey(item) === progress.activeKey);
-    const restoredNotice = '已保留確認過的課次。匯入相同版本的教材後，可查看對應進度。';
-    showNotice(byId('progressNotice'), missingCourse && cutoff === null ? restoredNotice : !course
-        ? '匯入教材後即可設定課次。' : !fields.lesson.value
-        ? '這個教材版本的教學進度尚未確認。'
-        : cutoff === 0 ? '已確認這學期尚未開始。' : `已確認教到第 ${cutoff} 課。`);
+    let message;
+    if (!fields.publisher.value) message = '先選擇孩子學校使用的出版社。';
+    else if (!courses.some(item => item.publisher === fields.publisher.value)) message = '目前沒有可用的教材。';
+    else if (!course) message = '選擇學年度、年級和學期後，即可設定課次。';
+    else if (cutoff === null) message = '這個教材版本的教學進度尚未確認。';
+    else if (cutoff === 0) message = '已確認這學期尚未開始。';
+    else message = `已確認教到第 ${cutoff} 課。`;
+    if (missingCourse && cutoff === null) message += ' 先前確認的課次已保留，載入相同版本後即可查看。';
+    showNotice(byId('progressNotice'), message);
     renderResults();
 }
 
@@ -188,11 +200,10 @@ byId('curriculumFiles').addEventListener('change', async event => {
             throw new Error('請選擇 candidate JSON，可一併選擇同批 comparison JSON。');
         }
         const imported = candidates.flatMap(candidate => importCourses(candidate, reports));
-        const merged = new Map(courses.map(course => [courseKey(course), course]));
-        for (const course of imported) merged.set(courseKey(course), course);
-        const updated = [...merged.values()];
+        const updated = mergeCourses(localCourses, imported);
         localStorage.setItem(curriculumStorageKey, JSON.stringify(updated));
-        courses = updated;
+        localCourses = updated;
+        courses = mergeCourses(cloudCourses, localCourses);
         fillPicker(courses.find(course => courseKey(course) === progress.activeKey));
         byId('curriculumImport').open = false;
         showNotice(notice, `已載入 ${imported.length} 組教材，共 ${imported.reduce((total, course) => total + course.lessons.length, 0)} 個比對一致課次。`);
@@ -206,10 +217,17 @@ byId('curriculumFiles').addEventListener('change', async event => {
     }
 });
 
-for (const field of [fields.academicYear, fields.publisher, fields.grade, fields.semester]) {
-    field.addEventListener('change', () => fillPicker());
+const selectionSteps = ['publisher', 'academicYear', 'grade', 'semester', 'edition'];
+for (const [index, key] of selectionSteps.slice(0, -1).entries()) {
+    fields[key].addEventListener('change', () => {
+        for (const step of selectionSteps.slice(index + 1)) fields[step].value = '';
+        fillPicker();
+    });
 }
 fields.edition.addEventListener('change', updateLessonPicker);
+fields.lesson.addEventListener('change', () => {
+    byId('confirmProgress').disabled = !currentCourse() || fields.lesson.value === '';
+});
 
 byId('progressForm').addEventListener('submit', async event => {
     event.preventDefault();
@@ -223,7 +241,7 @@ byId('progressForm').addEventListener('submit', async event => {
     } catch (error) {
         showNotice(byId('progressNotice'), error instanceof DOMException ? '儲存失敗，請檢查瀏覽器儲存空間。' : error.message, true);
     } finally {
-        byId('progressFields').disabled = !courses.length;
+        byId('progressFields').disabled = false;
     }
 });
 
@@ -238,5 +256,30 @@ byId('showRecords').addEventListener('click', () => {
 });
 
 byId('showRecords').hidden = !Object.keys(writing).length;
-byId('curriculumImport').open = !courses.length;
+if (cloud) byId('lookupHelp').textContent = '查詢文字只在此瀏覽器處理。習寫紀錄會同步到此帳號。';
 fillPicker(courses.find(course => courseKey(course) === progress.activeKey));
+
+async function loadCatalog() {
+    const notice = byId('catalogNotice');
+    const retry = byId('retryCatalog');
+    retry.hidden = true;
+    try {
+        const settings = !cloud && readCloudSettings();
+        if (!cloud && !settings) return;
+        showNotice(notice, '正在載入雲端教材…');
+        const { published, review } = cloud ? await cloud.readCurriculumCatalog()
+            : await readCurriculumCatalog(await connectCloud(settings));
+        cloudCourses = mergeCourses(review, published);
+        courses = mergeCourses(cloudCourses, localCourses);
+        const restore = fields.publisher.value === '' && courses.find(course => courseKey(course) === progress.activeKey);
+        fillPicker(restore || undefined);
+        if (review.length) showNotice(notice, '已載入僅供本帳號使用的開發測試教材。');
+        else showNotice(notice, cloudCourses.length ? '已載入雲端教材。' : '目前沒有可用的雲端教材。');
+    } catch {
+        showNotice(notice, '暫時無法載入雲端教材。已匯入本機的教材仍可使用。', true);
+        retry.hidden = false;
+    }
+}
+
+byId('retryCatalog').addEventListener('click', loadCatalog);
+void loadCatalog();

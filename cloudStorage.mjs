@@ -38,11 +38,36 @@ export async function connectCloud(settings = readCloudSettings()) {
     } });
 }
 
-async function authenticatedSession(client) {
+export async function readCurriculumCatalog(client, includeReview = false) {
+    async function readRows(query) {
+        const size = 100;
+        const courses = [];
+        for (let from = 0; ; from += size) {
+            const { data, error } = await query().order('course_key').range(from, from + size - 1)
+                .abortSignal(AbortSignal.timeout(8000));
+            if (error || !Array.isArray(data)) throw new Error('無法載入雲端教材。', { cause: error });
+            courses.push(...data.map(row => row.course));
+            if (data.length < size) return courses;
+        }
+    }
+    const [published, review] = await Promise.all([
+        readRows(() => client.from('curriculum_catalog').select('course_key,course')),
+        includeReview ? readRows(() => client.rpc('read_review_curriculum')) : []
+    ]);
+    return { published, review };
+}
+
+async function currentSession(client) {
     const { data, error } = await client.auth.getSession();
     if (error) throw new Error('無法確認登入狀態。請檢查連線後重試。');
-    if (!data.session?.user?.id || data.session.user.is_anonymous) throw new Error('請登入後再開啟雲端資料。');
-    return data.session;
+    const session = data.session;
+    return session?.user?.id && !session.user.is_anonymous ? session : null;
+}
+
+async function authenticatedSession(client) {
+    const session = await currentSession(client);
+    if (!session) throw new Error('請登入後再開啟雲端資料。');
+    return session;
 }
 
 async function readFamilyBackup(client, session) {
@@ -148,17 +173,24 @@ export function cloudPageUrl(path) {
     return url.href;
 }
 
-export async function openPageStorage() {
-    if (new URL(location.href).searchParams.get('cloud') !== '1') return null;
+export async function openPageStorage({ home = false } = {}) {
+    const explicit = new URL(location.href).searchParams.get('cloud') === '1';
+    if (!explicit && !home) return null;
     const main = document.querySelector('main');
-    main.inert = true;
     const status = document.createElement('p');
     status.className = 'notice cloud-mode-status';
     status.setAttribute('role', 'status');
     status.textContent = '正在讀取雲端資料…';
-    main.before(status);
+    const signIn = () => syncPageUrl(home ? cloudPageUrl('index.html') : location.href);
     try {
-        const client = await connectCloud();
+        const settings = readCloudSettings();
+        if (!explicit && !settings) return null;
+        const client = await connectCloud(settings);
+        if (!explicit && !(await currentSession(client))) {
+            return { isGuest: true, readCurriculumCatalog: () => readCurriculumCatalog(client) };
+        }
+        main.inert = true;
+        main.before(status);
         const download = document.createElement('button');
         download.type = 'button';
         download.textContent = '下載未同步備份';
@@ -196,7 +228,7 @@ export async function openPageStorage() {
             window.removeEventListener('beforeunload', protectDraft);
             draftNotice.remove();
             main.replaceChildren();
-            location.replace(syncPageUrl(location.href));
+            location.replace(signIn());
         }, attempted => {
             draft = attempted;
             explanation.textContent = '這次修改已保留在此頁。請下載備份，再重新載入雲端資料。';
@@ -205,10 +237,10 @@ export async function openPageStorage() {
         });
         for (const link of document.querySelectorAll('header a[href]')) {
             const href = link.getAttribute('href');
-            if (['vocabulary.html', 'learning.html'].includes(href)) link.href = cloudPageUrl(href);
+            if (['index.html', 'vocabulary.html', 'learning.html'].includes(href)) link.href = cloudPageUrl(href);
             if (href === 'backup.html') link.textContent = '本機備份與還原';
         }
-        status.textContent = '雲端模式。看到已同步後，即可在其他裝置開啟這筆資料。';
+        status.textContent = home ? '已連線到家庭帳號。' : '雲端模式。看到已同步後，即可在其他裝置開啟這筆資料。';
         window.addEventListener('pagehide', event => {
             if (event.persisted) main.hidden = true;
         });
@@ -219,12 +251,14 @@ export async function openPageStorage() {
             }
         });
         main.inert = false;
-        return context;
+        return { ...context, readCurriculumCatalog: () => readCurriculumCatalog(client, true) };
     } catch (error) {
+        main.inert = true;
+        main.before(status);
         status.textContent = `${error.message} `;
         status.setAttribute('data-error', '');
         const link = document.createElement('a');
-        link.href = syncPageUrl(location.href);
+        link.href = signIn();
         link.textContent = '前往登入或重試連線';
         status.append(link);
         throw error;

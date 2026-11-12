@@ -23,28 +23,30 @@
         <div class="panels">
             <section class="panel" aria-labelledby="progressHeading">
                 <h2 id="progressHeading">教學進度</h2>
-                <details id="curriculumImport" class="curriculum-import">
-                    <summary>匯入本機教材</summary>
-                    <label for="curriculumFiles">選擇教材 JSON</label>
-                    <input id="curriculumFiles" type="file" accept=".json,application/json" multiple aria-describedby="importHelp">
-                    <p id="importHelp" class="hint">選取已備妥的教材資料檔（JSON）。如有同批課次比對報告，可一起選取。教材只存於此瀏覽器。</p>
-                </details>
-                <p class="notice" id="importNotice" role="status"></p>
+                <p class="notice" id="catalogNotice" role="status"></p>
+                <button type="button" id="retryCatalog" hidden>重新載入教材</button>
                 <form id="progressForm">
                     <fieldset id="progressFields" disabled>
                         <legend class="visually-hidden">教材與已教課次</legend>
                         <div class="course-fields">
+                            <label class="wide">學校使用的出版社<select id="publisher" required></select></label>
                             <label>學年度<select id="academicYear"></select></label>
-                            <label>出版社<select id="publisher"></select></label>
                             <label>年級<select id="grade"></select></label>
                             <label>學期<select id="semester"></select></label>
                             <label class="wide">教材版本<select id="edition"></select></label>
                             <label class="wide">目前教到的課次<select id="lesson" required></select></label>
                         </div>
-                        <button type="submit" class="primary">確認教學進度</button>
+                        <button type="submit" id="confirmProgress" class="primary" disabled>確認教學進度</button>
                     </fieldset>
                 </form>
                 <p class="notice" id="progressNotice" role="status"></p>
+                <details id="curriculumImport" class="curriculum-import">
+                    <summary>從檔案匯入本機教材</summary>
+                    <label for="curriculumFiles">選擇教材 JSON</label>
+                    <input id="curriculumFiles" type="file" accept=".json,application/json" multiple aria-describedby="importHelp">
+                    <p id="importHelp" class="hint">選取已備妥的教材資料檔（JSON）。如有同批課次比對報告，可一起選取。檔案只存於此瀏覽器。</p>
+                </details>
+                <p class="notice" id="importNotice" role="status"></p>
             </section>
 
             <section class="panel" aria-labelledby="queryHeading">
@@ -57,7 +59,7 @@
                         <button type="button" id="showRecords" hidden>查看習寫紀錄</button>
                     </div>
                 </form>
-                <p class="hint">查詢文字與習寫紀錄只在此瀏覽器處理。</p>
+                <p class="hint" id="lookupHelp">查詢文字與習寫紀錄只在此瀏覽器處理。</p>
             </section>
         </div>
 

@@ -32,3 +32,7 @@ projection superseded them. History only; not current state.
 - 開發環境 Google 手動連結與原家庭資料比對通過；AUTH-07 等待 iPhone Safari 新增詞語與 Windows Chrome 出卷。 <!-- memory_record_projection:active-task-summary:026b8060c3fbb398dd75377cf0ce1ffd544c9d3ef1ef7194b71db1cda70757dd -->
 
 - AUTH-07 Google 開發環境驗收通過，原家庭資料與 iPhone 到 Windows 的 15 題出卷已核對。停在本次驗收。 <!-- memory_record_projection:active-task-summary:1fe3de2504bba51026a173c2c71d14af71dbced999414bd38ac2ada67cc00936 -->
+
+- AUTH-07 開發環境驗收通過；已準備 codex/ux-review 交接版，含完整新版程式、合成資料和 UX／UI 審查入口。正式教材仍等待授權。 <!-- memory_record_projection:active-task-summary:6f67fd49fbd8f8f5026f41ddcfb6b0bd949dcc4baaf00bcce19b12519d3b6352 -->
+
+- D-05 私有開發匯入完成；公開授權與正式發布待確認。 <!-- memory_record_projection:active-task-summary:453c679f6ee74906064d8f01da4eb32895bcdc6883653b49f59ba21007f84b4c -->

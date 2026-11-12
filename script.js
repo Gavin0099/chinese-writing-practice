@@ -68,8 +68,26 @@ function loadCharDatabase() {
 // Init immediately when DOM loads
 // Init immediately when DOM loads
 // --- Spec v1.1 Implementation Start ---
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     loadCharDatabase();
+
+    const { openWorksheetHome } = await import('./worksheetHome.mjs');
+    const home = await openWorksheetHome({
+        prepare(text, metadata) {
+            charactersInput.value = text;
+            renderSheets(text, metadata);
+        },
+        clear() {
+            if (renderedWorksheetLesson && charactersInput.value === renderedWorksheetLesson.text) {
+                charactersInput.value = '';
+            }
+            renderedWorksheetLesson = null;
+            document.getElementById('sheets-container').replaceChildren();
+            document.getElementById('worksheetPreviewActions').hidden = true;
+            previewArea.querySelector(':scope > .empty-state').hidden = false;
+        }
+    });
+    if (home) return;
 
     // 0. Handle Onboarding (Spec v1.1)
     if (window.storageManager && window.storageManager.isNewUser()) {
@@ -155,11 +173,11 @@ function initApp() {
             let cleanTitle = rec.title ? rec.title.split('\n')[0] : "";
 
             if (rec.isNewSemester) {
-                heroSubTitle.innerText = `準備開始 ${rec.grade} 年級 ${rec.semester === 'A' ? '上學期' : '下學期'}`;
+                heroSubTitle.innerText = `康軒 113 學年度 · 準備開始 ${rec.grade} 年級${rec.semester === 'A' ? '上學期' : '下學期'}`;
                 heroTitle.innerText = "✨ 新的開始";
                 cleanTitle = "新的開始";
             } else {
-                heroSubTitle.innerText = `${rec.grade} 年級 ${rec.semester === 'A' ? '上學期' : '下學期'}`;
+                heroSubTitle.innerText = `康軒 113 學年度 · ${rec.grade} 年級${rec.semester === 'A' ? '上學期' : '下學期'}`;
                 heroTitle.innerText = `第 ${rec.lesson} 課：${cleanTitle}`;
             }
 
@@ -270,38 +288,7 @@ function initApp() {
                         // Re-bind Print Button (v1.4 Unified Native Print)
                         const heroPrintBtn = document.getElementById('heroPrintBtn');
                         if (heroPrintBtn) {
-                            heroPrintBtn.onclick = () => {
-                                console.log('[Success Screen] v1.7: Printing initiated');
-
-                                // Detect LINE In-App Browser
-                                if (/Line\//i.test(navigator.userAgent)) {
-                                    showLineGuide();
-                                }
-
-                                const originalInner = heroPrintBtn.innerHTML;
-                                heroPrintBtn.innerHTML = "⏳ 準備中...";
-                                heroPrintBtn.disabled = true;
-
-                                const outputLesson = renderedWorksheetLesson;
-
-                                // Prepare Dynamic Filename (v1.6)
-                                const originalTitle = document.title;
-                                const filename = `康軒-${rec.grade}年級-${rec.semester === 'A' ? '上' : '下'}-第${rec.lesson}課-${rec.title.split('\n')[0]}`;
-                                document.title = filename;
-
-                                // Trigger Native Print
-                                document.body.classList.add('is-printing-now');
-                                setTimeout(() => {
-                                    recordWorksheetOutput(outputLesson);
-                                    window.print();
-                                    setTimeout(() => {
-                                        document.body.classList.remove('is-printing-now');
-                                        document.title = originalTitle; // Restore
-                                        heroPrintBtn.innerHTML = originalInner;
-                                        heroPrintBtn.disabled = false;
-                                    }, 1500);
-                                }, 400); // 400ms buffer for Chrome/Safari to apply class
-                            };
+                            heroPrintBtn.onclick = () => printWorksheet(heroPrintBtn);
                         }
 
                         // Re-bind Next Lesson (Spec v1.1)
@@ -340,6 +327,7 @@ function initApp() {
 
             // Toggle Custom Controls
             if (toggleCustomBtn && legacyControls) {
+                toggleCustomBtn.disabled = false;
                 toggleCustomBtn.onclick = () => {
                     if (legacyControls.style.display === 'none') {
                         legacyControls.style.display = 'block';
@@ -440,7 +428,7 @@ function initApp() {
 
                 const hSub = document.getElementById('heroSubTitle');
                 const hTitle = document.getElementById('heroTitle');
-                if (hSub) hSub.innerText = `${rec.grade}年級 ${rec.semester === 'A' ? '上學期' : '下學期'}`;
+                if (hSub) hSub.innerText = `康軒 113 學年度 · ${rec.grade} 年級${rec.semester === 'A' ? '上學期' : '下學期'}`;
                 if (hTitle) hTitle.innerText = `第 ${rec.lesson} 課：${rec.title}`;
 
                 const isToday = settings.lastOutputAt && new Date(settings.lastOutputAt).toDateString() === new Date().toDateString();
@@ -528,7 +516,7 @@ generateBtn.addEventListener('click', () => {
 
     // v1.1 Custom Screen behavior: update pinnedLesson
     const lesSel = document.getElementById('lessonSelect');
-    if (lesSel && window.storageManager) {
+    if (lesSel && window.storageManager && document.getElementById('currentWorksheet').hidden) {
         window.storageManager.updateSettings({ pinnedLesson: parseInt(lesSel.value) });
     }
 
@@ -549,8 +537,51 @@ function isIOS() {
 }
 
 function recordWorksheetOutput(lesson) {
-    if (lesson) window.storageManager?.addHistory(lesson);
+    if (lesson && !lesson.academicYear) {
+        const { text, ...metadata } = lesson;
+        window.storageManager?.addHistory(metadata);
+    }
 }
+
+function worksheetTitle(lesson) {
+    if (!lesson) return '生字練習簿';
+    const publisher = lesson.academicYear ? `${lesson.publisher}-${lesson.academicYear}學年度` : '康軒';
+    const name = lesson.title ? `-${lesson.title}` : '';
+    return `${publisher}-${lesson.grade}年級-${lesson.semester === 'A' ? '上' : '下'}-第${lesson.lesson}課${name}`
+        .replace(/[\\/:*?"<>|\r\n]/g, '-');
+}
+
+function printWorksheet(button) {
+    const page = document.querySelector('.sheet-page');
+    if (!page) return;
+    if (/Line\//i.test(navigator.userAgent)) showLineGuide();
+    const originalContent = button.innerHTML;
+    const originalTitle = document.title;
+    const lesson = renderedWorksheetLesson;
+    button.textContent = '準備列印…';
+    button.disabled = true;
+    document.title = worksheetTitle(lesson);
+    document.body.classList.add('is-printing-now');
+    setTimeout(() => {
+        try {
+            if (page.isConnected) {
+                recordWorksheetOutput(lesson);
+                window.print();
+            }
+        } finally {
+            setTimeout(() => {
+                document.body.classList.remove('is-printing-now');
+                document.title = originalTitle;
+                button.innerHTML = originalContent;
+                button.disabled = false;
+            }, 1500);
+        }
+    }, 400);
+}
+
+const worksheetPrint = document.getElementById('worksheetPrint');
+worksheetPrint.addEventListener('click', () => printWorksheet(worksheetPrint));
+document.getElementById('worksheetPdf').addEventListener('click', () => downloadBtn.click());
 
 downloadBtn.addEventListener('click', async () => {
     const pages = document.querySelectorAll('.sheet-page');
@@ -581,6 +612,11 @@ downloadBtn.addEventListener('click', async () => {
     const originalText = downloadBtn.innerText;
     downloadBtn.innerText = "⏳ 轉檔中...";
     downloadBtn.disabled = true;
+    const worksheetPdf = document.getElementById('worksheetPdf');
+    const controls = document.getElementById('currentWorksheet').hidden ? []
+        : [worksheetPdf, worksheetPrint, generateBtn, document.getElementById('worksheetLesson'),
+            document.getElementById('prepareWorksheet')].filter(control => !control.disabled);
+    for (const control of controls) control.disabled = true;
 
     // FORCE VISIBILITY for html2canvas
     const legacyControls = document.getElementById('legacyControls');
@@ -596,8 +632,7 @@ downloadBtn.addEventListener('click', async () => {
 
     try {
         const totalPages = pages.length;
-        const visibleDownloadBtn = document.getElementById('downloadPdfBtn');
-        const originalVisibleText = visibleDownloadBtn ? visibleDownloadBtn.innerText : '';
+        const visibleDownloadBtn = document.getElementById('downloadPdfBtn') ?? worksheetPdf;
 
         for (let i = 0; i < totalPages; i++) {
             const progressText = `⏳ 轉檔中 (${i + 1}/${totalPages})...`;
@@ -635,20 +670,14 @@ downloadBtn.addEventListener('click', async () => {
         }
 
         // Construct dynamic filename
-        let filename = "生字練習簿.pdf";
-        const hSub = document.getElementById('heroSubTitle');
-        const hTitle = document.getElementById('heroTitle');
-        if (hSub && hTitle) {
-            const subText = hSub.innerText.replace(/\s+/g, '-'); // 一年級-上學期
-            const titleText = hTitle.innerText.replace(/[:：\s]+/g, '-'); // 第-1-課-名稱
-            filename = `康軒-${subText}-${titleText}.pdf`;
-        }
+        const filename = `${worksheetTitle(outputLesson)}.pdf`;
 
         if (isMobile) {
             // Mobile Strategy: Handled by window.print() at start
             return;
         }
 
+        if (!pages[0].isConnected) return;
         doc.save(filename);
         recordWorksheetOutput(outputLesson);
 
@@ -670,6 +699,8 @@ downloadBtn.addEventListener('click', async () => {
 
         const visibleBtn = document.getElementById('downloadPdfBtn');
         if (visibleBtn) visibleBtn.innerText = "或是下載 PDF 備份";
+        worksheetPdf.innerText = '下載 PDF';
+        for (const control of controls) control.disabled = false;
 
         // RESTORE VISIBILITY
         if (wasHidden && legacyControls) {
@@ -703,7 +734,12 @@ function renderSheets(text, metadata = null) {
         const pageDOM = createPage(pageChars, metadata);
         container.appendChild(pageDOM);
     }
-    renderedWorksheetLesson = metadata;
+    renderedWorksheetLesson = metadata ? { ...metadata, text: cleanText } : null;
+    if (!document.getElementById('currentWorksheet').hidden) {
+        previewArea.querySelector(':scope > .empty-state').hidden = true;
+        document.getElementById('worksheetPreviewActions').hidden = false;
+        document.getElementById('worksheetPdf').hidden = isIOS() || /Android/i.test(navigator.userAgent);
+    }
     // Enable Download (Force update)
     if (downloadBtn) {
         console.log("✅ Enabling Download Button...");

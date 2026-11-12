@@ -2,6 +2,7 @@
 node_modules/
 supabase/.temp/
 supabase/.branches/
+/cloudConfig.local.mjs
 
 # Build outputs
 dist/

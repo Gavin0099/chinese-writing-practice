@@ -1,6 +1,7 @@
 const pendingKey = 'write-practice-google-flow';
 const maxFlowAge = 15 * 60 * 1000;
 const returnParams = new Map([
+    ['index.html', []],
     ['vocabulary.html', ['book']],
     ['learning.html', []],
     ['exam.html', ['id', 'part']]

@@ -23,6 +23,9 @@
 - [x] D-03 已逐課比對教育百科，194 組一致、7 組字表差異及 1 組未編號單元缺漏。
 - [x] [D-03R](work/tickets/d-03r-curriculum-dispositions.md) 完成八筆差異的處置。八筆證據不足，均已隔離。
 - [x] [D-04](work/tickets/d-04-curriculum-redistribution.md) 完成授權盤點並記錄公開門檻。2026-11-12 已向中研院與教育百科寄出詢問，115 上候選字表等待明確授權。
+- [x] [D-05 開發驗收](work/tickets/d-05-curriculum-catalog.md)：115 上三家共 18 組、194 課已存入專用開發資料庫，僅供指定帳號載入；教學進度先選出版社。
+- [x] [首頁練習簿](work/tickets/d-05-curriculum-catalog.md#首頁練習簿)：依帳號已確認的教材與課次準備習寫字練習簿，可另選同版本課次複習。
+- [ ] D-05 正式發布：確認准用欄位及署名後才開放其他使用者查詢。
 - [x] [F-00](work/tickets/f-00-separate-worksheet-history.md) 分開練習紙輸出紀錄及教學進度，完成本機遷移與 Chrome 驗證。實機 iOS Safari 待驗。
 - [x] [F-02](work/tickets/f-02-character-lookup-core.md) 以合成教材驗證純查詢核心。
 - [x] F-01／F-03／F-04 在本機 Chrome 驗收確認進度、逐字查詢、習寫紀錄和重開保留，見 [國字學習查詢工單](work/tickets/2026-11-11-character-learning-lookup.md)。

@@ -1,0 +1,138 @@
+/* Home interface only. Worksheet rules remain in styles.css. */
+@media screen {
+    .home-page {
+        --primary-sage: var(--accent);
+        --primary-sage-dark: var(--ink);
+        --text-dark: var(--ink);
+        --text-main: var(--ink);
+        --text-muted: var(--muted);
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font: var(--type-body) / 1.5 var(--bs-body-font-family);
+    }
+    .home-page a { color: var(--accent); text-underline-offset: .2em; }
+    .home-page :is(button, select, textarea) { font: inherit; }
+    .home-page :is(button, a, select, summary) { min-height: 44px; min-width: 44px; }
+    .home-page :is(button, a, select, textarea, summary):focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .home-page button { cursor: pointer; }
+    .home-page button:disabled { cursor: default; }
+    .hero-section { padding: 2rem 0 0; }
+    .hero-section > .container { width: min(calc(100% - 2rem), 64rem); max-width: none; padding: 0; }
+    .home-intro { margin-bottom: 1.5rem; }
+    .home-intro h1 { margin: 0 0 .5rem; font-size: var(--type-title); font-weight: 700; line-height: 1.2; }
+    .home-intro p { margin: 0; color: var(--muted); }
+    .primary-tasks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+    .task-card { display: flex; flex-direction: column; min-width: 0; padding: 1.25rem; border: 1px solid var(--line); border-radius: .85rem; background: var(--surface); }
+    .task-card > h2 { display: flex; align-items: center; gap: .6rem; margin: 0 0 1rem; font-size: var(--type-heading); line-height: 1.4; font-weight: 700; }
+    .task-number { display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: .4rem; background: var(--paper); color: var(--accent); font-size: var(--type-small); flex-shrink: 0; }
+    .task-description, .lesson-summary { min-height: 3.2em; margin: 0 0 1rem; color: var(--muted); }
+    .hero-subtitle, .hero-title { margin: 0; font-size: var(--type-body); line-height: 1.6; }
+    .hero-subtitle { color: var(--muted); font-weight: 400; }
+    .hero-title { color: var(--ink); font-weight: 600; }
+    .card-content { flex: 1; }
+    .card-loading { color: var(--muted); }
+    .home-page .btn-primary-hero, .home-page #generateBtn, .home-page .feedback-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        width: 100%;
+        min-height: 48px;
+        padding: .65rem .8rem;
+        border: 1px solid var(--accent);
+        border-radius: .4rem;
+        background: var(--accent);
+        color: var(--surface);
+        font-size: var(--type-body);
+        line-height: 1.5;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+    }
+    .home-page :is(.btn-primary-hero, #generateBtn, .feedback-btn):hover { background: var(--ink); border-color: var(--ink); }
+    .home-page .btn-primary-hero:disabled { background: var(--line); border-color: var(--line); color: var(--muted); }
+    .task-card > .btn-primary-hero { margin-top: auto; }
+    .hero-hint, .task-hint { margin: .6rem 0 0; color: var(--muted); font-size: var(--type-small); }
+    .hero-hint .icon-shield { display: none; }
+    .secondary-actions { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem 1rem; margin-top: .75rem; }
+    .home-page .btn-text { display: inline-flex; align-items: center; justify-content: center; padding: .6rem .4rem; border: 0; background: transparent; color: var(--accent); font-size: var(--type-small); text-decoration: underline; text-underline-offset: .2em; }
+    .data-tools { display: flex; align-items: center; flex-wrap: wrap; gap: .25rem .75rem; font-size: var(--type-small); }
+    .data-tools span { color: var(--muted); }
+    .data-tools a { display: inline-flex; align-items: center; }
+
+    /* Settings controls: no selectors reach inside the rendered worksheet. */
+    #legacyControls { scroll-margin-top: 1rem; margin-bottom: 1.5rem; }
+    /* Required by the existing PDF capture and no-recommendation fallback. */
+    #legacyControls.show-controls { display: block !important; opacity: 1; }
+    #legacyControls .card { border-radius: .85rem; }
+    #legacyControls .card-header h5 { font-size: var(--type-heading); }
+    #legacyControls .form-label { color: var(--muted); font-size: var(--type-small); font-weight: 600; }
+    #legacyControls :is(.form-select, .form-control) { min-height: 48px; border-color: var(--line); color: var(--ink); background-color: var(--surface); }
+    #legacyControls textarea { resize: vertical; }
+    #legacyControls textarea::placeholder { color: var(--muted); opacity: 1; }
+    .grade-selector, .grade-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
+    .grade-card, .ob-btn { padding: .6rem .3rem; border: 1px solid var(--line); border-radius: .4rem; color: var(--ink); background: var(--surface); }
+    .grade-card:hover, .ob-btn:hover { border-color: var(--accent); }
+    .grade-card.active, .ob-btn.active { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+    .reset-settings { margin-top: .5rem; }
+    .empty-state { padding: 2rem 1rem; text-align: center; color: var(--muted); }
+    .empty-state h5 { color: var(--ink); font-size: var(--type-heading); }
+    .empty-icon { margin-bottom: 1rem; font-size: var(--type-title); }
+    .preview-facts { margin: 1rem 0; padding: 0; list-style: none; text-align: left; display: inline-block; }
+    .preview-hint { color: var(--muted); font-size: var(--type-small); }
+
+    /* First-visit setup is the only modal. */
+    .onboarding-overlay { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgb(36 53 45 / .35); overflow-y: auto; }
+    .onboarding-card { width: min(100%, 32rem); max-height: 100%; overflow-y: auto; padding: 2rem; border: 1px solid var(--line); border-radius: .85rem; background: var(--surface); }
+    .onboarding-card h2 { margin: 0 0 .5rem; font-size: var(--type-heading); font-weight: 700; }
+    .onboarding-card p { margin: 0 0 1rem; color: var(--muted); }
+    .onboarding-q { margin-top: 1rem; }
+    .onboarding-q label { display: block; margin-bottom: .5rem; font-weight: 600; }
+    .sem-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+    #obStartBtn { margin-top: 1.5rem; }
+    .onboarding-tools { display: grid; gap: .5rem; margin-top: .5rem; }
+    .onboarding-tools a { display: flex; justify-content: center; align-items: center; padding: .6rem; border: 1px solid var(--accent); border-radius: .4rem; font-weight: 600; text-decoration: none; }
+    .onboarding-tools a:hover { background: var(--paper); }
+
+    /* Normalize existing inline success UI without changing its JS or worksheet. */
+    .success-state .hero-subtitle { color: var(--ink); }
+    #debugToggleBtn { color: var(--muted) !important; opacity: 1 !important; }
+    .success-state .btn-primary-hero { padding-inline: .5rem; }
+    .line-guide-overlay { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; padding: 1rem; background: rgb(36 53 45 / .35); }
+    .line-guide-content { width: min(100%, 25rem); padding: 1.5rem; border-radius: .85rem; background: var(--surface); }
+    .line-guide-title { font-size: var(--type-heading); font-weight: 700; }
+    .line-guide-step { display: flex; gap: .75rem; margin-block: .75rem; padding: .75rem; border-radius: .4rem; background: var(--paper); }
+    .step-number { color: var(--accent); font-weight: 700; }
+    .line-guide-close { width: 100%; border: 1px solid var(--line); border-radius: .4rem; background: var(--paper); color: var(--ink); }
+
+    .ui-pro-footer { margin-top: 2rem; padding: 1.5rem 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: var(--type-small); }
+    .footer-container { max-width: 64rem; margin: 0 auto; }
+    .source-credit { line-height: 1.8; }
+    .source-credit p { margin: 0; }
+    .source-credit a { display: inline-flex; align-items: center; }
+    .license-badge { margin-top: .5rem; color: var(--muted); }
+    .footer-divider { height: 1px; background: var(--line); margin-block: 1rem; }
+    .footer-main-card { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+    .footer-author { display: flex; align-items: flex-start; gap: .75rem; }
+    .author-icon { font-size: var(--type-heading); }
+    .author-text h4 { margin: 0 0 .3rem; color: var(--ink); font-size: var(--type-body); font-weight: 600; }
+    .author-text p { margin: 0; }
+    .feedback-hint { margin-top: .5rem; }
+    .footer-copyright { margin-top: 1.5rem; }
+    @media (max-width: 42rem) {
+        .hero-section { padding-top: 1.25rem; }
+        .home-intro { margin-bottom: 1rem; }
+        .primary-tasks { grid-template-columns: 1fr; gap: .75rem; }
+        .task-card { padding: .85rem 1rem; }
+        .task-card > h2 { margin-bottom: .5rem; }
+        .task-description, .lesson-summary { min-height: 0; margin-bottom: .65rem; font-size: var(--type-small); }
+        .task-description br { display: none; }
+        .hero-subtitle, .hero-title { display: inline; font-size: var(--type-small); }
+        .hero-subtitle { margin-right: .5rem; }
+        .hero-hint, .task-hint { display: none; }
+        .secondary-actions { align-items: flex-start; flex-direction: column; gap: 0; }
+        .onboarding-card { padding: 1.25rem; }
+        .footer-main-card { align-items: stretch; flex-direction: column; }
+    }
+}

@@ -343,10 +343,12 @@ function initApp() {
                 toggleCustomBtn.onclick = () => {
                     if (legacyControls.style.display === 'none') {
                         legacyControls.style.display = 'block';
+                        toggleCustomBtn.setAttribute('aria-expanded', 'true');
                         toggleCustomBtn.innerHTML = '📂 收合自訂設定 (進階)';
                         legacyControls.scrollIntoView({ behavior: 'smooth' });
                     } else {
                         legacyControls.style.display = 'none';
+                        toggleCustomBtn.setAttribute('aria-expanded', 'false');
                         toggleCustomBtn.innerHTML = '想練習別課？前往自訂設定';
                     }
                 }

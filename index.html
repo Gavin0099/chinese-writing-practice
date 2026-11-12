@@ -7,19 +7,20 @@
     <title>生字練習簿產生器</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="stroke-notice.css">
-    <link rel="stylesheet" href="attribution.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="site-nav.css" media="screen">
+    <link rel="stylesheet" href="home.css" media="screen">
 </head>
 
-<body>
+<body class="home-page">
     <!-- 0. Onboarding Modal (Spec v1.1) -->
-    <div id="onboardingModal" class="onboarding-overlay" style="display: none;">
+    <div id="onboardingModal" class="onboarding-overlay" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle" style="display: none;">
         <div class="onboarding-card">
-            <h2>✨ 歡迎使用生字小幫手</h2>
+            <h2 id="onboardingTitle">歡迎使用生字小幫手</h2>
             <p>選擇年級與學期，系統會推薦練習紙</p>
 
             <div class="onboarding-q">
@@ -42,55 +43,76 @@
                 </div>
             </div>
 
-            <button id="obStartBtn" class="btn-primary-hero" style="width: 100%; margin-top: 1rem;" disabled>
-                開始練習
+            <button id="obStartBtn" class="btn-primary-hero" disabled>
+                開始製作練習簿
             </button>
-            <a class="btn-text d-inline-block mt-3" href="learning.html">前往國字學習查詢</a>
-            <a class="btn-text d-inline-block mt-3" href="vocabulary.html">老師詞庫與出卷</a>
+            <div class="onboarding-tools">
+                <a href="vocabulary.html">老師詞庫與出卷</a>
+                <a href="learning.html">國字學習查詢</a>
+            </div>
         </div>
     </div>
 
-    <!-- 1. Minimal Header -->
-    <header class="minimal-header">
-        <div class="brand">
-            <span class="icon">🏫</span>
-            <span class="text">生字練習簿小幫手</span>
-        </div>
-        <nav class="main-tools" aria-label="學習工具">
-            <a class="btn-text" href="learning.html">國字學習查詢</a>
-            <a class="btn-text" href="vocabulary.html">老師詞庫與出卷</a>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="學習工具">
+            <a href="index.html" aria-current="page">生字練習簿</a>
+            <a href="vocabulary.html">老師詞庫與出卷</a>
+            <a href="learning.html">國字學習查詢</a>
+            <a href="backup.html">備份與還原</a>
+            <a href="sync.html">雲端同步</a>
         </nav>
     </header>
 
-    <!-- 2. Main Hero Section (The Brain) -->
     <main class="hero-section">
-        <div class="container">
-            <div class="smart-card" id="smartCard">
-                <!-- Loading State -->
-                <div class="card-loading" id="cardLoading">正在準備練習紙...</div>
-
-                <!-- Content State -->
-                <div class="card-content" style="display: none;">
-                    <h2 id="heroSubTitle" class="hero-subtitle">一年級 上學期</h2>
-                    <h1 id="heroTitle" class="hero-title">第 1 課：初始課程</h1>
-
-                    <div class="hero-actions">
-                        <button id="heroActionBtn" class="btn-primary-hero">
-                            <span class="icon">✨</span> 下載練習簿 (10秒)
-                        </button>
-                        <p class="hero-hint">
-                            <span class="icon-shield">🛡</span> 已為您準備好練習紙
-                        </p>
+        <div class="container home-overview">
+            <div class="home-intro">
+                <h1>陪孩子，一起練好國字</h1>
+                <p>選課練字、整理詞語、查詢學習進度。</p>
+            </div>
+            <div class="primary-tasks" aria-label="三個學習工具">
+                <section class="task-card smart-card" id="smartCard" aria-labelledby="practiceHeading">
+                    <h2 id="practiceHeading"><span class="task-number" aria-hidden="true">01</span> 生字練習簿</h2>
+                    <div class="card-loading" id="cardLoading" role="status">正在準備練習紙…</div>
+                    <div class="card-content" style="display: none;">
+                        <div class="lesson-summary">
+                            <p id="heroSubTitle" class="hero-subtitle">一年級 上學期</p>
+                            <h3 id="heroTitle" class="hero-title">第 1 課：初始課程</h3>
+                        </div>
+                        <div class="hero-actions">
+                            <button id="heroActionBtn" class="btn-primary-hero">下載練習簿</button>
+                            <p class="hero-hint">已為您準備好練習紙</p>
+                        </div>
                     </div>
+                </section>
+                <section class="task-card" aria-labelledby="vocabularyHeading">
+                    <h2 id="vocabularyHeading"><span class="task-number" aria-hidden="true">02</span> 老師詞庫與出卷</h2>
+                    <p class="task-description">整理老師指定的詞語，<br>製作考卷與解答。</p>
+                    <a class="btn-primary-hero" href="vocabulary.html">開啟老師詞庫</a>
+                    <p class="task-hint">依班級與課次整理</p>
+                </section>
+                <section class="task-card" aria-labelledby="learningHeading">
+                    <h2 id="learningHeading"><span class="task-number" aria-hidden="true">03</span> 國字學習查詢</h2>
+                    <p class="task-description">查詢教材收錄的國字，<br>記下孩子的習寫狀態。</p>
+                    <a class="btn-primary-hero" href="learning.html">查詢國字</a>
+                    <p class="task-hint">掌握孩子的學習進度</p>
+                </section>
+            </div>
+            <div class="secondary-actions">
+                <button id="toggleCustomBtn" class="btn-text" aria-controls="legacyControls" aria-expanded="false">想練習別課？前往自訂設定</button>
+                <div class="data-tools" aria-label="資料管理">
+                    <span>資料管理</span>
+                    <a href="backup.html">備份與還原</a>
+                    <a href="sync.html">雲端同步</a>
                 </div>
             </div>
-
-            <div class="secondary-actions">
-                <!-- Fallback / Advanced Toggle -->
-                <button id="toggleCustomBtn" class="btn-text">
-                    想練習別課？前往自訂設定
-                </button>
-            </div>
+            <details id="strokeNoticeModal" class="stroke-notice">
+                <summary>筆順與字形說明</summary>
+                <div class="stroke-notice-content">
+                    <p>本練習簿使用<strong>教育部標準字體</strong>作為字形與筆順的參考依據。部分字的筆順在不同教材會略有差異。</p>
+                    <p>例如「草」字的草字頭，可寫成連筆 <strong>艹</strong> 或分筆 <strong>丷 丷</strong>，兩種寫法都符合標準。</p>
+                    <p>只要字形結構正確、筆畫清晰，就是正確的寫法。若與學校課本有明顯差異，建議以學校教材為主要參考。</p>
+                </div>
+            </details>
         </div>
 
         <!-- 3. Legacy Controls (Hidden by default) -->
@@ -105,28 +127,28 @@
                         <div class="card-body p-4">
                             <!-- Grade Selection (Grid) -->
                             <div class="mb-4">
-                                <label class="form-label text-muted small mb-2">年級</label>
+                                <label class="form-label mb-2">年級</label>
                                 <div class="grade-selector">
-                                    <div class="grade-card active" data-value="1">一年級</div>
-                                    <div class="grade-card" data-value="2">二年級</div>
-                                    <div class="grade-card" data-value="3">三年級</div>
-                                    <div class="grade-card" data-value="4">四年級</div>
-                                    <div class="grade-card" data-value="5">五年級</div>
-                                    <div class="grade-card" data-value="6">六年級</div>
+                                    <button type="button" class="grade-card active" data-value="1">一年級</button>
+                                    <button type="button" class="grade-card" data-value="2">二年級</button>
+                                    <button type="button" class="grade-card" data-value="3">三年級</button>
+                                    <button type="button" class="grade-card" data-value="4">四年級</button>
+                                    <button type="button" class="grade-card" data-value="5">五年級</button>
+                                    <button type="button" class="grade-card" data-value="6">六年級</button>
                                 </div>
                             </div>
 
                             <!-- Semester & Lesson -->
                             <div class="row mb-3">
                                 <div class="col-6">
-                                    <label class="form-label text-muted small">學期</label>
+                                    <label for="semesterSelect" class="form-label">學期</label>
                                     <select id="semesterSelect" class="form-select form-select-sm">
                                         <option value="A">上學期</option>
                                         <option value="B">下學期</option>
                                     </select>
                                 </div>
                                 <div class="col-6">
-                                    <label class="form-label text-muted small">課程</label>
+                                    <label for="lessonSelect" class="form-label">課程</label>
                                     <select id="lessonSelect" class="form-select form-select-sm">
                                         <option value="1">第 1 課</option>
                                         <!-- Dynamic Population -->
@@ -136,14 +158,14 @@
 
                             <!-- Manual Input -->
                             <div class="mb-3">
-                                <label for="characters" class="form-label text-muted small">手動輸入生字</label>
+                                <label for="characters" class="form-label">手動輸入生字</label>
                                 <textarea id="characters" class="form-control" rows="3"
                                     placeholder="在此貼上生字..."></textarea>
                             </div>
 
                             <!-- Grid Settings -->
                             <div class="mb-3">
-                                <label class="form-label text-muted small">格線</label>
+                                <label for="gridType" class="form-label">格線</label>
                                 <select id="gridType" class="form-select form-select-sm">
                                     <option value="tian">田字格</option>
                                     <option value="mi">米字格</option>
@@ -154,12 +176,10 @@
                             <!-- Actions -->
                             <div class="d-grid gap-2">
                                 <!-- Align with primary color -->
-                                <button id="generateBtn" class="btn btn-primary"
-                                    style="background-color: var(--primary-sage); border: none;">
+                                <button id="generateBtn" class="btn btn-primary">
                                     更新預覽
                                 </button>
-                                <button id="resetAppBtn" class="btn btn-link btn-sm text-muted mt-3"
-                                    style="font-size: 0.9rem; text-decoration: none; opacity: 0.6;">
+                                <button id="resetAppBtn" class="btn-text reset-settings">
                                     ⚙️ 重新初始化系統設定
                                 </button>
                             </div>
@@ -183,16 +203,15 @@
                                 <div id="sheets-container"></div>
 
                                 <div class="empty-state py-5">
-                                    <div style="font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.3;">📋</div>
-                                    <h5 style="color: var(--text-dark); margin-bottom: 1rem;">練習簿配置已準備就緒</h5>
-                                    <ul
-                                        style="text-align: left; display: inline-block; list-style: none; padding: 0; color: #666; font-size: 0.9rem; line-height: 1.8;">
+                                    <div class="empty-icon" aria-hidden="true">📋</div>
+                                    <h5>練習簿配置已準備就緒</h5>
+                                    <ul class="preview-facts">
                                         <li>● 格式：標準 A4 尺寸</li>
                                         <li>● 教材：康軒 113 學年度</li>
                                         <li>● 內容：筆順教學 + 描紅練習 + 自行書寫</li>
                                         <li>● 樣式：標準田字格</li>
                                     </ul>
-                                    <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #999;">按下列印即可取得純淨 A4 格式</p>
+                                    <p class="preview-hint">按下列印即可取得純淨 A4 格式</p>
                                 </div>
                             </div>
                         </div>
@@ -202,6 +221,8 @@
         </div>
 
 
+
+    </main>
 
         <!-- Scripts -->
         <script src="db_core.js"></script>
@@ -231,40 +252,6 @@
             }
         </script>
 
-
-        <!-- 筆順說明 Modal -->
-        <div id="strokeNoticeModal" class="stroke-modal-overlay">
-            <div class="stroke-modal">
-                <div class="stroke-modal-header">
-                    <div class="stroke-modal-emoji">📚✨</div>
-                    <h3 class="stroke-modal-title">關於筆順與字形差異</h3>
-                    <p class="stroke-modal-subtitle">給家長的說明</p>
-                </div>
-
-                <div class="stroke-modal-content">
-                    <p>本練習簿使用<strong>教育部標準字體</strong>作為字形與筆順的參考依據。</p>
-
-                    <div class="stroke-modal-example">
-                        <div class="stroke-modal-example-char">草</div>
-                        <p class="stroke-modal-example-text">
-                            部分字的筆順在不同教材會略有差異。<br>
-                            例如「草」字的草字頭,可寫成連筆 <strong>艹</strong> 或分筆 <strong>丷 丷</strong>,<br>
-                            <strong>兩種寫法都符合標準</strong>。
-                        </p>
-                    </div>
-
-                    <p>💡 <strong>重點提醒</strong>:只要字形結構正確、筆畫清晰,就是正確的寫法。筆順略有差異不影響學習成效。</p>
-
-                    <p style="font-size: 13px; color: #666; margin-top: 16px;">
-                        ℹ️ 若您發現與學校課本有明顯差異,建議以學校教材為主要參考。
-                    </p>
-                </div>
-
-                <button class="stroke-modal-button" onclick="closeStrokeNoticeModal()">
-                    了解,開始使用
-                </button>
-            </div>
-        </div>
 
         <!-- 筆順說明腳本 -->
         <script src="stroke-notice.js"></script>
@@ -300,9 +287,9 @@
 
                     <div class="footer-action">
                         <a href="https://docs.google.com/forms/d/e/1FAIpQLSf2VfN4hgcv3be2s2AD20uF9b-Zth7JkEvQuFSQ4uJ8y-eKeA/viewform"
-                            target="_blank" class="feedback-btn action-pulse">
+                            target="_blank" class="feedback-btn">
                             <span class="btn-icon">🐛</span>
-                            <span class="btn-text">發現問題 / 許願功能</span>
+                            <span>發現問題 / 許願功能</span>
                         </a>
                         <div class="feedback-hint">您的建議能讓這個工具更好用！</div>
                     </div>
@@ -315,180 +302,7 @@
             </div>
         </footer>
 
-        <style>
-            /* UI Pro Footer Styles */
-            .ui-pro-footer {
-                margin-top: 4rem;
-                padding: 3rem 1rem;
-                background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
-                border-top: 1px solid #e2e8f0;
-                color: #475569;
-                font-family: 'Segoe UI', system-ui, sans-serif;
-            }
 
-            .footer-container {
-                max-width: 800px;
-                margin: 0 auto;
-                text-align: center;
-            }
-
-            /* Source Credit */
-            .source-credit {
-                font-size: 0.85rem;
-                color: #94a3b8;
-                line-height: 1.6;
-                margin-bottom: 2rem;
-            }
-
-            .source-credit a {
-                color: #64748b;
-                text-decoration: underline;
-                text-decoration-color: #cbd5e1;
-                transition: color 0.2s;
-            }
-
-            .source-credit a:hover {
-                color: #334155;
-            }
-
-            .license-badge {
-                display: inline-block;
-                background: #f0fdf4;
-                color: #166534;
-                padding: 0.25rem 0.75rem;
-                border-radius: 999px;
-                font-size: 0.75rem;
-                margin-top: 0.5rem;
-                border: 1px solid #bbf7d0;
-            }
-
-            .footer-divider {
-                height: 1px;
-                background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
-                margin: 0 auto 2.5rem auto;
-                width: 60%;
-            }
-
-            /* Main Card */
-            .footer-main-card {
-                background: white;
-                border-radius: 16px;
-                padding: 2rem;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-                border: 1px solid #f1f5f9;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 1.5rem;
-                margin-bottom: 2rem;
-            }
-
-            .footer-author {
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-                text-align: left;
-            }
-
-            .author-icon {
-                font-size: 2rem;
-                background: #eff6ff;
-                width: 3.5rem;
-                height: 3.5rem;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .author-text h4 {
-                margin: 0 0 0.25rem 0;
-                color: #1e293b;
-                font-size: 1.1rem;
-                font-weight: 600;
-            }
-
-            .author-text p {
-                margin: 0;
-                font-size: 0.9rem;
-                color: #64748b;
-                line-height: 1.4;
-            }
-
-            /* Button */
-            .feedback-btn {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.5rem;
-                background: #60a5fa;
-                /* Lighter Blue-400 */
-                color: white;
-                padding: 0.75rem 1.5rem;
-                border-radius: 12px;
-                text-decoration: none;
-                font-weight: 600;
-                box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
-                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            .feedback-btn:hover {
-                background: #3b82f6;
-                /* Blue-500 */
-                transform: translateY(-2px);
-                box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
-            }
-
-            .feedback-btn:active {
-                transform: translateY(0);
-            }
-
-            .feedback-hint {
-                margin-top: 0.5rem;
-                font-size: 0.8rem;
-                color: #94a3b8;
-            }
-
-            .footer-copyright {
-                font-size: 0.8rem;
-                color: #cbd5e1;
-            }
-
-            /* Animations */
-            @keyframes pulse-subtle {
-
-                0%,
-                100% {
-                    transform: scale(1);
-                }
-
-                50% {
-                    transform: scale(1.02);
-                }
-            }
-
-            .action-pulse:hover {
-                animation: pulse-subtle 2s infinite;
-            }
-
-            @media print {
-                .ui-pro-footer {
-                    display: none !important;
-                }
-            }
-
-            @media (min-width: 640px) {
-                .footer-main-card {
-                    flex-direction: row;
-                    justify-content: space-between;
-                    padding: 2.5rem;
-                    text-align: left;
-                }
-
-                .footer-action {
-                    text-align: right;
-                }
-            }
-        </style>
 
 </body>
 

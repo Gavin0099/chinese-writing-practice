@@ -8,15 +8,18 @@
     <title>雲端同步｜生字練習簿</title>
     <link rel="stylesheet" href="learning.css">
     <link rel="stylesheet" href="vocabulary.css">
+    <link rel="stylesheet" href="site-nav.css" media="screen">
     <script type="module" src="sync.mjs"></script>
 </head>
-<body>
+<body class="sync-page">
     <a class="skip-link" href="#main-content">跳到主要內容</a>
-    <header class="page-header">
-        <nav aria-label="學習工具">
-            <a href="vocabulary.html">本機老師詞庫</a>
-            <a href="learning.html">本機學習查詢</a>
-            <a href="backup.html">本機備份與還原</a>
+    <header class="page-header site-header">
+        <nav class="site-nav" aria-label="學習工具">
+            <a href="index.html">生字練習簿</a>
+            <a href="vocabulary.html">老師詞庫與出卷</a>
+            <a href="learning.html">國字學習查詢</a>
+            <a href="backup.html">備份與還原</a>
+            <a href="sync.html" aria-current="page">雲端同步</a>
         </nav>
     </header>
     <main id="main-content">
@@ -44,6 +47,10 @@
                     </form>
                 </details>
                 <p id="loginNotice" class="notice" role="status">正在確認登入狀態…</p>
+                <div class="sync-local-start">
+                    <p class="hint">尚未連線也能使用詞庫與出卷，資料會保留在這個瀏覽器。</p>
+                    <a class="primary-link" href="vocabulary.html">先使用本機老師詞庫</a>
+                </div>
                 <noscript><p class="hint">請啟用 JavaScript，或使用上方的本機工具。</p></noscript>
                 <div class="actions" id="accountActions" hidden>
                     <button type="button" id="linkGoogle" hidden>連結 Google 帳號</button>
@@ -55,7 +62,7 @@
                 <h2 id="workspaceHeading">家庭資料</h2>
                 <p class="notice" id="workspaceNotice" role="status"></p>
                 <div class="actions">
-                    <a href="vocabulary.html?cloud=1">開啟雲端詞庫</a>
+                    <a class="primary-link" href="vocabulary.html?cloud=1">開啟雲端詞庫</a>
                     <a href="learning.html?cloud=1">開啟雲端學習紀錄</a>
                     <button type="button" id="backupCloud">下載雲端備份</button>
                 </div>
@@ -63,14 +70,18 @@
                 <button type="button" id="migrateLocal" hidden>上傳本機紀錄到這個家庭</button>
             </section>
         </div>
-        <details id="projectSettings" class="panel subpanel" hidden>
-            <summary>開發環境連線設定</summary>
-            <form id="settingsForm" class="entry-form" autocomplete="off">
-                <label class="wide">專案網址<input name="url" type="url" required></label>
-                <label class="wide">Publishable Key<input name="key" type="text" spellcheck="false" required></label>
-                <div class="wide"><button type="submit">儲存連線設定</button></div>
-                <p id="settingsNotice" class="notice wide" role="status"></p>
-            </form>
+        <details class="panel subpanel sync-advanced">
+            <summary>進階：開發環境連線設定</summary>
+            <p class="hint">僅供自行架設服務時使用。一般練習與出卷不需要填寫。</p>
+            <details id="projectSettings" class="subpanel" hidden>
+                <summary>專案連線資料</summary>
+                <form id="settingsForm" class="entry-form" autocomplete="off">
+                    <label class="wide">專案網址<input name="url" type="url" required></label>
+                    <label class="wide">Publishable Key<input name="key" type="text" spellcheck="false" required></label>
+                    <div class="wide"><button type="submit">儲存連線設定</button></div>
+                    <p id="settingsNotice" class="notice wide" role="status"></p>
+                </form>
+            </details>
         </details>
     </main>
 </body>

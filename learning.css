@@ -132,3 +132,61 @@ button:disabled { cursor: default; }
 @media screen and (min-width: 48rem) {
     .storage-explainer { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 }
+
+/* Shared screen colors. Exam paper keeps the root aliases and inherited ink. */
+@media screen {
+    body { background-color: var(--ui-canvas); }
+    .tool-page, .page-header, #examControls, #previewError, .cloud-mode-status {
+        --ink: var(--ui-text);
+        --muted: var(--ui-muted);
+        --paper: var(--ui-canvas);
+        --line: var(--ui-divider);
+        --accent: var(--ui-primary);
+    }
+    .tool-page, .page-header, #examControls { color: var(--ui-text); }
+    .page-header { border-color: var(--ui-divider); }
+    .tool-page .panel, .tool-page .result-card, #examControls {
+        background-color: var(--ui-surface);
+        border-color: var(--ui-divider);
+    }
+    .tool-page .skip-link { background-color: var(--ui-surface); }
+    .tool-page .curriculum-import { background-color: var(--ui-surface-muted); }
+    .tool-page :is(select, textarea, input:not([type='checkbox'])) {
+        color: var(--ui-text);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+        caret-color: var(--ui-primary);
+    }
+    .tool-page input::placeholder, .tool-page textarea::placeholder { color: var(--ui-muted); }
+    .tool-page input[type='file']::file-selector-button {
+        color: var(--ui-primary);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+    }
+    .tool-page input[type='checkbox'] { accent-color: var(--ui-primary); }
+    .tool-page button, #examControls button {
+        color: var(--ui-primary);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-primary);
+    }
+    .tool-page button:not(.primary):hover { background-color: var(--ui-primary-soft); }
+    .tool-page button.primary, .tool-page .primary-link, #examControls button.primary {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+        border-color: var(--ui-primary);
+    }
+    .tool-page button.primary:hover, .tool-page .primary-link:hover, #examControls button.primary:hover {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary-hover);
+        border-color: var(--ui-primary-hover);
+    }
+    .tool-page a:not(.primary-link):hover, .page-header a:hover, #examControls a:hover {
+        color: var(--ui-primary-hover);
+    }
+    .tool-page .notice[data-error], #previewError[data-error], .cloud-mode-status[data-error] {
+        color: var(--ui-danger);
+    }
+    .tool-page :focus-visible, .page-header a:focus-visible, #examControls :focus-visible {
+        outline-color: var(--ui-focus);
+    }
+}

@@ -85,3 +85,23 @@ input[type='checkbox'] { min-height: 0; accent-color: var(--accent); }
     .book-actions .primary-link { flex-basis: 100%; }
     .exam-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* Color-only additions for the vocabulary and sync forms. */
+@media screen {
+    .tool-page .entry-form input:not([type='checkbox']), .tool-page .exam-form input {
+        color: var(--ui-text);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+    }
+    .tool-page .subpanel { background-color: var(--ui-surface-muted); }
+    .tool-page .blank-choices label { border-color: var(--ui-border); }
+    .tool-page .blank-choices label:has(:checked) {
+        border-color: var(--ui-primary);
+        background-color: var(--ui-primary-soft);
+    }
+    .tool-page .word-list .delete {
+        color: var(--ui-danger);
+        border-color: var(--ui-danger);
+    }
+    .tool-page .batch-rows [data-error] { color: var(--ui-danger); }
+}

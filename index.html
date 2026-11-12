@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#FAF8F4">
     <title>生字練習簿產生器</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="stroke-notice.css">
@@ -198,13 +199,13 @@
                                     <div style="font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.3;">📋</div>
                                     <h5 style="color: var(--text-dark); margin-bottom: 1rem;">練習簿配置已準備就緒</h5>
                                     <ul
-                                        style="text-align: left; display: inline-block; list-style: none; padding: 0; color: #666; font-size: 0.9rem; line-height: 1.8;">
+                                        style="text-align: left; display: inline-block; list-style: none; padding: 0; color: var(--ui-muted); font-size: 0.9rem; line-height: 1.8;">
                                         <li>● 格式：標準 A4 尺寸</li>
                                         <li>● 教材：康軒 113 學年度</li>
                                         <li>● 內容：筆順教學 + 描紅練習 + 自行書寫</li>
                                         <li>● 樣式：標準田字格</li>
                                     </ul>
-                                    <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #999;">按下列印即可取得純淨 A4 格式</p>
+                                    <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--ui-muted);">按下列印即可取得純淨 A4 格式</p>
                                 </div>
                             </div>
                         </div>
@@ -267,7 +268,7 @@
 
                     <p>💡 <strong>重點提醒</strong>:只要字形結構正確、筆畫清晰,就是正確的寫法。筆順略有差異不影響學習成效。</p>
 
-                    <p style="font-size: 13px; color: #666; margin-top: 16px;">
+                    <p style="font-size: 13px; color: var(--ui-muted); margin-top: 16px;">
                         ℹ️ 若您發現與學校課本有明顯差異,建議以學校教材為主要參考。
                     </p>
                 </div>
@@ -332,9 +333,9 @@
             .ui-pro-footer {
                 margin-top: 4rem;
                 padding: 3rem 1rem;
-                background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
-                border-top: 1px solid #e2e8f0;
-                color: #475569;
+                background: linear-gradient(to bottom, var(--ui-canvas), var(--ui-surface-muted));
+                border-top: 1px solid var(--ui-divider);
+                color: var(--ui-muted);
                 font-family: 'Segoe UI', system-ui, sans-serif;
             }
 
@@ -347,36 +348,36 @@
             /* Source Credit */
             .source-credit {
                 font-size: 0.85rem;
-                color: #94a3b8;
+                color: var(--ui-muted);
                 line-height: 1.6;
                 margin-bottom: 2rem;
             }
 
             .source-credit a {
-                color: #64748b;
+                color: var(--ui-primary);
                 text-decoration: underline;
-                text-decoration-color: #cbd5e1;
+                text-decoration-color: var(--ui-divider);
                 transition: color 0.2s;
             }
 
             .source-credit a:hover {
-                color: #334155;
+                color: var(--ui-primary-hover);
             }
 
             .license-badge {
                 display: inline-block;
-                background: #f0fdf4;
-                color: #166534;
+                background: var(--ui-primary-soft);
+                color: var(--ui-primary);
                 padding: 0.25rem 0.75rem;
                 border-radius: 999px;
                 font-size: 0.75rem;
                 margin-top: 0.5rem;
-                border: 1px solid #bbf7d0;
+                border: 1px solid var(--ui-divider);
             }
 
             .footer-divider {
                 height: 1px;
-                background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+                background: linear-gradient(90deg, transparent, var(--ui-divider), transparent);
                 margin: 0 auto 2.5rem auto;
                 width: 60%;
             }
@@ -387,7 +388,7 @@
                 border-radius: 16px;
                 padding: 2rem;
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-                border: 1px solid #f1f5f9;
+                border: 1px solid var(--ui-divider);
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -404,7 +405,7 @@
 
             .author-icon {
                 font-size: 2rem;
-                background: #eff6ff;
+                background: var(--ui-primary-soft);
                 width: 3.5rem;
                 height: 3.5rem;
                 border-radius: 50%;
@@ -415,7 +416,7 @@
 
             .author-text h4 {
                 margin: 0 0 0.25rem 0;
-                color: #1e293b;
+                color: var(--ui-text);
                 font-size: 1.1rem;
                 font-weight: 600;
             }
@@ -423,7 +424,7 @@
             .author-text p {
                 margin: 0;
                 font-size: 0.9rem;
-                color: #64748b;
+                color: var(--ui-muted);
                 line-height: 1.4;
             }
 
@@ -432,22 +433,20 @@
                 display: inline-flex;
                 align-items: center;
                 gap: 0.5rem;
-                background: #60a5fa;
-                /* Lighter Blue-400 */
-                color: white;
+                background: var(--ui-primary);
+                color: var(--ui-on-primary);
                 padding: 0.75rem 1.5rem;
                 border-radius: 12px;
                 text-decoration: none;
                 font-weight: 600;
-                box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+                box-shadow: 0 4px 6px -1px rgba(var(--ui-primary-rgb), 0.2);
                 transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
             .feedback-btn:hover {
-                background: #3b82f6;
-                /* Blue-500 */
+                background: var(--ui-primary-hover);
                 transform: translateY(-2px);
-                box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+                box-shadow: 0 10px 15px -3px rgba(var(--ui-primary-rgb), 0.3);
             }
 
             .feedback-btn:active {
@@ -457,12 +456,12 @@
             .feedback-hint {
                 margin-top: 0.5rem;
                 font-size: 0.8rem;
-                color: #94a3b8;
+                color: var(--ui-muted);
             }
 
             .footer-copyright {
                 font-size: 0.8rem;
-                color: #cbd5e1;
+                color: var(--ui-muted);
             }
 
             /* Animations */

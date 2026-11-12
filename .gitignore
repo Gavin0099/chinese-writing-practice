@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+.agents/skills/impeccable/
 supabase/.temp/
 supabase/.branches/
 

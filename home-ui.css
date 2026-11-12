@@ -1,0 +1,135 @@
+/* Home controls only. Never apply this theme to the rendered worksheet. */
+@media screen {
+    :root {
+        --primary-sage: var(--accent);
+        --primary-sage-dark: var(--ink);
+        --text-dark: var(--accent);
+        --text-main: var(--ink);
+        --text-muted: var(--muted);
+    }
+    body { background: var(--paper); }
+    .hero-section { padding: 1.5rem 0 0; }
+    .hero-section > .container { width: min(calc(100% - 2rem), 64rem); max-width: none; padding: 0; margin-inline: auto; }
+    .home-start, .home-help, .settings-card, .onboarding-card, .ui-pro-footer,
+    .empty-state, .line-guide-content { font-family: var(--ui-font); color: var(--ink); line-height: 1.6; }
+    .home-start, .home-help, .settings-card, .onboarding-card, .ui-pro-footer { text-align: left; }
+    .home-intro { margin-bottom: 1.5rem; }
+    .home-intro h1 { margin: 0 0 .5rem; font-size: var(--ui-title); line-height: 1.25; font-weight: 700; text-wrap: balance; }
+    .home-intro p { margin: 0; color: var(--muted); }
+    .primary-tasks { display: grid; gap: .75rem; align-items: start; }
+    .task-card { min-width: 0; padding: 1rem; background: var(--surface); border: 1px solid var(--line); border-radius: .85rem; }
+    .task-card h2 { margin: 0 0 .5rem; font-size: var(--ui-heading); font-weight: 700; line-height: 1.4; }
+    .task-description, .course-summary { margin: 0 0 .75rem; color: var(--muted); }
+    .course-summary { display: flex; flex-wrap: wrap; gap: 0 .75rem; }
+    .hero-subtitle, .hero-title { margin: 0; font-size: var(--ui-body); font-weight: 400; line-height: 1.6; color: var(--muted); }
+    .hero-hint, .task-hint { display: none; margin: .5rem 0 0; color: var(--muted); font-size: var(--ui-small); }
+    .hero-actions .icon, .hero-hint .icon-shield { display: none; }
+    .card-loading { color: var(--muted); padding-block: .75rem; }
+    .btn-primary-hero, .task-action, #generateBtn, .feedback-btn, .stroke-modal-button {
+        display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+        min-height: 44px; min-width: 44px; padding: .6rem 1rem;
+        border: 1px solid var(--accent); border-radius: .4rem;
+        background: var(--accent); color: var(--surface);
+        font: 600 var(--ui-body) / 1.5 var(--ui-font); text-align: center; text-decoration: none; cursor: pointer;
+    }
+    .btn-primary-hero, .task-action { width: 100%; }
+    .btn-primary-hero:hover, .task-action:hover, #generateBtn:hover, .feedback-btn:hover, .stroke-modal-button:hover {
+        background: var(--ink); border-color: var(--ink); color: var(--surface);
+    }
+    .btn-primary-hero:disabled { background: var(--paper); color: var(--muted); border-color: var(--line); cursor: default; }
+    .btn-text {
+        display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px;
+        padding: .5rem; border: 0; border-radius: .4rem; background: transparent; color: var(--accent);
+        font: inherit; text-decoration: underline; text-underline-offset: .2em; cursor: pointer;
+    }
+    .btn-text:hover { background: var(--paper); color: var(--ink); }
+    .secondary-actions { margin-top: .75rem; }
+    #toggleCustomBtn { padding-inline: 0; text-align: left; }
+    #toggleCustomBtn::after { content: '+'; margin-left: .5rem; font-size: var(--ui-heading); }
+    #toggleCustomBtn[aria-expanded='true']::after { content: '−'; }
+    .reset-action { font-size: var(--ui-small); color: var(--muted); }
+    #legacyControls { scroll-margin-top: 1rem; }
+    /* Required when PDF export temporarily reveals a collapsed preview. */
+    #legacyControls.show-controls { display: block !important; }
+    .settings-card { text-align: left; }
+    .settings-card h5, .empty-state h5 { font-size: var(--ui-heading); font-weight: 700; }
+    .settings-card .form-label { margin-bottom: .5rem; font-size: var(--ui-body); font-weight: 600; color: var(--ink); }
+    .settings-card :is(select, textarea) { min-height: 44px; font-size: var(--ui-body); color: var(--ink); background-color: var(--surface); border-color: var(--control-border); }
+    .settings-card textarea::placeholder { color: var(--muted); opacity: 1; }
+    .grade-selector, .grade-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
+    .grade-card, .ob-btn {
+        min-width: 44px; min-height: 44px; padding: .6rem .4rem;
+        border: 1px solid var(--control-border); border-radius: .4rem;
+        background: var(--surface); color: var(--ink); font: inherit; cursor: pointer;
+    }
+    .grade-card:hover, .ob-btn:hover { border-color: var(--accent); background: var(--paper); }
+    .grade-card.active, .ob-btn.active { color: var(--surface); background: var(--accent); border-color: var(--accent); }
+    .empty-state { padding: 2rem 1rem; color: var(--muted); background: var(--surface); }
+    .empty-state h5 { margin-bottom: 1rem; color: var(--ink); }
+    .empty-state ul { display: inline-block; padding: 0; text-align: left; list-style: none; }
+    .empty-state p { margin: 1rem 0 0; }
+    .onboarding-overlay {
+        position: fixed; inset: 0; z-index: 9999; display: flex;
+        align-items: safe center; justify-content: center; overflow-y: auto;
+        padding: 1rem; background: var(--paper);
+    }
+    .onboarding-card { width: 100%; max-width: 32rem; margin-block: auto; padding: 1.25rem; border: 1px solid var(--line); border-radius: .85rem; background: var(--surface); }
+    .onboarding-card h2 { font-size: var(--ui-heading); font-weight: 700; margin-bottom: .5rem; }
+    .onboarding-card p { color: var(--muted); margin-bottom: 1rem; }
+    .onboarding-q { margin-top: 1rem; }
+    .onboarding-q label { display: block; margin-bottom: .5rem; font-weight: 600; }
+    .sem-toggle { display: flex; gap: .5rem; }
+    .sem-toggle .ob-btn { flex: 1; }
+    .onboarding-link { margin-top: .5rem; }
+    .onboarding-tools { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+    .onboarding-tools a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; padding: .5rem; color: var(--accent); }
+    .hero-section > .home-help { margin-top: 1.5rem; }
+    .stroke-notice-details { max-width: 44rem; border-top: 1px solid var(--line); }
+    .stroke-notice-details summary { min-height: 44px; padding: .75rem 0; color: var(--accent); cursor: pointer; }
+    .stroke-modal { padding: .5rem 0 1rem; }
+    .stroke-modal-header { margin-bottom: 1rem; }
+    .stroke-modal-title { font-size: var(--ui-heading); font-weight: 700; }
+    .stroke-modal-subtitle { color: var(--muted); font-size: var(--ui-small); }
+    .stroke-modal-content { max-width: 65ch; }
+    .stroke-modal-example { padding: 1rem; background: var(--surface); margin-block: 1rem; border-radius: .85rem; }
+    .stroke-modal-example-char { font-family: 'edukai', 'DFKai-SB', serif; font-size: var(--ui-title); }
+    .stroke-modal-example-text { margin: .5rem 0 0; }
+    .ui-pro-footer { width: 100%; margin-top: 2rem; padding: 2rem 1rem; border-top: 1px solid var(--line); font-size: var(--ui-small); color: var(--muted); }
+    .footer-container { max-width: 64rem; margin: 0 auto; }
+    .source-credit { max-width: 70ch; }
+    .source-credit p { margin: 0 0 .5rem; }
+    .source-credit a { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; color: var(--accent); text-underline-offset: .2em; }
+    .footer-divider { height: 1px; background: var(--line); margin: 1.5rem 0; }
+    .footer-main-card { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem; }
+    .author-text h4 { font-size: var(--ui-body); font-weight: 700; color: var(--ink); margin: 0 0 .5rem; }
+    .author-text p { margin: 0; }
+    .feedback-btn .btn-text { padding: 0; min-height: auto; color: inherit; background: transparent; text-decoration: none; }
+    .feedback-hint, .footer-copyright { margin-top: .75rem; }
+    .success-state .hero-subtitle { color: var(--ink); }
+    .success-state :is(.btn-text, .btn-primary-hero) { font-size: var(--ui-body) !important; }
+    #debugToggleBtn { opacity: 1 !important; color: var(--accent) !important; }
+    .line-guide-overlay { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; padding: 1rem; background: var(--paper); }
+    .line-guide-content { width: min(100%, 28rem); max-height: 100%; overflow-y: auto; padding: 1.5rem; background: var(--surface); border: 1px solid var(--line); border-radius: .85rem; }
+    .line-guide-title { font-size: var(--ui-heading); font-weight: 700; margin-bottom: 1rem; }
+    .line-guide-step { display: flex; gap: .75rem; margin-bottom: 1rem; }
+    .step-number { font-weight: 700; color: var(--accent); }
+    .line-guide-close { min-width: 44px; min-height: 44px; padding: .6rem 1rem; border: 1px solid var(--accent); border-radius: .4rem; background: var(--accent); color: var(--surface); }
+    .skip-link { position: absolute; top: .5rem; left: 1rem; z-index: 10001; padding: .75rem 1rem; background: var(--surface); color: var(--accent); transform: translateY(-200%); }
+    .skip-link:focus { transform: none; }
+    :is(.home-start, .home-help, .settings-card, .onboarding-card, .ui-pro-footer, .line-guide-content) :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; box-shadow: none; }
+    :is(.home-start, .home-help, .settings-card, .onboarding-card, .ui-pro-footer) ::selection { background: var(--accent); color: var(--surface); }
+    .settings-card :is(textarea, select) { caret-color: var(--accent); }
+    @media (max-width: 42rem) {
+        #legacyControls .col-lg-8 { overflow-x: auto; }
+    }
+    @media (min-width: 52rem) {
+        .hero-section { padding-top: 2rem; }
+        .home-intro { margin-bottom: 2rem; }
+        .primary-tasks { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+        .task-card { padding: 1.25rem; }
+        .task-description, .course-summary { min-height: 3.2em; }
+        .course-summary { display: block; }
+        .hero-hint, .task-hint { display: block; }
+        .onboarding-card { padding: 2rem; }
+    }
+}

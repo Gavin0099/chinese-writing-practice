@@ -15,6 +15,11 @@ const dateFormat = new Intl.DateTimeFormat('zh-TW', { dateStyle: 'short', timeSt
 const filter = byId('lessonFilter');
 const query = new URL(location.href);
 const main = document.querySelector('main');
+const storageNotice = byId('storageNotice');
+storageNotice.textContent = cloud
+    ? '雲端詞庫 · 目前開啟家庭資料。儲存成功後會顯示「已同步」。'
+    : '本機詞庫 · 儲存於這個瀏覽器。換裝置請使用本機備份，或前往「資料與同步」。';
+storageNotice.hidden = false;
 let data = { books: [], words: [], exams: [] };
 let activeId = query.searchParams.get('book');
 let editingId = null;
@@ -78,7 +83,7 @@ function clearEditor(lesson = wordFields.lesson.value) {
     editingId = null;
     wordForm.reset();
     wordFields.lesson.value = lesson || '1';
-    byId('wordHeading').textContent = '新增詞語';
+    byId('wordHeading').textContent = '單筆新增詞語';
     byId('saveWord').textContent = '儲存詞語';
     byId('cancelEdit').hidden = true;
     dirty = false;
@@ -108,12 +113,13 @@ function editWord(entry) {
 
 function renderWords() {
     const words = ownWords();
+    byId('emptyBookHint').hidden = !activeId || words.length > 0;
     const current = filter.value;
     const lessons = [...new Set(words.map(entry => entry.lesson))].sort((a, b) => a - b);
     filter.replaceChildren(new Option('全部課次', ''), ...lessons.map(lesson => new Option(`第 ${lesson} 課`, lesson)));
     if (lessons.includes(Number(current))) filter.value = current;
     const shown = words.filter(entry => !filter.value || entry.lesson === Number(filter.value)).sort((a, b) => a.lesson - b.lesson);
-    notice('listCount', shown.length ? `${shown.length} 個詞語 · ${shown.filter(entry => entry.confirmed).length} 個可出題` : '這裡還沒有詞語。');
+    notice('listCount', shown.length ? `${shown.length} 個詞語 · ${shown.filter(entry => entry.confirmed).length} 個已核對注音` : '尚無詞語。請從「單筆新增」或「批次貼上」開始。');
     byId('wordList').replaceChildren(...shown.map(entry => {
         const row = document.createElement('li');
         const text = document.createElement('div');
@@ -123,7 +129,7 @@ function renderWords() {
         meta.className = 'word-meta';
         const chars = Array.from(entry.word);
         const targets = entry.blanks.map(position => chars[position - 1]).join('、');
-        meta.textContent = `第 ${entry.lesson} 課 · 挖空 ${targets} · ${entry.confirmed ? '已確認' : '待確認'}`;
+        meta.textContent = `第 ${entry.lesson} 課 · 挖空 ${targets} · ${entry.confirmed ? '已核對注音' : '待核對注音'}`;
         const reading = document.createElement('p');
         reading.className = 'word-meta';
         reading.textContent = entry.pronunciation.join('　') || '尚未填寫注音';
@@ -161,6 +167,8 @@ function renderBooks() {
     bookSelect.disabled = !activeId;
     byId('bookWorkspace').hidden = !activeId;
     byId('goToExam').hidden = !activeId;
+    byId('bookActions').hidden = !activeId;
+    byId('bookStartHint').hidden = Boolean(activeId);
     if (activeId) {
         bookSelect.value = activeId;
         query.searchParams.set('book', activeId);
@@ -195,7 +203,7 @@ bookForm.addEventListener('submit', async event => {
         batchForm.reset();
         clearBatch();
         renderBooks();
-        notice('bookNotice', `已建立「${book.name}」。`);
+        notice('bookNotice', `已建立「${book.name}」，${cloud ? '已同步至家庭雲端' : '已儲存至此瀏覽器'}。接著新增或批次貼上詞語。`);
         bookSelect.focus();
     } catch (error) {
         notice('bookNotice', error.message, true);
@@ -232,7 +240,7 @@ wordForm.addEventListener('submit', async event => {
         filter.value = '';
         clearEditor(entry.lesson);
         renderWords();
-        notice('wordNotice', `${cloud ? '已同步' : '已儲存'}「${entry.word}」。`);
+        notice('wordNotice', `「${entry.word}」${cloud ? '已同步至家庭雲端' : '已儲存至此瀏覽器'}。`);
         wordFields.word.focus();
     } catch (error) {
         notice('wordNotice', error.message, true);
@@ -245,6 +253,17 @@ byId('cancelEdit').addEventListener('click', () => {
     wordFields.word.focus();
 });
 filter.addEventListener('change', renderWords);
+
+// Shortcuts only reveal and focus the existing forms; they never submit or reset them.
+byId('goToWord').addEventListener('click', event => {
+    event.preventDefault();
+    wordFields.word.focus();
+});
+byId('goToBatch').addEventListener('click', event => {
+    event.preventDefault();
+    byId('batchDetails').open = true;
+    batchForm.elements.words.focus();
+});
 
 batchForm.addEventListener('input', event => {
     if (event.target !== byId('batchConfirm')) clearBatch();
@@ -279,7 +298,7 @@ byId('commitBatch').addEventListener('click', async () => {
     batchForm.elements.words.value = batch.filter(row => row.error).map(row => original[row.line - 1]).join('\n');
     clearBatch();
     renderWords();
-    notice('batchNotice', `已儲存 ${accepted.length} 個詞語，${ready} 個可出題。`);
+    notice('batchNotice', `已儲存 ${accepted.length} 個詞語，${ready} 個已核對注音。${cloud ? '已同步至家庭雲端' : '資料保存在此瀏覽器'}。`);
 });
 
 function examSettings() {
@@ -293,7 +312,7 @@ function renderPool() {
         const { from, to } = examSettings();
         const { available, ambiguous } = questionPool(ownWords(), activeId, from, to);
         const excluded = ambiguous ? `。${ambiguous} 組提示會對到多個答案，已排除` : '';
-        notice('examPool', `這個範圍有 ${available.length} 題可抽${excluded}。`);
+        notice('examPool', `這個範圍有 ${available.length} 題可抽${excluded}。${available.length ? '' : '請先新增並核對詞語，或調整課次範圍。'}`);
     } catch (error) {
         notice('examPool', error.message, true);
     }
@@ -338,7 +357,7 @@ examForm.addEventListener('submit', async event => {
             book, words: state.words, seed }));
     }, 'examNotice')) return;
     renderExams();
-    notice('examNotice', `${cloud ? '已同步' : '已儲存'} ${examSettings().count} 題。可在下方開啟考卷與解答。`);
+    notice('examNotice', `已產生 ${examSettings().count} 題，${cloud ? '已同步至家庭雲端' : '已儲存至此瀏覽器'}。接著開啟已儲存的考卷與解答。`);
     byId('examList').querySelector('a')?.focus();
 });
 

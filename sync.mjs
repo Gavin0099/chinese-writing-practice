@@ -266,7 +266,7 @@ try {
             byId('googleSignIn').hidden = false;
             byId('localEmailTest').hidden = !localEmail;
             emailForm.hidden = !localEmail;
-            notice('loginNotice', '');
+            notice('loginNotice', '尚未登入雲端。本機資料仍在這個瀏覽器，可繼續使用上方的本機工具。');
         }
         if (callbackError) notice('loginNotice', callbackError, true);
         if (linked && !returnTo) notice('loginNotice', 'Google 已連結。這個帳號可以繼續開啟同一份家庭資料。');

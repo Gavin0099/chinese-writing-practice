@@ -7,16 +7,17 @@
     <link rel="stylesheet" href="learning.css">
     <script type="module" src="learning.mjs"></script>
 </head>
-<body>
+<body class="tool-page learning-page">
+    <a class="skip-link" href="#main-content">跳到國字查詢</a>
     <header class="page-header">
         <nav aria-label="工具" class="actions">
-            <a href="index.html">← 生字練習簿</a>
-            <a href="vocabulary.html">老師詞庫與出卷</a>
-            <a href="backup.html">備份與還原</a>
-            <a href="sync.html">雲端同步</a>
+            <a href="index.html">練習紙</a>
+            <a href="vocabulary.html">老師詞庫</a>
+            <a href="backup.html">本機備份</a>
+            <a href="sync.html">資料與同步</a>
         </nav>
     </header>
-    <main>
+    <main id="main-content" tabindex="-1">
         <h1>國字學習查詢</h1>
         <p class="intro">依家長確認的課次查詢教材，並記下孩子還需要練習的字。</p>
 
@@ -57,7 +58,7 @@
                         <button type="button" id="showRecords" hidden>查看習寫紀錄</button>
                     </div>
                 </form>
-                <p class="hint">查詢文字與習寫紀錄只在此瀏覽器處理。</p>
+                <p class="hint">查詢文字在此瀏覽器處理。習寫紀錄在本機模式存於此瀏覽器；從雲端入口開啟時，儲存至家庭雲端，以儲存結果訊息為準。</p>
             </section>
         </div>
 

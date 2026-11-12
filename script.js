@@ -8,10 +8,10 @@ let renderedWorksheetLesson = null;
 // --- LINE Visual Guide Injector ---
 (function injectLineGuide() {
     const guideHtml = `
-        <div id="lineGuide" class="line-guide-overlay">
+        <div id="lineGuide" class="line-guide-overlay" role="dialog" aria-modal="true" aria-labelledby="lineGuideTitle">
             <div class="line-guide-content">
                 <div class="line-guide-icon">💡</div>
-                <div class="line-guide-title">使用 Safari / Chrome 開啟</div>
+                <div id="lineGuideTitle" class="line-guide-title">使用 Safari / Chrome 開啟</div>
                 <div class="line-guide-step">
                     <div class="step-number">1</div>
                     <div class="step-text">點擊右下角的 <b>「分享」</b> 按鈕 (或三個點)</div>
@@ -23,7 +23,7 @@ let renderedWorksheetLesson = null;
                 <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 1rem;">
                     LINE 內建瀏覽器限制較多，切換至系統瀏覽器即可正常列印與下載 PDF。
                 </p>
-                <button class="line-guide-close" onclick="document.getElementById('lineGuide').style.display='none'">我知道了</button>
+                <button class="line-guide-close" onclick="closeLineGuide()">我知道了</button>
             </div>
         </div>
     `;
@@ -32,10 +32,47 @@ let renderedWorksheetLesson = null;
     document.body.appendChild(div.firstElementChild);
 })();
 
+let lineGuideReturnFocus = null;
+
 function showLineGuide() {
     const guide = document.getElementById('lineGuide');
-    if (guide) guide.style.display = 'flex';
+    if (guide) {
+        lineGuideReturnFocus = document.activeElement;
+        guide.style.display = 'flex';
+        guide.querySelector('button').focus();
+    }
 }
+
+function closeLineGuide() {
+    document.getElementById('lineGuide').style.display = 'none';
+    lineGuideReturnFocus?.focus();
+}
+
+// Keep keyboard focus in the visible overlay, with Escape always available.
+document.addEventListener('keydown', event => {
+    const stroke = document.getElementById('strokeNoticeModal');
+    const line = document.getElementById('lineGuide');
+    const onboarding = document.getElementById('onboardingModal');
+    const overlay = stroke?.classList.contains('active') ? stroke
+        : line?.style.display === 'flex' ? line
+        : onboarding?.style.display === 'flex' ? onboarding : null;
+    if (!overlay) return;
+    if (event.key === 'Escape') {
+        event.preventDefault();
+        if (overlay === stroke) closeStrokeNoticeModal();
+        else if (overlay === line) closeLineGuide();
+        else document.getElementById('obDismissBtn').click();
+    } else if (event.key === 'Tab') {
+        const targets = [...overlay.querySelectorAll('a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), summary')]
+            .filter(element => element.getClientRects().length);
+        const first = targets[0];
+        const last = targets.at(-1);
+        if (!overlay.contains(document.activeElement) || (event.shiftKey && document.activeElement === first) || (!event.shiftKey && document.activeElement === last)) {
+            event.preventDefault();
+            (event.shiftKey ? last : first)?.focus();
+        }
+    }
+});
 
 // --- Hybrid Print Mode Detector (v8.5) ---
 (function detectPrintMode() {
@@ -77,6 +114,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const startBtn = document.getElementById('obStartBtn');
         if (modal) {
             modal.style.display = 'flex';
+            modal.querySelector('a[href]').focus();
+            document.getElementById('obDismissBtn').onclick = () => {
+                modal.style.display = 'none';
+                initApp();
+                document.getElementById('homeVocabularyLink').focus();
+            };
 
             let selectedGrade = null;
             let selectedSem = null;
@@ -120,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 modal.style.display = 'none';
                 initApp(); // Start the app
+                document.getElementById('heroActionBtn').focus();
             };
             return; // Stop here, initApp will be called by startBtn
         }

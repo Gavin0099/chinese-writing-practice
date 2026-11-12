@@ -5,10 +5,16 @@
 /**
  * 顯示筆順說明 Modal
  */
+let strokeNoticeReturnFocus = null;
+
 function showStrokeNoticeModal() {
     const overlay = document.getElementById('strokeNoticeModal');
     if (overlay) {
+        strokeNoticeReturnFocus = document.activeElement;
+        overlay.inert = false;
+        overlay.removeAttribute('aria-hidden');
         overlay.classList.add('active');
+        overlay.querySelector('button').focus();
     }
 }
 
@@ -19,6 +25,9 @@ function closeStrokeNoticeModal() {
     const overlay = document.getElementById('strokeNoticeModal');
     if (overlay) {
         overlay.classList.remove('active');
+        overlay.inert = true;
+        overlay.setAttribute('aria-hidden', 'true');
+        strokeNoticeReturnFocus?.focus();
     }
 }
 

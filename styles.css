@@ -1945,3 +1945,61 @@ body {
         border-left: 1px dashed #3B4CCA !important;
     }
 }
+
+/* UX task 2: target only the screen's task entry and controls, never worksheet ancestors. */
+@media screen {
+    .minimal-header .main-tools { gap: .25rem .75rem; }
+    .minimal-header .main-tools a, #toggleCustomBtn,
+    #onboardingModal :is(a, button), #lineGuide button, #strokeNoticeModal button {
+        min-height: 44px;
+        min-width: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+    .minimal-header .main-tools a, #toggleCustomBtn, #onboardingModal .btn-text { color: #305b47; }
+    .home-task-entry {
+        width: 100%;
+        max-width: 46rem;
+        margin: 0 auto 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #d5dfd5;
+        text-align: left;
+    }
+    .home-task-entry h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.5; text-wrap: balance; color: #24352d; }
+    .home-task-entry p { margin: .5rem 0 1rem; font-size: 1rem; line-height: 1.6; color: #52645a; }
+    .home-task-entry .task-primary, #onboardingModal .task-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: .75rem 1.25rem;
+        background: #305b47;
+        color: white;
+        border-radius: .5rem;
+        font-size: 1rem;
+        font-weight: 700;
+        text-decoration: none;
+    }
+    .home-task-entry .task-primary:hover, #onboardingModal .task-primary:hover { background: #254a39; }
+    #onboardingModal { overflow-y: auto; padding: 1rem; }
+    #onboardingModal .onboarding-card { padding: 1.5rem; border-radius: 1rem; max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); overflow-y: auto; text-align: left; }
+    #onboardingModal h2 { font-size: 1.75rem; line-height: 1.4; }
+    #onboardingModal p { font-size: 1rem; line-height: 1.6; opacity: 1; color: #52645a; }
+    #onboardingModal .onboarding-section-title { margin: 1.25rem 0 .5rem; padding-top: 1.25rem; border-top: 1px solid #d5dfd5; font-size: 1.125rem; font-weight: 700; }
+    #onboardingModal .onboarding-q { margin-top: .75rem; }
+    #onboardingModal .onboarding-q label { margin-bottom: .5rem; font-size: 1rem; color: #24352d; }
+    #onboardingModal .ob-btn { padding: .5rem; border-radius: .5rem; }
+    #onboardingModal #obStartBtn { border-radius: .5rem; background: #305b47; padding: .75rem; }
+    #onboardingModal #obStartBtn:disabled { background: #e2e8e4; color: #52645a; box-shadow: none; cursor: default; }
+    #obDismissBtn { width: 100%; margin-top: .25rem; }
+    #strokeNoticeModal .stroke-modal, #lineGuide .line-guide-content { max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); overflow-y: auto; }
+    .minimal-header :focus-visible, .home-task-entry :focus-visible, #toggleCustomBtn:focus-visible,
+    #onboardingModal :focus-visible, #strokeNoticeModal :focus-visible, #lineGuide :focus-visible,
+    #legacyControls .col-lg-4 :focus-visible, #heroActionBtn:focus-visible {
+        outline: 3px solid #305b47;
+        outline-offset: 3px;
+    }
+    #legacyControls .col-lg-4 :is(button, select, textarea) { min-height: 44px; min-width: 44px; font-size: 1rem; }
+}

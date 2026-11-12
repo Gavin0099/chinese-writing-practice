@@ -62,3 +62,73 @@ button:disabled { cursor: default; }
     .panels, .result-card { grid-template-columns: 1fr; }
     .character { display: flex; align-items: baseline; gap: .5rem; }
 }
+
+/* UX task 2: screen controls only; exam pages and printed output inherit none of these rules. */
+@media screen {
+    .page-header { padding-block: .375rem; }
+    .tool-page .page-header nav { display: flex; flex-wrap: wrap; gap: .25rem .5rem; }
+    .page-header a, .tool-page .actions a, .storage-explainer a {
+        display: inline-flex;
+        align-items: center;
+        min-width: 44px;
+        min-height: 44px;
+        padding: .375rem .25rem;
+    }
+    .tool-page main { padding-top: 1.5rem; }
+    .tool-page h1 { font-size: clamp(1.75rem, 4vw, 2.25rem); text-wrap: balance; }
+    .tool-page h2 { line-height: 1.4; }
+    .tool-page .intro { margin-bottom: 1rem; max-width: 44rem; }
+    .tool-page .hint, .tool-page .notice { font-size: 1rem; }
+    .tool-page .panel > .hint { margin-bottom: .75rem; }
+    .tool-page :is(button, select, input:not([type='checkbox']), summary),
+    #examControls :is(button, a) { min-height: 44px; min-width: 44px; }
+    .tool-page :is(input, select, textarea, button), #examControls button { font-size: 1rem; }
+    .tool-page summary { padding-block: .5rem; font-weight: 650; }
+    .tool-page input::placeholder, .tool-page textarea::placeholder { color: #52645a; opacity: 1; }
+    .tool-page .primary-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: .5rem .75rem;
+        border: 1px solid var(--accent);
+        border-radius: .4rem;
+        background: var(--accent);
+        color: white;
+        font-weight: 650;
+        text-decoration: none;
+    }
+    .tool-page .primary-link:hover { background: #254a39; }
+    .tool-page :focus-visible, .page-header a:focus-visible, #examControls :focus-visible {
+        outline: 3px solid #305b47;
+        outline-offset: 3px;
+    }
+    .tool-page .skip-link {
+        position: absolute;
+        inset: .25rem auto auto 1rem;
+        z-index: 10;
+        padding: .5rem .75rem;
+        min-height: 44px;
+        background: white;
+        transform: translateY(-200%);
+    }
+    .tool-page .skip-link:focus { transform: none; }
+    .storage-note {
+        margin: 0 0 1.25rem;
+        padding: .75rem 0;
+        border-block: 1px solid var(--line);
+        color: var(--ink);
+        overflow-wrap: anywhere;
+    }
+    .storage-explainer { display: grid; gap: 1rem 2rem; padding-block: .25rem 1.5rem; }
+    .storage-explainer h2 { font-size: 1.125rem; margin-bottom: .375rem; }
+    .storage-explainer p { color: var(--muted); max-width: 40rem; }
+    .tool-page .cloud-mode-status { font-size: 1rem; }
+    .sync-page .panels:not(:has(#cloudWorkspace:not([hidden]))) { grid-template-columns: minmax(0, 1fr); max-width: 40rem; }
+    #examControls .actions { gap: .5rem; }
+    #examControls .actions a { display: inline-flex; align-items: center; padding: .5rem; }
+}
+
+@media screen and (min-width: 48rem) {
+    .storage-explainer { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}

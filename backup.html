@@ -4,20 +4,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#f6f8f3">
-    <title>備份與還原｜生字練習簿</title>
+    <title>本機備份與還原｜生字練習簿</title>
     <link rel="stylesheet" href="learning.css">
     <script type="module" src="backup.mjs"></script>
 </head>
-<body>
+<body class="tool-page backup-page">
+    <a class="skip-link" href="#main-content">跳到備份與還原</a>
     <header class="page-header">
         <nav class="actions" aria-label="學習工具">
-            <a href="vocabulary.html">老師詞庫與出卷</a>
-            <a href="learning.html">國字學習查詢</a>
+            <a href="vocabulary.html">本機老師詞庫</a>
+            <a href="learning.html">本機國字查詢</a>
+            <a href="sync.html">資料與同步</a>
         </nav>
     </header>
-    <main>
-        <h1>備份與還原</h1>
-        <p class="intro">把班級詞庫、考卷、教學進度和習寫紀錄存成一個檔案。換裝置後，可在同一頁選檔還原。</p>
+    <main id="main-content" tabindex="-1">
+        <h1>本機備份與還原</h1>
+        <p class="intro">把這個瀏覽器的班級詞庫、考卷、教學進度和習寫紀錄存成檔案。換裝置後，在同一頁選檔還原。</p>
+        <p class="storage-note">此頁只處理本機資料，不會寫入家庭雲端。雲端備份請到「資料與同步」下載。</p>
         <div class="panels">
             <section class="panel" aria-labelledby="exportHeading">
                 <h2 id="exportHeading">下載備份</h2>
@@ -30,9 +33,10 @@
                 <p class="notice" id="exportNotice" role="status"></p>
             </section>
             <section class="panel" aria-labelledby="restoreHeading">
-                <h2 id="restoreHeading">還原備份</h2>
+                <h2 id="restoreHeading">還原到這個瀏覽器</h2>
+                <p class="hint" id="restoreHelp">選檔後會先顯示內容摘要。確認還原會取代這個瀏覽器目前的紀錄，建議先下載本機備份。</p>
                 <label for="backupFile">選擇備份檔（JSON）</label>
-                <input id="backupFile" name="backup-file" type="file" accept=".json,application/json" aria-describedby="restoreNotice">
+                <input id="backupFile" name="backup-file" type="file" accept=".json,application/json" aria-describedby="restoreHelp restoreNotice">
                 <p class="notice" id="restoreNotice" role="status"></p>
                 <div class="actions">
                     <button type="button" class="primary" id="restoreBackup" hidden>還原這份備份</button>

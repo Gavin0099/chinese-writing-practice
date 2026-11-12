@@ -48,3 +48,40 @@ input[type='checkbox'] { min-height: 0; accent-color: var(--accent); }
     .exam-form { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .exam-form .seed-field { grid-column: 1 / -1; }
 }
+
+/* Screen-only workflow layout. No exam rendering or print styles are changed. */
+@media screen {
+    .book-bar h2 { margin-bottom: .5rem; }
+    #bookStartHint { margin: 0 0 .75rem; }
+    .book-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .5rem; margin-top: .75rem; }
+    .book-actions a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; padding: .5rem .25rem; font-weight: 650; }
+    .book-bar .subpanel { margin-top: .75rem; }
+    .vocabulary-page .exam-panel { margin: 0 0 1.5rem; }
+    .exam-workspace { display: grid; gap: 1.5rem; align-items: start; }
+    .exam-form { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
+    .exam-form .actions button { width: 100%; }
+    .exam-form .exam-advanced { margin-top: 0; }
+    #examHistory { margin-top: 0; }
+    #examHistory h3, #wordHeading { font-size: 1.125rem; line-height: 1.5; }
+    #wordHeading { margin: 1.5rem 0 .75rem; }
+    #batchDetails { margin-top: 0; }
+    #batchDetails[open] { margin-bottom: 1.5rem; }
+    #batchDetails summary { font-size: 1rem; }
+    #examHeading, #wordHeading, #batchDetails { scroll-margin-top: 1rem; }
+    .word-meta { font-size: 1rem; }
+    .word-list .actions { flex-shrink: 0; }
+    .blank-choices label, .entry-form label.check { min-width: 44px; min-height: 44px; }
+    .entry-form label.check { padding-block: .5rem; }
+    .entry-form input[type='checkbox'] { flex-shrink: 0; width: 1.125rem; height: 1.125rem; }
+    .exam-workspace #examHistory a { min-width: 44px; }
+}
+
+@media screen and (min-width: 52rem) {
+    .exam-workspace:has(#examHistory:not([hidden])) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; }
+    .exam-form { max-width: 40rem; }
+}
+
+@media screen and (max-width: 24rem) {
+    .book-actions .primary-link { flex-basis: 100%; }
+    .exam-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

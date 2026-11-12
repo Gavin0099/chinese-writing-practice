@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#f6f8f3">
     <meta name="referrer" content="no-referrer">
-    <title>雲端同步｜生字練習簿</title>
+    <title>資料保存與同步｜生字練習簿</title>
     <link rel="stylesheet" href="learning.css">
     <link rel="stylesheet" href="vocabulary.css">
     <script type="module" src="sync.mjs"></script>
 </head>
-<body>
+<body class="tool-page sync-page">
     <a class="skip-link" href="#main-content">跳到主要內容</a>
     <header class="page-header">
         <nav aria-label="學習工具">
@@ -19,12 +19,23 @@
             <a href="backup.html">本機備份與還原</a>
         </nav>
     </header>
-    <main id="main-content">
-        <h1>雲端同步</h1>
-        <p class="intro">在手機和電腦使用同一個帳號，開啟家庭的詞庫、考卷與學習紀錄。</p>
+    <main id="main-content" tabindex="-1">
+        <h1>資料保存與同步</h1>
+        <p class="intro">手機與電腦要共用資料，請使用同一個帳號開啟雲端詞庫。</p>
+        <section class="storage-explainer" aria-label="資料保存位置">
+            <div>
+                <h2>本機：留在這個瀏覽器</h2>
+                <p>本機詞庫不會因登入而自動上傳。換裝置可下載備份，再到另一台裝置還原。</p>
+                <a href="backup.html">本機備份與還原</a>
+            </div>
+            <div>
+                <h2>雲端：同帳號跨裝置使用</h2>
+                <p>登入後從「開啟雲端詞庫」進入。儲存後看到「已同步」，才代表那筆修改已存到家庭雲端。</p>
+            </div>
+        </section>
         <div class="panels">
             <section class="panel" aria-labelledby="loginHeading">
-                <h2 id="loginHeading">家庭帳號</h2>
+                <h2 id="loginHeading">雲端帳號</h2>
                 <div id="googleSignIn" hidden>
                     <button type="button" class="primary" id="googleButton">使用 Google 登入</button>
                     <p class="hint">已有雲端紀錄時，請選擇與原帳號相同的電子郵件，或先在原帳號內連結 Google。</p>
@@ -52,10 +63,10 @@
                 <button type="button" id="retrySync" hidden>重新連線</button>
             </section>
             <section class="panel" id="cloudWorkspace" aria-labelledby="workspaceHeading" hidden>
-                <h2 id="workspaceHeading">家庭資料</h2>
+                <h2 id="workspaceHeading">家庭雲端資料</h2>
                 <p class="notice" id="workspaceNotice" role="status"></p>
                 <div class="actions">
-                    <a href="vocabulary.html?cloud=1">開啟雲端詞庫</a>
+                    <a class="primary-link" href="vocabulary.html?cloud=1">開啟雲端詞庫</a>
                     <a href="learning.html?cloud=1">開啟雲端學習紀錄</a>
                     <button type="button" id="backupCloud">下載雲端備份</button>
                 </div>

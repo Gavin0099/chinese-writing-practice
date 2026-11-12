@@ -1,25 +1,42 @@
-/* Shared screen palette: ink teal and warm paper. Print keeps the original colors. */
+/* Shared screen palette: warm paper, mist blue, and a little coral.
+   Print, exam paper, 田字格, tracing, and stroke SVGs keep the original colors. */
 @media screen {
     :root {
-        --ui-canvas: #F7F5F0;
+        --ui-canvas: #FAF8F4;
         --ui-surface: #FFFFFF;
-        --ui-surface-muted: #EEF2EF;
-        --ui-primary-soft: #E4EFEC;
-        --ui-text: #243632;
-        --ui-muted: #52635D;
-        --ui-text-strong: #061510;
-        --ui-primary: #245D59;
-        --ui-primary-hover: #1B4946;
-        --ui-primary-active: #133A37;
+        --ui-surface-muted: #EDF3FA;
+        --ui-primary-soft: #EDF3FA;
+        --ui-text: #243444;
+        --ui-muted: #566675;
+        --ui-text-strong: #111820;
+        --ui-primary: #315F8C;
+        --ui-primary-hover: #244A72;
+        --ui-primary-active: #1D3B5B;
         --ui-on-primary: #FFFFFF;
-        --ui-border: #73847C;
-        --ui-divider: #CDD7D1;
-        --ui-focus: #8A4B24;
-        --ui-danger: #963C35;
-        --ui-warning: #795515;
-        --ui-warning-surface: #FFF2D6;
-        --ui-disabled-bg: #E1E6E2;
+        --ui-border: #71879A;
+        --ui-divider: #D1D6D9;
+        --ui-focus: #C86D4B;
+        --ui-danger: #A95133;
+        --ui-warning: #A95133;
+        --ui-warning-surface: #F5EAE3;
+        --ui-disabled-bg: #EDF3FA;
         --ui-inverse-highlight: rgba(255, 255, 255, 0.08);
-        --ui-primary-rgb: 36, 93, 89;
+        --ui-primary-rgb: 49, 95, 140;
+        --ui-accent: #C86D4B;
+        --ui-accent-text: #A95133;
+    }
+
+    /* Accent is for hints, milestones and small emphasis, never for every button.
+       box-shadow is used for the storage mark so layout boxes stay unchanged. */
+    #smartCard .hero-hint {
+        color: var(--ui-accent-text);
+    }
+    #smartCard .success-state .hero-title,
+    #smartCard .success-state h2.hero-title {
+        color: var(--ui-accent);
+    }
+    .tool-page #storageNotice.storage-note {
+        box-shadow: inset 3px 0 0 var(--ui-accent);
+        color: var(--ui-text);
     }
 }

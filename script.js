@@ -20,7 +20,7 @@ let renderedWorksheetLesson = null;
                     <div class="step-number">2</div>
                     <div class="step-text">選擇 <b>「在瀏覽器中開啟」</b> 或 <b>「使用 Safari 開啟」</b></div>
                 </div>
-                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 1rem;">
+                <p style="font-size: 0.85rem; color: var(--ui-accent-text); margin-top: 1rem;">
                     LINE 內建瀏覽器限制較多，切換至系統瀏覽器即可正常列印與下載 PDF。
                 </p>
                 <button class="line-guide-close" onclick="closeLineGuide()">我知道了</button>
@@ -262,7 +262,7 @@ function initApp() {
                         cardContent.innerHTML = `
                             <div class="success-state" style="animation: fadeIn 0.5s; padding: 2rem 0;">
                                 <div style="font-size: 4rem; margin-bottom: 1.5rem;">✅</div>
-                                <h2 class="hero-title" style="margin-bottom: 0.5rem; font-size: 2.2rem; color: var(--primary-sage);">練習簿已準備好</h2>
+                                <h2 class="hero-title" style="margin-bottom: 0.5rem; font-size: 2.2rem; color: var(--ui-accent);">練習簿已準備好</h2>
                                 <p class="hero-subtitle" style="margin-bottom: 2.5rem; opacity: 0.8;">
                                     <!-- Hidden Metadata for PDF Filename Engine -->
                                     <span id="heroSubTitle" style="display:none;">${rec.grade}年級 ${rec.semester === 'A' ? '上學期' : '下學期'}</span>
@@ -278,7 +278,7 @@ function initApp() {
                                     </button>
                                     
                                     <div style="display: flex; gap: 10px; width: 100%;">
-                                        <button onclick="location.reload()" class="btn-primary-hero" style="background-color: white; color: var(--text-dark); border: 2px solid #eee; flex: 1; font-size: 0.9rem;">
+                                        <button onclick="location.reload()" class="btn-primary-hero" style="background-color: white; color: var(--text-dark); border: 2px solid var(--ui-divider); flex: 1; font-size: 0.9rem;">
                                             明天再來
                                         </button>
                                         <button id="nextLessonBtn" class="btn-primary-hero" style="background-color: var(--primary-sage); flex: 1; font-size: 0.9rem;">
@@ -291,7 +291,7 @@ function initApp() {
                                     </button>
 
                                     <!-- Mobile Debug Toggle -->
-                                    <div style="margin-top: 1.5rem; border-top: 1px dashed #eee; padding-top: 1rem;">
+                                    <div style="margin-top: 1.5rem; border-top: 1px dashed var(--ui-divider); padding-top: 1rem;">
                                         <button id="debugToggleBtn" class="btn-text" style="font-size: 0.8rem; opacity: 0.5;">
                                             🔧 開啟列印除錯模式 (抓跳頁蟲)
                                         </button>
@@ -940,7 +940,7 @@ function createCharColumn(char) {
 // Dedicated Stroke Renderer using HanziWriter RAW Data (Static Mode)
 async function renderStrokeOrder(container, char) {
     if (!char) return;
-    container.innerHTML = '<div style="font-size:12px; color:#999; padding: 10px;">載入中...</div>';
+    container.innerHTML = '<div style="font-size:12px; color:var(--ui-muted); padding: 10px;">載入中...</div>';
 
     try {
         // 1. Fetch RAW Data using HanziWriter (MIT License - 可商業使用)
@@ -956,7 +956,7 @@ async function renderStrokeOrder(container, char) {
         const strokes = charData.strokes;
 
         if (!strokes || strokes.length === 0) {
-            container.innerHTML = '<span style="color:#ccc; font-size:10px;">無資料</span>';
+            container.innerHTML = '<span style="color:var(--ui-muted); font-size:10px;">無資料</span>';
             return;
         }
 

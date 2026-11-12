@@ -28,7 +28,7 @@ summary { cursor: pointer; color: var(--accent); }
 fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
 .course-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; margin-bottom: .8rem; }
 .course-fields .wide { grid-column: 1 / -1; }
-#catalogNotice:not(:empty), #retryCatalog { margin-bottom: .65rem; }
+#catalogNotice:not(:empty), #catalogMode, #retryCatalog { margin-bottom: .65rem; }
 label { display: block; font-weight: 620; }
 select, textarea, input, button { font: inherit; }
 select, textarea { width: 100%; border: 1px solid #a8b7ad; border-radius: .4rem; padding: .45rem .5rem; background: white; color: var(--ink); }

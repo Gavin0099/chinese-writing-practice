@@ -1,10 +1,13 @@
 import { courseKey, lookupCharacters } from './characterLookup.mjs';
 import { confirmCourse, curriculumStorageKey, importCourses, isPediaSource, isWritingHistory, lookupScope, mergeCourses,
     progressStorageKey, readProgress, readStoredValue, writingStorageKey } from './learningData.mjs';
-import { connectCloud, openPageStorage, readCloudSettings, readCurriculumCatalog } from './cloudStorage.mjs';
+import { cloudPageUrl, connectCloud, openPageStorage, readCloudSettings, readCurriculumCatalog } from './cloudStorage.mjs';
+import { syncPageUrl } from './googleAuth.mjs';
 
-const cloud = await openPageStorage();
+const access = await openPageStorage({ resumeSession: true });
+const cloud = access && !access.isGuest ? access : null;
 const recordStorage = cloud ?? localStorage;
+const localRequested = new URL(location.href).searchParams.get('local') === '1';
 
 const byId = id => document.getElementById(id);
 const fields = Object.fromEntries(['publisher', 'academicYear', 'grade', 'semester', 'edition', 'lesson'].map(id => [id, byId(id)]));
@@ -264,17 +267,24 @@ async function loadCatalog() {
     const retry = byId('retryCatalog');
     retry.hidden = true;
     try {
-        const settings = !cloud && readCloudSettings();
-        if (!cloud && !settings) return;
+        const settings = !access && readCloudSettings();
+        if (!access && !settings) return;
+        const modeLink = byId('catalogModeLink');
+        const cloudLookup = cloudPageUrl('learning.html');
+        modeLink.href = cloud ? 'learning.html?local=1' : localRequested ? cloudLookup : syncPageUrl(cloudLookup);
+        modeLink.textContent = cloud ? '改用本機查詢' : localRequested ? '開啟雲端查詢' : '使用 Google 登入';
+        byId('catalogMode').hidden = false;
         showNotice(notice, '正在載入雲端教材…');
-        const { published, review } = cloud ? await cloud.readCurriculumCatalog()
+        const { published, review } = access ? await access.readCurriculumCatalog()
             : await readCurriculumCatalog(await connectCloud(settings));
         cloudCourses = mergeCourses(review, published);
         courses = mergeCourses(cloudCourses, localCourses);
         const restore = fields.publisher.value === '' && courses.find(course => courseKey(course) === progress.activeKey);
         fillPicker(restore || undefined);
         if (review.length) showNotice(notice, '已載入僅供本帳號使用的開發測試教材。');
-        else showNotice(notice, cloudCourses.length ? '已載入雲端教材。' : '目前沒有可用的雲端教材。');
+        else if (cloudCourses.length) showNotice(notice, '已載入雲端教材。');
+        else showNotice(notice, cloud ? '這個帳號目前沒有可用的雲端教材。'
+            : '登入後可載入帳號可用的教材。');
     } catch {
         showNotice(notice, '暫時無法載入雲端教材。已匯入本機的教材仍可使用。', true);
         retry.hidden = false;

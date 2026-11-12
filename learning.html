@@ -6,14 +6,21 @@
     <title>國字學習查詢｜生字練習簿小幫手</title>
     <link rel="stylesheet" href="learning.css">
     <script type="module" src="learning.mjs"></script>
+    <link rel="stylesheet" href="task-layout.css" media="screen">
 </head>
 <body>
     <header class="page-header">
-        <nav aria-label="工具" class="actions">
-            <a href="index.html">← 生字練習簿</a>
-            <a href="vocabulary.html">老師詞庫與出卷</a>
-            <a href="backup.html">備份與還原</a>
-            <a href="sync.html">雲端同步</a>
+        <nav class="task-nav" aria-label="學習工具">
+            <a href="vocabulary.html" data-workspace-link>老師詞庫</a>
+            <a href="learning.html" data-workspace-link aria-current="page">國字查詢</a>
+            <a href="index.html" data-workspace-link>練習紙</a>
+            <details class="task-nav-more">
+                <summary>資料與設定</summary>
+                <div class="task-nav-menu">
+                    <a href="backup.html">本機備份與還原</a>
+                    <a href="sync.html">雲端同步</a>
+                </div>
+            </details>
         </nav>
     </header>
     <main>
@@ -24,6 +31,7 @@
             <section class="panel" aria-labelledby="progressHeading">
                 <h2 id="progressHeading">教學進度</h2>
                 <p class="notice" id="catalogNotice" role="status"></p>
+                <p class="notice" id="catalogMode" hidden><a id="catalogModeLink" href="sync.html">登入以載入教材</a></p>
                 <button type="button" id="retryCatalog" hidden>重新載入教材</button>
                 <form id="progressForm">
                     <fieldset id="progressFields" disabled>

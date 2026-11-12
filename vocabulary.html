@@ -8,20 +8,28 @@
     <link rel="stylesheet" href="learning.css">
     <link rel="stylesheet" href="vocabulary.css">
     <script type="module" src="vocabulary.mjs"></script>
+    <link rel="stylesheet" href="task-layout.css" media="screen">
 </head>
 <body>
     <a class="skip-link" href="#main">跳到詞庫</a>
     <header class="page-header">
-        <nav aria-label="工具">
-            <a href="index.html">生字練習簿</a>
-            <a href="learning.html">國字學習查詢</a>
-            <a href="backup.html">備份與還原</a>
-            <a href="sync.html">雲端同步</a>
+        <nav class="task-nav" aria-label="學習工具">
+            <a href="vocabulary.html" data-workspace-link aria-current="page">老師詞庫</a>
+            <a href="learning.html" data-workspace-link>國字查詢</a>
+            <a href="index.html" data-workspace-link>練習紙</a>
+            <details class="task-nav-more">
+                <summary>資料與設定</summary>
+                <div class="task-nav-menu">
+                    <a href="backup.html">本機備份與還原</a>
+                    <a href="sync.html">雲端同步</a>
+                </div>
+            </details>
         </nav>
     </header>
     <main id="main">
         <h1>老師詞庫與出卷</h1>
-        <p class="intro">按班級和課次儲存老師指定的詞語，確認注音後就能抽題。詞庫和考卷存在這個瀏覽器。</p>
+        <p class="intro">按班級和課次儲存老師指定的詞語，確認注音後就能抽題。</p>
+        <p class="notice vocabulary-mode" id="vocabularyMode" role="status"></p>
 
         <section class="panel book-bar" aria-labelledby="bookHeading">
             <h2 id="bookHeading">班級詞庫</h2>
@@ -41,67 +49,74 @@
                 </form>
             </details>
             <p class="notice" id="bookNotice" role="status"></p>
-            <a href="#examHeading" id="goToExam" hidden>前往隨機出卷 ↓</a>
         </section>
 
         <div id="bookWorkspace" hidden>
-            <div class="vocabulary-columns">
-                <section class="panel" aria-labelledby="wordHeading">
-                    <h2 id="wordHeading">新增詞語</h2>
-                    <form id="wordForm" class="entry-form" autocomplete="off">
-                        <label class="wide">課次<input name="lesson" type="number" min="1" max="60" value="1" required></label>
-                        <label class="wide">詞語<input name="word" required maxlength="20" placeholder="例如 放晴…" spellcheck="false"></label>
-                        <label class="wide">逐字注音<input name="pronunciation" maxlength="90" placeholder="ㄈㄤˋ ㄑㄧㄥˊ…" aria-describedby="readingHelp" spellcheck="false"></label>
-                        <p class="hint wide" id="readingHelp">每字一組，以空格分隔。可先儲存，確認讀音後再出題。</p>
-                        <fieldset class="wide"><legend>挖空字</legend><div id="blankChoices" class="blank-choices">輸入詞語後選擇。</div></fieldset>
-                        <label class="wide check"><input name="confirmed" type="checkbox">我已核對這個詞語的注音</label>
-                        <div class="actions wide">
-                            <button type="submit" class="primary" id="saveWord">儲存詞語</button>
-                            <button type="button" id="cancelEdit" hidden>取消編輯</button>
-                        </div>
-                        <p class="notice wide" id="wordNotice" role="status"></p>
-                    </form>
-                    <details id="batchDetails" class="subpanel">
-                        <summary>批次貼上詞語</summary>
-                        <form id="batchForm" class="entry-form" autocomplete="off">
-                            <label class="wide">批次匯入課次<input name="lesson" type="number" min="1" max="60" value="1" required></label>
-                            <label class="wide">每行一個詞語<textarea name="words" rows="4" maxlength="16000" required aria-describedby="batchHelp" placeholder="晴天&#10;放晴…"></textarea></label>
-                            <p class="hint wide" id="batchHelp">可只貼詞語，或從試算表貼上三欄：詞語、逐字注音、挖空位置（從 1 起算）。省略位置時預選第一字。</p>
-                            <div class="wide"><button type="submit">預覽匯入</button></div>
-                            <p class="notice wide" id="batchNotice" role="status"></p>
-                            <ol id="batchRows" class="batch-rows wide"></ol>
-                            <label id="batchConfirmLabel" class="wide check" hidden><input id="batchConfirm" name="confirmed" type="checkbox">我已核對清單中有填寫注音的詞語</label>
-                            <div class="wide" id="batchCommitAction" hidden><button type="button" id="commitBatch" class="primary">儲存可匯入的詞語</button></div>
-                        </form>
-                    </details>
-                </section>
-
-                <section class="panel" aria-labelledby="listHeading">
-                    <h2 id="listHeading">班級詞語</h2>
-                    <div class="list-controls">
-                        <div><label for="lessonFilter">篩選課次</label><select id="lessonFilter" name="lesson-filter"></select></div>
-                        <p class="notice" id="listCount" role="status"></p>
-                    </div>
-                    <ul id="wordList" class="word-list"></ul>
-                </section>
+            <div class="actions vocabulary-actions" aria-label="詞庫操作">
+                <button type="button" id="goToExam" class="primary" aria-controls="examPanel">使用此詞庫出卷</button>
+                <button type="button" id="goToWord" aria-controls="wordPanel">新增詞語</button>
+                <button type="button" id="goToBatch" aria-controls="wordPanel">批次貼上</button>
             </div>
-
-            <section class="panel exam-panel" aria-labelledby="examHeading">
-                <h2 id="examHeading">隨機出卷</h2>
+            <section class="panel exam-panel" id="examPanel" aria-labelledby="examHeading">
+                <h2 id="examHeading" tabindex="-1">製作考卷</h2>
                 <form id="examForm" class="exam-form" autocomplete="off">
                     <label>起始課次<input name="from" type="number" min="1" max="60" value="1" required></label>
                     <label>結束課次<input name="to" type="number" min="1" max="60" value="8" required></label>
                     <label>抽題數<input name="count" type="number" min="1" max="60" value="15" required></label>
-                    <label class="seed-field">亂數種子（選填）<input name="seed" maxlength="48" spellcheck="false" placeholder="留空會產生新種子…"></label>
                     <p class="hint" id="examPool" role="status"></p>
+                    <details class="subpanel exam-advanced">
+                        <summary>進階：固定抽題設定</summary>
+                        <label class="seed-field">固定種子（選填）<input name="seed" maxlength="48" spellcheck="false" aria-describedby="seedHelp"></label>
+                        <p class="hint" id="seedHelp">留空會重新抽題。重印請直接開啟已儲存的考卷。</p>
+                        <button type="button" id="newExamSeed">重新產生另一份考卷</button>
+                    </details>
                     <div class="actions"><button type="submit" class="primary">產生考卷與解答</button></div>
                     <p class="notice" id="examNotice" role="status"></p>
                 </form>
-                <div id="examHistory" hidden>
-                    <h3>已儲存的考卷</h3>
-                    <ul id="examList" class="word-list"></ul>
+            </section>
+            <section class="panel" id="wordPanel" aria-labelledby="wordHeading" hidden>
+                <h2 id="wordHeading">新增詞語</h2>
+                <h2 id="batchHeading" hidden>批次貼上詞語</h2>
+                <form id="wordForm" class="entry-form" autocomplete="off">
+                    <label class="wide">課次<input name="lesson" type="number" min="1" max="60" value="1" required></label>
+                    <label class="wide">詞語<input name="word" required maxlength="20" placeholder="例如 放晴…" spellcheck="false"></label>
+                    <label class="wide">逐字注音<input name="pronunciation" maxlength="90" placeholder="ㄈㄤˋ ㄑㄧㄥˊ…" aria-describedby="readingHelp" spellcheck="false"></label>
+                    <p class="hint wide" id="readingHelp">每字一組，以空格分隔。可先儲存，確認讀音後再出題。</p>
+                    <fieldset class="wide"><legend>挖空字</legend><div id="blankChoices" class="blank-choices">輸入詞語後選擇。</div></fieldset>
+                    <label class="wide check"><input name="confirmed" type="checkbox">我已核對這個詞語的注音</label>
+                    <div class="actions wide">
+                        <button type="submit" class="primary" id="saveWord">儲存詞語</button>
+                        <button type="button" id="cancelEdit" hidden>取消編輯</button>
+                    </div>
+                    <p class="notice wide" id="wordNotice" role="status"></p>
+                </form>
+                <div id="batchDetails" hidden>
+                    <form id="batchForm" class="entry-form" autocomplete="off">
+                        <label class="wide">批次匯入課次<input name="lesson" type="number" min="1" max="60" value="1" required></label>
+                        <label class="wide">每行一個詞語<textarea name="words" rows="4" maxlength="16000" required aria-describedby="batchHelp" placeholder="晴天&#10;放晴…"></textarea></label>
+                        <p class="hint wide" id="batchHelp">可只貼詞語，或從試算表貼上三欄：詞語、逐字注音、挖空位置（從 1 起算）。省略位置時預選第一字。</p>
+                        <div class="wide"><button type="submit">預覽匯入</button></div>
+                        <p class="notice wide" id="batchNotice" role="status"></p>
+                        <ol id="batchRows" class="batch-rows wide"></ol>
+                        <label id="batchConfirmLabel" class="wide check" hidden><input id="batchConfirm" name="confirmed" type="checkbox">我已核對清單中有填寫注音的詞語</label>
+                        <div class="wide" id="batchCommitAction" hidden><button type="button" id="commitBatch" class="primary">儲存可匯入的詞語</button></div>
+                    </form>
                 </div>
             </section>
+
+            <details id="examHistory" class="panel vocabulary-disclosure" hidden>
+                <summary>重新列印已儲存的考卷</summary>
+                <ul id="examList" class="word-list"></ul>
+            </details>
+            <details id="wordListDetails" class="panel vocabulary-disclosure">
+                <summary>管理班級詞語</summary>
+                <div class="list-controls">
+                    <div><label for="lessonFilter">篩選課次</label><select id="lessonFilter" name="lesson-filter"></select></div>
+                    <p class="notice" id="listCount" role="status"></p>
+                </div>
+                <ul id="wordList" class="word-list"></ul>
+            </details>
+
         </div>
     </main>
 </body>

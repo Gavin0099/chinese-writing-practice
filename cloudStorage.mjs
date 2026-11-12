@@ -173,15 +173,24 @@ export function cloudPageUrl(path) {
     return url.href;
 }
 
-export async function openPageStorage({ home = false } = {}) {
-    const explicit = new URL(location.href).searchParams.get('cloud') === '1';
-    if (!explicit && !home) return null;
+export function useCloudNavigation() {
+    for (const link of document.querySelectorAll('a[data-workspace-link]')) {
+        link.href = cloudPageUrl(link.href);
+    }
+}
+
+export async function openPageStorage({ home = false, resumeSession = home } = {}) {
+    const page = new URL(location.href);
+    const explicit = page.searchParams.get('cloud') === '1';
+    if (!explicit && (!resumeSession || page.searchParams.get('local') === '1')) return null;
+    if (explicit) useCloudNavigation();
     const main = document.querySelector('main');
     const status = document.createElement('p');
     status.className = 'notice cloud-mode-status';
     status.setAttribute('role', 'status');
     status.textContent = '正在讀取雲端資料…';
-    const signIn = () => syncPageUrl(home ? cloudPageUrl('index.html') : location.href);
+    const signIn = () => syncPageUrl(cloudPageUrl(home ? 'index.html' : page));
+    let openingCloud = explicit;
     try {
         const settings = readCloudSettings();
         if (!explicit && !settings) return null;
@@ -189,6 +198,7 @@ export async function openPageStorage({ home = false } = {}) {
         if (!explicit && !(await currentSession(client))) {
             return { isGuest: true, readCurriculumCatalog: () => readCurriculumCatalog(client) };
         }
+        openingCloud = true;
         main.inert = true;
         main.before(status);
         const download = document.createElement('button');
@@ -235,11 +245,7 @@ export async function openPageStorage({ home = false } = {}) {
             draftNotice.hidden = false;
             window.addEventListener('beforeunload', protectDraft);
         });
-        for (const link of document.querySelectorAll('header a[href]')) {
-            const href = link.getAttribute('href');
-            if (['index.html', 'vocabulary.html', 'learning.html'].includes(href)) link.href = cloudPageUrl(href);
-            if (href === 'backup.html') link.textContent = '本機備份與還原';
-        }
+        useCloudNavigation();
         status.textContent = home ? '已連線到家庭帳號。' : '雲端模式。看到已同步後，即可在其他裝置開啟這筆資料。';
         window.addEventListener('pagehide', event => {
             if (event.persisted) main.hidden = true;
@@ -253,6 +259,7 @@ export async function openPageStorage({ home = false } = {}) {
         main.inert = false;
         return { ...context, readCurriculumCatalog: () => readCurriculumCatalog(client, true) };
     } catch (error) {
+        if (!openingCloud && !home) return null;
         main.inert = true;
         main.before(status);
         status.textContent = `${error.message} `;

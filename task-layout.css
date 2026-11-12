@@ -1,0 +1,76 @@
+.page-header .task-nav, .minimal-header .task-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: .25rem;
+}
+
+.task-nav > a, .task-nav summary, .task-nav-menu a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: .65rem;
+    white-space: nowrap;
+}
+
+.task-nav a[aria-current] { text-decoration: underline; text-underline-offset: .25em; }
+.minimal-header .task-nav :is(a, summary) { color: var(--primary-sage-dark); }
+.task-nav-more { position: relative; }
+.task-nav-more summary { cursor: pointer; }
+.task-nav-more summary::after { content: '▾'; margin-inline-start: .25rem; }
+.task-nav-more[open] summary::after { content: '▴'; }
+.task-nav-menu {
+    position: absolute;
+    inset: 100% 0 auto auto;
+    z-index: 3;
+    min-width: max-content;
+    padding: .25rem;
+    border: 1px solid var(--line, currentColor);
+    border-radius: .45rem;
+    background: var(--surface, white);
+}
+.task-nav-menu a { display: flex; }
+.task-nav :focus-visible, .home-task-actions :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.home-overview { max-width: 64rem; margin-inline: auto; }
+.home-task-intro { max-width: 40rem; margin: 0 auto 1rem; text-align: center; }
+.home-task-intro h1 { font-size: clamp(1.7rem, 4vw, 2.45rem); }
+.home-task-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: .25rem .8rem;
+}
+.home-task-actions a { display: inline-flex; align-items: center; min-height: 44px; }
+.home-task-actions .btn-primary-hero { text-decoration: none; }
+.home-stroke-help { margin: .8rem auto 0; max-width: 40rem; }
+.home-stroke-help summary { cursor: pointer; min-height: 44px; display: list-item; padding-block: .55rem; }
+.home-stroke-help p { margin-block: .3rem; }
+
+dialog.onboarding-overlay {
+    margin: 0;
+    border: 0;
+    max-width: none;
+    max-height: none;
+    overflow: auto;
+}
+.onboarding-card { max-height: 100%; overflow: auto; }
+.onboarding-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .25rem .65rem; }
+.onboarding-tools a, .onboarding-tools button, .onboarding-card .ob-btn { min-height: 44px; }
+.onboarding-tools a { display: inline-flex; align-items: center; }
+#legacyControls .grade-card { min-height: 44px; }
+
+@media (max-width: 42rem) {
+    .page-header:has(.task-nav), .minimal-header:has(.task-nav) { padding-inline: .65rem; }
+    .task-nav > a, .task-nav summary { padding-inline: .35rem; font-size: .9rem; }
+    .home-task-intro { margin-bottom: .8rem; }
+    .onboarding-card { padding: 1.4rem 1rem; }
+}
+
+@media (max-width: 22rem) {
+    .task-nav > a, .task-nav summary { padding-inline: .2rem; }
+}

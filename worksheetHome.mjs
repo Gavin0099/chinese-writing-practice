@@ -43,8 +43,7 @@ export async function openWorksheetHome({ prepare, clear }) {
     if (!access && !connectionFailed && !initial.hasConfirmedProgress) return false;
 
     const account = byId('worksheetAccount');
-    account.hidden = !access && !connectionFailed;
-    account.textContent = cloud ? '帳號與同步' : '登入同步';
+    account.textContent = cloud ? '帳號與同步' : '雲端同步';
     if (!cloud) account.href = syncPageUrl(cloudPageUrl('index.html'));
     const settings = byId('worksheetSettings');
     if (cloud) settings.href = cloudPageUrl('learning.html');
@@ -93,6 +92,10 @@ export async function openWorksheetHome({ prepare, clear }) {
         heading.textContent = connectionFailed ? '手動練習' : '先設定學校教材';
         notice.textContent = connectionFailed ? '可以手動輸入這次要練習的生字。'
             : '選擇學校使用的出版社，並確認目前教到哪一課。';
+        if (access?.isGuest) {
+            settings.href = syncPageUrl(cloudPageUrl('learning.html'));
+            settings.textContent = '登入後設定學校教材';
+        }
         return true;
     }
 

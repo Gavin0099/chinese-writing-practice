@@ -2,10 +2,14 @@
 .skip-link { position: absolute; inset: .25rem auto auto 1rem; z-index: 2; background: white; padding: .5rem; transform: translateY(-200%); }
 .skip-link:focus { transform: none; }
 .book-bar { margin-bottom: 1rem; }
-.book-bar select { max-width: 34rem; }
-#goToExam { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.book-bar select { max-width: 34rem; min-height: 44px; }
 #examHeading { scroll-margin-top: 1rem; }
-.vocabulary-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: start; gap: 1rem; }
+.vocabulary-mode { margin: -.7rem 0 .9rem; }
+.vocabulary-actions { margin-bottom: .75rem; }
+.vocabulary-actions button { min-height: 44px; }
+.vocabulary-actions [aria-pressed="true"] { text-decoration: underline; text-underline-offset: .18em; }
+.vocabulary-disclosure { margin-top: .75rem; }
+.vocabulary-disclosure summary, .book-bar summary, .exam-advanced summary { min-height: 44px; padding-block: .55rem; }
 .entry-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
 .entry-form .wide { grid-column: 1 / -1; }
 .entry-form label { min-width: 0; }
@@ -29,11 +33,13 @@
 .batch-rows { padding-left: 1.5rem; margin: 0; overflow-wrap: anywhere; }
 .batch-rows:empty { display: none; }
 .batch-rows [data-error] { color: #902f29; }
-.exam-panel { margin-top: 1rem; }
-.exam-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 2fr); gap: .65rem; }
+.exam-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .55rem .65rem; }
 .exam-form label { min-width: 0; }
 .exam-form > :not(label) { grid-column: 1 / -1; }
-#examHistory { margin-top: 1.25rem; }
+.exam-advanced { margin: 0; padding-block: 0; }
+.exam-advanced[open] { padding-bottom: .65rem; }
+.exam-advanced #newExamSeed { margin-top: .55rem; }
+#bookWorkspace :is(button, select, input:not([type='checkbox']), textarea) { min-height: 44px; }
 #examHistory a { display: inline-flex; min-height: 2.75rem; align-items: center; }
 code { overflow-wrap: anywhere; }
 button, a { touch-action: manipulation; }
@@ -43,8 +49,5 @@ select, input, button { min-height: 2.65rem; }
 input[type='checkbox'] { min-height: 0; accent-color: var(--accent); }
 
 @media (max-width: 44rem) {
-    .vocabulary-columns { grid-template-columns: minmax(0, 1fr); }
     .word-list li { flex-wrap: wrap; }
-    .exam-form { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .exam-form .seed-field { grid-column: 1 / -1; }
 }

@@ -1,0 +1,25 @@
+/* Shared screen palette: ink teal and warm paper. Print keeps the original colors. */
+@media screen {
+    :root {
+        --ui-canvas: #F7F5F0;
+        --ui-surface: #FFFFFF;
+        --ui-surface-muted: #EEF2EF;
+        --ui-primary-soft: #E4EFEC;
+        --ui-text: #243632;
+        --ui-muted: #52635D;
+        --ui-text-strong: #061510;
+        --ui-primary: #245D59;
+        --ui-primary-hover: #1B4946;
+        --ui-primary-active: #133A37;
+        --ui-on-primary: #FFFFFF;
+        --ui-border: #73847C;
+        --ui-divider: #CDD7D1;
+        --ui-focus: #8A4B24;
+        --ui-danger: #963C35;
+        --ui-warning: #795515;
+        --ui-warning-surface: #FFF2D6;
+        --ui-disabled-bg: #E1E6E2;
+        --ui-inverse-highlight: rgba(255, 255, 255, 0.08);
+        --ui-primary-rgb: 36, 93, 89;
+    }
+}

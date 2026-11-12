@@ -66,3 +66,16 @@
         font-size: 11px;
     }
 }
+
+@media screen {
+    .data-attribution {
+        background-color: var(--ui-surface-muted);
+        border-color: var(--ui-divider);
+        color: var(--ui-muted);
+    }
+    .attribution-text strong { color: var(--ui-text); }
+    .attribution-text a { color: var(--ui-primary); }
+    .attribution-text a:hover { color: var(--ui-primary-hover); }
+    .attribution-note { color: var(--ui-muted); }
+    .attribution-text a:focus-visible { outline-color: var(--ui-focus); }
+}

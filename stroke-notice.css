@@ -191,3 +191,24 @@
         display: none !important;
     }
 }
+
+/* Screen palette only; gradient geometry and print rules remain unchanged. */
+@media screen {
+    .stroke-notice, .stroke-modal-button {
+        background-image: linear-gradient(135deg, var(--ui-primary) 0%, var(--ui-primary-hover) 100%);
+        color: var(--ui-on-primary);
+    }
+    .stroke-notice { box-shadow: 0 4px 12px rgba(var(--ui-primary-rgb), 0.3); }
+    .stroke-notice-highlight { background-color: var(--ui-inverse-highlight); }
+    .stroke-tip {
+        background-color: var(--ui-warning-surface);
+        border-color: var(--ui-warning);
+        color: var(--ui-warning);
+    }
+    .stroke-modal { background-color: var(--ui-surface); }
+    .stroke-modal-title, .stroke-modal-content { color: var(--ui-text); }
+    .stroke-modal-subtitle, .stroke-modal-example-text { color: var(--ui-muted); }
+    #strokeNoticeModal .stroke-modal-content > p[style] { color: var(--ui-muted) !important; }
+    .stroke-modal-example { background-color: var(--ui-surface-muted); }
+    .stroke-modal-button:hover { box-shadow: 0 8px 20px rgba(var(--ui-primary-rgb), 0.4); }
+}

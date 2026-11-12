@@ -2003,3 +2003,236 @@ body {
     }
     #legacyControls .col-lg-4 :is(button, select, textarea) { min-height: 44px; min-width: 44px; font-size: 1rem; }
 }
+
+/* Color-only screen layer. Keep aliases off worksheet ancestors and print. */
+@media screen {
+    html body { background-color: var(--ui-canvas); }
+
+    .minimal-header, .home-task-entry, #smartCard, #onboardingModal,
+    #legacyControls .col-lg-4, #legacyControls .empty-state,
+    #lineGuide, #strokeNoticeModal, #appFooter {
+        --bg-page: var(--ui-canvas);
+        --bg-card: var(--ui-surface);
+        --text-main: var(--ui-text);
+        --text-muted: var(--ui-muted);
+        --primary: var(--ui-primary);
+        --primary-hover: var(--ui-primary-hover);
+        --secondary: var(--ui-primary);
+        --secondary-hover: var(--ui-primary-hover);
+        --border-input: var(--ui-border);
+        --focus-ring: var(--ui-focus);
+        --primary-sage: var(--ui-primary);
+        --primary-sage-dark: var(--ui-primary-hover);
+        --bg-beige: var(--ui-canvas);
+        --text-dark: var(--ui-text);
+        color: var(--ui-text);
+    }
+
+    .minimal-header .brand { color: var(--ui-muted); }
+    .home-task-entry { border-color: var(--ui-divider); }
+    .home-task-entry h2, #onboardingModal h2,
+    #onboardingModal .onboarding-q label { color: var(--ui-text); }
+    .home-task-entry p, #onboardingModal p { color: var(--ui-muted); }
+    .minimal-header .main-tools a, #toggleCustomBtn, #onboardingModal .btn-text,
+    #smartCard .btn-text { color: var(--ui-primary); }
+    .minimal-header .main-tools a:hover, #toggleCustomBtn:hover,
+    #onboardingModal .btn-text:hover, #smartCard .btn-text:hover {
+        color: var(--ui-primary-hover);
+    }
+    .home-task-entry .task-primary, #onboardingModal .task-primary {
+        background-color: var(--ui-primary);
+        color: var(--ui-on-primary);
+    }
+    .home-task-entry .task-primary:hover, #onboardingModal .task-primary:hover {
+        background-color: var(--ui-primary-hover);
+    }
+
+    #smartCard, #onboardingModal .onboarding-card {
+        background-color: var(--ui-surface);
+        border-color: var(--ui-divider);
+    }
+    #smartCard .hero-hint { color: var(--ui-muted); }
+    #smartCard .card-loading { color: var(--ui-text-strong); }
+    /* Compensate for the existing success subtitle's .8 opacity. */
+    #smartCard .success-state .hero-subtitle { color: var(--ui-text); }
+    #onboardingModal { background-color: var(--ui-canvas); }
+    #onboardingModal .onboarding-section-title { border-color: var(--ui-divider); }
+    #onboardingModal .ob-btn {
+        color: var(--ui-text);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+    }
+    #onboardingModal .ob-btn:hover {
+        color: var(--ui-primary);
+        border-color: var(--ui-primary);
+    }
+    #onboardingModal .ob-btn.active {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+        border-color: var(--ui-primary);
+        box-shadow: 0 4px 12px rgba(var(--ui-primary-rgb), 0.3);
+    }
+    #onboardingModal #obStartBtn { background-color: var(--ui-primary); }
+    #onboardingModal #obStartBtn:hover { background-color: var(--ui-primary-hover); }
+    #onboardingModal #obStartBtn:disabled {
+        background-color: var(--ui-disabled-bg);
+        color: var(--ui-muted);
+    }
+
+    /* Retain each existing shadow's geometry and alpha. */
+    :where(#smartCard, #onboardingModal) .btn-primary-hero {
+        background-color: var(--ui-primary);
+        color: var(--ui-on-primary);
+        box-shadow: 0 4px 15px rgba(var(--ui-primary-rgb), 0.3);
+    }
+    :where(#smartCard, #onboardingModal) .btn-primary-hero:hover {
+        --primary-sage: var(--ui-primary-hover);
+        background-color: var(--ui-primary-hover);
+        box-shadow: 0 6px 20px rgba(var(--ui-primary-rgb), 0.4);
+    }
+
+    #legacyControls .col-lg-4 .card,
+    #legacyControls .col-lg-8 > .card > .card-header {
+        color: var(--ui-text);
+        background-color: var(--ui-surface);
+    }
+    #legacyControls .col-lg-8 > .card > .bg-light {
+        background-color: var(--ui-surface-muted) !important;
+    }
+    #legacyControls .empty-state {
+        color: var(--ui-muted);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-divider);
+    }
+    /* Only HTML-authored empty-state copy; JS-rendered sheet colors stay untouched. */
+    #legacyControls .empty-state > ul, #legacyControls .empty-state > p {
+        color: var(--ui-muted) !important;
+    }
+    #legacyControls .col-lg-4 .text-muted { color: var(--ui-muted) !important; }
+    #legacyControls .grade-card {
+        color: var(--ui-text);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+    }
+    #legacyControls .grade-card:hover { background-color: var(--ui-primary-soft); }
+    #legacyControls .grade-card.active {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+        border-color: var(--ui-primary);
+        box-shadow: 0 4px 6px -1px rgba(var(--ui-primary-rgb), 0.2);
+    }
+    #legacyControls .grade-card.active .grade-label { color: var(--ui-on-primary); }
+    #legacyControls .tab-nav { background-color: var(--ui-surface-muted); }
+    #legacyControls .tab-btn.active {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+    }
+    #legacyControls .col-lg-4 :is(.form-control, .form-select) {
+        color: var(--ui-text);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+        caret-color: var(--ui-primary);
+    }
+    #legacyControls .col-lg-4 .form-control::placeholder { color: var(--ui-muted); }
+    #legacyControls .col-lg-4 :is(.form-control, .form-select):focus {
+        border-color: var(--ui-focus);
+        box-shadow: 0 0 0 .25rem var(--ui-focus);
+    }
+    #legacyControls .col-lg-4 .btn-primary {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+        border-color: var(--ui-primary);
+    }
+    #legacyControls .col-lg-4 .btn-primary:hover {
+        --primary-sage: var(--ui-primary-hover);
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary-hover);
+        border-color: var(--ui-primary-hover);
+    }
+    :where(#legacyControls .col-lg-4) .btn-primary:where(:not(:disabled)) {
+        box-shadow: 0 4px 6px -1px rgba(var(--ui-primary-rgb), 0.3);
+    }
+    :where(#legacyControls .col-lg-4) .btn-primary:where(:not(:disabled)):hover {
+        box-shadow: 0 6px 8px -1px rgba(var(--ui-primary-rgb), 0.4);
+    }
+    #legacyControls .col-lg-4 .btn-primary:active {
+        --primary-sage: var(--ui-primary-active);
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary-active);
+        border-color: var(--ui-primary-active);
+    }
+    #legacyControls .col-lg-4 .btn-primary:focus-visible {
+        color: var(--ui-on-primary);
+        border-color: var(--ui-primary);
+        box-shadow: 0 0 0 .25rem var(--ui-surface);
+    }
+    #legacyControls .col-lg-4 .btn-primary:disabled {
+        --primary-sage: var(--ui-disabled-bg);
+        color: var(--ui-muted);
+        background-color: var(--ui-disabled-bg);
+        border-color: var(--ui-border);
+    }
+    #legacyControls #resetAppBtn { color: var(--ui-text-strong) !important; }
+    #legacyControls #resetAppBtn:focus-visible {
+        /* The existing .6 element opacity also fades its outline and shadow. */
+        outline-color: var(--ui-text-strong);
+        box-shadow: 0 0 0 .25rem var(--ui-text-strong);
+    }
+
+    #lineGuide .line-guide-content { background-color: var(--ui-surface); }
+    #lineGuide .line-guide-title { color: var(--ui-text); }
+    #lineGuide .line-guide-step {
+        background-color: var(--ui-surface-muted);
+        border-color: var(--ui-divider);
+    }
+    #lineGuide .step-text { color: var(--ui-muted); }
+    #lineGuide .step-number {
+        background-color: var(--ui-primary);
+        color: var(--ui-on-primary);
+    }
+    #lineGuide .line-guide-close {
+        background-color: var(--ui-surface-muted);
+        color: var(--ui-primary);
+    }
+
+    /* ID specificity keeps the HTML footer's later inline stylesheet from winning. */
+    #appFooter {
+        background-image: linear-gradient(to bottom, var(--ui-canvas), var(--ui-surface-muted));
+        border-color: var(--ui-divider);
+        color: var(--ui-text);
+    }
+    #appFooter .source-credit, #appFooter .author-text p,
+    #appFooter .feedback-hint, #appFooter .footer-copyright { color: var(--ui-muted); }
+    #appFooter .source-credit a { color: var(--ui-primary); }
+    #appFooter .source-credit a:hover { color: var(--ui-primary-hover); }
+    #appFooter .license-badge {
+        background-color: var(--ui-primary-soft);
+        color: var(--ui-primary);
+        border-color: var(--ui-divider);
+    }
+    #appFooter .footer-divider {
+        background-image: linear-gradient(90deg, transparent, var(--ui-divider), transparent);
+    }
+    #appFooter .footer-main-card {
+        background-color: var(--ui-surface);
+        border-color: var(--ui-divider);
+    }
+    #appFooter .author-icon { background-color: var(--ui-primary-soft); }
+    #appFooter .author-text h4 { color: var(--ui-text); }
+    #appFooter .feedback-btn {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+        box-shadow: 0 4px 6px -1px rgba(var(--ui-primary-rgb), 0.2);
+    }
+    #appFooter .feedback-btn .btn-text { color: var(--ui-on-primary); }
+    #appFooter .feedback-btn:hover {
+        background-color: var(--ui-primary-hover);
+        box-shadow: 0 10px 15px -3px rgba(var(--ui-primary-rgb), 0.3);
+    }
+
+    .minimal-header :focus-visible, .home-task-entry :focus-visible, #toggleCustomBtn:focus-visible,
+    #onboardingModal :focus-visible, #strokeNoticeModal :focus-visible, #lineGuide :focus-visible,
+    #legacyControls .col-lg-4 :focus-visible, #smartCard :focus-visible, #appFooter a:focus-visible {
+        outline-color: var(--ui-focus);
+    }
+}

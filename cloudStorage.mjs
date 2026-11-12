@@ -173,9 +173,16 @@ export function cloudPageUrl(path) {
     return url.href;
 }
 
+export function useCloudNavigation() {
+    for (const link of document.querySelectorAll('a[data-workspace-link]')) {
+        link.href = cloudPageUrl(link.href);
+    }
+}
+
 export async function openPageStorage({ home = false } = {}) {
     const explicit = new URL(location.href).searchParams.get('cloud') === '1';
     if (!explicit && !home) return null;
+    if (explicit) useCloudNavigation();
     const main = document.querySelector('main');
     const status = document.createElement('p');
     status.className = 'notice cloud-mode-status';
@@ -235,11 +242,7 @@ export async function openPageStorage({ home = false } = {}) {
             draftNotice.hidden = false;
             window.addEventListener('beforeunload', protectDraft);
         });
-        for (const link of document.querySelectorAll('header a[href]')) {
-            const href = link.getAttribute('href');
-            if (['index.html', 'vocabulary.html', 'learning.html'].includes(href)) link.href = cloudPageUrl(href);
-            if (href === 'backup.html') link.textContent = '本機備份與還原';
-        }
+        useCloudNavigation();
         status.textContent = home ? '已連線到家庭帳號。' : '雲端模式。看到已同步後，即可在其他裝置開啟這筆資料。';
         window.addEventListener('pagehide', event => {
             if (event.persisted) main.hidden = true;

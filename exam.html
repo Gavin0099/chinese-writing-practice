@@ -8,9 +8,24 @@
     <link rel="stylesheet" href="learning.css">
     <link rel="stylesheet" href="exam.css">
     <script type="module" src="exam.mjs"></script>
+    <link rel="stylesheet" href="task-layout.css" media="screen">
 </head>
 <body>
-    <header class="page-header"><a id="backToBook" href="vocabulary.html">← 回到老師詞庫</a></header>
+    <header class="page-header">
+        <nav class="task-nav" aria-label="學習工具">
+            <a href="vocabulary.html" data-workspace-link aria-current="location">老師詞庫</a>
+            <a href="learning.html" data-workspace-link>國字查詢</a>
+            <a href="index.html" data-workspace-link>練習紙</a>
+            <details class="task-nav-more">
+                <summary>資料與設定</summary>
+                <div class="task-nav-menu">
+                    <a href="backup.html">本機備份與還原</a>
+                    <a href="sync.html">雲端同步</a>
+                </div>
+            </details>
+        </nav>
+        <a id="backToBook" href="vocabulary.html" data-workspace-link>← 回到老師詞庫</a>
+    </header>
     <main>
         <section id="examControls" class="panel" aria-labelledby="previewHeading" hidden>
             <h1 id="previewHeading">考卷與解答預覽</h1>

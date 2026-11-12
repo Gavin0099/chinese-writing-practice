@@ -94,8 +94,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const modal = document.getElementById('onboardingModal');
         const startBtn = document.getElementById('obStartBtn');
         if (modal) {
-            modal.style.display = 'flex';
-
             let selectedGrade = null;
             let selectedSem = null;
 
@@ -136,10 +134,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     lastOutputLesson: 0,
                     pinnedLesson: null
                 });
-                modal.style.display = 'none';
-                initApp(); // Start the app
+                modal.close('confirmed');
             };
-            return; // Stop here, initApp will be called by startBtn
+            document.getElementById('obSkipBtn').onclick = () => modal.close();
+            modal.addEventListener('close', () => {
+                initApp();
+                const next = modal.returnValue === 'confirmed' ? 'heroActionBtn' : 'homeVocabulary';
+                document.getElementById(next).focus();
+            }, { once: true });
+            modal.showModal();
+            return;
         }
     }
 

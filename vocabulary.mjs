@@ -20,6 +20,11 @@ let activeId = query.searchParams.get('book');
 let editingId = null;
 let batch = [];
 let dirty = false;
+let workspaceView = 'exam';
+
+byId('vocabularyMode').textContent = cloud
+    ? '雲端資料 · 詞庫與考卷同步到此帳號'
+    : '本機資料 · 詞庫與考卷儲存在此瀏覽器';
 
 function notice(id, message = '', error = false) {
     const element = byId(id);
@@ -53,6 +58,40 @@ async function persist(update, messageId) {
 
 const ownWords = () => data.words.filter(entry => entry.bookId === activeId);
 const selectedBlanks = () => [...byId('blankChoices').querySelectorAll('input:checked')].map(input => Number(input.value));
+
+function renderWorkspace() {
+    const hasWords = ownWords().length > 0;
+    if (!hasWords && workspaceView === 'exam') workspaceView = 'word';
+    byId('goToExam').hidden = !hasWords;
+    byId('goToWord').classList.toggle('primary', !hasWords);
+    byId('wordListDetails').hidden = !hasWords;
+    byId('examPanel').hidden = workspaceView !== 'exam';
+    byId('wordPanel').hidden = workspaceView === 'exam';
+    byId('wordPanel').setAttribute('aria-labelledby', workspaceView === 'batch' ? 'batchHeading' : 'wordHeading');
+    byId('wordHeading').hidden = workspaceView === 'batch';
+    byId('batchHeading').hidden = workspaceView !== 'batch';
+    wordForm.hidden = workspaceView === 'batch';
+    byId('batchDetails').hidden = workspaceView !== 'batch';
+    for (const [id, view] of [['goToExam', 'exam'], ['goToWord', 'word'], ['goToBatch', 'batch']]) {
+        byId(id).setAttribute('aria-pressed', String(workspaceView === view));
+    }
+}
+
+byId('goToExam').addEventListener('click', () => {
+    workspaceView = 'exam';
+    renderWorkspace();
+    byId('examHeading').focus();
+});
+byId('goToWord').addEventListener('click', () => {
+    workspaceView = 'word';
+    renderWorkspace();
+    wordFields.word.focus();
+});
+byId('goToBatch').addEventListener('click', () => {
+    workspaceView = 'batch';
+    renderWorkspace();
+    batchForm.elements.words.focus();
+});
 
 function fillBlanks(positions) {
     const word = wordFields.word.value.trim();
@@ -103,6 +142,8 @@ function editWord(entry) {
     byId('cancelEdit').hidden = false;
     notice('wordNotice');
     dirty = false;
+    workspaceView = 'word';
+    renderWorkspace();
     wordFields.word.focus();
 }
 
@@ -145,13 +186,15 @@ function renderWords() {
             if (!await persist(state => { state.words = state.words.filter(word => word.id !== entry.id); }, 'listCount')) return;
             if (editingId === entry.id) clearEditor();
             renderWords();
-            filter.focus();
+            if (ownWords().length) filter.focus();
+            else byId('goToWord').focus();
             notice('listCount', `已刪除「${entry.word}」，目前有 ${ownWords().length} 個詞語。`);
         });
         actions.append(edit, remove);
         row.append(text, actions);
         return row;
     }));
+    renderWorkspace();
     renderExams();
 }
 
@@ -160,7 +203,9 @@ function renderBooks() {
     bookSelect.replaceChildren(...data.books.map(book => new Option(bookLabel(book), book.id)));
     bookSelect.disabled = !activeId;
     byId('bookWorkspace').hidden = !activeId;
-    byId('goToExam').hidden = !activeId;
+    workspaceView = 'exam';
+    byId('wordListDetails').open = false;
+    byId('examHistory').open = false;
     if (activeId) {
         bookSelect.value = activeId;
         query.searchParams.set('book', activeId);
@@ -328,6 +373,10 @@ examForm.addEventListener('input', () => {
     notice('examNotice');
     renderPool();
 });
+byId('newExamSeed').addEventListener('click', () => {
+    examForm.elements.seed.value = '';
+    examForm.requestSubmit();
+});
 examForm.addEventListener('submit', async event => {
     event.preventDefault();
     const seed = examForm.elements.seed.value.trim() || crypto.randomUUID().replaceAll('-', '').slice(0, 16);
@@ -338,6 +387,7 @@ examForm.addEventListener('submit', async event => {
             book, words: state.words, seed }));
     }, 'examNotice')) return;
     renderExams();
+    byId('examHistory').open = true;
     notice('examNotice', `${cloud ? '已同步' : '已儲存'} ${examSettings().count} 題。可在下方開啟考卷與解答。`);
     byId('examList').querySelector('a')?.focus();
 });

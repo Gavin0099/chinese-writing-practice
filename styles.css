@@ -21,11 +21,13 @@
     background: rgba(255, 255, 255, 1);
     backdrop-filter: blur(8px);
     z-index: 9999;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     padding: 20px;
 }
+
+.onboarding-overlay[open] { display: flex; }
 
 .onboarding-card {
     background: white;

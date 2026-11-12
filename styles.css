@@ -1945,3 +1945,62 @@ body {
         border-left: 1px dashed #3B4CCA !important;
     }
 }
+
+/* UX task 2: presentation only. These rules never participate in A4 output. */
+@media screen {
+    .minimal-header .main-tools { align-items: start; gap: .4rem .8rem; }
+    .minimal-header a, .minimal-header summary,
+    .teacher-tasks a, .onboarding-card a, .onboarding-card button,
+    #heroActionBtn, #toggleCustomBtn,
+    #legacyControls button, #legacyControls select, #legacyControls textarea,
+    .stroke-modal-button, .line-guide-close {
+        min-width: 44px;
+        min-height: 44px;
+    }
+    .minimal-header a, .teacher-tasks a, .onboarding-card a { display: inline-flex; align-items: center; }
+    .minimal-header .nav-tools { text-align: left; }
+    .minimal-header summary { padding: .6rem .35rem; cursor: pointer; color: #305b47; font-weight: 650; }
+    .minimal-header .tool-links { display: flex; flex-direction: column; padding: .35rem .6rem; border: 1px solid #d5dfd5; border-radius: .5rem; background: white; }
+    .minimal-header .tool-links a { padding: .5rem .25rem; color: #305b47; }
+    .minimal-header :focus-visible, .hero-section :focus-visible,
+    .onboarding-overlay :focus-visible, .stroke-modal-overlay :focus-visible,
+    .line-guide-overlay :focus-visible {
+        outline: 3px solid #245eab;
+        outline-offset: 3px;
+    }
+    .teacher-tasks { max-width: 64rem; margin: 0 auto 2rem; padding: 1.5rem; border: 1px solid #d5dfd5; border-radius: 1rem; background: #f2f6f0; text-align: left; }
+    .teacher-tasks h1 { margin: 0 0 .7rem; color: #24352d; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.4; }
+    .teacher-tasks > p { color: #52645a; margin-bottom: 1rem; }
+    .task-actions { display: flex; flex-wrap: wrap; gap: .65rem; }
+    a.task-link { display: inline-flex; align-items: center; justify-content: center; padding: .75rem 1rem; border: 1px solid #305b47; border-radius: .5rem; color: #305b47; background: white; font-weight: 700; text-decoration: none; }
+    a.task-link:hover { background: #e5eee4; }
+    a.task-link-primary { background: #305b47; color: white; }
+    a.task-link-primary:hover { background: #254a39; color: white; }
+    .teacher-tasks .home-data-note { margin: .6rem 0 0; font-size: .92rem; }
+    .home-data-note a { padding: .4rem .25rem; color: #305b47; }
+    .smart-card { margin-inline: auto; }
+    .onboarding-overlay { overflow-y: auto; align-items: start; }
+    .onboarding-card { position: relative; margin: auto; padding: 1.5rem 2rem; }
+    .onboarding-card h2 { font-size: 1.75rem; }
+    .onboarding-card .onboarding-close { display: block; margin: 0 0 .6rem auto; padding: .5rem .25rem; border: 0; border-radius: .3rem; background: transparent; color: #52645a; text-decoration: underline; text-underline-offset: .2em; }
+    .onboarding-card .onboarding-vocabulary { width: 100%; }
+    .onboarding-card .onboarding-divider { margin: 1rem 0 0; padding-top: 1rem; border-top: 1px solid #d5dfd5; opacity: 1; color: #52645a; font-size: .95rem; }
+    .onboarding-card .onboarding-q { margin-top: .85rem; }
+    .onboarding-card .onboarding-q label { margin-bottom: .5rem; }
+    .onboarding-card .ob-btn { padding: .6rem .25rem; }
+    .stroke-modal-overlay { overflow-y: auto; align-items: start; padding-block: 1rem; }
+    .stroke-modal { margin: auto; }
+    #legacyControls .grade-card { font: inherit; }
+}
+
+@media screen and (max-width: 36rem) {
+    .hero-section { padding: 1rem; }
+    .hero-section > .container:not(#legacyControls) { padding-inline: 0; }
+    .teacher-tasks { padding: 1rem; margin-bottom: 1.25rem; }
+    .task-actions { flex-direction: column; }
+    .smart-card { padding: 1.5rem; }
+    .onboarding-overlay { padding: .75rem; }
+    .onboarding-card { padding: 1rem; border-radius: 1rem; }
+    .onboarding-card h2 { font-size: 1.55rem; }
+    .onboarding-card .ob-btn { font-size: 1rem; }
+}

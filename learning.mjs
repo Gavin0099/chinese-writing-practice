@@ -7,6 +7,7 @@ const cloud = await openPageStorage();
 const recordStorage = cloud ?? localStorage;
 
 const byId = id => document.getElementById(id);
+byId('storageLocation').hidden = Boolean(cloud);
 const fields = Object.fromEntries(['academicYear', 'publisher', 'grade', 'semester', 'edition', 'lesson'].map(id => [id, byId(id)]));
 const input = byId('query');
 const statusLabels = { taught: '推估已教', not_yet_taught: '尚未教到', insufficient_data: '資料不足' };

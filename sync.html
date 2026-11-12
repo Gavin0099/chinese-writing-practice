@@ -5,23 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#f6f8f3">
     <meta name="referrer" content="no-referrer">
-    <title>雲端同步｜生字練習簿</title>
+    <title>資料保存與雲端同步｜生字練習簿</title>
     <link rel="stylesheet" href="learning.css">
     <link rel="stylesheet" href="vocabulary.css">
     <script type="module" src="sync.mjs"></script>
 </head>
-<body>
+<body class="workspace-page">
     <a class="skip-link" href="#main-content">跳到主要內容</a>
     <header class="page-header">
         <nav aria-label="學習工具">
-            <a href="vocabulary.html">本機老師詞庫</a>
-            <a href="learning.html">本機學習查詢</a>
-            <a href="backup.html">本機備份與還原</a>
+            <a href="index.html">練習紙</a>
+            <a href="vocabulary.html">本機詞庫</a>
+            <details class="nav-tools">
+                <summary>其他工具</summary>
+                <div class="tool-links">
+                    <a href="learning.html">本機國字學習查詢</a>
+                    <a href="backup.html">本機備份與還原</a>
+                    <a href="sync.html" aria-current="page">資料與同步</a>
+                </div>
+            </details>
         </nav>
     </header>
     <main id="main-content">
-        <h1>雲端同步</h1>
-        <p class="intro">在手機和電腦使用同一個帳號，開啟家庭的詞庫、考卷與學習紀錄。</p>
+        <h1>資料保存與雲端同步</h1>
+        <p class="intro">本機與雲端是兩份資料。登入後，請開啟雲端詞庫；本機資料不會自動上傳。</p>
         <div class="panels">
             <section class="panel" aria-labelledby="loginHeading">
                 <h2 id="loginHeading">家庭帳號</h2>
@@ -51,6 +58,18 @@
                 </div>
                 <button type="button" id="retrySync" hidden>重新連線</button>
             </section>
+            <section class="panel storage-help" aria-labelledby="storageHeading">
+                <h2 id="storageHeading">換裝置時，資料怎麼帶？</h2>
+                <h3>本機：存在這個瀏覽器</h3>
+                <p>換手機、電腦或瀏覽器不會自動出現。可下載備份檔，到另一台裝置的本機備份頁還原。</p>
+                <div class="actions">
+                    <a class="action-link" href="vocabulary.html">繼續使用本機詞庫</a>
+                    <a class="action-link" href="backup.html">下載／還原本機備份</a>
+                </div>
+                <h3>雲端：使用同一個家庭帳號</h3>
+                <p>在另一台裝置登入相同帳號，開啟雲端詞庫。儲存後看到「已同步」，才能在另一台裝置開啟該筆資料。</p>
+                <p class="hint">首次上傳須在登入後確認；若家庭已有資料，依下方家庭資料區的提示操作。</p>
+            </section>
             <section class="panel" id="cloudWorkspace" aria-labelledby="workspaceHeading" hidden>
                 <h2 id="workspaceHeading">家庭資料</h2>
                 <p class="notice" id="workspaceNotice" role="status"></p>
@@ -65,6 +84,7 @@
         </div>
         <details id="projectSettings" class="panel subpanel" hidden>
             <summary>開發環境連線設定</summary>
+            <p class="section-help">供網站管理者設定測試環境。家長不需自行申請或填寫金鑰，可先使用本機詞庫與備份。</p>
             <form id="settingsForm" class="entry-form" autocomplete="off">
                 <label class="wide">專案網址<input name="url" type="url" required></label>
                 <label class="wide">Publishable Key<input name="key" type="text" spellcheck="false" required></label>

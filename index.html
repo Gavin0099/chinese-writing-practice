@@ -17,10 +17,13 @@
 
 <body>
     <!-- 0. Onboarding Modal (Spec v1.1) -->
-    <div id="onboardingModal" class="onboarding-overlay" style="display: none;">
+    <div id="onboardingModal" class="onboarding-overlay" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle" style="display: none;">
         <div class="onboarding-card">
-            <h2>✨ 歡迎使用生字小幫手</h2>
-            <p>選擇年級與學期，系統會推薦練習紙</p>
+            <button type="button" id="closeOnboarding" class="onboarding-close">稍後設定，先看首頁</button>
+            <h2 id="onboardingTitle">今天想練習什麼？</h2>
+            <p>老師指定的詞語，從詞庫開始。</p>
+            <a class="task-link task-link-primary onboarding-vocabulary" href="vocabulary.html">老師詞庫與出卷 →</a>
+            <p class="onboarding-divider">要做課本生字練習紙，再選年級與學期</p>
 
             <div class="onboarding-q">
                 <label>1. 孩子的年級是？</label>
@@ -46,7 +49,6 @@
                 開始練習
             </button>
             <a class="btn-text d-inline-block mt-3" href="learning.html">前往國字學習查詢</a>
-            <a class="btn-text d-inline-block mt-3" href="vocabulary.html">老師詞庫與出卷</a>
         </div>
     </div>
 
@@ -57,14 +59,30 @@
             <span class="text">生字練習簿小幫手</span>
         </div>
         <nav class="main-tools" aria-label="學習工具">
-            <a class="btn-text" href="learning.html">國字學習查詢</a>
-            <a class="btn-text" href="vocabulary.html">老師詞庫與出卷</a>
+            <a class="btn-text" href="vocabulary.html">老師詞庫</a>
+            <details class="nav-tools">
+                <summary>其他工具</summary>
+                <div class="tool-links">
+                    <a href="learning.html">國字學習查詢</a>
+                    <a href="backup.html">本機備份與還原</a>
+                    <a href="sync.html">資料與同步</a>
+                </div>
+            </details>
         </nav>
     </header>
 
     <!-- 2. Main Hero Section (The Brain) -->
     <main class="hero-section">
         <div class="container">
+            <section class="teacher-tasks" aria-labelledby="teacherTasksHeading">
+                <h1 id="teacherTasksHeading">老師指定的詞語，收好就能出卷</h1>
+                <p>新增一個詞語或貼上整份清單，核對注音後練習。</p>
+                <div class="task-actions">
+                    <a id="homeVocabulary" class="task-link task-link-primary" href="vocabulary.html">進入老師詞庫</a>
+                    <a class="task-link" href="vocabulary.html#examHeading">用既有詞庫出卷 →</a>
+                </div>
+                <p class="home-data-note">本機詞庫只存在目前瀏覽器。<a href="sync.html">換裝置／雲端同步</a></p>
+            </section>
             <div class="smart-card" id="smartCard">
                 <!-- Loading State -->
                 <div class="card-loading" id="cardLoading">正在準備練習紙...</div>
@@ -107,12 +125,12 @@
                             <div class="mb-4">
                                 <label class="form-label text-muted small mb-2">年級</label>
                                 <div class="grade-selector">
-                                    <div class="grade-card active" data-value="1">一年級</div>
-                                    <div class="grade-card" data-value="2">二年級</div>
-                                    <div class="grade-card" data-value="3">三年級</div>
-                                    <div class="grade-card" data-value="4">四年級</div>
-                                    <div class="grade-card" data-value="5">五年級</div>
-                                    <div class="grade-card" data-value="6">六年級</div>
+                                    <button type="button" class="grade-card active" data-value="1">一年級</button>
+                                    <button type="button" class="grade-card" data-value="2">二年級</button>
+                                    <button type="button" class="grade-card" data-value="3">三年級</button>
+                                    <button type="button" class="grade-card" data-value="4">四年級</button>
+                                    <button type="button" class="grade-card" data-value="5">五年級</button>
+                                    <button type="button" class="grade-card" data-value="6">六年級</button>
                                 </div>
                             </div>
 
@@ -233,11 +251,11 @@
 
 
         <!-- 筆順說明 Modal -->
-        <div id="strokeNoticeModal" class="stroke-modal-overlay">
+        <div id="strokeNoticeModal" class="stroke-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="strokeNoticeTitle" inert>
             <div class="stroke-modal">
                 <div class="stroke-modal-header">
                     <div class="stroke-modal-emoji">📚✨</div>
-                    <h3 class="stroke-modal-title">關於筆順與字形差異</h3>
+                    <h3 id="strokeNoticeTitle" class="stroke-modal-title">關於筆順與字形差異</h3>
                     <p class="stroke-modal-subtitle">給家長的說明</p>
                 </div>
 

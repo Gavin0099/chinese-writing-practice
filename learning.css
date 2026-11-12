@@ -62,3 +62,51 @@ button:disabled { cursor: default; }
     .panels, .result-card { grid-template-columns: 1fr; }
     .character { display: flex; align-items: baseline; gap: .5rem; }
 }
+
+/* UX task 2: screen controls only; exam paper styles keep their original cascade. */
+@media screen {
+    .workspace-page main { padding-top: 1.4rem; }
+    .workspace-page .intro { margin-bottom: .8rem; }
+    .workspace-page .page-header { padding-block: .45rem; }
+    .workspace-page .page-header nav { display: flex; flex-wrap: wrap; align-items: start; gap: .35rem .75rem; }
+    .workspace-page a,
+    .workspace-page button,
+    .workspace-page select,
+    .workspace-page input:not([type='checkbox']),
+    .workspace-page summary,
+    #examControls a, #examControls button, .page-header > a {
+        min-width: 44px;
+        min-height: 44px;
+    }
+    .workspace-page a, .page-header > a { display: inline-flex; align-items: center; padding: .4rem .3rem; }
+    .workspace-page summary { padding: .55rem .25rem; font-weight: 650; }
+    .workspace-page textarea { min-height: 6rem; }
+    .workspace-page input[type='file']::file-selector-button { min-height: 44px; font: inherit; }
+    .workspace-page label:has(> input[type='checkbox']) { min-width: 44px; min-height: 44px; }
+    .workspace-page :focus-visible, #examControls :focus-visible, .page-header > a:focus-visible {
+        outline: 3px solid #245eab;
+        outline-offset: 3px;
+    }
+    .workspace-page .page-header a[aria-current] { text-decoration-thickness: .18em; }
+    .workspace-page .nav-tools { margin-left: auto; }
+    .workspace-page .nav-tools[open] { flex-basis: 100%; }
+    .workspace-page .nav-tools > summary { width: max-content; margin-left: auto; }
+    .workspace-page .tool-links { display: flex; flex-wrap: wrap; gap: .25rem 1rem; padding-top: .35rem; border-top: 1px solid var(--line); }
+    .workspace-page .data-location {
+        margin: 0 0 1rem;
+        padding: .45rem .75rem;
+        border-left: 3px solid var(--accent);
+        background: #eaf1e9;
+        color: var(--ink);
+        font-size: .92rem;
+    }
+    .workspace-page .section-help { margin: -.25rem 0 .85rem; color: var(--muted); }
+    .workspace-page .action-link { border: 1px solid var(--accent); border-radius: .4rem; padding-inline: .8rem; font-weight: 650; }
+    .workspace-page .storage-help h3 { font-size: 1rem; margin: 1rem 0 .35rem; }
+    .workspace-page .storage-help .actions { margin-top: .65rem; }
+    .workspace-page #cloudWorkspace { grid-column: 1 / -1; }
+    .workspace-page #projectSettings { margin-top: 1rem; }
+    .workspace-page .skip-link { position: absolute; inset: .25rem auto auto 1rem; z-index: 3; background: white; padding: .5rem; transform: translateY(-200%); }
+    .workspace-page .skip-link:focus { transform: none; }
+    .workspace-page [id] { scroll-margin-top: 1rem; }
+}

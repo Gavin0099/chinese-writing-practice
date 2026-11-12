@@ -9,26 +9,33 @@
     <link rel="stylesheet" href="vocabulary.css">
     <script type="module" src="vocabulary.mjs"></script>
 </head>
-<body>
+<body class="workspace-page vocabulary-page">
     <a class="skip-link" href="#main">跳到詞庫</a>
     <header class="page-header">
-        <nav aria-label="工具">
-            <a href="index.html">生字練習簿</a>
-            <a href="learning.html">國字學習查詢</a>
-            <a href="backup.html">備份與還原</a>
-            <a href="sync.html">雲端同步</a>
+        <nav aria-label="學習工具">
+            <a href="index.html">練習紙</a>
+            <a href="vocabulary.html" aria-current="page">老師詞庫</a>
+            <details class="nav-tools">
+                <summary>其他工具</summary>
+                <div class="tool-links">
+                    <a href="learning.html">國字學習查詢</a>
+                    <a href="backup.html">本機備份與還原</a>
+                    <a href="sync.html">資料與同步</a>
+                </div>
+            </details>
         </nav>
     </header>
     <main id="main">
         <h1>老師詞庫與出卷</h1>
-        <p class="intro">按班級和課次儲存老師指定的詞語，確認注音後就能抽題。詞庫和考卷存在這個瀏覽器。</p>
+        <p class="intro">收好老師指定的詞語，核對注音後就能出卷。</p>
+        <p id="storageLocation" class="data-location" hidden><strong>本機資料</strong> · 只存在此瀏覽器。<a href="sync.html">換裝置／雲端同步</a></p>
 
         <section class="panel book-bar" aria-labelledby="bookHeading">
             <h2 id="bookHeading">班級詞庫</h2>
             <label for="bookSelect">目前班級</label>
             <select id="bookSelect" name="book" disabled></select>
             <details id="bookDetails" class="subpanel">
-                <summary>新增班級詞庫</summary>
+                <summary id="bookDetailsLabel">新增班級詞庫</summary>
                 <form id="bookForm" class="entry-form" autocomplete="off">
                     <label class="wide">班級名稱<input name="name" required maxlength="40" placeholder="例如 二年三班…"></label>
                     <label>出版社<input name="publisher" list="publishers" maxlength="24" required placeholder="例如 康軒…"></label>
@@ -41,13 +48,39 @@
                 </form>
             </details>
             <p class="notice" id="bookNotice" role="status"></p>
-            <a href="#examHeading" id="goToExam" hidden>前往隨機出卷 ↓</a>
         </section>
 
         <div id="bookWorkspace" hidden>
+            <nav class="workspace-actions" aria-label="詞庫操作">
+                <a href="#wordDetails" data-entry="word">新增一個詞語</a>
+                <a href="#batchDetails" data-entry="batch">批次貼上</a>
+                <a href="#examHeading" id="goToExam" class="primary-link" hidden>用詞庫出卷 ↓</a>
+            </nav>
+            <section class="panel exam-panel" aria-labelledby="examHeading">
+                <h2 id="examHeading" tabindex="-1">用詞庫出卷</h2>
+                <p class="section-help">選課次與題數，從已核對注音的詞語抽題。</p>
+                <form id="examForm" class="exam-form" autocomplete="off">
+                    <label>起始課次<input name="from" type="number" min="1" max="60" value="1" required></label>
+                    <label>結束課次<input name="to" type="number" min="1" max="60" value="8" required></label>
+                    <label>抽題數<input name="count" type="number" min="1" max="60" value="15" required></label>
+                    <label class="seed-field">亂數種子（選填）<input name="seed" maxlength="48" spellcheck="false" placeholder="留空會產生新種子…" aria-describedby="seedHelp"></label>
+                    <p class="hint" id="examPool" role="status"></p>
+                    <p class="hint" id="seedHelp">想重現相同題目時，使用相同詞庫、範圍、題數與種子。</p>
+                    <div class="actions"><button type="submit" class="primary">產生考卷與解答</button></div>
+                    <p class="notice" id="examNotice" role="status"></p>
+                </form>
+                <div id="examHistory" hidden>
+                    <h3>已儲存的考卷</h3>
+                    <ul id="examList" class="word-list"></ul>
+                </div>
+            </section>
+
             <div class="vocabulary-columns">
-                <section class="panel" aria-labelledby="wordHeading">
-                    <h2 id="wordHeading">新增詞語</h2>
+                <section class="panel entry-panel" aria-labelledby="entryHeading">
+                    <h2 id="entryHeading">加入老師指定的詞語</h2>
+                    <p class="section-help">逐筆輸入或整批貼上，內容都可稍後再編輯。</p>
+                    <details id="wordDetails" class="subpanel">
+                    <summary id="wordHeading">新增一個詞語</summary>
                     <form id="wordForm" class="entry-form" autocomplete="off">
                         <label class="wide">課次<input name="lesson" type="number" min="1" max="60" value="1" required></label>
                         <label class="wide">詞語<input name="word" required maxlength="20" placeholder="例如 放晴…" spellcheck="false"></label>
@@ -61,6 +94,7 @@
                         </div>
                         <p class="notice wide" id="wordNotice" role="status"></p>
                     </form>
+                    </details>
                     <details id="batchDetails" class="subpanel">
                         <summary>批次貼上詞語</summary>
                         <form id="batchForm" class="entry-form" autocomplete="off">
@@ -83,25 +117,9 @@
                         <p class="notice" id="listCount" role="status"></p>
                     </div>
                     <ul id="wordList" class="word-list"></ul>
+                    <p id="emptyWordHelp" class="hint" hidden>先<a href="#wordDetails" data-entry="word">新增一個詞語</a>或<a href="#batchDetails" data-entry="batch">批次貼上</a>，再核對注音，就能用詞庫出卷。</p>
                 </section>
             </div>
-
-            <section class="panel exam-panel" aria-labelledby="examHeading">
-                <h2 id="examHeading">隨機出卷</h2>
-                <form id="examForm" class="exam-form" autocomplete="off">
-                    <label>起始課次<input name="from" type="number" min="1" max="60" value="1" required></label>
-                    <label>結束課次<input name="to" type="number" min="1" max="60" value="8" required></label>
-                    <label>抽題數<input name="count" type="number" min="1" max="60" value="15" required></label>
-                    <label class="seed-field">亂數種子（選填）<input name="seed" maxlength="48" spellcheck="false" placeholder="留空會產生新種子…"></label>
-                    <p class="hint" id="examPool" role="status"></p>
-                    <div class="actions"><button type="submit" class="primary">產生考卷與解答</button></div>
-                    <p class="notice" id="examNotice" role="status"></p>
-                </form>
-                <div id="examHistory" hidden>
-                    <h3>已儲存的考卷</h3>
-                    <ul id="examList" class="word-list"></ul>
-                </div>
-            </section>
         </div>
     </main>
 </body>

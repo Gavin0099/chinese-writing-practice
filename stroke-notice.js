@@ -2,6 +2,8 @@
 // 筆順說明提示功能
 // ========================================
 
+let restoreStrokeNoticeFocus = null;
+
 /**
  * 顯示筆順說明 Modal
  */
@@ -9,6 +11,8 @@ function showStrokeNoticeModal() {
     const overlay = document.getElementById('strokeNoticeModal');
     if (overlay) {
         overlay.classList.add('active');
+        overlay.inert = false;
+        restoreStrokeNoticeFocus ??= wireOverlayKeyboard(overlay, closeStrokeNoticeModal);
     }
 }
 
@@ -19,6 +23,9 @@ function closeStrokeNoticeModal() {
     const overlay = document.getElementById('strokeNoticeModal');
     if (overlay) {
         overlay.classList.remove('active');
+        overlay.inert = true;
+        restoreStrokeNoticeFocus?.();
+        restoreStrokeNoticeFocus = null;
     }
 }
 

@@ -1,0 +1,181 @@
+{
+  "baseline": "901cb8d",
+  "starting_head": "02349bd",
+  "platform": "macOS",
+  "node_cli_tests": "NOT RUN: command not found; exit 127",
+  "browser_visual_keyboard_print": "NOT VERIFIED: Chrome exit 134 / SIGABRT; browser host unavailable",
+  "structural": [
+    {
+      "page": "index.html",
+      "original_ids_preserved": 22,
+      "duplicates": 0,
+      "form_controls_unchanged": true
+    },
+    {
+      "page": "vocabulary.html",
+      "original_ids_preserved": 37,
+      "duplicates": 0,
+      "form_controls_unchanged": true
+    },
+    {
+      "page": "learning.html",
+      "original_ids_preserved": 22,
+      "duplicates": 0,
+      "form_controls_unchanged": true
+    },
+    {
+      "page": "backup.html",
+      "original_ids_preserved": 8,
+      "duplicates": 0,
+      "form_controls_unchanged": true
+    },
+    {
+      "page": "sync.html",
+      "original_ids_preserved": 22,
+      "duplicates": 0,
+      "form_controls_unchanged": true
+    },
+    {
+      "page": "exam.html",
+      "original_ids_preserved": 10,
+      "duplicates": 0,
+      "form_controls_unchanged": true
+    },
+    {
+      "stylesheet": "styles.css",
+      "original_bytes_preserved": true,
+      "additions_screen_only": true
+    },
+    {
+      "stylesheet": "learning.css",
+      "original_bytes_preserved": true,
+      "additions_screen_only": true
+    },
+    {
+      "stylesheet": "vocabulary.css",
+      "original_bytes_preserved": true,
+      "additions_screen_only": true
+    },
+    {
+      "protected_files_byte_identical": 33,
+      "unique_files": 33
+    },
+    {
+      "file": "script.js",
+      "unchanged_suffix_from": "function initApp() {",
+      "characters": 35028
+    },
+    {
+      "worksheet_markup": "identical; only grade selector native button normalization excluded"
+    }
+  ],
+  "http_and_unchanged_logic": [
+    {
+      "url": "index.html",
+      "http_status": 200
+    },
+    {
+      "url": "vocabulary.html",
+      "http_status": 200
+    },
+    {
+      "url": "learning.html",
+      "http_status": 200
+    },
+    {
+      "url": "sync.html",
+      "http_status": 200
+    },
+    {
+      "url": "backup.html",
+      "http_status": 200
+    },
+    {
+      "url": "exam.html",
+      "http_status": 200
+    },
+    {
+      "url": "styles.css",
+      "http_status": 200
+    },
+    {
+      "url": "learning.css",
+      "http_status": 200
+    },
+    {
+      "url": "vocabulary.css",
+      "http_status": 200
+    },
+    {
+      "url": "script.js",
+      "http_status": 200
+    },
+    {
+      "url": "stroke-notice.js",
+      "http_status": 200
+    },
+    {
+      "url": "vocabulary.mjs",
+      "http_status": 200
+    },
+    {
+      "url": "learning.mjs",
+      "http_status": 200
+    },
+    {
+      "unchanged_logic_section": "async function persist(",
+      "sha256": "d95c599984a2bc049388d9667657c6a0195a8cdf5b5e1257e8af86fdf4291958"
+    },
+    {
+      "unchanged_logic_section": "function fillBlanks(",
+      "sha256": "eb3695233773a505eea092372ca1ffb6070e444293df1ea5e0c85ad9173722f3"
+    },
+    {
+      "unchanged_logic_section": "function discardEditor(",
+      "sha256": "a568e69a0a6bcfaef214b0be2f3824f531331187035b15d991dad32b5af1b1e3"
+    },
+    {
+      "unchanged_logic_section": "function clearBatch(",
+      "sha256": "51e6eeb91cdcd8a95a64b8d8c2399fa760eb9e655bf1b16eb28de38a747685dd"
+    },
+    {
+      "unchanged_logic_section": "bookForm.elements.year",
+      "sha256": "339c5fcbc9b8a8b227523d82d9e130bf6800a7e5307adc345b2a76d503d45156"
+    },
+    {
+      "unchanged_logic_section": "wordForm.addEventListener('input'",
+      "sha256": "c16f309623a21d7c8e5932252a4677ae64c4116461f7daddc4e15537f36ec6f5"
+    },
+    {
+      "unchanged_logic_section": "batchForm.addEventListener('input'",
+      "sha256": "4f812e43d10fdd931488bbe8ca25db023a3c965669dfa004d22f28ee0c7cf0f9"
+    },
+    {
+      "unchanged_logic_section": "function examSettings()",
+      "sha256": "c423bf2c0564dd7cb385ab06f44fd24ad8ec6a52b2f1370fae649b60e4b5b072"
+    },
+    {
+      "unchanged_logic_section": "function renderExams()",
+      "sha256": "0d2d0b448a9fff0d1d51ca8518582ac067cf77de98a1e43a80883c5d22e04719"
+    }
+  ],
+  "syntax_only": [
+    {
+      "file": "script.js",
+      "result": "syntax OK"
+    },
+    {
+      "file": "stroke-notice.js",
+      "result": "syntax OK"
+    },
+    {
+      "file": "vocabulary.mjs",
+      "result": "syntax OK"
+    },
+    {
+      "file": "learning.mjs",
+      "result": "syntax OK"
+    }
+  ],
+  "boundary": "Syntax/source/HTTP checks are not functional tests or pixel comparisons."
+}

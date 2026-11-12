@@ -4,20 +4,30 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#f6f8f3">
-    <title>備份與還原｜生字練習簿</title>
+    <title>本機備份與還原｜生字練習簿</title>
     <link rel="stylesheet" href="learning.css">
     <script type="module" src="backup.mjs"></script>
 </head>
-<body>
+<body class="workspace-page">
+    <a class="skip-link" href="#main-content">跳到主要內容</a>
     <header class="page-header">
-        <nav class="actions" aria-label="學習工具">
-            <a href="vocabulary.html">老師詞庫與出卷</a>
-            <a href="learning.html">國字學習查詢</a>
+        <nav aria-label="學習工具">
+            <a href="index.html">練習紙</a>
+            <a href="vocabulary.html">老師詞庫</a>
+            <details class="nav-tools">
+                <summary>其他工具</summary>
+                <div class="tool-links">
+                    <a href="learning.html">國字學習查詢</a>
+                    <a href="backup.html" aria-current="page">本機備份與還原</a>
+                    <a href="sync.html">資料與同步</a>
+                </div>
+            </details>
         </nav>
     </header>
-    <main>
-        <h1>備份與還原</h1>
-        <p class="intro">把班級詞庫、考卷、教學進度和習寫紀錄存成一個檔案。換裝置後，可在同一頁選檔還原。</p>
+    <main id="main-content">
+        <h1>本機備份與還原</h1>
+        <p class="intro">把此瀏覽器的詞庫、考卷、教學進度和習寫紀錄存成檔案，帶到另一台裝置還原。</p>
+        <p class="data-location"><strong>只處理本機資料</strong> · 雲端家庭資料請到<a href="sync.html">資料與同步</a>下載雲端備份。</p>
         <div class="panels">
             <section class="panel" aria-labelledby="exportHeading">
                 <h2 id="exportHeading">下載備份</h2>
@@ -31,6 +41,7 @@
             </section>
             <section class="panel" aria-labelledby="restoreHeading">
                 <h2 id="restoreHeading">還原備份</h2>
+                <p class="section-help">還原會替換此瀏覽器的現有紀錄。請先下載備份，選檔後核對內容再確認。</p>
                 <label for="backupFile">選擇備份檔（JSON）</label>
                 <input id="backupFile" name="backup-file" type="file" accept=".json,application/json" aria-describedby="restoreNotice">
                 <p class="notice" id="restoreNotice" role="status"></p>

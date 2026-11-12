@@ -5,6 +5,7 @@ import { cloudPageUrl, openPageStorage } from './cloudStorage.mjs';
 const cloud = await openPageStorage();
 
 const byId = id => document.getElementById(id);
+byId('storageLocation').hidden = Boolean(cloud);
 const bookForm = byId('bookForm');
 const bookSelect = byId('bookSelect');
 const wordForm = byId('wordForm');
@@ -20,6 +21,20 @@ let activeId = query.searchParams.get('book');
 let editingId = null;
 let batch = [];
 let dirty = false;
+
+// Page shortcuts only reveal the existing forms; unsaved values stay in place.
+for (const link of document.querySelectorAll('[data-entry]')) {
+    link.addEventListener('click', event => {
+        event.preventDefault();
+        const isBatch = link.dataset.entry === 'batch';
+        byId(isBatch ? 'batchDetails' : 'wordDetails').open = true;
+        (isBatch ? batchForm.elements.lesson : wordFields.lesson).focus();
+    });
+}
+byId('goToExam').addEventListener('click', event => {
+    event.preventDefault();
+    byId('examHeading').focus();
+});
 
 function notice(id, message = '', error = false) {
     const element = byId(id);
@@ -78,7 +93,7 @@ function clearEditor(lesson = wordFields.lesson.value) {
     editingId = null;
     wordForm.reset();
     wordFields.lesson.value = lesson || '1';
-    byId('wordHeading').textContent = '新增詞語';
+    byId('wordHeading').textContent = '新增一個詞語';
     byId('saveWord').textContent = '儲存詞語';
     byId('cancelEdit').hidden = true;
     dirty = false;
@@ -92,6 +107,7 @@ function discardEditor(includeBatch = false) {
 
 function editWord(entry) {
     if (!discardEditor()) return;
+    byId('wordDetails').open = true;
     editingId = entry.id;
     wordFields.lesson.value = entry.lesson;
     wordFields.word.value = entry.word;
@@ -113,7 +129,8 @@ function renderWords() {
     filter.replaceChildren(new Option('全部課次', ''), ...lessons.map(lesson => new Option(`第 ${lesson} 課`, lesson)));
     if (lessons.includes(Number(current))) filter.value = current;
     const shown = words.filter(entry => !filter.value || entry.lesson === Number(filter.value)).sort((a, b) => a.lesson - b.lesson);
-    notice('listCount', shown.length ? `${shown.length} 個詞語 · ${shown.filter(entry => entry.confirmed).length} 個可出題` : '這裡還沒有詞語。');
+    notice('listCount', shown.length ? `${shown.length} 個詞語 · ${shown.filter(entry => entry.confirmed).length} 個已核對注音` : '這裡還沒有詞語。');
+    byId('emptyWordHelp').hidden = Boolean(words.length);
     byId('wordList').replaceChildren(...shown.map(entry => {
         const row = document.createElement('li');
         const text = document.createElement('div');
@@ -123,7 +140,7 @@ function renderWords() {
         meta.className = 'word-meta';
         const chars = Array.from(entry.word);
         const targets = entry.blanks.map(position => chars[position - 1]).join('、');
-        meta.textContent = `第 ${entry.lesson} 課 · 挖空 ${targets} · ${entry.confirmed ? '已確認' : '待確認'}`;
+        meta.textContent = `第 ${entry.lesson} 課 · 挖空 ${targets} · ${entry.confirmed ? '已核對注音' : '待核對注音'}`;
         const reading = document.createElement('p');
         reading.className = 'word-meta';
         reading.textContent = entry.pronunciation.join('　') || '尚未填寫注音';
@@ -161,6 +178,7 @@ function renderBooks() {
     bookSelect.disabled = !activeId;
     byId('bookWorkspace').hidden = !activeId;
     byId('goToExam').hidden = !activeId;
+    byId('bookDetailsLabel').textContent = activeId ? '新增班級詞庫' : '先建立班級詞庫';
     if (activeId) {
         bookSelect.value = activeId;
         query.searchParams.set('book', activeId);
@@ -279,7 +297,7 @@ byId('commitBatch').addEventListener('click', async () => {
     batchForm.elements.words.value = batch.filter(row => row.error).map(row => original[row.line - 1]).join('\n');
     clearBatch();
     renderWords();
-    notice('batchNotice', `已儲存 ${accepted.length} 個詞語，${ready} 個可出題。`);
+    notice('batchNotice', `已儲存 ${accepted.length} 個詞語，${ready} 個已核對注音。`);
 });
 
 function examSettings() {
@@ -293,7 +311,7 @@ function renderPool() {
         const { from, to } = examSettings();
         const { available, ambiguous } = questionPool(ownWords(), activeId, from, to);
         const excluded = ambiguous ? `。${ambiguous} 組提示會對到多個答案，已排除` : '';
-        notice('examPool', `這個範圍有 ${available.length} 題可抽${excluded}。`);
+        notice('examPool', `此範圍可抽題：${available.length} 題${excluded}。${available.length ? '' : '請先新增或批次貼上詞語，並核對注音與挖空字。'}`);
     } catch (error) {
         notice('examPool', error.message, true);
     }
@@ -351,6 +369,14 @@ window.addEventListener('beforeunload', event => {
 try {
     data = cloud ? readVocabulary(cloud) : readVocabulary();
     renderBooks();
+    if (query.hash === '#examHeading') {
+        if (activeId) {
+            byId('examHeading').focus();
+        } else {
+            notice('bookNotice', '先建立班級詞庫、加入詞語並核對注音，就能出卷。');
+            bookForm.elements.name.focus();
+        }
+    }
 } catch (error) {
     notice('bookNotice', error.message, true);
 }

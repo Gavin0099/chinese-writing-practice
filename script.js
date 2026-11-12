@@ -5,13 +5,46 @@ const downloadBtn = document.getElementById('downloadBtn');
 const previewArea = document.getElementById('previewSection');
 let renderedWorksheetLesson = null;
 
+// Keyboard support for the existing screen-only help and onboarding overlays.
+function wireOverlayKeyboard(overlay, dismiss) {
+    const previousFocus = document.activeElement;
+    const controls = () => [...overlay.querySelectorAll('a[href], button, input, select, textarea, [tabindex="0"]')]
+        .filter(element => !element.disabled && element.getClientRects().length);
+    function handleKey(event) {
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            event.stopPropagation();
+            dismiss();
+        } else if (event.key === 'Tab') {
+            const items = controls();
+            const first = items[0];
+            const last = items.at(-1);
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last?.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first?.focus();
+            }
+        }
+    }
+    overlay.addEventListener('keydown', handleKey);
+    controls()[0]?.focus();
+    return () => {
+        overlay.removeEventListener('keydown', handleKey);
+        if (previousFocus?.isConnected && previousFocus.getClientRects().length) previousFocus.focus();
+    };
+}
+
+let restoreLineGuideFocus = null;
+
 // --- LINE Visual Guide Injector ---
 (function injectLineGuide() {
     const guideHtml = `
-        <div id="lineGuide" class="line-guide-overlay">
+        <div id="lineGuide" class="line-guide-overlay" role="dialog" aria-modal="true" aria-labelledby="lineGuideTitle">
             <div class="line-guide-content">
                 <div class="line-guide-icon">💡</div>
-                <div class="line-guide-title">使用 Safari / Chrome 開啟</div>
+                <div id="lineGuideTitle" class="line-guide-title">使用 Safari / Chrome 開啟</div>
                 <div class="line-guide-step">
                     <div class="step-number">1</div>
                     <div class="step-text">點擊右下角的 <b>「分享」</b> 按鈕 (或三個點)</div>
@@ -23,7 +56,7 @@ let renderedWorksheetLesson = null;
                 <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 1rem;">
                     LINE 內建瀏覽器限制較多，切換至系統瀏覽器即可正常列印與下載 PDF。
                 </p>
-                <button class="line-guide-close" onclick="document.getElementById('lineGuide').style.display='none'">我知道了</button>
+                <button class="line-guide-close" onclick="closeLineGuide()">我知道了</button>
             </div>
         </div>
     `;
@@ -34,7 +67,16 @@ let renderedWorksheetLesson = null;
 
 function showLineGuide() {
     const guide = document.getElementById('lineGuide');
-    if (guide) guide.style.display = 'flex';
+    if (guide) {
+        guide.style.display = 'flex';
+        restoreLineGuideFocus ??= wireOverlayKeyboard(guide, closeLineGuide);
+    }
+}
+
+function closeLineGuide() {
+    document.getElementById('lineGuide').style.display = 'none';
+    restoreLineGuideFocus?.();
+    restoreLineGuideFocus = null;
 }
 
 // --- Hybrid Print Mode Detector (v8.5) ---
@@ -77,6 +119,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const startBtn = document.getElementById('obStartBtn');
         if (modal) {
             modal.style.display = 'flex';
+            const restoreFocus = wireOverlayKeyboard(modal, dismissOnboarding);
+            document.getElementById('closeOnboarding').onclick = dismissOnboarding;
+
+            function dismissOnboarding() {
+                modal.style.display = 'none';
+                restoreFocus();
+                initApp();
+                document.getElementById('homeVocabulary').focus();
+            }
 
             let selectedGrade = null;
             let selectedSem = null;
@@ -119,7 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     pinnedLesson: null
                 });
                 modal.style.display = 'none';
+                restoreFocus();
                 initApp(); // Start the app
+                document.getElementById('heroActionBtn').focus();
             };
             return; // Stop here, initApp will be called by startBtn
         }

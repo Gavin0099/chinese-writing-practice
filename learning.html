@@ -7,18 +7,26 @@
     <link rel="stylesheet" href="learning.css">
     <script type="module" src="learning.mjs"></script>
 </head>
-<body>
+<body class="workspace-page">
+    <a class="skip-link" href="#main-content">跳到主要內容</a>
     <header class="page-header">
-        <nav aria-label="工具" class="actions">
-            <a href="index.html">← 生字練習簿</a>
-            <a href="vocabulary.html">老師詞庫與出卷</a>
-            <a href="backup.html">備份與還原</a>
-            <a href="sync.html">雲端同步</a>
+        <nav aria-label="學習工具">
+            <a href="index.html">練習紙</a>
+            <a href="vocabulary.html">老師詞庫</a>
+            <details class="nav-tools">
+                <summary>其他工具</summary>
+                <div class="tool-links">
+                    <a href="learning.html" aria-current="page">國字學習查詢</a>
+                    <a href="backup.html">本機備份與還原</a>
+                    <a href="sync.html">資料與同步</a>
+                </div>
+            </details>
         </nav>
     </header>
-    <main>
+    <main id="main-content">
         <h1>國字學習查詢</h1>
         <p class="intro">依家長確認的課次查詢教材，並記下孩子還需要練習的字。</p>
+        <p id="storageLocation" class="data-location" hidden><strong>本機資料</strong> · 學習紀錄只存在此瀏覽器。<a href="sync.html">換裝置／雲端同步</a></p>
 
         <div class="panels">
             <section class="panel" aria-labelledby="progressHeading">
@@ -57,7 +65,7 @@
                         <button type="button" id="showRecords" hidden>查看習寫紀錄</button>
                     </div>
                 </form>
-                <p class="hint">查詢文字與習寫紀錄只在此瀏覽器處理。</p>
+                <p class="hint">教材檔只存於此瀏覽器；學習紀錄的保存位置請見頁面上方。</p>
             </section>
         </div>
 

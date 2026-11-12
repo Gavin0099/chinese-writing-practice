@@ -343,11 +343,13 @@ function initApp() {
                 toggleCustomBtn.onclick = () => {
                     if (legacyControls.style.display === 'none') {
                         legacyControls.style.display = 'block';
-                        toggleCustomBtn.innerHTML = '📂 收合自訂設定 (進階)';
+                        toggleCustomBtn.setAttribute('aria-expanded', 'true');
+                        toggleCustomBtn.innerHTML = '收合自訂設定';
                         legacyControls.scrollIntoView({ behavior: 'smooth' });
                     } else {
                         legacyControls.style.display = 'none';
-                        toggleCustomBtn.innerHTML = '想練習別課？前往自訂設定';
+                        toggleCustomBtn.setAttribute('aria-expanded', 'false');
+                        toggleCustomBtn.innerHTML = '自訂練習簿：選課或輸入生字';
                     }
                 }
             }

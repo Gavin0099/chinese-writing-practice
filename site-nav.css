@@ -1,0 +1,65 @@
+/* Shared screen UI. Worksheet and exam print styles remain independent. */
+@media screen {
+    :root {
+        --ink: #24352d;
+        --muted: #52645a;
+        --paper: #f6f8f3;
+        --line: #d5dfd5;
+        --accent: #305b47;
+        --surface: #fff;
+        --control-border: #758b7d;
+        --focus: #527d6a;
+        --ui-small: .9375rem;
+        --ui-body: 1rem;
+        --ui-heading: 1.25rem;
+        --ui-title: 2rem;
+        --ui-font: 'Noto Sans TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    }
+    .page-header, .minimal-header {
+        padding: .5rem max(1rem, calc((100vw - 64rem) / 2));
+        border-bottom: 1px solid var(--line);
+        background: var(--surface);
+    }
+    .site-nav, .page-header .site-nav {
+        display: flex; flex-wrap: wrap; gap: .25rem; margin: 0;
+        font-family: var(--ui-font); font-size: var(--ui-small); line-height: 1.5;
+    }
+    .site-nav a {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 44px; min-height: 44px; padding: .5rem;
+        border-radius: .4rem; color: var(--accent); font-weight: 600;
+        text-decoration: none; text-underline-offset: .3em;
+    }
+    .site-nav a:hover { background: var(--paper); text-decoration: underline; }
+    .site-nav a[aria-current] {
+        background: var(--paper); color: var(--ink);
+        text-decoration: underline; text-decoration-thickness: 2px;
+    }
+    .site-nav a:focus-visible, .exam-back-link:focus-visible,
+    .primary-link:focus-visible, .sync-page summary:focus-visible {
+        outline: 3px solid var(--focus); outline-offset: 2px;
+    }
+    .exam-back-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: .5rem; }
+    .primary-link {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-height: 44px; padding: .6rem 1rem; border: 1px solid var(--accent);
+        border-radius: .4rem; background: var(--accent); color: var(--surface);
+        text-decoration: none; font-weight: 650;
+    }
+    .primary-link:hover { background: var(--ink); color: var(--surface); }
+    .local-tools-action { margin-top: 1rem; }
+    .sync-page:has(#retrySync:not([hidden])) .primary-link {
+        background: transparent; color: var(--accent); border-color: transparent;
+        text-decoration: underline;
+    }
+    /* The existing script owns hidden state; CSS follows it without new logic. */
+    .sync-page:has(#googleSignIn:not([hidden])) .local-tools-action,
+    .sync-page:has(#accountActions:not([hidden])) .local-tools-action,
+    .sync-page:has(#localEmailTest:not([hidden])) .local-tools-action,
+    .sync-page:has(#projectSettings[hidden]) .sync-advanced { display: none; }
+    .sync-page .panels { grid-template-columns: minmax(0, 1fr); max-width: 44rem; }
+    .sync-page .sync-advanced { max-width: 44rem; margin-top: 1.5rem; }
+    .sync-page summary { min-height: 44px; padding-block: .6rem; }
+    .sync-page button, .sync-page input { min-height: 44px; }
+    .sync-page .actions a { min-height: 44px; display: inline-flex; align-items: center; }
+}

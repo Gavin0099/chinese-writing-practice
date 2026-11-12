@@ -1,0 +1,27 @@
+/* Warm paper / deep teal. Screen tokens never replace worksheet or print defaults. */
+@media screen {
+    :root {
+        --ui-page: #F7F5EF;
+        --ui-surface: #FFFFFF;
+        --ui-soft: #EEF3F0;
+        --ui-selected: #E3EEE9;
+        --ui-text: #203832;
+        --ui-muted: #52635D;
+        --ui-primary: #123F37;
+        --ui-primary-hover: #0B302A;
+        --ui-on-primary: #FFFFFF;
+        --ui-border: #718178;
+        --ui-divider: #D1DCD5;
+        --ui-focus: #AA7934;
+        --ui-success: #286346;
+        --ui-warning: #80551C;
+        --ui-warning-bg: #FCF2D9;
+        --ui-danger: #953F36;
+        --ui-disabled-bg: #E4EAE6;
+        --ui-opacity-ink: #091B16;
+        --ui-shadow-rgb: 18, 63, 55;
+        --ui-scrim: rgba(18, 63, 55, 0.50);
+        --ui-scrim-strong: rgba(18, 63, 55, 0.75);
+        --ui-highlight: rgba(255, 255, 255, 0.20);
+    }
+}

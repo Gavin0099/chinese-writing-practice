@@ -150,7 +150,44 @@ export async function openFamilyStorage(client, onSessionLost = () => {}, onUnco
         });
     }
 
+    async function reviewRequest(query) {
+        const session = await authenticatedSession(client);
+        if (!active || session.user.id !== owner) throw new Error(sessionChanged);
+        const result = await query()
+            .setHeader('Authorization', `Bearer ${session.access_token}`)
+            .abortSignal(AbortSignal.timeout(10000));
+        if (!active) throw new Error(sessionChanged);
+        return result;
+    }
+
+    async function readReviewAttempts() {
+        const attempts = [];
+        const size = 100;
+        let after;
+        for (;;) {
+            const { data, error } = await reviewRequest(() => {
+                const query = client.from('review_attempts').select('attempt_id,attempt')
+                    .eq('owner_id', owner).order('attempt_id').limit(size);
+                return after === undefined ? query : query.gt('attempt_id', after);
+            });
+            if (error || !Array.isArray(data)) throw new Error('無法讀取雲端批改紀錄。', { cause: error });
+            attempts.push(...data.map(row => row.attempt));
+            if (data.length < size) return attempts;
+            after = data.at(-1).attempt_id;
+        }
+    }
+
+    async function appendReviewAttempts(attempts) {
+        const { data, error } = await reviewRequest(() =>
+            client.rpc('append_review_attempts', { p_attempts: attempts }));
+        if (error?.message === 'review_attempt_conflict') throw new Error('同一筆批改紀錄有不同內容，請保留此瀏覽器的紀錄。');
+        if (error || data !== attempts.length) throw new Error('尚未確認雲端儲存。', { cause: error });
+    }
+
     return {
+        ownerId: owner,
+        readReviewAttempts,
+        appendReviewAttempts,
         getItem(key) { const section = sectionsByKey.get(key); return section && backup ? JSON.stringify(backup[section]) : null; },
         setItem(key, value) {
             const section = sectionsByKey.get(key);

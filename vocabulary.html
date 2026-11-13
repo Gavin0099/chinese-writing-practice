@@ -3,12 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f6f8f3">
+    <meta name="theme-color" content="#FAF8F4">
     <title>老師詞庫與出卷｜生字練習簿</title>
     <link rel="stylesheet" href="learning.css">
     <link rel="stylesheet" href="vocabulary.css">
     <script type="module" src="vocabulary.mjs"></script>
     <link rel="stylesheet" href="task-layout.css" media="screen">
+    <link rel="stylesheet" href="tokens.css" media="screen">
 </head>
 <body>
     <a class="skip-link" href="#main">跳到詞庫</a>
@@ -16,7 +17,7 @@
         <nav class="task-nav" aria-label="學習工具">
             <a href="vocabulary.html" data-workspace-link aria-current="page">老師詞庫</a>
             <a href="learning.html" data-workspace-link>國字查詢</a>
-            <a href="index.html" data-workspace-link>練習紙</a>
+            <a href="index.html" data-workspace-link>首頁</a>
             <details class="task-nav-more">
                 <summary>資料與設定</summary>
                 <div class="task-nav-menu">
@@ -51,18 +52,144 @@
             <p class="notice" id="bookNotice" role="status"></p>
         </section>
 
+        <details class="panel vocabulary-disclosure" id="shareDetails">
+            <summary>分享與匯入詞庫</summary>
+            <section id="shareExport" hidden>
+                <h3>匯出目前班級的詞語</h3>
+                <form id="shareExportForm">
+                    <p class="hint">勾選要分享的詞語。檔案會附上班級名稱和教材版次。</p>
+                    <button id="shareToggleAll" type="button">全選</button>
+                    <div class="share-entries" id="shareExportWords" role="group" aria-label="選擇要匯出的詞語"></div>
+                    <button type="submit" id="shareDownload" disabled>下載分享檔</button>
+                    <p class="notice" id="shareExportNotice" role="status"></p>
+                </form>
+            </section>
+            <form id="shareImportForm">
+                <h3>匯入分享檔</h3>
+                <label for="shareFile">選擇詞庫 JSON 檔案</label>
+                <input type="file" id="shareFile" accept=".json,application/json">
+                <div id="sharePreview" hidden>
+                    <p class="hint" id="shareSource"></p>
+                    <label for="shareTarget">匯入到哪個班級</label>
+                    <select id="shareTarget"></select>
+                    <label id="shareNameLabel">新班級名稱<input id="shareName" maxlength="40"></label>
+                    <ul id="sharePreviewRows" class="share-entries"></ul>
+                    <label class="check"><input id="shareConfirmReadings" type="checkbox">我已核對新詞語的注音</label>
+                    <button type="submit" class="primary" id="shareApply" disabled>確認匯入新詞語</button>
+                </div>
+                <p class="notice" id="shareImportNotice" role="status"></p>
+            </form>
+        </details>
+
         <div id="bookWorkspace" hidden>
             <div class="actions vocabulary-actions" aria-label="詞庫操作">
                 <button type="button" id="goToExam" class="primary" aria-controls="examPanel">使用此詞庫出卷</button>
                 <button type="button" id="goToWord" aria-controls="wordPanel">新增詞語</button>
                 <button type="button" id="goToBatch" aria-controls="wordPanel">批次貼上</button>
+                <button type="button" id="goToPhoto" aria-controls="photoPanel" aria-expanded="false" hidden>拍照匯入詞語</button>
             </div>
+            <section class="panel" id="photoPanel" aria-labelledby="photoHeading" hidden>
+                <h2 id="photoHeading" tabindex="-1">拍照匯入詞語</h2>
+                <p class="hint">照片留在這台裝置。辨識工具首次使用需要下載。</p>
+                <label class="photo-mode">辨識模式
+                    <select id="photoMode">
+                        <option value="circles">老師圈選詞語</option>
+                        <option value="text">一般文字／手寫辨識</option>
+                    </select>
+                </label>
+                <div class="actions photo-file-actions">
+                    <label for="photoCamera" id="photoCameraLabel">拍照</label>
+                    <input id="photoCamera" class="visually-hidden" type="file" accept="image/*" capture="environment">
+                    <label for="photoFile">選擇照片</label>
+                    <input id="photoFile" class="visually-hidden" type="file" accept="image/*" multiple>
+                    <button type="button" id="clearPhotos" hidden>清除這批照片</button>
+                </div>
+                <p id="photoLoadNotice" class="notice" role="status"></p>
+                <p id="photoNotice" class="notice" role="status"></p>
+                <div id="photoCrop" hidden>
+                    <label id="photoPreviewPicker" hidden>裁切預覽
+                        <select id="photoPreview"></select>
+                    </label>
+                    <div class="actions" id="photoTextOptions" hidden>
+                        <label>文字方向
+                            <select id="photoTextDirection">
+                                <option value="auto">自動</option>
+                                <option value="horizontal">橫排</option>
+                                <option value="vertical">直排</option>
+                            </select>
+                        </label>
+                        <button type="button" id="drawPhotoTextBox" aria-pressed="false">框選文字</button>
+                    </div>
+                    <p id="photoTextHelp" class="hint" hidden>可直接辨識照片。若國字旁有注音，請框住國字。</p>
+                    <div class="photo-crop-frame" id="photoCropFrame">
+                        <canvas id="photoCanvas" role="img" aria-label="照片裁切預覽"></canvas>
+                        <div id="photoCropOutline" aria-hidden="true"></div>
+                    </div>
+                    <fieldset id="photoEdges" class="course-fields">
+                        <legend id="photoCropLegend">調整裁切範圍，保留紅圈和旁邊的編號</legend>
+                        <label>左緣 <input type="range" name="left" min="0" max="100" value="0"></label>
+                        <label>右緣 <input type="range" name="right" min="0" max="100" value="100"></label>
+                        <label>上緣 <input type="range" name="top" min="0" max="100" value="0"></label>
+                        <label>下緣 <input type="range" name="bottom" min="0" max="100" value="100"></label>
+                    </fieldset>
+                    <fieldset class="photo-number-range" id="photoNumberRange" aria-describedby="photoRangeHelp photoRangeError">
+                        <legend>老師的編號範圍（選填）</legend>
+                        <div>
+                            <label>起始編號 <input id="photoFirstNumber" type="text" maxlength="2" inputmode="numeric" placeholder="1"></label>
+                            <label>最後編號 <input id="photoLastNumber" type="text" maxlength="2" inputmode="numeric" placeholder="18"></label>
+                        </div>
+                        <p class="hint" id="photoRangeHelp">先填起訖編號，辨識後就能檢查開頭、中間和結尾有沒有缺號。</p>
+                        <p class="notice" id="photoRangeError" role="status" hidden></p>
+                    </fieldset>
+                    <div id="photoHandwritingOptions" hidden>
+                        <p class="hint" id="photoHandwritingTarget"></p>
+                        <label>加入位置
+                            <select id="photoHandwritingPosition">
+                                <option value="after">接在詞語後面</option>
+                                <option value="before">接在詞語前面</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="actions">
+                        <button type="button" id="resetPhotoCrop">重設裁切</button>
+                        <button type="button" id="scanPhoto" class="primary">辨識圈選詞語</button>
+                        <button type="button" id="scanPhotoHandwriting" class="primary" hidden>辨識紅字並補進詞語</button>
+                        <button type="button" id="cancelPhotoHandwriting" hidden>取消補紅字</button>
+                    </div>
+                </div>
+                <form id="photoReview" class="photo-review" hidden>
+                    <h3>核對詞語</h3>
+                    <p class="hint">請核對辨識詞語和字典注音，再勾選要匯入的詞。每字一組注音，以空格分隔。</p>
+                    <label>課次 <input type="number" name="lesson" min="1" max="60" value="1" required></label>
+                    <div class="actions">
+                        <button type="button" id="sortPhotoWords" disabled>依編號排序</button>
+                        <label class="check"><input type="checkbox" id="selectAllPhotoWords" disabled>全選詞語</label>
+                        <button type="button" id="clearPhotoResults" hidden>清除結果</button>
+                    </div>
+                    <p class="notice" id="photoOrderNotice" role="status"></p>
+                    <section id="photoMissingSection" aria-labelledby="photoMissingHeading">
+                        <h4 id="photoMissingHeading">檢查缺號</h4>
+                        <p class="notice" id="photoMissingNotice" role="status"></p>
+                    </section>
+                    <details id="photoDiagnostics" hidden>
+                        <summary>辨識詳情</summary>
+                        <ul></ul>
+                    </details>
+                    <ol id="photoCandidates"></ol>
+                    <div class="actions">
+                        <button type="button" id="addPhotoWord">手動加一筆</button>
+                        <button type="submit" id="savePhotoWords" class="primary" disabled>確認加入老師詞庫</button>
+                    </div>
+                    <p id="photoSaveNotice" class="notice" role="status"></p>
+                </form>
+            </section>
             <section class="panel exam-panel" id="examPanel" aria-labelledby="examHeading">
                 <h2 id="examHeading" tabindex="-1">製作考卷</h2>
                 <form id="examForm" class="exam-form" autocomplete="off">
                     <label>起始課次<input name="from" type="number" min="1" max="60" value="1" required></label>
                     <label>結束課次<input name="to" type="number" min="1" max="60" value="8" required></label>
                     <label>抽題數<input name="count" type="number" min="1" max="60" value="15" required></label>
+                    <div><label class="check"><input name="prioritize" type="checkbox">優先抽最近答錯的詞語</label></div>
                     <p class="hint" id="examPool" role="status"></p>
                     <details class="subpanel exam-advanced">
                         <summary>進階：固定抽題設定</summary>

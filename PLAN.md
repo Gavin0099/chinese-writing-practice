@@ -6,6 +6,7 @@
 
 ## Current Phase
 
+- Release Stabilization 聚焦首頁下載 PDF 與私人站可重建的交付版本。暫緩 OCR 新功能、額外 UI 改版與 OCR 實機效能測試。
 - [x] 完成 AI Governance 初始導入與本機驗證。
 - [x] 國字查詢 MVP 已通過本機使用流程驗收。
 - [x] M1 checkpoint `eb9670f` 已建立，含國字查詢程式、測試與工單。
@@ -15,6 +16,9 @@
 
 ## Active Sprint
 
+- PDF-01／PDF-02 獨立重現與修正首頁直接下載 PDF 裁切，保留原生列印驗收。
+- REL-01／REL-02 封存私人站執行版本，另建整合 Draft PR，從乾淨版本重建、驗證並交付審查。
+- QA-01 驗證實體紙本與 iPhone Safari 備份還原，紀錄實機結果。
 - [x] 固定共用框架版本，套用框架 baseline 與專案規則。
 - [x] 安裝 Git hooks，驗證治理設定、版本一致性及 runtime fixtures。
 - [x] Owner 確認契約領域為中文書寫練習與列印教材生成，repo 風險分級為低風險。

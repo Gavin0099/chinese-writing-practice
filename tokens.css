@@ -1,0 +1,129 @@
+/* Screen palette from PR #9, applied to the current product layout. */
+@media screen {
+    :root {
+        --ui-canvas: #FAF8F4;
+        --ui-surface: #FFFFFF;
+        --ui-surface-muted: #EDF3FA;
+        --ui-text: #243444;
+        --ui-muted: #566675;
+        --ui-primary: #315F8C;
+        --ui-primary-hover: #244A72;
+        --ui-primary-active: #1D3B5B;
+        --ui-on-primary: #FFFFFF;
+        --ui-border: #71879A;
+        --ui-divider: #D1D6D9;
+        --ui-focus: #1D3B5B;
+        --ui-focus-gap: #FFFFFF;
+        --ui-danger: #9C3F43;
+        --ui-warning: #85591F;
+        --ui-warning-surface: #F5EAE3;
+        --ui-accent: #C86D4B;
+        --ui-accent-text: #A95133;
+        --ui-primary-rgb: 49, 95, 140;
+        --ink: var(--ui-text);
+        --muted: var(--ui-muted);
+        --paper: var(--ui-canvas);
+        --line: var(--ui-divider);
+        --accent: var(--ui-primary);
+    }
+
+    body { background-color: var(--ui-canvas); color: var(--ui-text); }
+    .page-header { border-color: var(--ui-divider); }
+    .page-header ~ main :is(select, textarea, input:not([type='checkbox'])) {
+        border-color: var(--ui-border);
+    }
+    .panel, .result-card, .onboarding-card { background-color: var(--ui-surface); }
+    .curriculum-import, .subpanel, .blank-choices label:has(:checked) {
+        background-color: var(--ui-surface-muted);
+    }
+    input[type='checkbox'] { accent-color: var(--ui-primary); }
+    .page-header ~ main button:not(.primary):hover { background-color: var(--ui-surface-muted); }
+    .page-header ~ main button.primary:hover { background-color: var(--ui-primary-hover); }
+    .page-header ~ main button.primary:active { background-color: var(--ui-primary-active); }
+    .notice[data-error], .batch-rows [data-error], .word-list .delete {
+        color: var(--ui-danger);
+    }
+    .word-list .delete { border-color: var(--ui-danger); }
+    .notice[data-warning]:not([data-error]) { color: var(--ui-warning); }
+    .notice[data-warning]:not(:empty) { background-color: var(--ui-warning-surface); }
+
+    .minimal-header, .home-task-intro, #smartCard, #onboardingModal, #legacyControls .col-lg-4, #appFooter {
+        --bg-page: var(--ui-canvas);
+        --bg-card: var(--ui-surface);
+        --text-main: var(--ui-text);
+        --text-muted: var(--ui-muted);
+        --primary: var(--ui-primary);
+        --primary-hover: var(--ui-primary-hover);
+        --secondary: var(--ui-primary);
+        --secondary-hover: var(--ui-primary-hover);
+        --border-input: var(--ui-border);
+        --focus-ring: var(--ui-focus);
+        --primary-sage: var(--ui-primary);
+        --primary-sage-dark: var(--ui-primary-hover);
+        --text-dark: var(--ui-text);
+        color: var(--ui-text);
+    }
+    .onboarding-q label, #smartCard .card-loading { color: var(--ui-muted); }
+    #smartCard .hero-hint { color: var(--ui-accent-text); }
+    #smartCard .success-state .hero-title { color: var(--ui-text); }
+    .btn-primary-hero { box-shadow: 0 4px 15px rgba(var(--ui-primary-rgb), 0.3); }
+    .btn-primary-hero:hover { box-shadow: 0 6px 20px rgba(var(--ui-primary-rgb), 0.4); }
+    #onboardingModal .ob-btn, #legacyControls .grade-card {
+        color: var(--ui-text);
+        background-color: var(--ui-surface);
+        border-color: var(--ui-border);
+    }
+    #onboardingModal .ob-btn:hover, #legacyControls .grade-card:hover {
+        color: var(--ui-primary);
+        background-color: var(--ui-surface-muted);
+        border-color: var(--ui-primary);
+    }
+    #onboardingModal .ob-btn.active, #legacyControls .grade-card.active {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+        border-color: var(--ui-primary);
+        box-shadow: 0 4px 6px rgba(var(--ui-primary-rgb), 0.2);
+    }
+    #legacyControls .grade-card.active .grade-label { color: var(--ui-on-primary); }
+    #legacyControls .col-lg-4 :is(.form-control, .form-select) { border-color: var(--ui-border); }
+    #legacyControls .col-lg-4 .btn-primary {
+        color: var(--ui-on-primary);
+        background-color: var(--ui-primary);
+        border-color: var(--ui-primary);
+    }
+    #legacyControls .col-lg-4 .btn-primary:hover {
+        --primary-sage: var(--ui-primary-hover);
+        background-color: var(--ui-primary-hover);
+        border-color: var(--ui-primary-hover);
+    }
+    #legacyControls .col-lg-8 > .card > .bg-light { background-color: var(--ui-surface-muted) !important; }
+
+    #appFooter {
+        background-image: linear-gradient(to bottom, var(--ui-canvas), var(--ui-surface-muted));
+        border-color: var(--ui-divider);
+    }
+    #appFooter .source-credit, #appFooter .author-text p,
+    #appFooter .feedback-hint, #appFooter .footer-copyright { color: var(--ui-muted); }
+    #appFooter .source-credit a { color: var(--ui-primary); }
+    #appFooter .license-badge, #appFooter .author-icon {
+        color: var(--ui-primary);
+        background-color: var(--ui-surface-muted);
+        border-color: var(--ui-divider);
+    }
+    #appFooter .author-icon { box-shadow: inset 0 -2px 0 var(--ui-accent); }
+    #appFooter .author-text h4 { color: var(--ui-text); }
+    #appFooter .feedback-btn { color: var(--ui-on-primary); background: var(--ui-primary); }
+    #appFooter .feedback-btn:hover { background: var(--ui-primary-hover); }
+
+    :focus-visible, .task-nav :focus-visible, .home-task-actions :focus-visible {
+        outline: 3px solid var(--ui-focus);
+        outline-offset: 2px;
+    }
+    #onboardingModal .ob-btn:focus-visible,
+    #smartCard #heroActionBtn:focus-visible,
+    #legacyControls .grade-card:focus-visible {
+        outline: 3px solid var(--ui-focus);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 2px var(--ui-focus-gap);
+    }
+}

@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生字練習簿產生器</title>
+    <meta name="theme-color" content="#FAF8F4">
+    <title>國字學習小幫手</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="attribution.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="task-layout.css" media="screen">
+    <link rel="stylesheet" href="tokens.css" media="screen">
 </head>
 
 <body>
@@ -58,7 +60,7 @@
         <nav class="task-nav" aria-label="學習工具">
             <a href="vocabulary.html" data-workspace-link>老師詞庫</a>
             <a href="learning.html" data-workspace-link>國字查詢</a>
-            <a href="index.html" data-workspace-link aria-current="page">練習紙</a>
+            <a href="index.html" data-workspace-link aria-current="page">首頁</a>
             <details class="task-nav-more">
                 <summary>資料與設定</summary>
                 <div class="task-nav-menu">
@@ -73,11 +75,15 @@
     <main class="hero-section">
         <div class="container home-overview">
             <div class="home-task-intro">
-                <h1>生字練習簿小幫手</h1>
-                <div class="home-task-actions">
-                    <a id="homeVocabulary" class="btn-primary-hero" href="vocabulary.html" data-workspace-link>開啟老師詞庫與出卷</a>
-                    <a class="btn-text" href="learning.html" data-workspace-link>國字查詢</a>
-                </div>
+                <p>國字學習小幫手</p>
+                <h1>今天想幫孩子練習什麼？</h1>
+                <p>依照學校進度，練生字、出考卷、複習錯題。</p>
+                <nav class="home-task-grid" aria-label="學習任務">
+                    <a href="#smartCard"><strong>列印生字本</strong><span>每課生字、筆順、描紅和田字格</span></a>
+                    <a id="homeVocabulary" href="vocabulary.html" data-workspace-link><strong>製作考卷</strong><span>老師詞庫、注音和隨機抽題</span></a>
+                    <a href="review.html" data-workspace-link><strong>錯題複習</strong><span>記錄寫錯的題目、再出一份考卷</span></a>
+                    <a href="learning.html" data-workspace-link><strong>查詢國字</strong><span>查生字課次及是否教過</span></a>
+                </nav>
             </div>
             <div class="smart-card" id="smartCard">
                 <!-- Loading State -->

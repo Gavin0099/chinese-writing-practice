@@ -4,7 +4,8 @@ const returnParams = new Map([
     ['index.html', []],
     ['vocabulary.html', ['book']],
     ['learning.html', []],
-    ['exam.html', ['id', 'part']]
+    ['exam.html', ['id', 'part']],
+    ['review.html', ['exam']]
 ]);
 
 export function cloudReturnUrl(target, page) {

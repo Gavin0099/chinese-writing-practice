@@ -47,6 +47,18 @@
 }
 .home-task-actions a { display: inline-flex; align-items: center; min-height: 44px; }
 .home-task-actions .btn-primary-hero { text-decoration: none; }
+.home-task-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; margin-top: .85rem; }
+.home-task-grid a {
+    display: flex; flex-direction: column; gap: .25rem; min-height: 44px; padding: .75rem;
+    border: 1px solid var(--ui-divider, #d5dfd5); border-radius: .55rem;
+    background: var(--ui-surface, white); color: var(--ui-primary, #305b47);
+    text-align: left; text-decoration: none;
+}
+.home-task-grid a:hover { background: var(--ui-surface-muted, #f6f8f3); }
+.home-task-grid a span { color: var(--ui-muted, #52645a); font-size: .875rem; }
+.home-task-grid a:first-child { background: var(--ui-primary, #305b47); color: var(--ui-on-primary, white); }
+.home-task-grid a:first-child span { color: inherit; }
+.home-task-grid a:first-child:hover { background: var(--ui-primary-hover, #254a39); }
 .home-stroke-help { margin: .8rem auto 0; max-width: 40rem; }
 .home-stroke-help summary { cursor: pointer; min-height: 44px; display: list-item; padding-block: .55rem; }
 .home-stroke-help p { margin-block: .3rem; }

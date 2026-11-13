@@ -20,7 +20,7 @@ let renderedWorksheetLesson = null;
                     <div class="step-number">2</div>
                     <div class="step-text">選擇 <b>「在瀏覽器中開啟」</b> 或 <b>「使用 Safari 開啟」</b></div>
                 </div>
-                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 1rem;">
+                <p style="font-size: 0.85rem; color: var(--ui-accent-text, #94a3b8); margin-top: 1rem;">
                     LINE 內建瀏覽器限制較多，切換至系統瀏覽器即可正常列印與下載 PDF。
                 </p>
                 <button class="line-guide-close" onclick="document.getElementById('lineGuide').style.display='none'">我知道了</button>
@@ -94,8 +94,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const modal = document.getElementById('onboardingModal');
         const startBtn = document.getElementById('obStartBtn');
         if (modal) {
-            modal.style.display = 'flex';
-
             let selectedGrade = null;
             let selectedSem = null;
 
@@ -136,10 +134,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     lastOutputLesson: 0,
                     pinnedLesson: null
                 });
-                modal.style.display = 'none';
-                initApp(); // Start the app
+                modal.close('confirmed');
             };
-            return; // Stop here, initApp will be called by startBtn
+            document.getElementById('obSkipBtn').onclick = () => modal.close();
+            modal.addEventListener('close', () => {
+                initApp();
+                const next = modal.returnValue === 'confirmed' ? 'heroActionBtn' : 'homeVocabulary';
+                document.getElementById(next).focus();
+            }, { once: true });
+            modal.showModal();
+            return;
         }
     }
 
@@ -236,7 +240,7 @@ function initApp() {
                         cardContent.innerHTML = `
                             <div class="success-state" style="animation: fadeIn 0.5s; padding: 2rem 0;">
                                 <div style="font-size: 4rem; margin-bottom: 1.5rem;">✅</div>
-                                <h2 class="hero-title" style="margin-bottom: 0.5rem; font-size: 2.2rem; color: var(--primary-sage);">練習簿已準備好</h2>
+                                <h2 class="hero-title" style="margin-bottom: 0.5rem; font-size: 2.2rem; color: var(--ui-text, var(--primary-sage));">練習簿已準備好</h2>
                                 <p class="hero-subtitle" style="margin-bottom: 2.5rem; opacity: 0.8;">
                                     <!-- Hidden Metadata for PDF Filename Engine -->
                                     <span id="heroSubTitle" style="display:none;">${rec.grade}年級 ${rec.semester === 'A' ? '上學期' : '下學期'}</span>

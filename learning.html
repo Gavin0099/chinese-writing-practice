@@ -3,27 +3,37 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#FAF8F4">
     <title>國字學習查詢｜生字練習簿小幫手</title>
     <link rel="stylesheet" href="learning.css">
     <script type="module" src="learning.mjs"></script>
+    <link rel="stylesheet" href="task-layout.css" media="screen">
+    <link rel="stylesheet" href="tokens.css" media="screen">
 </head>
 <body>
     <header class="page-header">
-        <nav aria-label="工具" class="actions">
-            <a href="index.html">← 生字練習簿</a>
-            <a href="vocabulary.html">老師詞庫與出卷</a>
-            <a href="backup.html">備份與還原</a>
-            <a href="sync.html">雲端同步</a>
+        <nav class="task-nav" aria-label="學習工具">
+            <a href="vocabulary.html" data-workspace-link>老師詞庫</a>
+            <a href="learning.html" data-workspace-link aria-current="page">國字查詢</a>
+            <a href="index.html" data-workspace-link>首頁</a>
+            <details class="task-nav-more">
+                <summary>資料與設定</summary>
+                <div class="task-nav-menu">
+                    <a href="backup.html">本機備份與還原</a>
+                    <a href="sync.html">雲端同步</a>
+                </div>
+            </details>
         </nav>
     </header>
     <main>
         <h1>國字學習查詢</h1>
-        <p class="intro">依家長確認的課次查詢教材，並記下孩子還需要練習的字。</p>
+        <p class="intro">比對目前教材和同出版社的前期教材，依已確認的進度推估是否教過。</p>
 
         <div class="panels">
             <section class="panel" aria-labelledby="progressHeading">
                 <h2 id="progressHeading">教學進度</h2>
                 <p class="notice" id="catalogNotice" role="status"></p>
+                <p class="notice" id="catalogMode" hidden><a id="catalogModeLink" href="sync.html">登入以載入教材</a></p>
                 <button type="button" id="retryCatalog" hidden>重新載入教材</button>
                 <form id="progressForm">
                     <fieldset id="progressFields" disabled>
@@ -52,20 +62,23 @@
             <section class="panel" aria-labelledby="queryHeading">
                 <h2 id="queryHeading">逐字查詢</h2>
                 <form id="queryForm">
-                    <label for="query">輸入國字、詞語或一段文字</label>
-                    <textarea id="query" rows="4" maxlength="200" placeholder="例如 烏雲密布"></textarea>
-                    <div class="actions">
-                        <button type="submit" class="primary">查詢國字</button>
-                        <button type="button" id="showRecords" hidden>查看習寫紀錄</button>
-                    </div>
+                    <fieldset id="queryFields" disabled>
+                        <legend class="visually-hidden">查詢內容</legend>
+                        <label for="query">輸入或貼上國字、詞語或課文</label>
+                        <textarea id="query" rows="4" maxlength="1000" placeholder="例如 烏雲密布"></textarea>
+                        <div class="actions">
+                            <button type="submit" class="primary">查詢國字</button>
+                        </div>
+                    </fieldset>
                 </form>
-                <p class="hint" id="lookupHelp">查詢文字與習寫紀錄只在此瀏覽器處理。</p>
+                <p class="hint">輸入的內容只在此瀏覽器處理。</p>
             </section>
         </div>
 
         <section class="results-section" aria-labelledby="resultsHeading">
             <h2 id="resultsHeading" hidden>查詢結果</h2>
             <p class="notice" id="queryNotice" role="status"></p>
+            <p class="notice" id="reviewLookupNotice" role="status"></p>
             <div id="results" class="results"></div>
         </section>
     </main>
@@ -73,28 +86,19 @@
     <template id="resultTemplate">
         <article class="result-card">
             <div class="character"><h3></h3><span class="count"></span></div>
-            <div class="evidence">
-                <h4>教材收錄</h4>
-                <p class="first-occurrence"></p>
-                <ul class="occurrences"></ul>
-            </div>
             <div class="assessment">
                 <h4>教學進度</h4>
                 <p class="teaching-status"></p>
-                <label>孩子的習寫狀態
-                    <select class="writing-status">
-                        <option value="not_assessed">尚未評估</option>
-                        <option value="can_write">會寫</option>
-                        <option value="cannot_write">不會寫</option>
-                        <option value="uses_zhuyin">用注音代替</option>
-                        <option value="missing_strokes">漏筆畫</option>
-                    </select>
-                </label>
-                <details class="writing-history" hidden>
-                    <summary>習寫紀錄</summary>
-                    <ol></ol>
-                </details>
-                <p class="notice writing-notice" role="status"></p>
+            </div>
+            <div class="evidence">
+                <h4>教材收錄</h4>
+                <div class="first-occurrence"></div>
+                <ul class="occurrences"></ul>
+                <ul class="occurrences reference-occurrences"></ul>
+            </div>
+            <div class="word-review" hidden>
+                <h4>相關詞語的批改紀錄</h4>
+                <ul class="word-review-list"></ul>
             </div>
         </article>
     </template>

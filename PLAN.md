@@ -6,6 +6,7 @@
 
 ## Current Phase
 
+- Release Stabilization 聚焦首頁下載 PDF 與私人站可重建的交付版本。暫緩 OCR 新功能、額外 UI 改版與 OCR 實機效能測試。
 - [x] 完成 AI Governance 初始導入與本機驗證。
 - [x] 國字查詢 MVP 已通過本機使用流程驗收。
 - [x] M1 checkpoint `eb9670f` 已建立，含國字查詢程式、測試與工單。
@@ -15,6 +16,9 @@
 
 ## Active Sprint
 
+- PDF-01／PDF-02 獨立重現與修正首頁直接下載 PDF 裁切，保留原生列印驗收。
+- REL-01／REL-02 封存私人站執行版本，另建整合 Draft PR，從乾淨版本重建、驗證並交付審查。
+- QA-01 驗證實體紙本與 iPhone Safari 備份還原，紀錄實機結果。
 - [x] 固定共用框架版本，套用框架 baseline 與專案規則。
 - [x] 安裝 Git hooks，驗證治理設定、版本一致性及 runtime fixtures。
 - [x] Owner 確認契約領域為中文書寫練習與列印教材生成，repo 風險分級為低風險。
@@ -25,6 +29,8 @@
 - [x] [D-04](work/tickets/d-04-curriculum-redistribution.md) 完成授權盤點並記錄公開門檻。2026-11-12 已向中研院與教育百科寄出詢問，115 上候選字表等待明確授權。
 - [x] [D-05 開發驗收](work/tickets/d-05-curriculum-catalog.md)：115 上三家共 18 組、194 課已存入專用開發資料庫，僅供指定帳號載入；教學進度先選出版社。
 - [x] [首頁練習簿](work/tickets/d-05-curriculum-catalog.md#首頁練習簿)：依帳號已確認的教材與課次準備習寫字練習簿，可另選同版本課次複習。
+- [x] [UX 任務 2 排版](docs/UX_REVIEW.md#任務-2-排版驗收)：由 `4da5e86` 整合首頁、手機導覽和詞庫出卷排版，通過 Windows Chrome 390px、1280px 驗收。
+- [ ] UX 任務 2 配色待驗證，下載 PDF 裁切獨立修復。
 - [ ] D-05 正式發布：確認准用欄位及署名後才開放其他使用者查詢。
 - [x] [F-00](work/tickets/f-00-separate-worksheet-history.md) 分開練習紙輸出紀錄及教學進度，完成本機遷移與 Chrome 驗證。實機 iOS Safari 待驗。
 - [x] [F-02](work/tickets/f-02-character-lookup-core.md) 以合成教材驗證純查詢核心。

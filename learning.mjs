@@ -1,19 +1,24 @@
 import { courseKey, lookupCharacters } from './characterLookup.mjs';
-import { confirmCourse, curriculumStorageKey, importCourses, isPediaSource, isWritingHistory, lookupScope, mergeCourses,
-    progressStorageKey, readProgress, readStoredValue, writingStorageKey } from './learningData.mjs';
-import { connectCloud, openPageStorage, readCloudSettings, readCurriculumCatalog } from './cloudStorage.mjs';
+import { confirmCourse, curriculumStorageKey, importCourses, isPediaSource, lookupReferenceLessons, lookupScope,
+    mergeCourses, progressStorageKey, readProgress, readStoredValue } from './learningData.mjs';
+import { cloudPageUrl, connectCloud, openPageStorage, readCloudSettings, readCurriculumCatalog } from './cloudStorage.mjs';
+import { syncPageUrl } from './googleAuth.mjs';
+import { lookupWordReviews, readAttempts } from './reviewData.mjs';
+import { mergeReviewAttempts } from './reviewSync.mjs';
+import { readVocabulary } from './vocabularyData.mjs';
 
-const cloud = await openPageStorage();
+const access = await openPageStorage({ resumeSession: true });
+const cloud = access && !access.isGuest ? access : null;
 const recordStorage = cloud ?? localStorage;
+const localRequested = new URL(location.href).searchParams.get('local') === '1';
 
 const byId = id => document.getElementById(id);
 const fields = Object.fromEntries(['publisher', 'academicYear', 'grade', 'semester', 'edition', 'lesson'].map(id => [id, byId(id)]));
 const publishers = ['康軒', '南一', '翰林'];
 const input = byId('query');
+const resultList = byId('results');
+const reviewNotice = byId('reviewLookupNotice');
 const statusLabels = { taught: '推估已教', not_yet_taught: '尚未教到', insufficient_data: '資料不足' };
-const writingLabels = { not_assessed: '尚未評估', can_write: '會寫', cannot_write: '不會寫',
-    uses_zhuyin: '用注音代替', missing_strokes: '漏筆畫' };
-const dateLabel = new Intl.DateTimeFormat('zh-TW', { dateStyle: 'medium', timeStyle: 'short' });
 const importLimit = 2_000_000;
 
 function readLocal(key) {
@@ -24,13 +29,13 @@ let localCourses = mergeCourses(readLocal(curriculumStorageKey));
 let cloudCourses = [];
 let courses = localCourses;
 let progress = readProgress(readLocal(progressStorageKey));
-function readWriting() {
-    return Object.fromEntries(Object.entries(readLocal(writingStorageKey) ?? {}).filter(([char, records]) =>
-        isWritingHistory(char, records)));
-}
-
-let writing = readWriting();
 let activeQuery = null;
+let reviewWords = [];
+let reviewAttempts = [];
+let remoteAttempts = [];
+let reviewLoading = false;
+let reviewReady = false;
+let reviewIncomplete = false;
 
 function showNotice(element, message, error = false) {
     element.textContent = message;
@@ -96,93 +101,197 @@ function updateLessonPicker() {
     renderResults();
 }
 
-function addEvidence(container, occurrence) {
-    const semester = occurrence.semester === 1 ? '上' : '下';
-    const kind = occurrence.type === 'writing' ? '習寫' : '認讀';
-    const text = `${occurrence.academicYear} 學年度 · ${occurrence.publisher}${occurrence.grade}${semester} · 第 ${occurrence.lesson} 課 · ${kind}`;
-    if (isPediaSource(occurrence.source)) {
-        const link = document.createElement('a');
-        link.href = occurrence.source;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.textContent = text;
-        container.append(link);
-    } else {
-        container.append(text);
+function lessonLabel(occurrence) {
+    const semester = occurrence.semester === 1 ? '上學期' : '下學期';
+    return `${occurrence.publisher} ${occurrence.grade} 年級${semester} 第 ${occurrence.lesson} 課`;
+}
+
+function sourceLink(url, label) {
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.textContent = label;
+    return link;
+}
+
+function appendExcerpt(container, excerpt) {
+    const text = typeof excerpt?.text === 'string' ? excerpt.text.trim() : '';
+    const credit = typeof excerpt?.credit === 'string' ? excerpt.credit.trim() : '';
+    let url;
+    if (typeof excerpt?.url === 'string') {
+        try { url = new URL(excerpt.url); } catch { /* Missing or invalid source. */ }
     }
-    if (occurrence.title) container.append(`　${occurrence.title.replace(/^[^：]+：/, '')}`);
+    const usable = text && [...text].length <= 80 && credit && url?.protocol === 'https:' && !url.username && !url.password;
+    const label = document.createElement('p');
+    label.textContent = usable ? '課文節錄' : '這一課目前沒有可顯示的課文節錄。';
+    label.className = usable ? 'lesson-excerpt-label' : 'hint';
+    container.append(label);
+    if (!usable) return;
+    const quote = document.createElement('blockquote');
+    quote.textContent = text;
+    quote.cite = url.href;
+    container.append(quote, sourceLink(url.href, credit));
 }
 
-function updateWritingHistory(card, records) {
-    const history = card.querySelector('.writing-history');
-    const items = records.slice().reverse().map(record => {
-        const item = document.createElement('li');
-        item.textContent = `${dateLabel.format(new Date(record.at))}　${writingLabels[record.status]}`;
-        return item;
-    });
-    history.querySelector('ol').replaceChildren(...items);
-    history.hidden = !records.length;
+function lessonEvidenceRenderer() {
+    const editions = new Map(courses.map(course => [courseKey(course), course]));
+    const rendered = new Map();
+    return (occurrence, prefix, char) => {
+        const kind = occurrence.type === 'writing' ? '習寫字' : '認讀字';
+        const edition = courseKey(occurrence);
+        const key = JSON.stringify([edition, occurrence.lesson]);
+        const previous = rendered.get(key);
+        if (previous) {
+            const link = document.createElement('a');
+            link.href = `#${previous.details.id}`;
+            link.textContent = `${prefix}同「${previous.char}」的教材課次（${kind}）`;
+            link.addEventListener('click', event => {
+                event.preventDefault();
+                previous.details.open = true;
+                previous.details.querySelector('summary').focus();
+            });
+            return link;
+        }
+        const details = document.createElement('details');
+        details.id = `lesson-evidence-${rendered.size + 1}`;
+        details.className = 'lesson-evidence';
+        const summary = document.createElement('summary');
+        const title = occurrence.title ? `〈${occurrence.title.replace(/^第.+?課[：:]\s*/, '')}〉` : '';
+        summary.textContent = `${prefix}${lessonLabel(occurrence)}${title}（${occurrence.academicYear} 學年度，${kind}）`;
+        details.append(summary);
+        rendered.set(key, { details, char });
+
+        const lesson = editions.get(edition)?.lessons.find(item => item.number === occurrence.lesson);
+        const body = document.createElement('div');
+        body.className = 'lesson-evidence-body';
+        appendExcerpt(body, lesson?.excerpt);
+        for (const [type, label] of [['writing', '習寫字'], ['recognition', '認讀字']]) {
+            const entries = lesson?.characters.filter(item => item.kind === type).map(item => item.character) ?? [];
+            if (!entries.length) continue;
+            const line = document.createElement('p');
+            line.textContent = `${label}　${entries.join('、')}`;
+            body.append(line);
+        }
+        if (isPediaSource(occurrence.source)) body.append(sourceLink(occurrence.source, '教育百科生字表'));
+        details.append(body);
+        return details;
+    };
 }
 
-function renderResult(result) {
+function renderResult(result, references, lessonEvidence) {
     const card = byId('resultTemplate').content.firstElementChild.cloneNode(true);
-    const { char, positions, curriculum, teachingStatus, writingStatus } = result;
+    const { char, positions, curriculum, teachingStatus } = result;
     card.querySelector('h3').textContent = char;
     if (positions.length > 1) card.querySelector('.count').textContent = `出現 ${positions.length} 次`;
 
     const first = card.querySelector('.first-occurrence');
     if (curriculum.firstOccurrence) {
-        first.textContent = '最早查到　';
-        addEvidence(first, curriculum.firstOccurrence);
+        first.append(lessonEvidence(curriculum.firstOccurrence, '最早查到　', char));
+    } else if (!references.length) {
+        first.textContent = '這次查詢的教材中未找到這個字。';
     } else {
-        first.textContent = '已核對範圍內查無收錄';
+        first.hidden = true;
     }
     const other = curriculum.occurrences.slice(1).map(occurrence => {
         const item = document.createElement('li');
-        addEvidence(item, occurrence);
+        item.append(lessonEvidence(occurrence, '', char));
         return item;
     });
     card.querySelector('.occurrences').append(...other);
+    const referenceItems = references.map(({ occurrence, otherYear }) => {
+        const item = document.createElement('li');
+        const prefix = otherYear ? '其他學年度參考　' : '前期教材（尚未確認使用）　';
+        item.append(lessonEvidence(occurrence, prefix, char));
+        return item;
+    });
+    card.querySelector('.reference-occurrences').append(...referenceItems);
 
     const teaching = card.querySelector('.teaching-status');
     teaching.textContent = statusLabels[teachingStatus];
     teaching.dataset.state = teachingStatus;
 
-    const writingField = card.querySelector('.writing-status');
-    writingField.value = writingStatus;
-    writingField.setAttribute('aria-label', `${char}的習寫狀態`);
-    updateWritingHistory(card, writing[char] ?? []);
-    writingField.addEventListener('change', async () => {
-        const current = readWriting();
-        const records = current[char] ?? [];
-        const next = [...records, { status: writingField.value, at: new Date().toISOString() }];
-        const updated = { ...current, [char]: next };
-        const notice = card.querySelector('.writing-notice');
-        try {
-            writingField.disabled = true;
-            await recordStorage.setItem(writingStorageKey, JSON.stringify(updated));
-            writing = updated;
-            byId('showRecords').hidden = false;
-            updateWritingHistory(card, next);
-            showNotice(notice, cloud ? '已同步' : '已儲存');
-        } catch (error) {
-            writingField.value = records.at(-1)?.status ?? 'not_assessed';
-            showNotice(notice, cloud ? error.message : '儲存失敗，請檢查瀏覽器儲存空間。', true);
-        } finally {
-            writingField.disabled = false;
-        }
-    });
     return card;
+}
+
+function renderWordReviews() {
+    const cards = [...resultList.children];
+    const characters = cards.map(card => card.querySelector('h3').textContent);
+    const hits = lookupWordReviews(characters, reviewWords, reviewAttempts);
+    let hasMatches = false;
+    for (const [index, card] of cards.entries()) {
+        const section = card.querySelector('.word-review');
+        const rows = hits.get(characters[index]);
+        hasMatches ||= rows.length > 0;
+        section.hidden = !rows.length;
+        section.querySelector('ul').replaceChildren(...rows.map(({ word, everWrong, lastWrong }) => {
+            const row = document.createElement('li');
+            const term = document.createElement('strong');
+            term.textContent = word;
+            const status = document.createElement('span');
+            if (everWrong) status.textContent = lastWrong ? '曾寫錯' : '曾寫錯，最近一次答對';
+            else if (lastWrong === null) status.textContent = reviewIncomplete ? '目前未取得批改紀錄' : '尚無批改紀錄';
+            else status.textContent = '有作答，未記錄錯誤';
+            row.append(term, status);
+            return row;
+        }));
+    }
+    let message = '';
+    if (cards.length) {
+        if (reviewLoading) message = '正在讀取批改紀錄…';
+        else if (reviewIncomplete) message = '暫時無法讀取完整的批改紀錄。可再按「查詢國字」重試。';
+        else if (reviewReady) message = hasMatches ? '詞語紀錄依整題批改結果顯示。' : '目前沒有相關詞語的批改紀錄。';
+    }
+    showNotice(reviewNotice, message, reviewIncomplete && !reviewLoading);
+}
+
+async function loadWordReviews() {
+    if (reviewLoading || !resultList.children.length) return;
+    reviewLoading = true;
+    reviewIncomplete = false;
+    if (cloud) renderWordReviews();
+    let localAttempts = [];
+    try {
+        localAttempts = readAttempts(localStorage, cloud?.ownerId ?? 'local');
+    } catch {
+        reviewIncomplete = true;
+    }
+    try {
+        reviewWords = readVocabulary(recordStorage).words;
+    } catch {
+        reviewWords = [];
+        reviewIncomplete = true;
+    }
+    if (cloud) {
+        try {
+            remoteAttempts = mergeReviewAttempts(await cloud.readReviewAttempts());
+        } catch {
+            reviewIncomplete = true;
+        }
+    }
+    try {
+        reviewAttempts = mergeReviewAttempts(remoteAttempts, localAttempts);
+    } catch {
+        reviewAttempts = remoteAttempts;
+        reviewIncomplete = true;
+    }
+    reviewLoading = false;
+    reviewReady = true;
+    renderWordReviews();
 }
 
 function renderResults() {
     if (activeQuery === null) return;
-    const writingStatuses = Object.fromEntries(Object.entries(writing).map(([char, records]) => [char, records.at(-1).status]));
     const scope = lookupScope(currentCourse(), courses, progress);
-    const results = lookupCharacters(activeQuery, { ...scope, writingStatuses });
+    const { references, ...confirmedScope } = scope;
+    const results = lookupCharacters(activeQuery, confirmedScope);
+    const referenceHits = lookupReferenceLessons(activeQuery, references);
+    const lessonEvidence = lessonEvidenceRenderer();
     byId('resultsHeading').hidden = !results.length;
     showNotice(byId('queryNotice'), results.length ? `共 ${results.length} 個不同的國字` : '請輸入至少一個國字。');
-    byId('results').replaceChildren(...results.map(renderResult));
+    resultList.replaceChildren(...results.map(result =>
+        renderResult(result, referenceHits.get(result.char) ?? [], lessonEvidence)));
+    renderWordReviews();
 }
 
 byId('curriculumFiles').addEventListener('change', async event => {
@@ -249,32 +358,34 @@ byId('queryForm').addEventListener('submit', event => {
     event.preventDefault();
     activeQuery = input.value;
     renderResults();
+    void loadWordReviews();
 });
-byId('showRecords').addEventListener('click', () => {
-    activeQuery = Object.keys(writing).join('');
-    renderResults();
-});
-
-byId('showRecords').hidden = !Object.keys(writing).length;
-if (cloud) byId('lookupHelp').textContent = '查詢文字只在此瀏覽器處理。習寫紀錄會同步到此帳號。';
 fillPicker(courses.find(course => courseKey(course) === progress.activeKey));
+byId('queryFields').disabled = false;
 
 async function loadCatalog() {
     const notice = byId('catalogNotice');
     const retry = byId('retryCatalog');
     retry.hidden = true;
     try {
-        const settings = !cloud && readCloudSettings();
-        if (!cloud && !settings) return;
+        const settings = !access && readCloudSettings();
+        if (!access && !settings) return;
+        const modeLink = byId('catalogModeLink');
+        const cloudLookup = cloudPageUrl('learning.html');
+        modeLink.href = cloud ? 'learning.html?local=1' : localRequested ? cloudLookup : syncPageUrl(cloudLookup);
+        modeLink.textContent = cloud ? '改用本機查詢' : localRequested ? '開啟雲端查詢' : '使用 Google 登入';
+        byId('catalogMode').hidden = false;
         showNotice(notice, '正在載入雲端教材…');
-        const { published, review } = cloud ? await cloud.readCurriculumCatalog()
+        const { published, review } = access ? await access.readCurriculumCatalog()
             : await readCurriculumCatalog(await connectCloud(settings));
         cloudCourses = mergeCourses(review, published);
         courses = mergeCourses(cloudCourses, localCourses);
         const restore = fields.publisher.value === '' && courses.find(course => courseKey(course) === progress.activeKey);
         fillPicker(restore || undefined);
         if (review.length) showNotice(notice, '已載入僅供本帳號使用的開發測試教材。');
-        else showNotice(notice, cloudCourses.length ? '已載入雲端教材。' : '目前沒有可用的雲端教材。');
+        else if (cloudCourses.length) showNotice(notice, '已載入雲端教材。');
+        else showNotice(notice, cloud ? '這個帳號目前沒有可用的雲端教材。'
+            : '登入後可載入帳號可用的教材。');
     } catch {
         showNotice(notice, '暫時無法載入雲端教材。已匯入本機的教材仍可使用。', true);
         retry.hidden = false;

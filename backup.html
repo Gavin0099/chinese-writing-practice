@@ -3,16 +3,26 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f6f8f3">
+    <meta name="theme-color" content="#FAF8F4">
     <title>備份與還原｜生字練習簿</title>
     <link rel="stylesheet" href="learning.css">
     <script type="module" src="backup.mjs"></script>
+    <link rel="stylesheet" href="task-layout.css" media="screen">
+    <link rel="stylesheet" href="tokens.css" media="screen">
 </head>
 <body>
     <header class="page-header">
-        <nav class="actions" aria-label="學習工具">
-            <a href="vocabulary.html">老師詞庫與出卷</a>
-            <a href="learning.html">國字學習查詢</a>
+        <nav class="task-nav" aria-label="學習工具">
+            <a href="vocabulary.html" data-workspace-link>老師詞庫</a>
+            <a href="learning.html" data-workspace-link>國字查詢</a>
+            <a href="index.html" data-workspace-link>首頁</a>
+            <details class="task-nav-more">
+                <summary>資料與設定</summary>
+                <div class="task-nav-menu">
+                    <a href="backup.html" aria-current="page">本機備份與還原</a>
+                    <a href="sync.html">雲端同步</a>
+                </div>
+            </details>
         </nav>
     </header>
     <main>

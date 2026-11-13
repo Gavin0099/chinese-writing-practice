@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { lookupCharacters } from '../characterLookup.mjs';
-import { confirmCourse, importCourses, lookupScope, readProgress } from '../learningData.mjs';
+import { confirmCourse, importCourses, lookupReferenceLessons, lookupScope, readProgress } from '../learningData.mjs';
 
 const url = number => `https://pedia.cloud.edu.tw/Bookmark/TCollection?TextNameId=99${number}`;
 const source = { sha256: 'a'.repeat(64), file: 'synthetic.xlsx' };
@@ -71,4 +71,33 @@ test('accumulates confirmed earlier terms and requires confirmation again after 
     assert.equal(confirmed.records.length, 2);
     assert.equal(confirmed.records[1].sourceVersion, newSource.sha256);
     assert.throws(() => confirmCourse(confirmed, replacement, 8), /有效的課次/);
+});
+
+test('finds the earlier grade and lesson without assuming that the child used that edition', () => {
+    const prior = { ...first, academic_year: 114, lessons: [lesson(1, '雨', 'writing'), lesson(2, '晴', 'writing')] };
+    const otherPublisher = { ...prior, publisher: '其他', lessons: [lesson(1, '密', 'writing')] };
+    const current = { ...first, grade: 2, lessons: [lesson(1, '勇', 'writing'), lesson(2, '風', 'writing')] };
+    const editions = [prior, first, current, otherPublisher];
+    const courses = importCourses(candidate(editions), [report(editions)]);
+    const [earlier, sameYear, active, alternative] = courses;
+    const progress = confirmCourse(readProgress(null), active, 1);
+    const referencesFor = (available, saved = progress) =>
+        lookupReferenceLessons('晴密', lookupScope(active, available, saved).references);
+    const lessonsFor = hits => hits.get('晴')?.map(({ occurrence, otherYear }) =>
+        [occurrence.academicYear, occurrence.grade, occurrence.semester, occurrence.lesson, otherYear]);
+
+    assert.deepEqual(lessonsFor(referencesFor(courses)), [[114, 1, 1, 2, false]]);
+    assert.equal(referencesFor(courses).has('密'), false);
+    const [unconfirmed] = lookupCharacters('晴', lookupScope(active, courses, progress));
+    assert.equal(unconfirmed.teachingStatus, 'insufficient_data');
+
+    assert.deepEqual(lessonsFor(referencesFor([sameYear, active])), [[115, 1, 1, 1, true], [115, 1, 1, 2, true]]);
+    assert.equal(referencesFor([...courses, { ...earlier, sourceVersion: 'another-edition' }]).size, 0);
+    assert.equal(referencesFor(courses, confirmCourse(progress, alternative, 1)).size, 0);
+
+    const confirmed = confirmCourse(confirmCourse(progress, earlier, 2), active, 1);
+    assert.equal(referencesFor(courses, confirmed).size, 0);
+    const [known] = lookupCharacters('晴', lookupScope(active, courses, confirmed));
+    assert.equal(known.teachingStatus, 'taught');
+    assert.equal(known.curriculum.firstOccurrence.lesson, 2);
 });

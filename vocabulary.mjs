@@ -1,6 +1,12 @@
 import { bookLabel, makeBook, makeWord, previewBatch, readVocabulary, saveWord, updateVocabulary, vocabularyStorageKey } from './vocabularyData.mjs';
 import { makeExam, questionPool } from './examData.mjs';
 import { cloudPageUrl, openPageStorage } from './cloudStorage.mjs';
+import { readAttempts, recentWrongTerms } from './reviewData.mjs';
+import { mergeReviewAttempts } from './reviewSync.mjs';
+import { applyVocabularyShare, compatibleShareBooks, createVocabularyShare, parseVocabularyShare,
+    previewVocabularyShare, vocabularyShareMaxBytes } from './vocabularyShare.mjs';
+import { initPhotoImport } from './photoImport.mjs';
+import { deploymentCloud } from './cloudConfig.mjs';
 
 const cloud = await openPageStorage();
 
@@ -11,6 +17,10 @@ const wordForm = byId('wordForm');
 const wordFields = wordForm.elements;
 const batchForm = byId('batchForm');
 const examForm = byId('examForm');
+const shareExportForm = byId('shareExportForm');
+const shareFile = byId('shareFile');
+const shareTarget = byId('shareTarget');
+const shareName = byId('shareName');
 const dateFormat = new Intl.DateTimeFormat('zh-TW', { dateStyle: 'short', timeStyle: 'short' });
 const filter = byId('lessonFilter');
 const query = new URL(location.href);
@@ -20,6 +30,14 @@ let activeId = query.searchParams.get('book');
 let editingId = null;
 let batch = [];
 let dirty = false;
+let workspaceView = 'exam';
+let sharedVocabulary = null;
+let importPreview = null;
+let creatingExam = false;
+
+byId('vocabularyMode').textContent = cloud
+    ? '雲端資料 · 詞庫與考卷同步到此帳號'
+    : '本機資料 · 詞庫與考卷儲存在此瀏覽器';
 
 function notice(id, message = '', error = false) {
     const element = byId(id);
@@ -51,8 +69,61 @@ async function persist(update, messageId) {
     }
 }
 
+const photo = initPhotoImport({
+    cloud: Boolean(cloud),
+    currentBook: () => data.books.find(book => book.id === activeId),
+    persist: async update => {
+        if (!await persist(update, 'photoSaveNotice')) return false;
+        renderWords();
+        return true;
+    }
+});
+
 const ownWords = () => data.words.filter(entry => entry.bookId === activeId);
 const selectedBlanks = () => [...byId('blankChoices').querySelectorAll('input:checked')].map(input => Number(input.value));
+
+function renderWorkspace() {
+    const hasWords = ownWords().length > 0;
+    if (!hasWords && workspaceView === 'exam') workspaceView = 'word';
+    byId('goToExam').hidden = !hasWords;
+    byId('goToWord').classList.toggle('primary', !hasWords);
+    byId('wordListDetails').hidden = !hasWords;
+    byId('examPanel').hidden = workspaceView !== 'exam';
+    byId('photoPanel').hidden = workspaceView !== 'photo';
+    byId('goToPhoto').setAttribute('aria-expanded', String(workspaceView === 'photo'));
+    byId('wordPanel').hidden = !['word', 'batch'].includes(workspaceView);
+    byId('wordPanel').setAttribute('aria-labelledby', workspaceView === 'batch' ? 'batchHeading' : 'wordHeading');
+    byId('wordHeading').hidden = workspaceView === 'batch';
+    byId('batchHeading').hidden = workspaceView !== 'batch';
+    wordForm.hidden = workspaceView === 'batch';
+    byId('batchDetails').hidden = workspaceView !== 'batch';
+    for (const [id, view] of [['goToExam', 'exam'], ['goToWord', 'word'], ['goToBatch', 'batch']]) {
+        byId(id).setAttribute('aria-pressed', String(workspaceView === view));
+    }
+}
+
+byId('goToExam').addEventListener('click', () => {
+    workspaceView = 'exam';
+    renderWorkspace();
+    byId('examHeading').focus();
+});
+byId('goToWord').addEventListener('click', () => {
+    workspaceView = 'word';
+    renderWorkspace();
+    wordFields.word.focus();
+});
+byId('goToBatch').addEventListener('click', () => {
+    workspaceView = 'batch';
+    renderWorkspace();
+    batchForm.elements.words.focus();
+});
+const photoButton = byId('goToPhoto');
+photoButton.hidden = !deploymentCloud.photoImport;
+photoButton.addEventListener('click', () => {
+    workspaceView = 'photo';
+    renderWorkspace();
+    byId('photoHeading').focus();
+});
 
 function fillBlanks(positions) {
     const word = wordFields.word.value.trim();
@@ -103,6 +174,8 @@ function editWord(entry) {
     byId('cancelEdit').hidden = false;
     notice('wordNotice');
     dirty = false;
+    workspaceView = 'word';
+    renderWorkspace();
     wordFields.word.focus();
 }
 
@@ -145,14 +218,21 @@ function renderWords() {
             if (!await persist(state => { state.words = state.words.filter(word => word.id !== entry.id); }, 'listCount')) return;
             if (editingId === entry.id) clearEditor();
             renderWords();
-            filter.focus();
+            if (ownWords().length) filter.focus();
+            else byId('goToWord').focus();
             notice('listCount', `已刪除「${entry.word}」，目前有 ${ownWords().length} 個詞語。`);
         });
         actions.append(edit, remove);
         row.append(text, actions);
         return row;
     }));
+    renderWorkspace();
     renderExams();
+    renderShareExport();
+    if (sharedVocabulary) {
+        fillShareTargets(shareTarget.value);
+        renderShareImport();
+    }
 }
 
 function renderBooks() {
@@ -160,7 +240,10 @@ function renderBooks() {
     bookSelect.replaceChildren(...data.books.map(book => new Option(bookLabel(book), book.id)));
     bookSelect.disabled = !activeId;
     byId('bookWorkspace').hidden = !activeId;
-    byId('goToExam').hidden = !activeId;
+    workspaceView = 'exam';
+    photo.reset();
+    byId('wordListDetails').open = false;
+    byId('examHistory').open = false;
     if (activeId) {
         bookSelect.value = activeId;
         query.searchParams.set('book', activeId);
@@ -287,11 +370,19 @@ function examSettings() {
     return { from: Number(fields.from.value), to: Number(fields.to.value), count: Number(fields.count.value) };
 }
 
+async function readPriorityTerms(bookId) {
+    const local = readAttempts(localStorage, cloud?.ownerId ?? 'local');
+    if (!cloud) return recentWrongTerms(local, bookId);
+    const remote = await cloud.readReviewAttempts();
+    return recentWrongTerms(mergeReviewAttempts(local, remote), bookId);
+}
+
 function renderPool() {
     if (!activeId) return;
     try {
         const { from, to } = examSettings();
-        const { available, ambiguous } = questionPool(ownWords(), activeId, from, to);
+        const distinctWords = examForm.elements.prioritize.checked;
+        const { available, ambiguous } = questionPool(ownWords(), activeId, from, to, distinctWords);
         const excluded = ambiguous ? `。${ambiguous} 組提示會對到多個答案，已排除` : '';
         notice('examPool', `這個範圍有 ${available.length} 題可抽${excluded}。`);
     } catch (error) {
@@ -328,18 +419,186 @@ examForm.addEventListener('input', () => {
     notice('examNotice');
     renderPool();
 });
+byId('newExamSeed').addEventListener('click', () => {
+    examForm.elements.seed.value = '';
+    examForm.requestSubmit();
+});
 examForm.addEventListener('submit', async event => {
     event.preventDefault();
+    if (creatingExam) return;
+    creatingExam = true;
     const seed = examForm.elements.seed.value.trim() || crypto.randomUUID().replaceAll('-', '').slice(0, 16);
+    const settings = examSettings();
+    const bookId = activeId;
+    try {
+        let priorityWords = null;
+        if (examForm.elements.prioritize.checked) {
+            notice('examNotice', '正在讀取最近的批改紀錄…');
+            main.inert = true;
+            try {
+                priorityWords = await readPriorityTerms(bookId);
+            } finally {
+                main.inert = false;
+            }
+        }
+        if (!await persist(state => {
+            const book = state.books.find(candidate => candidate.id === bookId);
+            if (!book) throw new Error('請重新選擇班級詞庫。');
+            state.exams.push(makeExam({ ...settings, id: crypto.randomUUID(), createdAt: new Date().toISOString(),
+                book, words: state.words, seed, priorityWords }));
+        }, 'examNotice')) return;
+        renderExams();
+        byId('examHistory').open = true;
+        notice('examNotice', `${cloud ? '已同步' : '已儲存'} ${settings.count} 題。可在下方開啟考卷與解答。`);
+        byId('examList').querySelector('a')?.focus();
+    } catch (error) {
+        notice('examNotice', error.message, true);
+    } finally {
+        creatingExam = false;
+    }
+});
+
+function exportChecks() {
+    return [...byId('shareExportWords').querySelectorAll('input')];
+}
+
+function updateShareSelection() {
+    const checks = exportChecks();
+    const selected = checks.filter(check => check.checked).length;
+    byId('shareDownload').disabled = !selected;
+    byId('shareToggleAll').textContent = selected === checks.length ? '取消全選' : '全選';
+    notice('shareExportNotice', `已選 ${selected} 個詞語。`);
+}
+
+function renderShareExport() {
+    const words = ownWords().sort((a, b) => a.lesson - b.lesson);
+    byId('shareExport').hidden = !words.length;
+    const list = byId('shareExportWords');
+    if (!byId('shareDetails').open) return;
+    const selected = new Set(list.dataset.book === activeId ? new FormData(shareExportForm).getAll('selected') : []);
+    list.dataset.book = activeId ?? '';
+    list.replaceChildren(...words.map(word => {
+        const label = document.createElement('label');
+        const check = document.createElement('input');
+        check.type = 'checkbox';
+        check.name = 'selected';
+        check.value = word.id;
+        check.checked = selected.has(word.id);
+        label.className = 'check';
+        label.append(check, `第 ${word.lesson} 課 · ${word.word}`);
+        return label;
+    }));
+    updateShareSelection();
+}
+
+function renderShareImport() {
+    const nameIsRequired = !shareTarget.value;
+    byId('shareNameLabel').hidden = !nameIsRequired;
+    const confirm = byId('shareConfirmReadings');
+    confirm.checked = false;
+    importPreview = null;
+    byId('shareApply').disabled = true;
+    byId('sharePreviewRows').replaceChildren();
+    try {
+        importPreview = previewVocabularyShare(data, sharedVocabulary, { id: shareTarget.value, name: shareName.value });
+        const rows = importPreview.rows;
+        const newRows = rows.filter(row => row.status === 'new');
+        const conflicts = rows.filter(row => row.status === 'conflict').length;
+        byId('shareApply').disabled = !newRows.length;
+        confirm.disabled = !newRows.some(({ word }) => word.pronunciation.length);
+        const describe = entry => {
+            const chars = Array.from(entry.word);
+            return `${entry.pronunciation.join('　') || '待補注音'} · 挖空 ${entry.blanks.map(i => chars[i - 1]).join('、')}`;
+        };
+        const labels = { new: '可新增', duplicate: '相同，略過', conflict: '與現有詞語不同，略過' };
+        byId('sharePreviewRows').replaceChildren(...rows.map(({ word, status, existing }) => {
+            const item = document.createElement('li');
+            const current = status === 'conflict' ? ` · 現有 ${describe(existing)}` : '';
+            item.textContent = `第 ${word.lesson} 課 · ${word.word} · ${describe(word)} · ${labels[status]}${current}`;
+            return item;
+        }));
+        notice('shareImportNotice', `${newRows.length} 筆可新增，${conflicts} 筆衝突，${rows.length - newRows.length - conflicts} 筆相同。`);
+    } catch (error) {
+        notice('shareImportNotice', error.message, true);
+    }
+}
+
+function fillShareTargets(preferred) {
+    const compatible = compatibleShareBooks(sharedVocabulary, data.books);
+    shareTarget.replaceChildren(new Option('建立新班級詞庫', ''), ...compatible.map(book => new Option(bookLabel(book), book.id)));
+    if (compatible.some(book => book.id === preferred)) shareTarget.value = preferred;
+}
+
+byId('shareDetails').addEventListener('toggle', renderShareExport);
+shareExportForm.addEventListener('change', updateShareSelection);
+byId('shareToggleAll').addEventListener('click', () => {
+    const checks = exportChecks();
+    const select = checks.some(check => !check.checked);
+    checks.forEach(check => { check.checked = select; });
+    updateShareSelection();
+});
+shareExportForm.addEventListener('submit', event => {
+    event.preventDefault();
+    try {
+        const selected = new Set(new FormData(shareExportForm).getAll('selected'));
+        const share = createVocabularyShare(data.books.find(book => book.id === activeId), ownWords().filter(word => selected.has(word.id)));
+        const blob = new Blob([JSON.stringify(share, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = '老師詞庫分享.json';
+        document.body.append(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        notice('shareExportNotice', `已匯出 ${share.words.length} 個詞語。`);
+    } catch (error) {
+        notice('shareExportNotice', error.message, true);
+    }
+});
+shareFile.addEventListener('change', async () => {
+    const file = shareFile.files[0];
+    sharedVocabulary = null;
+    importPreview = null;
+    byId('sharePreview').hidden = true;
+    notice('shareImportNotice');
+    if (!file) return;
+    try {
+        if (file.size > vocabularyShareMaxBytes) throw new Error('分享檔須小於 2 MB。');
+        const raw = await file.text();
+        if (shareFile.files[0] !== file) return;
+        sharedVocabulary = parseVocabularyShare(raw);
+        fillShareTargets(activeId);
+        shareName.value = sharedVocabulary.source.name;
+        byId('shareSource').textContent = `來源班級　${bookLabel(sharedVocabulary.source)}`;
+        byId('sharePreview').hidden = false;
+        renderShareImport();
+    } catch (error) {
+        if (shareFile.files[0] === file) notice('shareImportNotice', error.message, true);
+    }
+});
+shareTarget.addEventListener('change', renderShareImport);
+shareName.addEventListener('input', renderShareImport);
+byId('shareImportForm').addEventListener('submit', async event => {
+    event.preventDefault();
+    const preview = importPreview;
+    const share = sharedVocabulary;
+    if (!preview || !share || byId('shareApply').disabled || !discardEditor(true)) return;
+    const confirmReadings = byId('shareConfirmReadings').checked;
+    let result;
     if (!await persist(state => {
-        const book = state.books.find(candidate => candidate.id === activeId);
-        if (!book) throw new Error('請重新選擇班級詞庫。');
-        state.exams.push(makeExam({ ...examSettings(), id: crypto.randomUUID(), createdAt: new Date().toISOString(),
-            book, words: state.words, seed }));
-    }, 'examNotice')) return;
-    renderExams();
-    notice('examNotice', `${cloud ? '已同步' : '已儲存'} ${examSettings().count} 題。可在下方開啟考卷與解答。`);
-    byId('examList').querySelector('a')?.focus();
+        result = applyVocabularyShare(state, share, preview, { confirmReadings, nextId: () => crypto.randomUUID() });
+    }, 'shareImportNotice')) return;
+    sharedVocabulary = null;
+    importPreview = null;
+    shareFile.value = '';
+    byId('sharePreview').hidden = true;
+    activeId = result.book.id;
+    clearEditor('1');
+    batchForm.reset();
+    clearBatch();
+    renderBooks();
+    notice('shareImportNotice', `已將 ${result.count} 個詞語匯入「${result.book.name}」。`);
 });
 
 window.addEventListener('beforeunload', event => {

@@ -36,3 +36,7 @@ projection superseded them. History only; not current state.
 - AUTH-07 開發環境驗收通過；已準備 codex/ux-review 交接版，含完整新版程式、合成資料和 UX／UI 審查入口。正式教材仍等待授權。 <!-- memory_record_projection:active-task-summary:6f67fd49fbd8f8f5026f41ddcfb6b0bd949dcc4baaf00bcce19b12519d3b6352 -->
 
 - D-05 私有開發匯入完成；公開授權與正式發布待確認。 <!-- memory_record_projection:active-task-summary:453c679f6ee74906064d8f01da4eb32895bcdc6883653b49f59ba21007f84b4c -->
+
+- 首頁開發驗收完成。帳號進度、教材字表和既有練習簿列印已接通。 <!-- memory_record_projection:active-task-summary:dcb3ea7a2945fdd99fad9143ab76325095f7f91560d2373493f547bee25e27d2 -->
+
+- UX 任務 2 排版在 4da5e86 獨立整合分支完成本機驗收。 <!-- memory_record_projection:active-task-summary:2c6fd1f576db3e8bb1d3d07bac5a04a25916f7492d2c57af32395c3ed21871ef -->

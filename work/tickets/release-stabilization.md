@@ -6,8 +6,8 @@
 
 1. 使用 Node.js 22 或以上執行 `node --test tests/*.test.mjs`。
 2. 執行 `python scripts/preview.py`，在同一個 loopback origin 開啟 `/index.html?local=1`。首頁、自訂練習、詞庫、考卷、錯題複習和國字查詢皆可在本機使用。
-3. 雲端環境依 `supabase/migrations/` 的時間順序建立資料庫。在獨立測試資料庫執行 `psql -v ON_ERROR_STOP=1 -f scripts/test-family-sync.sql` 和 `psql -v ON_ERROR_STOP=1 -f scripts/test-review-sync.sql`。兩個腳本使用合成帳號並在交易結束時回滾。使用 Supabase CLI 2.84.2 建立本機環境時，需在暫存設定將 `[local_smtp]` 改為 `[inbucket]` 才能通過 CLI 的設定解析。
-4. 需要驗證 Google 登入及 OCR 時，由授權操作者提供開發環境的瀏覽器 publishable 設定、Google callback 及照片匯入開關，並依下節準備模型。專案原始碼的預設設定保留本機模式。雲端測試使用獨立測試帳號與合成樣本。
+3. 依 [Supabase 本機驗收方法](supabase-family-sync.md#本機驗收方法) 使用 CLI 3.1.0，並按 `supabase/migrations/` 的時間順序建立資料庫。在獨立測試資料庫執行 `psql -v ON_ERROR_STOP=1 -f scripts/test-family-sync.sql` 和 `psql -v ON_ERROR_STOP=1 -f scripts/test-review-sync.sql`。兩個腳本使用合成帳號並在交易結束時回滾。這次 SQL 驗收使用全新 PostgreSQL 18.4 及合成 Auth fixture。
+4. 需要驗證 Google 登入及 OCR 時，由授權操作者在獨立測試環境的 `cloudConfig.mjs` 提供瀏覽器 publishable 設定、設定 Google callback，並以 `photoImport: true` 開啟匯入。模型組裝方式見下節。雲端測試使用獨立測試帳號與合成樣本。
 
 ## 重建裝置端 OCR 資產
 
@@ -19,7 +19,7 @@ npm install --prefix <dependency-directory> --save-exact onnxruntime-web@1.22.0
 python scripts/prepare-photo-ocr-assets.py <model.onnx> <dependency-directory>/node_modules/onnxruntime-web photo-ocr-assets
 ```
 
-把 [ONNX Runtime MIT License](https://raw.githubusercontent.com/microsoft/onnxruntime/v1.22.0/LICENSE) 與 [PaddleOCR Apache-2.0 License](https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf/LICENSE) 放到資產目錄，名稱為 `onnxruntime-license.txt` 和 `paddleocr-license.txt`。模型、字表和 WASM 由測試環境組裝。輸出雜湊如下。
+把 [ONNX Runtime MIT License](https://raw.githubusercontent.com/microsoft/onnxruntime/v1.22.0/LICENSE) 與 [PaddleOCR Apache-2.0 License](https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf/LICENSE) 放到資產目錄，名稱為 `onnxruntime-license.txt` 和 `paddleocr-license.txt`。模型、字表和 WASM 由測試環境組裝。兩份授權檔的雜湊如下。
 
 | 檔案 | SHA-256 |
 | --- | --- |

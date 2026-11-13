@@ -8,4 +8,4 @@
 
 - Update this file when task state changes.
 
-- UX 任務 2 排版在 4da5e86 獨立整合分支完成本機驗收。 <!-- memory_record_projection:active-task-summary:2c6fd1f576db3e8bb1d3d07bac5a04a25916f7492d2c57af32395c3ed21871ef -->
+- Release Stabilization 已核對私人站版本，整合分支完成雙 agent 審查。F-04 使用流程與 QA-01 尚待確認。 <!-- memory_record_projection:active-task-summary:65c6e488e3484fdd9fbeed3a026fcb6c90107c3d5139bd9db0e150b41e49df18 -->

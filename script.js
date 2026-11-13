@@ -607,6 +607,8 @@ downloadBtn.addEventListener('click', async () => {
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4'); // Portrait, Millimeters, A4
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
 
     // Show Loading State
     const originalText = downloadBtn.innerText;
@@ -643,13 +645,16 @@ downloadBtn.addEventListener('click', async () => {
 
             const page = pages[i];
 
-            // High Quality Canvas
+            // Keep the responsive preview from narrowing the A4 capture.
             const canvas = await html2canvas(page, {
                 scale: 2, // Retain quality
                 allowTaint: true, // CRITICAL: Allow cross-origin resources
                 logging: false,
-                windowWidth: page.scrollWidth,
-                windowHeight: page.scrollHeight
+                windowWidth: Math.max(window.innerWidth, 1024),
+                onclone(_document, sheet) {
+                    sheet.style.width = 'var(--a4-width)';
+                    sheet.style.minWidth = 'var(--a4-width)';
+                }
             });
 
             // Use toBlob instead of toDataURL to avoid security errors
@@ -658,15 +663,14 @@ downloadBtn.addEventListener('click', async () => {
             });
 
             const imgData = URL.createObjectURL(blob);
-            const imgWidth = 210; // A4 Width in mm
-            const pageHeight = 297; // A4 Height in mm
-
-            // Calculate ratio to fit exactly
-            const imgProps = doc.getImageProperties(imgData);
-            const pdfHeight = (imgProps.height * imgWidth) / imgProps.width;
-
-            doc.addImage(imgData, 'JPEG', 0, 0, imgWidth, pdfHeight);
-            URL.revokeObjectURL(imgData); // Clean up
+            try {
+                const scale = Math.min(pageWidth / canvas.width, pageHeight / canvas.height);
+                const width = canvas.width * scale;
+                const height = canvas.height * scale;
+                doc.addImage(imgData, 'JPEG', (pageWidth - width) / 2, 0, width, height);
+            } finally {
+                URL.revokeObjectURL(imgData);
+            }
         }
 
         // Construct dynamic filename

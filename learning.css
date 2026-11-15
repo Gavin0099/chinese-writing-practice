@@ -56,6 +56,9 @@ button:disabled, select:disabled { opacity: .55; cursor: default; }
 .first-occurrence { color: var(--muted); margin-top: .25rem; }
 .teaching-status { margin: .2rem 0 .55rem; color: var(--muted); }
 .teaching-status[data-state='taught'] { color: var(--accent); font-weight: 650; }
+.writing-history { margin-top: .4rem; }
+.writing-history ol { padding-left: 1.2rem; margin: .3rem 0 0; }
+.writing-notice:empty { margin: 0; }
 .lesson-evidence { margin: .3rem 0; }
 .lesson-evidence-body { margin: .5rem 0 .6rem .85rem; overflow-wrap: anywhere; }
 .lesson-evidence-body p { margin-top: .4rem; }

@@ -1,6 +1,6 @@
 import { courseKey, lookupCharacters } from './characterLookup.mjs';
-import { confirmCourse, curriculumStorageKey, importCourses, isPediaSource, lookupReferenceLessons, lookupScope,
-    mergeCourses, progressStorageKey, readProgress, readStoredValue } from './learningData.mjs';
+import { confirmCourse, curriculumStorageKey, importCourses, isPediaSource, isWritingHistory, lookupReferenceLessons,
+    lookupScope, mergeCourses, progressStorageKey, readProgress, readStoredValue, writingStorageKey } from './learningData.mjs';
 import { cloudPageUrl, connectCloud, openPageStorage, readCloudSettings, readCurriculumCatalog } from './cloudStorage.mjs';
 import { syncPageUrl } from './googleAuth.mjs';
 import { lookupWordReviews, readAttempts } from './reviewData.mjs';
@@ -19,10 +19,18 @@ const input = byId('query');
 const resultList = byId('results');
 const reviewNotice = byId('reviewLookupNotice');
 const statusLabels = { taught: '推估已教', not_yet_taught: '尚未教到', insufficient_data: '資料不足' };
+const writingLabels = { not_assessed: '尚未評估', can_write: '會寫', cannot_write: '不會寫',
+    uses_zhuyin: '用注音代替', missing_strokes: '漏筆畫' };
+const dateLabel = new Intl.DateTimeFormat('zh-TW', { dateStyle: 'medium', timeStyle: 'short' });
 const importLimit = 2_000_000;
 
 function readLocal(key) {
     return readStoredValue(key === curriculumStorageKey ? localStorage : recordStorage, key);
+}
+
+function readWriting() {
+    return Object.fromEntries(Object.entries(readLocal(writingStorageKey) ?? {}).filter(([char, records]) =>
+        isWritingHistory(char, records)));
 }
 
 let localCourses = mergeCourses(readLocal(curriculumStorageKey));
@@ -179,9 +187,20 @@ function lessonEvidenceRenderer() {
     };
 }
 
-function renderResult(result, references, lessonEvidence) {
+function updateWritingHistory(card, records) {
+    const history = card.querySelector('.writing-history');
+    const items = records.slice().reverse().map(record => {
+        const item = document.createElement('li');
+        item.textContent = `${dateLabel.format(new Date(record.at))}　${writingLabels[record.status]}`;
+        return item;
+    });
+    history.querySelector('ol').replaceChildren(...items);
+    history.hidden = !records.length;
+}
+
+function renderResult(result, references, lessonEvidence, records) {
     const card = byId('resultTemplate').content.firstElementChild.cloneNode(true);
-    const { char, positions, curriculum, teachingStatus } = result;
+    const { char, positions, curriculum, teachingStatus, writingStatus } = result;
     card.querySelector('h3').textContent = char;
     if (positions.length > 1) card.querySelector('.count').textContent = `出現 ${positions.length} 次`;
 
@@ -211,6 +230,34 @@ function renderResult(result, references, lessonEvidence) {
     teaching.textContent = statusLabels[teachingStatus];
     teaching.dataset.state = teachingStatus;
 
+    const writingField = card.querySelector('.writing-status');
+    writingField.value = writingStatus;
+    writingField.setAttribute('aria-label', `${char}的習寫狀態`);
+    updateWritingHistory(card, records);
+    writingField.addEventListener('change', async () => {
+        const notice = card.querySelector('.writing-notice');
+        const controls = [byId('queryFields'), ...resultList.querySelectorAll('.writing-status')];
+        controls.forEach(control => { control.disabled = true; });
+        try {
+            const current = JSON.parse(recordStorage.getItem(writingStorageKey) ?? '{}');
+            if (!current || typeof current !== 'object' || Array.isArray(current) ||
+                (Object.hasOwn(current, char) && !isWritingHistory(char, current[char]))) {
+                throw new Error('習寫紀錄格式異常，請先下載備份核對。');
+            }
+            const next = [...(current[char] ?? []), { status: writingField.value, at: new Date().toISOString() }];
+            await recordStorage.setItem(writingStorageKey, JSON.stringify({ ...current, [char]: next }));
+            byId('showRecords').hidden = false;
+            updateWritingHistory(card, next);
+            showNotice(notice, cloud ? '已同步' : '已儲存');
+        } catch (error) {
+            writingField.value = readWriting()[char]?.at(-1)?.status ?? 'not_assessed';
+            const message = error instanceof DOMException ? '儲存失敗，請檢查瀏覽器儲存空間。'
+                : error instanceof SyntaxError ? '習寫紀錄無法讀取，請保留原資料。' : error.message;
+            showNotice(notice, message, true);
+        } finally {
+            controls.forEach(control => { control.disabled = false; });
+        }
+    });
     return card;
 }
 
@@ -284,13 +331,16 @@ function renderResults() {
     if (activeQuery === null) return;
     const scope = lookupScope(currentCourse(), courses, progress);
     const { references, ...confirmedScope } = scope;
-    const results = lookupCharacters(activeQuery, confirmedScope);
+    const writing = readWriting();
+    const writingStatuses = Object.fromEntries(Object.entries(writing).map(([char, records]) =>
+        [char, records.at(-1).status]));
+    const results = lookupCharacters(activeQuery, { ...confirmedScope, writingStatuses });
     const referenceHits = lookupReferenceLessons(activeQuery, references);
     const lessonEvidence = lessonEvidenceRenderer();
     byId('resultsHeading').hidden = !results.length;
     showNotice(byId('queryNotice'), results.length ? `共 ${results.length} 個不同的國字` : '請輸入至少一個國字。');
     resultList.replaceChildren(...results.map(result =>
-        renderResult(result, referenceHits.get(result.char) ?? [], lessonEvidence)));
+        renderResult(result, referenceHits.get(result.char) ?? [], lessonEvidence, writing[result.char] ?? [])));
     renderWordReviews();
 }
 
@@ -360,6 +410,13 @@ byId('queryForm').addEventListener('submit', event => {
     renderResults();
     void loadWordReviews();
 });
+byId('showRecords').addEventListener('click', () => {
+    activeQuery = Object.keys(readWriting()).join('');
+    renderResults();
+    void loadWordReviews();
+});
+byId('showRecords').hidden = !Object.keys(readWriting()).length;
+if (cloud) byId('lookupHelp').textContent = '輸入的內容只在此瀏覽器處理。習寫紀錄會同步到此帳號。';
 fillPicker(courses.find(course => courseKey(course) === progress.activeKey));
 byId('queryFields').disabled = false;
 

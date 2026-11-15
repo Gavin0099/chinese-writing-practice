@@ -68,10 +68,11 @@
                         <textarea id="query" rows="4" maxlength="1000" placeholder="例如 烏雲密布"></textarea>
                         <div class="actions">
                             <button type="submit" class="primary">查詢國字</button>
+                            <button type="button" id="showRecords" hidden>查看習寫紀錄</button>
                         </div>
                     </fieldset>
                 </form>
-                <p class="hint">輸入的內容只在此瀏覽器處理。</p>
+                <p class="hint" id="lookupHelp">輸入的內容與習寫紀錄留在此瀏覽器。</p>
             </section>
         </div>
 
@@ -89,6 +90,20 @@
             <div class="assessment">
                 <h4>教學進度</h4>
                 <p class="teaching-status"></p>
+                <label>習寫狀態
+                    <select class="writing-status">
+                        <option value="not_assessed">尚未評估</option>
+                        <option value="can_write">會寫</option>
+                        <option value="cannot_write">不會寫</option>
+                        <option value="uses_zhuyin">用注音代替</option>
+                        <option value="missing_strokes">漏筆畫</option>
+                    </select>
+                </label>
+                <details class="writing-history" hidden>
+                    <summary>習寫紀錄</summary>
+                    <ol></ol>
+                </details>
+                <p class="notice writing-notice" role="status"></p>
             </div>
             <div class="evidence">
                 <h4>教材收錄</h4>

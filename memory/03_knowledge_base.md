@@ -1,5 +1,11 @@
 # Knowledge Base
 
+## CANDIDATE / UNREVIEWED: 國字查詢失去習寫紀錄入口
+
+- 版本整合移除了國字查詢的逐字習寫狀態欄位與查閱入口。備份仍包含原資料，還原後卻無法在查詢頁讀取或編輯。
+- 修正提交 `d2687b9` 恢復入口並沿用既有本機及雲端儲存。失敗時回復已儲存的狀態，雲端 409 仍可下載未同步備份。
+- 合成 v1 備份在 Chrome 和 iPhone 尺寸 WebKit 驗證舊紀錄、編輯、重開與錯誤回復。54 項 Node 測試通過。對應的紀錄見 [2026-11-15.md](2026-11-15.md)。
+
 ## CANDIDATE / UNREVIEWED: Windows clone 安裝 Git hooks
 
 - GitHub checkout 的 `origin` 可能省略 `.git`，安裝器會把尚未登記的 URL 加入受追蹤的 identity 檔。Windows 的 `core.autocrlf` 也會將該檔轉為 CRLF，安裝器比對原始位元組時會重寫。

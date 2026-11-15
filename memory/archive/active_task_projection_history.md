@@ -40,3 +40,5 @@ projection superseded them. History only; not current state.
 - 首頁開發驗收完成。帳號進度、教材字表和既有練習簿列印已接通。 <!-- memory_record_projection:active-task-summary:dcb3ea7a2945fdd99fad9143ab76325095f7f91560d2373493f547bee25e27d2 -->
 
 - UX 任務 2 排版在 4da5e86 獨立整合分支完成本機驗收。 <!-- memory_record_projection:active-task-summary:2c6fd1f576db3e8bb1d3d07bac5a04a25916f7492d2c57af32395c3ed21871ef -->
+
+- Release Stabilization 已核對私人站版本，整合分支完成雙 agent 審查。F-04 使用流程與 QA-01 尚待確認。 <!-- memory_record_projection:active-task-summary:65c6e488e3484fdd9fbeed3a026fcb6c90107c3d5139bd9db0e150b41e49df18 -->

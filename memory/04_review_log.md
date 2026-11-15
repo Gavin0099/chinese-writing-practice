@@ -25,3 +25,14 @@
 - Validation boundary: 42 個應用檔與私人站一致，50 個部署資產雜湊核對，54 Node tests，PostgreSQL 五個 migration 及兩套 SQL 測試，Chrome 與行動尺寸 WebKit。
 - Next action: 整合 Draft PR、獨立 PDF 修正與實體 QA-01。
 - PLAN reconciliation: `updated`
+
+<!-- memory_record_projection:review-log:1ac62b20a4ae7d812966b468e8e595760aaed1d4c9feccd1becafb78bf2df4a8 -->
+### Canonical memory checkpoint — 01a1d3e9-556b-74e2-ad56-0aecaa53035d
+
+- Writer: `governance_tools.memory_record`
+- Record identity: `1ac62b20a4ae7d812966b468e8e595760aaed1d4c9feccd1becafb78bf2df4a8`
+- Commit binding: `d2687b994d3047e57b5391cc76c67a923a82de81` (bound)
+- Record: F-04 恢復國字查詢的單字習寫紀錄。交付草稿的範圍審查未見阻擋項目，精確版本的獨立審查待合併前驗證。
+- Validation boundary: 54 項 Node 測試通過。Windows Chrome 與行動尺寸 WebKit 驗證 v1 備份舊資料、編輯、重開、配額及格式錯誤。模擬雲端 409 回復並保留下載未同步備份。
+- Next action: 完成 QA-01 iPhone 實機與私人站 F-04 驗收。
+- PLAN reconciliation: `not_applicable`

@@ -150,7 +150,44 @@ export async function openFamilyStorage(client, onSessionLost = () => {}, onUnco
         });
     }
 
+    async function reviewRequest(query) {
+        const session = await authenticatedSession(client);
+        if (!active || session.user.id !== owner) throw new Error(sessionChanged);
+        const result = await query()
+            .setHeader('Authorization', `Bearer ${session.access_token}`)
+            .abortSignal(AbortSignal.timeout(10000));
+        if (!active) throw new Error(sessionChanged);
+        return result;
+    }
+
+    async function readReviewAttempts() {
+        const attempts = [];
+        const size = 100;
+        let after;
+        for (;;) {
+            const { data, error } = await reviewRequest(() => {
+                const query = client.from('review_attempts').select('attempt_id,attempt')
+                    .eq('owner_id', owner).order('attempt_id').limit(size);
+                return after === undefined ? query : query.gt('attempt_id', after);
+            });
+            if (error || !Array.isArray(data)) throw new Error('無法讀取雲端批改紀錄。', { cause: error });
+            attempts.push(...data.map(row => row.attempt));
+            if (data.length < size) return attempts;
+            after = data.at(-1).attempt_id;
+        }
+    }
+
+    async function appendReviewAttempts(attempts) {
+        const { data, error } = await reviewRequest(() =>
+            client.rpc('append_review_attempts', { p_attempts: attempts }));
+        if (error?.message === 'review_attempt_conflict') throw new Error('同一筆批改紀錄有不同內容，請保留此瀏覽器的紀錄。');
+        if (error || data !== attempts.length) throw new Error('尚未確認雲端儲存。', { cause: error });
+    }
+
     return {
+        ownerId: owner,
+        readReviewAttempts,
+        appendReviewAttempts,
         getItem(key) { const section = sectionsByKey.get(key); return section && backup ? JSON.stringify(backup[section]) : null; },
         setItem(key, value) {
             const section = sectionsByKey.get(key);
@@ -173,15 +210,24 @@ export function cloudPageUrl(path) {
     return url.href;
 }
 
-export async function openPageStorage({ home = false } = {}) {
-    const explicit = new URL(location.href).searchParams.get('cloud') === '1';
-    if (!explicit && !home) return null;
+export function useCloudNavigation() {
+    for (const link of document.querySelectorAll('a[data-workspace-link]')) {
+        link.href = cloudPageUrl(link.href);
+    }
+}
+
+export async function openPageStorage({ home = false, resumeSession = home } = {}) {
+    const page = new URL(location.href);
+    const explicit = page.searchParams.get('cloud') === '1';
+    if (!explicit && (!resumeSession || page.searchParams.get('local') === '1')) return null;
+    if (explicit) useCloudNavigation();
     const main = document.querySelector('main');
     const status = document.createElement('p');
     status.className = 'notice cloud-mode-status';
     status.setAttribute('role', 'status');
     status.textContent = '正在讀取雲端資料…';
-    const signIn = () => syncPageUrl(home ? cloudPageUrl('index.html') : location.href);
+    const signIn = () => syncPageUrl(cloudPageUrl(home ? 'index.html' : page));
+    let openingCloud = explicit;
     try {
         const settings = readCloudSettings();
         if (!explicit && !settings) return null;
@@ -189,6 +235,7 @@ export async function openPageStorage({ home = false } = {}) {
         if (!explicit && !(await currentSession(client))) {
             return { isGuest: true, readCurriculumCatalog: () => readCurriculumCatalog(client) };
         }
+        openingCloud = true;
         main.inert = true;
         main.before(status);
         const download = document.createElement('button');
@@ -235,11 +282,7 @@ export async function openPageStorage({ home = false } = {}) {
             draftNotice.hidden = false;
             window.addEventListener('beforeunload', protectDraft);
         });
-        for (const link of document.querySelectorAll('header a[href]')) {
-            const href = link.getAttribute('href');
-            if (['index.html', 'vocabulary.html', 'learning.html'].includes(href)) link.href = cloudPageUrl(href);
-            if (href === 'backup.html') link.textContent = '本機備份與還原';
-        }
+        useCloudNavigation();
         status.textContent = home ? '已連線到家庭帳號。' : '雲端模式。看到已同步後，即可在其他裝置開啟這筆資料。';
         window.addEventListener('pagehide', event => {
             if (event.persisted) main.hidden = true;
@@ -253,6 +296,7 @@ export async function openPageStorage({ home = false } = {}) {
         main.inert = false;
         return { ...context, readCurriculumCatalog: () => readCurriculumCatalog(client, true) };
     } catch (error) {
+        if (!openingCloud && !home) return null;
         main.inert = true;
         main.before(status);
         status.textContent = `${error.message} `;

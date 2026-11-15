@@ -1,6 +1,6 @@
 import { backupCounts, downloadBackupFile, exportBackup } from './backupData.mjs';
 import { deploymentCloud } from './cloudConfig.mjs';
-import { connectCloud, openFamilyStorage, readCloudSettings, saveCloudSettings } from './cloudStorage.mjs';
+import { connectCloud, openFamilyStorage, readCloudSettings, saveCloudSettings, useCloudNavigation } from './cloudStorage.mjs';
 import { cloudReturnUrl, finishGoogleFlow, googleIdentity, readGoogleCallback, startGoogleFlow, syncPageUrl, takeGoogleFlow } from './googleAuth.mjs';
 
 const byId = id => document.getElementById(id);
@@ -67,6 +67,7 @@ async function showWorkspace(session, resume = false) {
         user = null;
         location.reload();
     });
+    useCloudNavigation();
     if (resume && returnTo) {
         location.replace(returnTo);
         return;

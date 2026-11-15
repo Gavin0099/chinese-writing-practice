@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { makeBook, makeWord, previewBatch, readVocabulary, saveWord, updateVocabulary } from '../vocabularyData.mjs';
 import { makeExam, questionPool } from '../examData.mjs';
+import { recentWrongTerms } from '../reviewData.mjs';
 
 const book = makeBook({ id: 'room-a', name: '二年三班', publisher: '康軒', year: 115, grade: 2, semester: 1, edition: '' });
 const entry = fields => makeWord({ id: 'word-1', bookId: book.id, lesson: 1, word: '晴天',
@@ -87,4 +88,31 @@ test('30 eligible prompts produce 15 unique snapshot questions with a repeatable
     assert.equal(first.pronunciation[0], 'ㄑㄧㄥˊ');
     assert.throws(() => makeExam({ ...options, words: words.slice(0, 10) }), /只有 10 題/);
     assert.throws(() => makeExam({ ...options, from: 8, to: 1 }), /課次範圍/);
+});
+
+test('priority includes current mistakes across selected lessons once and fills the remaining seats from vocabulary', () => {
+    const words = [
+        entry(), entry({ id: 'sky-variant', lesson: 8, blanks: [2] }),
+        entry({ id: 'rain', lesson: 7, word: '雨天', pronunciation: 'ㄩˇ ㄊㄧㄢ' }),
+        entry({ id: 'cloud', lesson: 3, word: '白雲', pronunciation: 'ㄅㄞˊ ㄩㄣˊ' }),
+        entry({ id: 'outside', lesson: 9, word: '陰天', pronunciation: 'ㄧㄣ ㄊㄧㄢ' }),
+        entry({ id: 'draft', lesson: 6, word: '晴空', pronunciation: 'ㄑㄧㄥˊ ㄎㄨㄥ', confirmed: false })
+    ];
+    const attempt = (id, bookId, day, grades) => ({
+        id, bookId, at: `2026-11-${day}T00:00:00Z`, items: grades.map(([word, wrong]) => ({ word, wrong }))
+    });
+    const history = [
+        attempt('latest', book.id, 12, [['白雲', false], ['晴天', true], ['雨天', true]]),
+        attempt('other', 'room-b', 13, [['白雲', true], ['晴天', false]]),
+        attempt('prior', book.id, 11, [['白雲', true], ['陰天', true], ['晴空', true]])
+    ];
+    const priorityWords = recentWrongTerms(history, book.id);
+    assert.deepEqual([...priorityWords].sort(), ['晴天', '晴空', '陰天', '雨天'].sort());
+    const options = { id: 'priority', createdAt: '2026-11-12T00:00:00Z', book, words, from: 1, to: 8, seed: 'priority', priorityWords };
+    const selected = makeExam({ ...options, count: 2 });
+    assert.deepEqual(selected.questions.map(question => question.word).sort(), ['晴天', '雨天']);
+    const filled = makeExam({ ...options, count: 3 });
+    assert.deepEqual(filled.questions.map(question => question.word).sort(), ['晴天', '白雲', '雨天'].sort());
+    assert.deepEqual(filled, makeExam({ ...options, count: 3, words: words.slice().reverse() }));
+    assert.throws(() => makeExam({ ...options, count: 4 }), /只有 3 題/);
 });

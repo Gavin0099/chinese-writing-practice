@@ -5,10 +5,11 @@ const fileInput = byId('backupFile');
 const restoreButton = byId('restoreBackup');
 let pending = null;
 
-function notice(id, message, error = false) {
+function notice(id, message, error = false, warning = false) {
     const element = byId(id);
     element.textContent = message;
     element.toggleAttribute('data-error', error);
+    element.toggleAttribute('data-warning', warning);
 }
 
 function describe(backup) {
@@ -54,7 +55,7 @@ fileInput.addEventListener('change', async () => {
         const target = readBackupTarget();
         const replaces = existingRecords();
         pending = { backup, target, replaces };
-        notice('restoreNotice', `檔案包含 ${describe(backup)}${replaces ? '還原會取代目前的詞庫、考卷與學習紀錄。' : ''}`);
+        notice('restoreNotice', `檔案包含 ${describe(backup)}${replaces ? '還原會取代目前的詞庫、考卷與學習紀錄。' : ''}`, false, replaces);
         restoreButton.hidden = false;
     } catch (error) {
         if (fileInput.files[0] !== file) return;

@@ -3,14 +3,30 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f6f8f3">
+    <meta name="theme-color" content="#FAF8F4">
     <title>詞語考卷｜生字練習簿</title>
     <link rel="stylesheet" href="learning.css">
     <link rel="stylesheet" href="exam.css">
     <script type="module" src="exam.mjs"></script>
+    <link rel="stylesheet" href="task-layout.css" media="screen">
+    <link rel="stylesheet" href="tokens.css" media="screen">
 </head>
 <body>
-    <header class="page-header"><a id="backToBook" href="vocabulary.html">← 回到老師詞庫</a></header>
+    <header class="page-header">
+        <nav class="task-nav" aria-label="學習工具">
+            <a href="vocabulary.html" data-workspace-link aria-current="location">老師詞庫</a>
+            <a href="learning.html" data-workspace-link>國字查詢</a>
+            <a href="index.html" data-workspace-link>首頁</a>
+            <details class="task-nav-more">
+                <summary>資料與設定</summary>
+                <div class="task-nav-menu">
+                    <a href="backup.html">本機備份與還原</a>
+                    <a href="sync.html">雲端同步</a>
+                </div>
+            </details>
+        </nav>
+        <a id="backToBook" href="vocabulary.html" data-workspace-link>← 回到老師詞庫</a>
+    </header>
     <main>
         <section id="examControls" class="panel" aria-labelledby="previewHeading" hidden>
             <h1 id="previewHeading">考卷與解答預覽</h1>
@@ -21,6 +37,7 @@
                 <a id="answers">只看解答</a>
             </div>
             <button id="printExam" type="button" class="primary">列印／儲存 PDF</button>
+            <a id="recordReview" href="review.html" data-workspace-link>記錄這份考卷的錯題</a>
         </section>
         <p id="previewError" class="notice" role="status"></p>
         <div id="examPages"></div>

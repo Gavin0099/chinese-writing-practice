@@ -73,6 +73,8 @@ try {
     const selected = ['questions', 'answers'].includes(params.get('part')) ? params.get('part') : 'both';
     const bookPath = `vocabulary.html?${new URLSearchParams({ book: exam.book.id })}`;
     byId('backToBook').href = cloud ? cloudPageUrl(bookPath) : bookPath;
+    const reviewPath = `review.html?${new URLSearchParams({ exam: exam.id })}`;
+    byId('recordReview').href = cloud ? cloudPageUrl(reviewPath) : reviewPath;
     for (const part of ['both', 'questions', 'answers']) {
         const link = byId(part);
         const path = `?${new URLSearchParams({ id: exam.id, part })}`;

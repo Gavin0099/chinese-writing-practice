@@ -1,4 +1,4 @@
-import { courseKey, isVerifiedLesson, isWritingStatus } from './characterLookup.mjs';
+import { courseKey, isVerifiedLesson, isWritingStatus, lookupCharacters } from './characterLookup.mjs';
 
 export const curriculumStorageKey = 'write_practice_lookup_curricula';
 export const progressStorageKey = 'write_practice_teaching_progress';
@@ -93,6 +93,7 @@ export function importCourses(candidate, reports = []) {
 }
 
 const term = course => course.academicYear * 2 + course.semester;
+const schoolTerm = course => (course.grade - 1) * 2 + course.semester;
 
 export function readProgress(value) {
     const records = Array.isArray(value?.records) ? value.records : [value];
@@ -116,8 +117,30 @@ export function lookupScope(course, courses, progress) {
     const records = progress.records.filter(record => term(record) < term(course) || courseKey(record) === currentKey);
     const keys = new Set(records.map(courseKey));
     const curricula = [...courses.filter(edition => keys.has(courseKey(edition)) && courseKey(edition) !== currentKey), course];
-    const schoolTerm = edition => (edition.grade - 1) * 2 + edition.semester;
     const historyComplete = records.length === schoolTerm(course) && curricula.length === records.length &&
         records.every(record => term(course) - term(record) === schoolTerm(course) - schoolTerm(record));
-    return { curricula, progress: records, historyComplete };
+
+    const confirmedTerms = new Set(records.map(term));
+    const references = [];
+    for (let slot = 1; slot < schoolTerm(course); slot++) {
+        const expectedTerm = term(course) - schoolTerm(course) + slot;
+        if (confirmedTerms.has(expectedTerm)) continue;
+        const options = courses.filter(edition => edition.publisher === course.publisher && schoolTerm(edition) === slot);
+        const exact = options.filter(edition => term(edition) === expectedTerm);
+        const candidates = exact.length ? exact : options.filter(edition => edition.academicYear === course.academicYear);
+        if (candidates.length === 1) references.push({ course: candidates[0], otherYear: exact.length === 0 });
+    }
+    return { curricula, progress: records, historyComplete, references };
+}
+
+export function lookupReferenceLessons(text, references = []) {
+    const hits = new Map();
+    for (const { course, otherYear } of references) {
+        for (const { char, curriculum } of lookupCharacters(text, { curricula: [course] })) {
+            if (!curriculum.occurrences.length) continue;
+            if (!hits.has(char)) hits.set(char, []);
+            hits.get(char).push(...curriculum.occurrences.map(occurrence => ({ occurrence, otherYear })));
+        }
+    }
+    return hits;
 }

@@ -1,0 +1,56 @@
+{
+ "390:ink.html": {
+  "elements": 50,
+  "movedOver1px": null,
+  "maxDeltaPx": null,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 390,
+  "height": 1780
+ },
+ "390:clay.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 390,
+  "height": 1780
+ },
+ "390:plum.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 390,
+  "height": 1780
+ },
+ "1280:ink.html": {
+  "elements": 50,
+  "movedOver1px": null,
+  "maxDeltaPx": null,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 1280,
+  "height": 1433
+ },
+ "1280:clay.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 1280,
+  "height": 1433
+ },
+ "1280:plum.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 1280,
+  "height": 1433
+ }
+}

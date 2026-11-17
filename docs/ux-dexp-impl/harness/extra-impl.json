@@ -1,0 +1,206 @@
+{
+  "mobile": {
+    "footer": {
+      "footer": {
+        "sel": "#appFooter, .ui-pro-footer",
+        "text": "📚 資料來源：字形採用 教育部標準楷書字體 (CC\n             ",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundColorHex": "#000000",
+        "color": "rgb(84, 37, 59)",
+        "colorHex": "#54253b"
+      },
+      "license": {
+        "sel": "#appFooter .license-badge, .license-badge",
+        "text": "✅ 本工具採用開放授權，歡迎家長與老師免費使用",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "backgroundColorHex": "#ffffff",
+        "color": "rgb(84, 37, 59)",
+        "colorHex": "#54253b",
+        "borderTopColor": "rgb(211, 184, 199)",
+        "borderTopColorHex": "#d3b8c7"
+      },
+      "hint": {
+        "sel": "#appFooter .feedback-hint, .feedback-hint",
+        "text": "您的建議能讓這個工具更好用！",
+        "color": "rgb(112, 85, 102)",
+        "colorHex": "#705566",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundColorHex": "#000000"
+      },
+      "copyright": {
+        "sel": "#appFooter .footer-copyright, .footer-copyright",
+        "text": "© 2026 生字練習簿生成器",
+        "color": "rgb(112, 85, 102)",
+        "colorHex": "#705566",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundColorHex": "#000000"
+      },
+      "feedback": {
+        "sel": "#appFooter .feedback-btn, .feedback-btn",
+        "text": "🐛\n                            發現問題 / 許願",
+        "backgroundColor": "rgb(123, 36, 63)",
+        "backgroundColorHex": "#7b243f",
+        "color": "rgb(255, 255, 255)",
+        "colorHex": "#ffffff"
+      },
+      "author": {
+        "sel": "#appFooter .author-text h4",
+        "text": "關於本站",
+        "color": "rgb(84, 37, 59)",
+        "colorHex": "#54253b"
+      },
+      "source": {
+        "sel": "#appFooter .source-credit, .source-credit",
+        "text": "📚 資料來源：字形採用 教育部標準楷書字體 (CC\n             ",
+        "color": "rgb(112, 85, 102)",
+        "colorHex": "#705566"
+      }
+    },
+    "success": {
+      "present": true,
+      "title": {
+        "sel": ".success-state .hero-title, .success-state h2",
+        "text": "練習簿已準備好",
+        "color": "rgb(44, 104, 74)",
+        "colorHex": "#2c684a",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundColorHex": "#000000",
+        "fontSize": "35.2px"
+      },
+      "reload": {
+        "sel": ".success-state button[onclick*=\"reload\"], .success-state .btn-primary-hero:nth-of-type(2)",
+        "text": "明天再來",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "backgroundColorHex": "#ffffff",
+        "color": "rgb(84, 37, 59)",
+        "colorHex": "#54253b",
+        "borderTopColor": "rgb(138, 90, 115)",
+        "borderTopColorHex": "#8a5a73"
+      },
+      "next": {
+        "sel": "#nextLessonBtn",
+        "text": "下一課",
+        "backgroundColor": "rgb(243, 217, 226)",
+        "backgroundColorHex": "#f3d9e2",
+        "color": "rgb(88, 33, 55)",
+        "colorHex": "#582137"
+      },
+      "print": {
+        "sel": "#heroPrintBtn",
+        "text": "🖨️ \n                                   ",
+        "backgroundColor": "rgb(123, 36, 63)",
+        "backgroundColorHex": "#7b243f",
+        "color": "rgb(255, 255, 255)",
+        "colorHex": "#ffffff"
+      },
+      "divider": {
+        "sel": ".success-state [style*=\"dashed\"], .success-state div[style]",
+        "text": "✅",
+        "borderTopColor": "rgb(84, 37, 59)",
+        "borderTopColorHex": "#54253b"
+      }
+    }
+  },
+  "desktop": {
+    "footer": {
+      "footer": {
+        "sel": "#appFooter, .ui-pro-footer",
+        "text": "📚 資料來源：字形採用 教育部標準楷書字體 (CC\n             ",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundColorHex": "#000000",
+        "color": "rgb(84, 37, 59)",
+        "colorHex": "#54253b"
+      },
+      "license": {
+        "sel": "#appFooter .license-badge, .license-badge",
+        "text": "✅ 本工具採用開放授權，歡迎家長與老師免費使用",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "backgroundColorHex": "#ffffff",
+        "color": "rgb(84, 37, 59)",
+        "colorHex": "#54253b",
+        "borderTopColor": "rgb(211, 184, 199)",
+        "borderTopColorHex": "#d3b8c7"
+      },
+      "hint": {
+        "sel": "#appFooter .feedback-hint, .feedback-hint",
+        "text": "您的建議能讓這個工具更好用！",
+        "color": "rgb(112, 85, 102)",
+        "colorHex": "#705566",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundColorHex": "#000000"
+      },
+      "copyright": {
+        "sel": "#appFooter .footer-copyright, .footer-copyright",
+        "text": "© 2026 生字練習簿生成器",
+        "color": "rgb(112, 85, 102)",
+        "colorHex": "#705566",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundColorHex": "#000000"
+      },
+      "feedback": {
+        "sel": "#appFooter .feedback-btn, .feedback-btn",
+        "text": "🐛\n                            發現問題 / 許願",
+        "backgroundColor": "rgb(123, 36, 63)",
+        "backgroundColorHex": "#7b243f",
+        "color": "rgb(255, 255, 255)",
+        "colorHex": "#ffffff"
+      },
+      "author": {
+        "sel": "#appFooter .author-text h4",
+        "text": "關於本站",
+        "color": "rgb(84, 37, 59)",
+        "colorHex": "#54253b"
+      },
+      "source": {
+        "sel": "#appFooter .source-credit, .source-credit",
+        "text": "📚 資料來源：字形採用 教育部標準楷書字體 (CC\n             ",
+        "color": "rgb(112, 85, 102)",
+        "colorHex": "#705566"
+      }
+    },
+    "success": {
+      "present": true,
+      "title": {
+        "sel": ".success-state .hero-title, .success-state h2",
+        "text": "練習簿已準備好",
+        "color": "rgb(44, 104, 74)",
+        "colorHex": "#2c684a",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundColorHex": "#000000",
+        "fontSize": "35.2px"
+      },
+      "reload": {
+        "sel": ".success-state button[onclick*=\"reload\"], .success-state .btn-primary-hero:nth-of-type(2)",
+        "text": "明天再來",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "backgroundColorHex": "#ffffff",
+        "color": "rgb(84, 37, 59)",
+        "colorHex": "#54253b",
+        "borderTopColor": "rgb(138, 90, 115)",
+        "borderTopColorHex": "#8a5a73"
+      },
+      "next": {
+        "sel": "#nextLessonBtn",
+        "text": "下一課",
+        "backgroundColor": "rgb(243, 217, 226)",
+        "backgroundColorHex": "#f3d9e2",
+        "color": "rgb(88, 33, 55)",
+        "colorHex": "#582137"
+      },
+      "print": {
+        "sel": "#heroPrintBtn",
+        "text": "🖨️ \n                                   ",
+        "backgroundColor": "rgb(123, 36, 63)",
+        "backgroundColorHex": "#7b243f",
+        "color": "rgb(255, 255, 255)",
+        "colorHex": "#ffffff"
+      },
+      "divider": {
+        "sel": ".success-state [style*=\"dashed\"], .success-state div[style]",
+        "text": "✅",
+        "borderTopColor": "rgb(84, 37, 59)",
+        "borderTopColorHex": "#54253b"
+      }
+    }
+  }
+}

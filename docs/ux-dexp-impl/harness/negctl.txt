@@ -1,0 +1,2 @@
+NEGCTL exam-answers vs exam-questions page1 differing pixels: 48490
+NEGCTL PASS

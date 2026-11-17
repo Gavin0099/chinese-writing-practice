@@ -1,0 +1,44 @@
+/* Offline reconstruction of the accepted home layout.
+   Geometry is shared by R0 and all six R1 directions. No print/grid rules. */
+* { box-sizing: border-box; }
+html { font-size: 16px; }
+body { margin: 0; background: var(--page); color: var(--text); font-family: var(--body-font); line-height: 1.5; }
+h1, h2, h4, p { margin-top: 0; }
+h1, h2, h4 { line-height: 1.2; }
+p { margin-bottom: 1rem; }
+button { font-family: inherit; line-height: inherit; margin: 0; text-transform: none; }
+button:disabled { opacity: 1; cursor: default; }
+.minimal-header { padding: 1rem 2rem; display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap; gap: .4rem 1rem; }
+.brand { display: flex; align-items: center; gap: .5rem; font-weight: 500; color: var(--muted); font-size: .9rem; }
+.main-tools { display: flex; flex-wrap: wrap; gap: .25rem .75rem; margin-inline-start: auto; }
+.btn-text { background: none; border: 0; border-bottom: 1px solid transparent; color: var(--nav); font-size: 1rem; padding: .5rem 1rem; margin: 0 1rem; text-decoration: none; min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+.hero-section { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; text-align: center; }
+.home-container { width: auto; max-width: 100%; margin-inline: auto; padding: 0; }
+.home-task-entry { width: 100%; max-width: 46rem; margin: 0 auto 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--rule); text-align: left; }
+.home-task-entry h2 { margin-bottom: .5rem; font-size: 1.5rem; font-weight: var(--entry-weight); line-height: 1.5; text-wrap: balance; color: var(--entry-text); }
+.home-task-entry p { margin: .5rem 0 1rem; font-size: 1rem; line-height: 1.6; color: var(--description); }
+.task-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .75rem 1.25rem; background: var(--primary); color: var(--on-primary); border: 0; border-radius: .5rem; font-size: 1rem; font-weight: 700; text-decoration: none; }
+.smart-card { background: var(--surface); padding: 3rem; border-radius: 24px; box-shadow: var(--card-shadow); width: 100%; max-width: 450px; margin-bottom: 2rem; position: relative; overflow: hidden; border: 1px solid var(--card-border); }
+.hero-subtitle { font-family: var(--label-font); font-size: 1rem; color: var(--muted); font-weight: var(--label-weight); margin-bottom: 1rem; letter-spacing: 1px; }
+.hero-title { font-family: var(--heading-font); font-size: 2.8rem; font-weight: var(--heading-weight); color: var(--title); margin-bottom: 2.5rem; letter-spacing: var(--heading-tracking); }
+.btn-primary-hero { background: var(--secondary); color: var(--on-secondary); border: 0; padding: 1rem 2.5rem; border-radius: 99px; font-size: 1.15rem; font-weight: 600; box-shadow: var(--button-shadow); width: 100%; margin-bottom: 1rem; display: inline-flex; align-items: center; gap: .75rem; }
+.hero-hint { margin-top: 1.5rem; font-size: .85rem; color: var(--hint); display: flex; align-items: center; justify-content: center; gap: .5rem; }
+.secondary-actions { margin-top: 1rem; }
+/* The footer stays in its original position and retains the original wording. */
+.ui-pro-footer { margin-top: 4rem; padding: 3rem 1rem; background: var(--footer-bg); border-top: 1px solid var(--footer-border); color: var(--footer-text); font-family: 'Segoe UI', system-ui, sans-serif; }
+.footer-container { max-width: 800px; margin: 0 auto; text-align: center; }
+.source-credit { font-size: .85rem; color: var(--credit); line-height: 1.6; margin-bottom: 2rem; }
+.source-link { color: var(--credit-link); text-decoration: underline; text-decoration-color: var(--rule); }
+.license-badge { display: inline-block; background: var(--badge-bg); color: var(--badge-text); padding: .25rem .75rem; border-radius: 999px; font-size: .75rem; margin-top: .5rem; border: 1px solid var(--badge-border); }
+.footer-divider { height: 1px; background: var(--rule); margin: 0 auto 2.5rem; width: 60%; }
+.footer-main-card { background: var(--surface); border-radius: 16px; padding: 2rem; box-shadow: var(--footer-shadow); border: 1px solid var(--footer-border); display: flex; flex-direction: column; align-items: center; gap: 1.5rem; margin-bottom: 2rem; }
+.footer-author { display: flex; align-items: center; gap: 1rem; text-align: left; }
+.author-icon { font-size: 2rem; background: var(--badge-bg); width: 3.5rem; height: 3.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.author-text h4 { margin: 0 0 .25rem; color: var(--title); font-size: 1.1rem; font-weight: 600; }
+.author-text p { margin: 0; font-size: .9rem; color: var(--muted); line-height: 1.4; }
+.feedback-btn { display: inline-flex; align-items: center; gap: .5rem; background: var(--feedback); color: var(--on-feedback); padding: .75rem 1.5rem; border: 0; border-radius: 12px; text-decoration: none; font-weight: 600; box-shadow: var(--button-shadow); }
+.feedback-btn .btn-text { color: inherit; font-size: .95rem; }
+.feedback-hint { font-size: .75rem; color: var(--credit); margin-top: .5rem; }
+.footer-copyright { font-size: .75rem; color: var(--credit); }
+@media (max-width: 36rem) { .minimal-header { padding-inline: 1rem; } .main-tools { margin-inline-start: 0; } }
+@media (min-width: 640px) { .footer-main-card { flex-direction: row; justify-content: space-between; padding: 2.5rem; text-align: left; } .footer-action { text-align: right; } }

@@ -1,0 +1,1574 @@
+[
+  {
+    "id": "R3-1",
+    "slug": "r3-1-bluebold",
+    "name": "藍墨粗黑",
+    "round": 3,
+    "parent": "R2-1",
+    "parents": [
+      "R2-1"
+    ],
+    "copied_from": "r2-1-blueprint.html",
+    "geometry_baseline": "R0-0",
+    "tag": "粗黑體 × 系統黑體",
+    "why": "用有力的黑體課名與熟悉的系統正文，讓備課入口快速清楚。",
+    "diff": "六版中最厚的無襯線標題；白底與藍色細框讓字的重量成為焦點。",
+    "title_font": "'PingFang TC', 'Microsoft JhengHei', 'Heiti TC', system-ui, sans-serif",
+    "body_font": "system-ui, -apple-system, 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+    "title_weight": 800,
+    "body_weight": 400,
+    "title_label": "粗黑體 800",
+    "body_label": "系統黑體 400",
+    "platform_fallbacks": {
+      "windows": {
+        "title": "Microsoft JhengHei（微軟正黑體）；未安裝繁中字型時由 system-ui／sans-serif 的 CJK fallback 決定。",
+        "body": "system-ui 的拉丁字為系統 UI 字體（常見 Segoe UI），繁中通常退回 Microsoft JhengHei；未安裝時由瀏覽器 sans-serif 決定。"
+      },
+      "iphone": {
+        "title": "PingFang TC（蘋方繁中）；缺字依 Heiti TC／system-ui／sans-serif 順序退回。",
+        "body": "system-ui／-apple-system 的拉丁字為 San Francisco，繁中通常為 PingFang TC。"
+      }
+    },
+    "font_availability": "Requested fallback chain, not an observed installed-font inventory. Windows Chrome / iPhone Safari: NOT MEASURED.",
+    "font_transfer_bytes": 0,
+    "webfont_note": "未安裝圓體／楷體時會退回黑體；跨平台保證同款字形需要另行核對授權的 web font，本輪未加入。Noto、Nunito、Varela Round 等資料庫字型不下載。",
+    "geometry_strategy": "同頁先以 R0 字型量得 header／home-container 各元素 border box，再保留 width／height／line-height；在原文字節點套字體，必要時字距 ±0.8px、字級最多縮 6% 保留原折行。其餘 footer／說明字型固定 R0。resize 後重算；不新增隱藏頁、不改文案、不裁字。實際 390／1280px：NOT MEASURED。",
+    "tokens": {
+      "body-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+      "heading-font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
+      "label-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+      "heading-weight": "900",
+      "entry-weight": "700",
+      "label-weight": "400",
+      "heading-tracking": "normal",
+      "card-shadow": "none",
+      "button-shadow": "inset 0 0 0 1px #7186B0",
+      "footer-shadow": "none",
+      "page": "#FFFFFF",
+      "surface": "#F2F5FC",
+      "text": "#22304C",
+      "title": "#22304C",
+      "entry-text": "#22304C",
+      "muted": "#515F77",
+      "description": "#515F77",
+      "hint": "#515F77",
+      "nav": "#244184",
+      "primary": "#244CBC",
+      "primary-hover": "#19398F",
+      "on-primary": "#FFFFFF",
+      "secondary": "#F2F5FC",
+      "secondary-hover": "#E1E8F6",
+      "on-secondary": "#244184",
+      "rule": "#B6C2D8",
+      "card-border": "#7D91B7",
+      "focus": "#244CBC",
+      "footer-bg": "#F2F5FC",
+      "footer-border": "#B6C2D8",
+      "footer-text": "#22304C",
+      "credit": "#515F77",
+      "credit-link": "#22304C",
+      "badge-bg": "#FFFFFF",
+      "badge-text": "#22304C",
+      "badge-border": "#B6C2D8",
+      "feedback": "#244CBC",
+      "on-feedback": "#FFFFFF",
+      "card-muted": "#515F77"
+    },
+    "contrast": {
+      "method": "sRGB linearization; (lighter + .05) / (darker + .05)",
+      "minimum": 5.915,
+      "pairs": [
+        {
+          "pair": "正文／頁底",
+          "foreground": "#22304C",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 13.165,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口標題／頁底",
+          "foreground": "#22304C",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 13.165,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口說明／頁底",
+          "foreground": "#515F77",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.455,
+          "meets_4_5": true
+        },
+        {
+          "pair": "導覽／頁底",
+          "foreground": "#244184",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 9.703,
+          "meets_4_5": true
+        },
+        {
+          "pair": "品牌／頁底",
+          "foreground": "#515F77",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.455,
+          "meets_4_5": true
+        },
+        {
+          "pair": "課名／卡片",
+          "foreground": "#22304C",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 12.063,
+          "meets_4_5": true
+        },
+        {
+          "pair": "年級／卡片",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "提示／卡片",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#244CBC"
+          ],
+          "ratio": 7.408,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#19398F"
+          ],
+          "ratio": 10.379,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙按鈕文字",
+          "foreground": "#244184",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 8.891,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙 hover 文字",
+          "foreground": "#244184",
+          "background": [
+            "#E1E8F6"
+          ],
+          "ratio": 7.889,
+          "meets_4_5": true
+        },
+        {
+          "pair": "署名／頁尾",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "來源連結／頁尾",
+          "foreground": "#22304C",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 12.063,
+          "meets_4_5": true
+        },
+        {
+          "pair": "授權標籤文字",
+          "foreground": "#22304C",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 13.165,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#244CBC"
+          ],
+          "ratio": 7.408,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者說明／卡片",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者標題／卡片",
+          "foreground": "#22304C",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 12.063,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋提示／卡片",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "版權／頁尾",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-2",
+    "slug": "r3-2-berryround",
+    "name": "莓果圓讀",
+    "round": 3,
+    "parent": "R2-2",
+    "parents": [
+      "R2-2"
+    ],
+    "copied_from": "r2-2-berrypress.html",
+    "geometry_baseline": "R0-0",
+    "tag": "圓體 × 圓體優先",
+    "why": "以圓潤標題和溫和正文呼應陪讀情境，維持成人工具的辨讀。",
+    "diff": "唯一同時讓標題與正文優先使用圓體；莓紅實線投影像文具印記。",
+    "title_font": "'Yuanti TC', 'Hiragino Maru Gothic ProN', 'Arial Rounded MT Bold', 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+    "body_font": "'Yuanti TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif",
+    "title_weight": 700,
+    "body_weight": 400,
+    "title_label": "圓體 700（有字型時）",
+    "body_label": "圓體優先 400",
+    "platform_fallbacks": {
+      "windows": {
+        "title": "若使用者裝有 Yuanti TC 或 Hiragino Maru Gothic ProN 優先使用；Arial Rounded MT Bold（常見於另裝 Office）只覆蓋支援字元，繁中退回 Microsoft JhengHei → sans-serif。標準安裝不保證中文為圓體。",
+        "body": "若有 Yuanti TC 使用該圓體；否則 Microsoft JhengHei → system-ui → sans-serif。"
+      },
+      "iphone": {
+        "title": "Yuanti TC → Hiragino Maru Gothic ProN（均以本機可用為前提）→ Arial Rounded MT Bold 的支援字元 → PingFang TC → sans-serif；缺少前述字型時繁中為黑體。",
+        "body": "若本機可用 Yuanti TC 使用該圓體；否則 PingFang TC → system-ui → sans-serif。"
+      }
+    },
+    "font_availability": "Requested fallback chain, not an observed installed-font inventory. Windows Chrome / iPhone Safari: NOT MEASURED.",
+    "font_transfer_bytes": 0,
+    "webfont_note": "未安裝圓體／楷體時會退回黑體；跨平台保證同款字形需要另行核對授權的 web font，本輪未加入。Noto、Nunito、Varela Round 等資料庫字型不下載。",
+    "geometry_strategy": "同頁先以 R0 字型量得 header／home-container 各元素 border box，再保留 width／height／line-height；在原文字節點套字體，必要時字距 ±0.8px、字級最多縮 6% 保留原折行。其餘 footer／說明字型固定 R0。resize 後重算；不新增隱藏頁、不改文案、不裁字。實際 390／1280px：NOT MEASURED。",
+    "tokens": {
+      "body-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+      "heading-font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
+      "label-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+      "heading-weight": "900",
+      "entry-weight": "700",
+      "label-weight": "400",
+      "heading-tracking": "normal",
+      "card-shadow": "5px 5px 0 #D7C4CE",
+      "button-shadow": "none",
+      "footer-shadow": "none",
+      "page": "#F7F3F5",
+      "surface": "#FFFFFF",
+      "text": "#54253B",
+      "title": "#54253B",
+      "entry-text": "#54253B",
+      "muted": "#705566",
+      "description": "#705566",
+      "hint": "#705566",
+      "nav": "#54253B",
+      "primary": "#7B243F",
+      "primary-hover": "#5E1930",
+      "on-primary": "#FFFFFF",
+      "secondary": "#F3D9E2",
+      "secondary-hover": "#EAC7D5",
+      "on-secondary": "#582137",
+      "rule": "#D3B8C7",
+      "card-border": "#AD7E94",
+      "focus": "#7B243F",
+      "footer-bg": "#E9DCE3",
+      "footer-border": "#D3B8C7",
+      "footer-text": "#54253B",
+      "credit": "#705566",
+      "credit-link": "#54253B",
+      "badge-bg": "#FFFFFF",
+      "badge-text": "#54253B",
+      "badge-border": "#D3B8C7",
+      "feedback": "#7B243F",
+      "on-feedback": "#FFFFFF",
+      "card-muted": "#705566"
+    },
+    "contrast": {
+      "method": "sRGB linearization; (lighter + .05) / (darker + .05)",
+      "minimum": 4.972,
+      "pairs": [
+        {
+          "pair": "正文／頁底",
+          "foreground": "#54253B",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 11.2,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口標題／頁底",
+          "foreground": "#54253B",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 11.2,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口說明／頁底",
+          "foreground": "#705566",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 6.004,
+          "meets_4_5": true
+        },
+        {
+          "pair": "導覽／頁底",
+          "foreground": "#54253B",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 11.2,
+          "meets_4_5": true
+        },
+        {
+          "pair": "品牌／頁底",
+          "foreground": "#705566",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 6.004,
+          "meets_4_5": true
+        },
+        {
+          "pair": "課名／卡片",
+          "foreground": "#54253B",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 12.319,
+          "meets_4_5": true
+        },
+        {
+          "pair": "年級／卡片",
+          "foreground": "#705566",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.603,
+          "meets_4_5": true
+        },
+        {
+          "pair": "提示／卡片",
+          "foreground": "#705566",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.603,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#7B243F"
+          ],
+          "ratio": 9.694,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#5E1930"
+          ],
+          "ratio": 12.668,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙按鈕文字",
+          "foreground": "#582137",
+          "background": [
+            "#F3D9E2"
+          ],
+          "ratio": 9.382,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙 hover 文字",
+          "foreground": "#582137",
+          "background": [
+            "#EAC7D5"
+          ],
+          "ratio": 8.076,
+          "meets_4_5": true
+        },
+        {
+          "pair": "署名／頁尾",
+          "foreground": "#705566",
+          "background": [
+            "#E9DCE3"
+          ],
+          "ratio": 4.972,
+          "meets_4_5": true
+        },
+        {
+          "pair": "來源連結／頁尾",
+          "foreground": "#54253B",
+          "background": [
+            "#E9DCE3"
+          ],
+          "ratio": 9.275,
+          "meets_4_5": true
+        },
+        {
+          "pair": "授權標籤文字",
+          "foreground": "#54253B",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 12.319,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#7B243F"
+          ],
+          "ratio": 9.694,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者說明／卡片",
+          "foreground": "#705566",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.603,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者標題／卡片",
+          "foreground": "#54253B",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 12.319,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋提示／卡片",
+          "foreground": "#705566",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.603,
+          "meets_4_5": true
+        },
+        {
+          "pair": "版權／頁尾",
+          "foreground": "#705566",
+          "background": [
+            "#E9DCE3"
+          ],
+          "ratio": 4.972,
+          "meets_4_5": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-3",
+    "slug": "r3-3-blueming",
+    "name": "藍墨明讀",
+    "round": 3,
+    "parent": "R2-1",
+    "parents": [
+      "R2-1"
+    ],
+    "copied_from": "r2-1-blueprint.html",
+    "geometry_baseline": "R0-0",
+    "tag": "明體 × 繁中黑體",
+    "why": "以明體的筆畫對比保留書卷感，正文用黑體讓操作說明穩定清楚。",
+    "diff": "與 R3-1 使用同一配色；標題改為明體 700，可直接比較襯線與粗黑的差異。",
+    "title_font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
+    "body_font": "'PingFang TC', 'Microsoft JhengHei', 'Heiti TC', system-ui, sans-serif",
+    "title_weight": 700,
+    "body_weight": 400,
+    "title_label": "明體 700",
+    "body_label": "繁中黑體 400",
+    "platform_fallbacks": {
+      "windows": {
+        "title": "PMingLiU（新細明體）→ MingLiU（細明體）→ serif；前兩者可能需繁中補充字型，未安裝時不保證為同款明體。",
+        "body": "Microsoft JhengHei（微軟正黑體）；未安裝繁中字型時由 system-ui／sans-serif 的 CJK fallback 決定。"
+      },
+      "iphone": {
+        "title": "Songti TC（宋體繁中，若本機可用）→ serif；未可用時以 Safari 的繁中 serif fallback 顯示，實際字型未觀察。",
+        "body": "PingFang TC（蘋方繁中）；缺字依 Heiti TC／system-ui／sans-serif 順序退回。"
+      }
+    },
+    "font_availability": "Requested fallback chain, not an observed installed-font inventory. Windows Chrome / iPhone Safari: NOT MEASURED.",
+    "font_transfer_bytes": 0,
+    "webfont_note": "未安裝圓體／楷體時會退回黑體；跨平台保證同款字形需要另行核對授權的 web font，本輪未加入。Noto、Nunito、Varela Round 等資料庫字型不下載。",
+    "geometry_strategy": "同頁先以 R0 字型量得 header／home-container 各元素 border box，再保留 width／height／line-height；在原文字節點套字體，必要時字距 ±0.8px、字級最多縮 6% 保留原折行。其餘 footer／說明字型固定 R0。resize 後重算；不新增隱藏頁、不改文案、不裁字。實際 390／1280px：NOT MEASURED。",
+    "tokens": {
+      "body-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+      "heading-font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
+      "label-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+      "heading-weight": "900",
+      "entry-weight": "700",
+      "label-weight": "400",
+      "heading-tracking": "normal",
+      "card-shadow": "none",
+      "button-shadow": "inset 0 0 0 1px #7186B0",
+      "footer-shadow": "none",
+      "page": "#FFFFFF",
+      "surface": "#F2F5FC",
+      "text": "#22304C",
+      "title": "#22304C",
+      "entry-text": "#22304C",
+      "muted": "#515F77",
+      "description": "#515F77",
+      "hint": "#515F77",
+      "nav": "#244184",
+      "primary": "#244CBC",
+      "primary-hover": "#19398F",
+      "on-primary": "#FFFFFF",
+      "secondary": "#F2F5FC",
+      "secondary-hover": "#E1E8F6",
+      "on-secondary": "#244184",
+      "rule": "#B6C2D8",
+      "card-border": "#7D91B7",
+      "focus": "#244CBC",
+      "footer-bg": "#F2F5FC",
+      "footer-border": "#B6C2D8",
+      "footer-text": "#22304C",
+      "credit": "#515F77",
+      "credit-link": "#22304C",
+      "badge-bg": "#FFFFFF",
+      "badge-text": "#22304C",
+      "badge-border": "#B6C2D8",
+      "feedback": "#244CBC",
+      "on-feedback": "#FFFFFF",
+      "card-muted": "#515F77"
+    },
+    "contrast": {
+      "method": "sRGB linearization; (lighter + .05) / (darker + .05)",
+      "minimum": 5.915,
+      "pairs": [
+        {
+          "pair": "正文／頁底",
+          "foreground": "#22304C",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 13.165,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口標題／頁底",
+          "foreground": "#22304C",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 13.165,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口說明／頁底",
+          "foreground": "#515F77",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.455,
+          "meets_4_5": true
+        },
+        {
+          "pair": "導覽／頁底",
+          "foreground": "#244184",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 9.703,
+          "meets_4_5": true
+        },
+        {
+          "pair": "品牌／頁底",
+          "foreground": "#515F77",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.455,
+          "meets_4_5": true
+        },
+        {
+          "pair": "課名／卡片",
+          "foreground": "#22304C",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 12.063,
+          "meets_4_5": true
+        },
+        {
+          "pair": "年級／卡片",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "提示／卡片",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#244CBC"
+          ],
+          "ratio": 7.408,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#19398F"
+          ],
+          "ratio": 10.379,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙按鈕文字",
+          "foreground": "#244184",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 8.891,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙 hover 文字",
+          "foreground": "#244184",
+          "background": [
+            "#E1E8F6"
+          ],
+          "ratio": 7.889,
+          "meets_4_5": true
+        },
+        {
+          "pair": "署名／頁尾",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "來源連結／頁尾",
+          "foreground": "#22304C",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 12.063,
+          "meets_4_5": true
+        },
+        {
+          "pair": "授權標籤文字",
+          "foreground": "#22304C",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 13.165,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#244CBC"
+          ],
+          "ratio": 7.408,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者說明／卡片",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者標題／卡片",
+          "foreground": "#22304C",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 12.063,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋提示／卡片",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "版權／頁尾",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-4",
+    "slug": "r3-4-blueberrykai",
+    "name": "藍莓楷語",
+    "round": 3,
+    "parent": "R2-4",
+    "parents": [
+      "R2-4"
+    ],
+    "copied_from": "r2-4-blueberry.html",
+    "geometry_baseline": "R0-0",
+    "tag": "楷體 × 繁中黑體",
+    "why": "楷體標題呼應練字主題，操作文字仍以清楚的黑體呈現。",
+    "diff": "唯一楷體筆意標題；只改首頁標題，不把系統字形當作習字範本。",
+    "title_font": "'Kaiti TC', 'STKaiti', 'DFKai-SB', 'BiauKai', 'KaiTi', 'PingFang TC', 'Microsoft JhengHei', serif",
+    "body_font": "'PingFang TC', 'Microsoft JhengHei', 'Heiti TC', system-ui, sans-serif",
+    "title_weight": 700,
+    "body_weight": 400,
+    "title_label": "楷體 700（有字型時）",
+    "body_label": "繁中黑體 400",
+    "platform_fallbacks": {
+      "windows": {
+        "title": "已安裝的 Kaiti TC／STKaiti 優先，否則 DFKai-SB（標楷體，可能需繁中補充字型）→ BiauKai → KaiTi → Microsoft JhengHei → serif。沒有楷體時使用正黑體。",
+        "body": "Microsoft JhengHei（微軟正黑體）；未安裝繁中字型時由 system-ui／sans-serif 的 CJK fallback 決定。"
+      },
+      "iphone": {
+        "title": "Kaiti TC → STKaiti → DFKai-SB → BiauKai → KaiTi（均以本機可用為前提）→ PingFang TC → serif；沒有楷體時使用蘋方，不能保證標楷外觀。",
+        "body": "PingFang TC（蘋方繁中）；缺字依 Heiti TC／system-ui／sans-serif 順序退回。"
+      }
+    },
+    "font_availability": "Requested fallback chain, not an observed installed-font inventory. Windows Chrome / iPhone Safari: NOT MEASURED.",
+    "font_transfer_bytes": 0,
+    "webfont_note": "未安裝圓體／楷體時會退回黑體；跨平台保證同款字形需要另行核對授權的 web font，本輪未加入。Noto、Nunito、Varela Round 等資料庫字型不下載。",
+    "geometry_strategy": "同頁先以 R0 字型量得 header／home-container 各元素 border box，再保留 width／height／line-height；在原文字節點套字體，必要時字距 ±0.8px、字級最多縮 6% 保留原折行。其餘 footer／說明字型固定 R0。resize 後重算；不新增隱藏頁、不改文案、不裁字。實際 390／1280px：NOT MEASURED。",
+    "tokens": {
+      "body-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+      "heading-font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
+      "label-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+      "heading-weight": "900",
+      "entry-weight": "700",
+      "label-weight": "400",
+      "heading-tracking": "normal",
+      "card-shadow": "0 10px 24px -12px rgba(75,55,110,.25)",
+      "button-shadow": "none",
+      "footer-shadow": "none",
+      "page": "#EAF0FC",
+      "surface": "#FBEAF2",
+      "text": "#293150",
+      "title": "#772D5C",
+      "entry-text": "#293150",
+      "muted": "#62556E",
+      "description": "#62556E",
+      "hint": "#62556E",
+      "nav": "#2A4E9A",
+      "primary": "#2A4E9A",
+      "primary-hover": "#203D7A",
+      "on-primary": "#FFFFFF",
+      "secondary": "#873A6C",
+      "secondary-hover": "#6A2852",
+      "on-secondary": "#FFFFFF",
+      "rule": "#C6C8E3",
+      "card-border": "#DAB6CF",
+      "focus": "#2A4E9A",
+      "footer-bg": "#F7F4FC",
+      "footer-border": "#C6C8E3",
+      "footer-text": "#293150",
+      "credit": "#62556E",
+      "credit-link": "#293150",
+      "badge-bg": "#FFFFFF",
+      "badge-text": "#293150",
+      "badge-border": "#C6C8E3",
+      "feedback": "#2A4E9A",
+      "on-feedback": "#FFFFFF",
+      "card-muted": "#62556E"
+    },
+    "contrast": {
+      "method": "sRGB linearization; (lighter + .05) / (darker + .05)",
+      "minimum": 5.964,
+      "pairs": [
+        {
+          "pair": "正文／頁底",
+          "foreground": "#293150",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 11.136,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口標題／頁底",
+          "foreground": "#293150",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 11.136,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口說明／頁底",
+          "foreground": "#62556E",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 6.034,
+          "meets_4_5": true
+        },
+        {
+          "pair": "導覽／頁底",
+          "foreground": "#2A4E9A",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 6.919,
+          "meets_4_5": true
+        },
+        {
+          "pair": "品牌／頁底",
+          "foreground": "#62556E",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 6.034,
+          "meets_4_5": true
+        },
+        {
+          "pair": "課名／卡片",
+          "foreground": "#772D5C",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 7.844,
+          "meets_4_5": true
+        },
+        {
+          "pair": "年級／卡片",
+          "foreground": "#62556E",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 5.964,
+          "meets_4_5": true
+        },
+        {
+          "pair": "提示／卡片",
+          "foreground": "#62556E",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 5.964,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#2A4E9A"
+          ],
+          "ratio": 7.91,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#203D7A"
+          ],
+          "ratio": 10.448,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#873A6C"
+          ],
+          "ratio": 7.363,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#6A2852"
+          ],
+          "ratio": 10.303,
+          "meets_4_5": true
+        },
+        {
+          "pair": "署名／頁尾",
+          "foreground": "#62556E",
+          "background": [
+            "#F7F4FC"
+          ],
+          "ratio": 6.341,
+          "meets_4_5": true
+        },
+        {
+          "pair": "來源連結／頁尾",
+          "foreground": "#293150",
+          "background": [
+            "#F7F4FC"
+          ],
+          "ratio": 11.701,
+          "meets_4_5": true
+        },
+        {
+          "pair": "授權標籤文字",
+          "foreground": "#293150",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 12.732,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#2A4E9A"
+          ],
+          "ratio": 7.91,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者說明／卡片",
+          "foreground": "#62556E",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 5.964,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者標題／卡片",
+          "foreground": "#772D5C",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 7.844,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋提示／卡片",
+          "foreground": "#62556E",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 5.964,
+          "meets_4_5": true
+        },
+        {
+          "pair": "版權／頁尾",
+          "foreground": "#62556E",
+          "background": [
+            "#F7F4FC"
+          ],
+          "ratio": 6.341,
+          "meets_4_5": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-5",
+    "slug": "r3-5-berryreading",
+    "name": "莓紅書頁",
+    "round": 3,
+    "parent": "R2-2",
+    "parents": [
+      "R2-2"
+    ],
+    "copied_from": "r2-2-berrypress.html",
+    "geometry_baseline": "R0-0",
+    "tag": "黑體 × 明體正文",
+    "why": "以黑體標題標清任務、明體正文增加紙本閱讀感，讓家長比較不同的閱讀節奏。",
+    "diff": "唯一明體正文，與 R3-2 同配色；小型授權頁尾仍保留基準黑體。",
+    "title_font": "'PingFang TC', 'Microsoft JhengHei', 'Heiti TC', system-ui, sans-serif",
+    "body_font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
+    "title_weight": 700,
+    "body_weight": 400,
+    "title_label": "黑體 700",
+    "body_label": "明體 400",
+    "platform_fallbacks": {
+      "windows": {
+        "title": "Microsoft JhengHei（微軟正黑體）；未安裝繁中字型時由 system-ui／sans-serif 的 CJK fallback 決定。",
+        "body": "PMingLiU（新細明體）→ MingLiU（細明體）→ serif；前兩者可能需繁中補充字型，未安裝時不保證為同款明體。"
+      },
+      "iphone": {
+        "title": "PingFang TC（蘋方繁中）；缺字依 Heiti TC／system-ui／sans-serif 順序退回。",
+        "body": "Songti TC（宋體繁中，若本機可用）→ serif；未可用時以 Safari 的繁中 serif fallback 顯示，實際字型未觀察。"
+      }
+    },
+    "font_availability": "Requested fallback chain, not an observed installed-font inventory. Windows Chrome / iPhone Safari: NOT MEASURED.",
+    "font_transfer_bytes": 0,
+    "webfont_note": "未安裝圓體／楷體時會退回黑體；跨平台保證同款字形需要另行核對授權的 web font，本輪未加入。Noto、Nunito、Varela Round 等資料庫字型不下載。",
+    "geometry_strategy": "同頁先以 R0 字型量得 header／home-container 各元素 border box，再保留 width／height／line-height；在原文字節點套字體，必要時字距 ±0.8px、字級最多縮 6% 保留原折行。其餘 footer／說明字型固定 R0。resize 後重算；不新增隱藏頁、不改文案、不裁字。實際 390／1280px：NOT MEASURED。",
+    "tokens": {
+      "body-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+      "heading-font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
+      "label-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+      "heading-weight": "900",
+      "entry-weight": "700",
+      "label-weight": "400",
+      "heading-tracking": "normal",
+      "card-shadow": "5px 5px 0 #D7C4CE",
+      "button-shadow": "none",
+      "footer-shadow": "none",
+      "page": "#F7F3F5",
+      "surface": "#FFFFFF",
+      "text": "#54253B",
+      "title": "#54253B",
+      "entry-text": "#54253B",
+      "muted": "#705566",
+      "description": "#705566",
+      "hint": "#705566",
+      "nav": "#54253B",
+      "primary": "#7B243F",
+      "primary-hover": "#5E1930",
+      "on-primary": "#FFFFFF",
+      "secondary": "#F3D9E2",
+      "secondary-hover": "#EAC7D5",
+      "on-secondary": "#582137",
+      "rule": "#D3B8C7",
+      "card-border": "#AD7E94",
+      "focus": "#7B243F",
+      "footer-bg": "#E9DCE3",
+      "footer-border": "#D3B8C7",
+      "footer-text": "#54253B",
+      "credit": "#705566",
+      "credit-link": "#54253B",
+      "badge-bg": "#FFFFFF",
+      "badge-text": "#54253B",
+      "badge-border": "#D3B8C7",
+      "feedback": "#7B243F",
+      "on-feedback": "#FFFFFF",
+      "card-muted": "#705566"
+    },
+    "contrast": {
+      "method": "sRGB linearization; (lighter + .05) / (darker + .05)",
+      "minimum": 4.972,
+      "pairs": [
+        {
+          "pair": "正文／頁底",
+          "foreground": "#54253B",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 11.2,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口標題／頁底",
+          "foreground": "#54253B",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 11.2,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口說明／頁底",
+          "foreground": "#705566",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 6.004,
+          "meets_4_5": true
+        },
+        {
+          "pair": "導覽／頁底",
+          "foreground": "#54253B",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 11.2,
+          "meets_4_5": true
+        },
+        {
+          "pair": "品牌／頁底",
+          "foreground": "#705566",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 6.004,
+          "meets_4_5": true
+        },
+        {
+          "pair": "課名／卡片",
+          "foreground": "#54253B",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 12.319,
+          "meets_4_5": true
+        },
+        {
+          "pair": "年級／卡片",
+          "foreground": "#705566",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.603,
+          "meets_4_5": true
+        },
+        {
+          "pair": "提示／卡片",
+          "foreground": "#705566",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.603,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#7B243F"
+          ],
+          "ratio": 9.694,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#5E1930"
+          ],
+          "ratio": 12.668,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙按鈕文字",
+          "foreground": "#582137",
+          "background": [
+            "#F3D9E2"
+          ],
+          "ratio": 9.382,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙 hover 文字",
+          "foreground": "#582137",
+          "background": [
+            "#EAC7D5"
+          ],
+          "ratio": 8.076,
+          "meets_4_5": true
+        },
+        {
+          "pair": "署名／頁尾",
+          "foreground": "#705566",
+          "background": [
+            "#E9DCE3"
+          ],
+          "ratio": 4.972,
+          "meets_4_5": true
+        },
+        {
+          "pair": "來源連結／頁尾",
+          "foreground": "#54253B",
+          "background": [
+            "#E9DCE3"
+          ],
+          "ratio": 9.275,
+          "meets_4_5": true
+        },
+        {
+          "pair": "授權標籤文字",
+          "foreground": "#54253B",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 12.319,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#7B243F"
+          ],
+          "ratio": 9.694,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者說明／卡片",
+          "foreground": "#705566",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.603,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者標題／卡片",
+          "foreground": "#54253B",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 12.319,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋提示／卡片",
+          "foreground": "#705566",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.603,
+          "meets_4_5": true
+        },
+        {
+          "pair": "版權／頁尾",
+          "foreground": "#705566",
+          "background": [
+            "#E9DCE3"
+          ],
+          "ratio": 4.972,
+          "meets_4_5": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-6",
+    "slug": "r3-6-blueberrysoft",
+    "name": "藍莓輕圓",
+    "round": 3,
+    "parent": "R2-4",
+    "parents": [
+      "R2-4"
+    ],
+    "copied_from": "r2-4-blueberry.html",
+    "geometry_baseline": "R0-0",
+    "tag": "輕圓體 × 中黑體",
+    "why": "以較輕的圓體標題搭配中等黑體正文，讓雙色畫面活潑而不過甜。",
+    "diff": "圓體只放標題、正文加重至 500；比 R3-2 清淡，比 R3-4 更現代。",
+    "title_font": "'Yuanti TC', 'Hiragino Maru Gothic ProN', 'Arial Rounded MT Bold', 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+    "body_font": "'PingFang TC', 'Microsoft JhengHei', 'Heiti TC', system-ui, sans-serif",
+    "title_weight": 500,
+    "body_weight": 500,
+    "title_label": "圓體 500（有字型時）",
+    "body_label": "繁中黑體 500",
+    "platform_fallbacks": {
+      "windows": {
+        "title": "若使用者裝有 Yuanti TC 或 Hiragino Maru Gothic ProN 優先使用；Arial Rounded MT Bold（常見於另裝 Office）只覆蓋支援字元，繁中退回 Microsoft JhengHei → sans-serif。標準安裝不保證中文為圓體。",
+        "body": "Microsoft JhengHei（微軟正黑體）；未安裝繁中字型時由 system-ui／sans-serif 的 CJK fallback 決定。"
+      },
+      "iphone": {
+        "title": "Yuanti TC → Hiragino Maru Gothic ProN（均以本機可用為前提）→ Arial Rounded MT Bold 的支援字元 → PingFang TC → sans-serif；缺少前述字型時繁中為黑體。",
+        "body": "PingFang TC（蘋方繁中）；缺字依 Heiti TC／system-ui／sans-serif 順序退回。"
+      }
+    },
+    "font_availability": "Requested fallback chain, not an observed installed-font inventory. Windows Chrome / iPhone Safari: NOT MEASURED.",
+    "font_transfer_bytes": 0,
+    "webfont_note": "未安裝圓體／楷體時會退回黑體；跨平台保證同款字形需要另行核對授權的 web font，本輪未加入。Noto、Nunito、Varela Round 等資料庫字型不下載。",
+    "geometry_strategy": "同頁先以 R0 字型量得 header／home-container 各元素 border box，再保留 width／height／line-height；在原文字節點套字體，必要時字距 ±0.8px、字級最多縮 6% 保留原折行。其餘 footer／說明字型固定 R0。resize 後重算；不新增隱藏頁、不改文案、不裁字。實際 390／1280px：NOT MEASURED。",
+    "tokens": {
+      "body-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+      "heading-font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
+      "label-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
+      "heading-weight": "900",
+      "entry-weight": "700",
+      "label-weight": "400",
+      "heading-tracking": "normal",
+      "card-shadow": "0 10px 24px -12px rgba(75,55,110,.25)",
+      "button-shadow": "none",
+      "footer-shadow": "none",
+      "page": "#EAF0FC",
+      "surface": "#FBEAF2",
+      "text": "#293150",
+      "title": "#772D5C",
+      "entry-text": "#293150",
+      "muted": "#62556E",
+      "description": "#62556E",
+      "hint": "#62556E",
+      "nav": "#2A4E9A",
+      "primary": "#2A4E9A",
+      "primary-hover": "#203D7A",
+      "on-primary": "#FFFFFF",
+      "secondary": "#873A6C",
+      "secondary-hover": "#6A2852",
+      "on-secondary": "#FFFFFF",
+      "rule": "#C6C8E3",
+      "card-border": "#DAB6CF",
+      "focus": "#2A4E9A",
+      "footer-bg": "#F7F4FC",
+      "footer-border": "#C6C8E3",
+      "footer-text": "#293150",
+      "credit": "#62556E",
+      "credit-link": "#293150",
+      "badge-bg": "#FFFFFF",
+      "badge-text": "#293150",
+      "badge-border": "#C6C8E3",
+      "feedback": "#2A4E9A",
+      "on-feedback": "#FFFFFF",
+      "card-muted": "#62556E"
+    },
+    "contrast": {
+      "method": "sRGB linearization; (lighter + .05) / (darker + .05)",
+      "minimum": 5.964,
+      "pairs": [
+        {
+          "pair": "正文／頁底",
+          "foreground": "#293150",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 11.136,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口標題／頁底",
+          "foreground": "#293150",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 11.136,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口說明／頁底",
+          "foreground": "#62556E",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 6.034,
+          "meets_4_5": true
+        },
+        {
+          "pair": "導覽／頁底",
+          "foreground": "#2A4E9A",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 6.919,
+          "meets_4_5": true
+        },
+        {
+          "pair": "品牌／頁底",
+          "foreground": "#62556E",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 6.034,
+          "meets_4_5": true
+        },
+        {
+          "pair": "課名／卡片",
+          "foreground": "#772D5C",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 7.844,
+          "meets_4_5": true
+        },
+        {
+          "pair": "年級／卡片",
+          "foreground": "#62556E",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 5.964,
+          "meets_4_5": true
+        },
+        {
+          "pair": "提示／卡片",
+          "foreground": "#62556E",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 5.964,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#2A4E9A"
+          ],
+          "ratio": 7.91,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#203D7A"
+          ],
+          "ratio": 10.448,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#873A6C"
+          ],
+          "ratio": 7.363,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#6A2852"
+          ],
+          "ratio": 10.303,
+          "meets_4_5": true
+        },
+        {
+          "pair": "署名／頁尾",
+          "foreground": "#62556E",
+          "background": [
+            "#F7F4FC"
+          ],
+          "ratio": 6.341,
+          "meets_4_5": true
+        },
+        {
+          "pair": "來源連結／頁尾",
+          "foreground": "#293150",
+          "background": [
+            "#F7F4FC"
+          ],
+          "ratio": 11.701,
+          "meets_4_5": true
+        },
+        {
+          "pair": "授權標籤文字",
+          "foreground": "#293150",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 12.732,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#2A4E9A"
+          ],
+          "ratio": 7.91,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者說明／卡片",
+          "foreground": "#62556E",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 5.964,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者標題／卡片",
+          "foreground": "#772D5C",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 7.844,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋提示／卡片",
+          "foreground": "#62556E",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 5.964,
+          "meets_4_5": true
+        },
+        {
+          "pair": "版權／頁尾",
+          "foreground": "#62556E",
+          "background": [
+            "#F7F4FC"
+          ],
+          "ratio": 6.341,
+          "meets_4_5": true
+        }
+      ]
+    }
+  }
+]

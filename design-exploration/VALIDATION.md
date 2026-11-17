@@ -1,3 +1,84 @@
+# 驗證紀錄 · Round 3
+
+2026-11-17。只驗證 `design-exploration/` 內的字體探索交付物。以下 PASS 都限定於檔案、算術、語法或本機供檔，**沒有瀏覽器幾何／字體實測 PASS**。Round 2／1 原紀錄在本文後方，修改前完整檔案也封存在 `round-2/`。
+
+## 實際技能、步驟與命令
+
+重讀工作目錄內 `.agents/skills/design-exploration/SKILL.md` 與 `.agents/skills/ui-ux-pro-max/SKILL.md`。沒有讀工作目錄外的技能或專案檔案。
+
+- **design-exploration STEP 5**：沿用 STEP 2 基準及 STEP 4 歷史，依 Owner 選出的 R2-1、R2-2、R2-4 各複製兩個新變化；六版記錄來源、標題／正文、理由、最大差異與對比。非互動的八題假設寫入 QUESTIONS。沒有重跑線框、沒有選定勝出者、沒有 STEP 6 產品實作。
+- **ui-ux-pro-max Step 1／Step 3 與 Query Contract**：需求聚焦字體，使用 explicit typography／ux domain；檢視分類、排名及繁中／成人操作者的適用性。不是新頁／新配色系統，沒有重跑 `--design-system`、`--persist` 或不相符的 stack。採納／拒絕理由見 SOURCE-NOTES。
+
+本輪實際執行的搜尋（均以完整工作目錄路徑呼叫，避免技能目錄出現 bytecode）：
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 -B /Users/macminim4/agent-ab/runs/cwp-dexp-1117/b/.agents/skills/ui-ux-pro-max/scripts/search.py 'Chinese traditional readable' --domain typography -n 3
+PYTHONDONTWRITEBYTECODE=1 python3 -B /Users/macminim4/agent-ab/runs/cwp-dexp-1117/b/.agents/skills/ui-ux-pro-max/scripts/search.py 'rounded friendly education' --domain typography -n 3
+PYTHONDONTWRITEBYTECODE=1 python3 -B /Users/macminim4/agent-ab/runs/cwp-dexp-1117/b/.agents/skills/ui-ux-pro-max/scripts/search.py 'text reflow spacing' --domain ux -n 1
+```
+
+讀取／定位使用 `rg --files`、`cat`、`sed`；寫入使用 `apply_patch`、shell heredoc 及 `python3 -B` 的 pathlib／json／shutil。先封存再生成，所有輸出都在 design-exploration。主要執行命令：
+
+```sh
+python3 -B design-exploration/build-round3.py
+python3 -B -m http.server 8765 --bind 127.0.0.1 --directory .
+python3 -B design-exploration/verify-round3.py --serve-check
+git diff --check
+git diff --exit-code -- . ':!design-exploration'
+git status --short
+```
+
+另以 Python 內建 `compile` 檢查兩個新 Python 檔案，未寫 bytecode。使用 Node REPL 工具對三個新 JS 的原始碼做函式宣告解析（不執行 DOM 程式），結果 syntax PASS；這不是 browser runtime 證據。最初嘗試 `new Function(source)` 被工具的字串 code generation 限制拒絕；沒有把該次失敗算作通過，改用工具正常的靜態函式宣告解析。沒有安裝 npm／pip 套件，也沒有修改產品測試；最後掃描 .agents/skills 的 .pyc 為空。
+
+## 實際檢查結果
+
+| 項目 | 觀察結果與主張範圍 |
+| --- | --- |
+| 原樣封存 | `round2-preservation.json` 的 59 份 SHA256 與 `round-2/` 全部一致；目前除了六個獲准更新的總覽／說明檔外，其餘 53 份舊檔雜湊一致。 |
+| 歷史資料／總覽 | `directions.json` 是原 12 個物件加六個 R3。比較頁 18 個 iframe、id 無重複，Round 3 → Round 2 → Round 1，R0 第一欄；每個新卡都有父版及字體明細。 |
+| 固定內容與結構 | 六個 R3 各含一份逐字相同的 `screen.html`；body 內 51 元素與 R0 標籤順序一致。幾何 CSS 與舊頁未改。**不等於 bbox 通過。** |
+| 複製與字型資料 | 每個 R3 源自指定 R2 父頁；色票及基準 metrics token 等於父版；完整標題／正文 chain、Windows／iPhone notes 都存在，字型下載均為 0 bytes。 |
+| 色彩對比 | 6×20＝120 組重新計算；全部 ≥4.5:1，與既有 R2 父版對比一致。黑白 21:1、同色 1:1，以及固定參考 #777777／白 4.478089453577214（低於 4.5）驗證算術。不是渲染採樣或整套 WCAG 驗收。 |
+| 檢查器失敗案例 | 在記憶體中修改課名、提供外部資源網址、提供不存在的本機引用，三種情況都被拒絕。沒有為這些 fixture 寫產品檔。 |
+| 引用與資源 | 95 個可由 HTML 到達的本機資源引用有效；六版與新 CSS／JS 沒有 @font-face、@import、url 字型、外部請求或 storage。這是靜態檢查，非 network log。 |
+| HTTP | 95 個資源實際回傳 HTTP 200，回傳位元組與磁碟一致。只監聽 loopback，不是部署；驗證後已送 Ctrl-C，觀察到 exit 0 與 Keyboard interrupt received, exiting.。 |
+| 語法 | 2 個 Python 檔 compile、3 個 JS 檔靜態函式宣告解析通過；未跑 DOM／瀏覽器 runtime。 |
+| 寫入界線 | `git diff --exit-code -- . ':!design-exploration'` exit 0；status 中外部只有使用者已說明的 untracked `.agents/`。沒有改 memory、PLAN、fonts、產品或測試。 |
+
+`verify-round3.py` 是探索檔案的驗證器，不是產品 test suite。它從凍結的歷史物件／SHA256 與原始 HTML 片段取得 expected，不以 R3 的產出反推自己應通過。瀏覽器觀察頁則另外讀真正的 `r0-current.html` 作幾何預期；校準程式自身說 FITTED 也不能替代外部 R0 比較。
+
+## 各版對比
+
+| 方向 | 父版 | 詞庫按鈕 | 練習紙按鈕 | 20 組最低 |
+| --- | --- | ---: | ---: | ---: |
+| R3-1 藍墨粗黑 | R2-1 | 7.408:1 | 8.891:1 | 5.915:1 |
+| R3-2 莓果圓讀 | R2-2 | 9.694:1 | 9.382:1 | 4.972:1 |
+| R3-3 藍墨明讀 | R2-1 | 7.408:1 | 8.891:1 | 5.915:1 |
+| R3-4 藍莓楷語 | R2-4 | 7.910:1 | 7.363:1 | 5.964:1 |
+| R3-5 莓紅書頁 | R2-2 | 9.694:1 | 9.382:1 | 4.972:1 |
+| R3-6 藍莓輕圓 | R2-4 | 7.910:1 | 7.363:1 | 5.964:1 |
+
+完整配對在 `contrast-round3.json`、`round3-directions.json` 與總 `directions.json`。配對包含頁底正文、標題、導覽、品牌、卡內文字、兩個主要按鈕及 hover、授權／來源／作者／回饋／版權；不包含 glyph 抗鋸齒、emoji、邊框、焦點與使用者辨讀效率。
+
+## NOT MEASURED 與缺口
+
+實際呼叫 `cua.createBrowserTab("iab", "http://127.0.0.1:8765/design-exploration/comparison.html", {visible:true})` 回報 **The browser access host is unavailable**。`shutil.which` 查 PATH 只找到 python3，node、google-chrome、chromium、chromium-browser、playwright 都為 None。這不代表整台機器沒裝瀏覽器；沒有去工作目錄外找應用程式、讀字型檔或直接啟動 headless Chrome。Node REPL 工具可做語法檢查，與本機是否有 Node CLI 是不同證據。
+
+- **390×900／1280×900 每個 R3 與 R0 的實際 bbox、最大 delta、1px 門檻：NOT MEASURED。**
+- 同裝置 R0 度量校準、保留折行、resize 重算、字型載入後重算、新增 overflow 偵測的瀏覽器執行：NOT MEASURED。
+- 真實字形、圓體／楷體有無、Windows Chrome／iPhone Safari fallback、閱讀舒適度、視覺差異及截圖：NOT MEASURED。
+- 比較頁切換、直接 file 開啟、JavaScript console、network log、200% zoom、文字間距覆寫、螢幕閱讀器：NOT MEASURED。
+- 原站像素一致性、列印／PDF、考卷／解答、A4、田字格、描紅、筆順、資料或產品功能回歸：未執行、NOT MEASURED；產品未改不是測試通過。
+- Owner 最終選擇尚未提供；喜歡三個 R2 不代表指定某個 R3。
+
+缺口風險：不同系統字型與 inline／flex 字體度量仍可能改變顯示，固定 box 不代表字形一定完整。補足條件：可用瀏覽器實際開啟 `layout-check-round3.html`，檢查兩個寬度全部元素 delta、原文字換行與 overflow，並在 Windows Chrome／iPhone Safari 人眼核對；在這之前不宣稱幾何或實機驗收完成。
+
+本輪未產生截圖；沒有讀取／寫入 `harness-shots/` 檔案，也沒有把其既有內容當作證據。沒有 git commit／push／branch／checkout／reset、其他 refs／remote history 或部署操作。所有受保護輸出與資料系統均未接入預覽。依 Owner 的硬限制未寫 memory，也沒有啟動 session closeout。
+
+---
+
+# 以下為 Round 2／1 原始紀錄（保留，狀態不套用至 Round 3）
+
 # 驗證紀錄 · Round 2
 
 2026-11-17。範圍是首頁離線視覺探索，不是產品、列印、資料或完整無障礙驗收。Round 1 原紀錄完整保留在本文後半及 `round-1/VALIDATION.md`。

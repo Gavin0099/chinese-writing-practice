@@ -95,3 +95,50 @@ Owner 回報的 R1-3 位移（1280px、15 元素、約 7.9px）是外部提供�
 - `references/pro-rules.md` 的 checklist 屬 native/mobile；只讀作對照，未把它說成 iOS／Android 驗收。`references/quick-reference.md` 的 web 對比、焦點、viewport、動態／資源條目用於靜態核對。
 
 沒有套用 skill 的新增 SVG 圖示建議，因 Owner 要求內容相同、保留既有 emoji；沒有採用外部字型與影像。純 HTML/CSS/JS 原型沒有資料庫內精確 stack，因此未冒用 `html-tailwind` 或其他框架指引。精確搜尋命令見本輪 VALIDATION 紀錄。
+
+## Round 3：字體、平台退回鏈與度量策略
+
+本輪只讀本工作目錄內的技能及專案檔案。先重讀 README、comparison、directions、round2-directions、QUESTIONS、SOURCE-NOTES、VALIDATION，再讀共用 screen 與前輪生成／檢查器。未讀外部技能或下載網路字型。
+
+### 實際採納的 ui-ux-pro-max 資料
+
+- `Chinese traditional readable --domain typography -n 3`：首名 **Chinese Traditional**（Noto Serif TC + Noto Sans TC）符合台灣繁中產品，採納「明體標題＋黑體正文」配對，轉成 Songti TC／PMingLiU 與 PingFang TC／Microsoft JhengHei。未採用第二名簡中或第三名日文市場方向，沒有下載 Noto 字型。
+- `rounded friendly education --domain typography -n 3`：首名 **Kids/Education**（Baloo 2 + Comic Neue）偏兒童遊戲，不能當作繁中字型支援；第二名 **Soft Rounded**（Varela Round + Nunito Sans）的柔和標題／清楚正文適用，但字型本身未下載。轉成本機圓體優先與黑體 fallback；第三名 Claymorphism 的 3D、糖果感與不同尺寸不採用。字體能否覆蓋本頁繁中字元仍依本機而定。
+- `text reflow spacing --domain ux -n 1`：首名 **Text Reflow and Spacing / Web**，採納不藏字、不省略、不以裁字掩飾折行的原則。本輪 1px 限制需要預覽專用固定度量，與一般產品應讓內容自然增高的建議有取捨；只在探索頁使用，不宣稱完成 zoom／使用者字距驗收，也不把這個校準機制直接移植產品。
+- 這是 STEP 5 的單一 typography concern，沿用已接受的三組視覺系統，依技能 Query Contract 選 explicit domain；沒有使用 `--design-system`、`--persist` 或不相符的框架 stack。
+
+### 六版如何配對
+
+完整資料：`round3-directions.json` 中的 `title_font`、`body_font`、字重、`platform_fallbacks.windows`／`.iphone`；比較頁每張卡片可展開。資料內 `tokens` 保持父 R2 的色票與 **R0 度量基準**，顯示用字型另由 `title_font`／`body_font` 產生 `--r3-title-font`／`--r3-body-font`，不應把基準 token 誤認為 R3 顯示字體。
+
+| 版本 | 複製來源 | 標題優先鏈（完整通用 fallback 見資料） | 正文優先鏈 | 差異 |
+| --- | --- | --- | --- | --- |
+| R3-1 藍墨粗黑 | R2-1 | PingFang TC → Microsoft JhengHei → Heiti TC → system-ui → sans-serif | system-ui → -apple-system → Segoe UI → PingFang TC → Microsoft JhengHei → sans-serif | 800 粗黑標題、400 系統正文 |
+| R3-2 莓果圓讀 | R2-2 | Yuanti TC → Hiragino Maru Gothic ProN → Arial Rounded MT Bold → PingFang TC → Microsoft JhengHei → sans-serif | Yuanti TC → PingFang TC → Microsoft JhengHei → system-ui → sans-serif | 700 圓體標題、400 圓體優先正文 |
+| R3-3 藍墨明讀 | R2-1 | Songti TC → PMingLiU → MingLiU → serif | PingFang TC → Microsoft JhengHei → Heiti TC → system-ui → sans-serif | 700 明體、400 黑體，與 R3-1 同色 |
+| R3-4 藍莓楷語 | R2-4 | Kaiti TC → STKaiti → DFKai-SB → BiauKai → KaiTi → PingFang TC → Microsoft JhengHei → serif | PingFang TC → Microsoft JhengHei → Heiti TC → system-ui → sans-serif | 700 楷體筆意、400 黑體 |
+| R3-5 莓紅書頁 | R2-2 | PingFang TC → Microsoft JhengHei → Heiti TC → system-ui → sans-serif | Songti TC → PMingLiU → MingLiU → serif | 700 黑體、400 明體正文 |
+| R3-6 藍莓輕圓 | R2-4 | Yuanti TC → Hiragino Maru Gothic ProN → Arial Rounded MT Bold → PingFang TC → Microsoft JhengHei → sans-serif | PingFang TC → Microsoft JhengHei → Heiti TC → system-ui → sans-serif | 500 輕圓標題、500 中黑正文 |
+
+這些是 CSS 要求順序，**不是已查證的 Windows／iOS 字型安裝清單**。Windows 若沒有繁中補充字型，細明體／標楷體可能不可用。iPhone 的 Yuanti TC、Kaiti TC、Songti TC 等以本機可用為前提；沒有時依列出的 fallback 顯示。Arial Rounded MT Bold 不含完整繁中；Hiragino Maru 為日文字型，中文缺字仍退回繁中黑體，不能視為完整台灣教育標準字形。圓體／楷體不能跨平台保證；若要保證需另行授權與加入 web font，本輪不用。
+
+字重 400／500／700／800 是要求值，不保證存在同名字面；單一 regular face 可能套用合成粗體或鄰近字重。標題用於首頁的風格比較，**不是描紅、筆順或標準字形教材**。本輪未觸碰受保護的 fonts 或工作紙。
+
+### 既有字型檔案與成本
+
+只讀 `fonts/README.md`（記載教育部字體及 CC BY-ND 摘要）、`fonts/font-face.css`（舊路徑宣告）與 `fonts/edukai-4.0.ttf` 的 stat：15,785,556 bytes，即 15.05 MiB。沒有修正舊路徑、載入／子集化／轉換此檔，沒有新增授權判定。所有 R3 font 資源傳輸量為 0 B，只有小型本地 HTML／CSS／JS。沒有 Google Fonts、CDN、@font-face、@import。
+
+### 幾何限制細節與風險
+
+1. 從原 R2 頁 copy-then-modify，新頁保留原 body 的 51 元素、所有文字與 `screen.html` 片段。只在 head 載入本地 `typography-round3.css`／`.js`，不新增 body 元素。
+2. 初次載入、視窗 resize、fonts.ready 後，同一份 DOM 暫時移除 `r3-type-ready`，以原 R2 中等同 R0 的 font tokens 量得尺寸與每一原文字節點的換行起點。不是隱藏 iframe 或第二份基準內容。
+3. 只為 header／home-container 既有元素保留 border-box width、height、min/max 尺寸與 line-height，維持正常 flex/block 排版、原 margin/padding/border。footer、來源署名、授權、study-disclaimer 的字型維持 R0。
+4. 套字體後若折行相同不調整；不同時先找 ±0.8px 字距，再最多縮小 6% 字級，行高保持原像素值。主要正文因此仍為 15.04–16px，原本小提示的基準字級不另提高。未做字形 transform、文字圖片、ellipsis 或新增 overflow 裁字。
+5. `window.r3Metrics` 在實際瀏覽器執行時才有當次校準結果。比對全部 body 元素的偏差、文字折行、相較基準新增的 scroll overflow。任何超限會標記 NEEDS REVIEW；不把固定 box 本身當作字形完整的證據。
+6. 外部 `layout-check-round3.html` 仍獨立載入真正 R0，比較所有元素幾何與完整文字節點的換行，不使用校準程式的 reference 宣告 PASS。它不能代替實機字體檢查或產品驗收。
+
+限制：沒有 JS、字型載入時序、裝置字体差異、200% zoom 與使用者字距規則都可能改變結果。瀏覽器服務 unavailable，本輪無法觀察校準是否成功。**不能宣稱 1px 已通過**；在 Windows Chrome／iPhone Safari 跑實際檢查頁與視覺查看後才能關閉缺口。此機制只為同版面字體比較，選定後須另做產品可存取性與自然排版設計。
+
+### 歷史保存
+
+修改前以 `shutil.copy2` 將當時 59 份探索檔案（含 Round 1 封存，排除 harness-shots）複製到 `round-2/`，SHA256 記於 `round2-preservation.json`。當前六份共用說明／總覽檔案獲准更新，其餘 53 份原檔維持雜湊。Round 3 新頁複製其 R2 父頁後另存；原頁未覆寫。早期本文「首頁 script-free、所有方向只有視覺變數」只描述 R0–R2，R3 的本地度量腳本是已記錄的新例外。

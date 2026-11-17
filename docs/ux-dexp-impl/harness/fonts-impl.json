@@ -1,0 +1,138 @@
+{
+ "index.html": {
+  ".hero-title": {
+   "family": "\"Noto Serif TC\", serif",
+   "rendered": [
+    "Noto Serif TC ExtraLight ×9"
+   ]
+  },
+  ".home-task-entry h2": {
+   "family": "\"Yuanti TC\", \"Hiragino Maru Gothic ProN\", \"Arial Rounded MT Bold\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×15"
+   ]
+  },
+  ".home-task-entry p": {
+   "family": "\"Yuanti TC\", \"PingFang TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×21"
+   ]
+  },
+  ".btn-primary-hero": {
+   "family": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+   "rendered": []
+  },
+  "body": {
+   "family": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+   "rendered": []
+  }
+ },
+ "vocabulary.html": {
+  "h1": {
+   "family": "\"Yuanti TC\", \"Hiragino Maru Gothic ProN\", \"Arial Rounded MT Bold\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×7"
+   ]
+  },
+  "h2": {
+   "family": "\"Yuanti TC\", \"Hiragino Maru Gothic ProN\", \"Arial Rounded MT Bold\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×4"
+   ]
+  },
+  "label": {
+   "family": "\"Noto Sans TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×4"
+   ]
+  },
+  "button": {
+   "family": "\"Noto Sans TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "rendered": []
+  },
+  "body": {
+   "family": "\"Noto Sans TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×4"
+   ]
+  }
+ },
+ "learning.html": {
+  "h1": {
+   "family": "\"Yuanti TC\", \"Hiragino Maru Gothic ProN\", \"Arial Rounded MT Bold\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×6"
+   ]
+  },
+  "h2": {
+   "family": "\"Yuanti TC\", \"Hiragino Maru Gothic ProN\", \"Arial Rounded MT Bold\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×4"
+   ]
+  },
+  "button": {
+   "family": "\"Noto Sans TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×6"
+   ]
+  },
+  "body": {
+   "family": "\"Noto Sans TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×6"
+   ]
+  }
+ },
+ "backup.html": {
+  "h1": {
+   "family": "\"Yuanti TC\", \"Hiragino Maru Gothic ProN\", \"Arial Rounded MT Bold\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×7"
+   ]
+  },
+  "button": {
+   "family": "\"Noto Sans TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×5"
+   ]
+  },
+  "body": {
+   "family": "\"Noto Sans TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×7"
+   ]
+  }
+ },
+ "sync.html": {
+  "h1": {
+   "family": "\"Yuanti TC\", \"Hiragino Maru Gothic ProN\", \"Arial Rounded MT Bold\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×7"
+   ]
+  },
+  "button": {
+   "family": "\"Noto Sans TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "rendered": []
+  },
+  "body": {
+   "family": "\"Noto Sans TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "rendered": [
+    "Noto Sans CJK TC ×6"
+   ]
+  }
+ },
+ "exam.html": {
+  "h1": {
+   "family": "\"Yuanti TC\", \"Hiragino Maru Gothic ProN\", \"Arial Rounded MT Bold\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "rendered": []
+  },
+  "button": {
+   "family": "\"Noto Sans TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "rendered": []
+  },
+  "body": {
+   "family": "\"Noto Sans TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "rendered": []
+  }
+ }
+}

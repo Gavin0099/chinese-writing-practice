@@ -1,0 +1,496 @@
+{
+  "method": "WCAG sRGB linearization: v<=0.04045 ? v/12.92 : ((v+0.055)/1.055)^2.4; luminance weights 0.2126/0.7152/0.0722; (Lmax+0.05)/(Lmin+0.05). Alpha composited in sRGB before luminance.",
+  "scope": "Computed declared token pairs, not measured browser pixels or a complete accessibility audit.",
+  "pairs": [
+    {
+      "role": "正文／導覽",
+      "foreground": "--ui-text",
+      "background": "--ui-bg",
+      "foreground_value": "#54253B",
+      "background_value": "#F7F3F5",
+      "ratio": 11.2,
+      "minimum": 4.5
+    },
+    {
+      "role": "正文／導覽",
+      "foreground": "--ui-text",
+      "background": "--ui-surface",
+      "foreground_value": "#54253B",
+      "background_value": "#FFFFFF",
+      "ratio": 12.319,
+      "minimum": 4.5
+    },
+    {
+      "role": "正文／導覽",
+      "foreground": "--ui-text",
+      "background": "--ui-footer-bg",
+      "foreground_value": "#54253B",
+      "background_value": "#E9DCE3",
+      "ratio": 9.275,
+      "minimum": 4.5
+    },
+    {
+      "role": "正文／導覽",
+      "foreground": "--ui-text",
+      "background": "--ui-selection-bg",
+      "foreground_value": "#54253B",
+      "background_value": "#F3D9E2",
+      "ratio": 9.288,
+      "minimum": 4.5
+    },
+    {
+      "role": "標題",
+      "foreground": "--ui-title",
+      "background": "--ui-bg",
+      "foreground_value": "#54253B",
+      "background_value": "#F7F3F5",
+      "ratio": 11.2,
+      "minimum": 4.5
+    },
+    {
+      "role": "標題",
+      "foreground": "--ui-title",
+      "background": "--ui-surface",
+      "foreground_value": "#54253B",
+      "background_value": "#FFFFFF",
+      "ratio": 12.319,
+      "minimum": 4.5
+    },
+    {
+      "role": "說明／placeholder／頁尾",
+      "foreground": "--ui-muted",
+      "background": "--ui-bg",
+      "foreground_value": "#705566",
+      "background_value": "#F7F3F5",
+      "ratio": 6.004,
+      "minimum": 4.5
+    },
+    {
+      "role": "說明／placeholder／頁尾",
+      "foreground": "--ui-muted",
+      "background": "--ui-surface",
+      "foreground_value": "#705566",
+      "background_value": "#FFFFFF",
+      "ratio": 6.603,
+      "minimum": 4.5
+    },
+    {
+      "role": "說明／placeholder／頁尾",
+      "foreground": "--ui-muted",
+      "background": "--ui-footer-bg",
+      "foreground_value": "#705566",
+      "background_value": "#E9DCE3",
+      "ratio": 4.972,
+      "minimum": 4.5
+    },
+    {
+      "role": "連結",
+      "foreground": "--ui-primary",
+      "background": "--ui-bg",
+      "foreground_value": "#7B243F",
+      "background_value": "#F7F3F5",
+      "ratio": 8.814,
+      "minimum": 4.5
+    },
+    {
+      "role": "連結",
+      "foreground": "--ui-primary",
+      "background": "--ui-surface",
+      "foreground_value": "#7B243F",
+      "background_value": "#FFFFFF",
+      "ratio": 9.694,
+      "minimum": 4.5
+    },
+    {
+      "role": "連結",
+      "foreground": "--ui-primary",
+      "background": "--ui-footer-bg",
+      "foreground_value": "#7B243F",
+      "background_value": "#E9DCE3",
+      "ratio": 7.299,
+      "minimum": 4.5
+    },
+    {
+      "role": "連結 hover",
+      "foreground": "--ui-primary-hover",
+      "background": "--ui-bg",
+      "foreground_value": "#5E1930",
+      "background_value": "#F7F3F5",
+      "ratio": 11.518,
+      "minimum": 4.5
+    },
+    {
+      "role": "連結 hover",
+      "foreground": "--ui-primary-hover",
+      "background": "--ui-surface",
+      "foreground_value": "#5E1930",
+      "background_value": "#FFFFFF",
+      "ratio": 12.668,
+      "minimum": 4.5
+    },
+    {
+      "role": "連結 hover",
+      "foreground": "--ui-primary-hover",
+      "background": "--ui-footer-bg",
+      "foreground_value": "#5E1930",
+      "background_value": "#E9DCE3",
+      "ratio": 9.538,
+      "minimum": 4.5
+    },
+    {
+      "role": "主要行動文字",
+      "foreground": "--ui-on-primary",
+      "background": "--ui-primary",
+      "foreground_value": "#FFFFFF",
+      "background_value": "#7B243F",
+      "ratio": 9.694,
+      "minimum": 4.5
+    },
+    {
+      "role": "主要行動文字",
+      "foreground": "--ui-on-primary",
+      "background": "--ui-primary-hover",
+      "foreground_value": "#FFFFFF",
+      "background_value": "#5E1930",
+      "ratio": 12.668,
+      "minimum": 4.5
+    },
+    {
+      "role": "次要行動文字",
+      "foreground": "--ui-on-secondary",
+      "background": "--ui-secondary",
+      "foreground_value": "#582137",
+      "background_value": "#F3D9E2",
+      "ratio": 9.382,
+      "minimum": 4.5
+    },
+    {
+      "role": "次要行動文字",
+      "foreground": "--ui-on-secondary",
+      "background": "--ui-secondary-hover",
+      "foreground_value": "#582137",
+      "background_value": "#EAC7D5",
+      "ratio": 8.076,
+      "minimum": 4.5
+    },
+    {
+      "role": "disabled 文字",
+      "foreground": "--ui-disabled-text",
+      "background": "--ui-disabled-bg",
+      "foreground_value": "#705566",
+      "background_value": "#E9DCE3",
+      "ratio": 4.972,
+      "minimum": 4.5
+    },
+    {
+      "role": "選中文字／項目",
+      "foreground": "--ui-selection-text",
+      "background": "--ui-selection-bg",
+      "foreground_value": "#582137",
+      "background_value": "#F3D9E2",
+      "ratio": 9.382,
+      "minimum": 4.5
+    },
+    {
+      "role": "刪除文字",
+      "foreground": "--ui-danger",
+      "background": "--ui-surface",
+      "foreground_value": "#9B2345",
+      "background_value": "#FFFFFF",
+      "ratio": 7.72,
+      "minimum": 4.5
+    },
+    {
+      "role": "刪除 hover 文字",
+      "foreground": "--ui-danger-hover",
+      "background": "--ui-danger-bg",
+      "foreground_value": "#751732",
+      "background_value": "#FBE9EE",
+      "ratio": 9.347,
+      "minimum": 4.5
+    },
+    {
+      "role": "提醒文字",
+      "foreground": "--ui-warning",
+      "background": "--ui-warning-bg",
+      "foreground_value": "#7A4D19",
+      "background_value": "#FFF1DC",
+      "ratio": 6.499,
+      "minimum": 4.5
+    },
+    {
+      "role": "成功標題＋✅",
+      "foreground": "--ui-success",
+      "background": "--ui-surface",
+      "foreground_value": "#2C684A",
+      "background_value": "#FFFFFF",
+      "ratio": 6.591,
+      "minimum": 4.5
+    },
+    {
+      "role": "輸入框／控制邊線",
+      "foreground": "--ui-input-border",
+      "background": "--ui-surface",
+      "foreground_value": "#8A5A73",
+      "background_value": "#FFFFFF",
+      "ratio": 5.54,
+      "minimum": 3
+    },
+    {
+      "role": "輸入框／控制邊線",
+      "foreground": "--ui-input-border",
+      "background": "--ui-bg",
+      "foreground_value": "#8A5A73",
+      "background_value": "#F7F3F5",
+      "ratio": 5.037,
+      "minimum": 3
+    },
+    {
+      "role": "輸入框／控制邊線",
+      "foreground": "--ui-input-border",
+      "background": "--ui-secondary",
+      "foreground_value": "#8A5A73",
+      "background_value": "#F3D9E2",
+      "ratio": 4.177,
+      "minimum": 3
+    },
+    {
+      "role": "輸入框／控制邊線",
+      "foreground": "--ui-input-border",
+      "background": "--ui-secondary-hover",
+      "foreground_value": "#8A5A73",
+      "background_value": "#EAC7D5",
+      "ratio": 3.595,
+      "minimum": 3
+    },
+    {
+      "role": "輸入框／控制邊線",
+      "foreground": "--ui-input-border",
+      "background": "--ui-disabled-bg",
+      "foreground_value": "#8A5A73",
+      "background_value": "#E9DCE3",
+      "ratio": 4.171,
+      "minimum": 3
+    },
+    {
+      "role": "已選控制邊線",
+      "foreground": "--ui-primary",
+      "background": "--ui-surface",
+      "foreground_value": "#7B243F",
+      "background_value": "#FFFFFF",
+      "ratio": 9.694,
+      "minimum": 3
+    },
+    {
+      "role": "已選控制邊線",
+      "foreground": "--ui-primary",
+      "background": "--ui-bg",
+      "foreground_value": "#7B243F",
+      "background_value": "#F7F3F5",
+      "ratio": 8.814,
+      "minimum": 3
+    },
+    {
+      "role": "已選控制邊線",
+      "foreground": "--ui-primary",
+      "background": "--ui-selection-bg",
+      "foreground_value": "#7B243F",
+      "background_value": "#F3D9E2",
+      "ratio": 7.309,
+      "minimum": 3
+    },
+    {
+      "role": "刪除邊線",
+      "foreground": "--ui-danger",
+      "background": "--ui-surface",
+      "foreground_value": "#9B2345",
+      "background_value": "#FFFFFF",
+      "ratio": 7.72,
+      "minimum": 3
+    },
+    {
+      "role": "刪除 hover 邊線",
+      "foreground": "--ui-danger-hover",
+      "background": "--ui-danger-bg",
+      "foreground_value": "#751732",
+      "background_value": "#FBE9EE",
+      "ratio": 9.347,
+      "minimum": 3
+    },
+    {
+      "role": "刪除 hover 邊線",
+      "foreground": "--ui-danger-hover",
+      "background": "--ui-surface",
+      "foreground_value": "#751732",
+      "background_value": "#FFFFFF",
+      "ratio": 10.909,
+      "minimum": 3
+    },
+    {
+      "role": "提醒邊線",
+      "foreground": "--ui-warning",
+      "background": "--ui-warning-bg",
+      "foreground_value": "#7A4D19",
+      "background_value": "#FFF1DC",
+      "ratio": 6.499,
+      "minimum": 3
+    },
+    {
+      "role": "提醒邊線",
+      "foreground": "--ui-warning",
+      "background": "--ui-surface",
+      "foreground_value": "#7A4D19",
+      "background_value": "#FFFFFF",
+      "ratio": 7.234,
+      "minimum": 3
+    },
+    {
+      "role": "焦點外框／focus 邊線",
+      "foreground": "--ui-focus",
+      "background": "--ui-surface",
+      "foreground_value": "#7B243F",
+      "background_value": "#FFFFFF",
+      "ratio": 9.694,
+      "minimum": 3
+    },
+    {
+      "role": "焦點外框／focus 邊線",
+      "foreground": "--ui-focus",
+      "background": "--ui-bg",
+      "foreground_value": "#7B243F",
+      "background_value": "#F7F3F5",
+      "ratio": 8.814,
+      "minimum": 3
+    },
+    {
+      "role": "焦點外框／focus 邊線",
+      "foreground": "--ui-focus",
+      "background": "--ui-secondary",
+      "foreground_value": "#7B243F",
+      "background_value": "#F3D9E2",
+      "ratio": 7.309,
+      "minimum": 3
+    },
+    {
+      "role": "焦點外框／focus 邊線",
+      "foreground": "--ui-focus",
+      "background": "--ui-secondary-hover",
+      "foreground_value": "#7B243F",
+      "background_value": "#EAC7D5",
+      "ratio": 6.291,
+      "minimum": 3
+    },
+    {
+      "role": "焦點外框／focus 邊線",
+      "foreground": "--ui-focus",
+      "background": "--ui-footer-bg",
+      "foreground_value": "#7B243F",
+      "background_value": "#E9DCE3",
+      "ratio": 7.299,
+      "minimum": 3
+    },
+    {
+      "role": "焦點外框／focus 邊線",
+      "foreground": "--ui-focus",
+      "background": "--ui-disabled-bg",
+      "foreground_value": "#7B243F",
+      "background_value": "#E9DCE3",
+      "ratio": 7.299,
+      "minimum": 3
+    },
+    {
+      "role": "卡片裝飾邊線",
+      "foreground": "--ui-card-border",
+      "background": "--ui-surface",
+      "foreground_value": "#AD7E94",
+      "background_value": "#FFFFFF",
+      "ratio": 3.393,
+      "minimum": null
+    },
+    {
+      "role": "卡片裝飾邊線",
+      "foreground": "--ui-card-border",
+      "background": "--ui-bg",
+      "foreground_value": "#AD7E94",
+      "background_value": "#F7F3F5",
+      "ratio": 3.085,
+      "minimum": null
+    },
+    {
+      "role": "分隔線／頁尾／徽章裝飾邊線",
+      "foreground": "--ui-border",
+      "background": "--ui-surface",
+      "foreground_value": "#D3B8C7",
+      "background_value": "#FFFFFF",
+      "ratio": 1.834,
+      "minimum": null
+    },
+    {
+      "role": "分隔線／頁尾／徽章裝飾邊線",
+      "foreground": "--ui-border",
+      "background": "--ui-bg",
+      "foreground_value": "#D3B8C7",
+      "background_value": "#F7F3F5",
+      "ratio": 1.667,
+      "minimum": null
+    },
+    {
+      "role": "分隔線／頁尾／徽章裝飾邊線",
+      "foreground": "--ui-border",
+      "background": "--ui-footer-bg",
+      "foreground_value": "#D3B8C7",
+      "background_value": "#E9DCE3",
+      "ratio": 1.381,
+      "minimum": null
+    },
+    {
+      "role": "載入 pulse 最低 opacity／重設按鈕",
+      "foreground": "--ui-faded-text @ 0.6",
+      "background": "--ui-surface",
+      "foreground_value": "#2B0B1B",
+      "background_value": "#FFFFFF",
+      "alpha": 0.6,
+      "ratio": 4.83,
+      "minimum": 4.5
+    },
+    {
+      "role": "成功畫面副標題",
+      "foreground": "--ui-text @ 0.8",
+      "background": "--ui-surface",
+      "foreground_value": "#54253B",
+      "background_value": "#FFFFFF",
+      "alpha": 0.8,
+      "ratio": 6.741,
+      "minimum": 4.5
+    },
+    {
+      "role": "筆順提示 .95 opacity 文字／.12 高亮底色",
+      "foreground": "--ui-on-primary @ .95",
+      "background": "--ui-highlight over --ui-primary @ .95",
+      "foreground_value": "#FFFFFF",
+      "background_value": "#7B243F",
+      "ratio": 6.695,
+      "minimum": 4.5
+    },
+    {
+      "role": "重設按鈕的外框（保留 opacity .6）",
+      "foreground": "--ui-focus @ 0.6",
+      "background": "--ui-surface",
+      "foreground_value": "#7B243F",
+      "background_value": "#FFFFFF",
+      "alpha": 0.6,
+      "ratio": 3.453,
+      "minimum": 3
+    },
+    {
+      "role": "除錯按鈕的深色外框（保留 opacity .5）",
+      "foreground": "--ui-faded-text @ 0.5",
+      "background": "--ui-surface",
+      "foreground_value": "#2B0B1B",
+      "background_value": "#FFFFFF",
+      "alpha": 0.5,
+      "ratio": 3.49,
+      "minimum": 3
+    }
+  ]
+}

@@ -3,12 +3,12 @@
    ======================================== */
 
 .data-attribution {
-    background: #f8f9fa;
-    border-top: 1px solid #e9ecef;
+    background: var(--ui-footer-bg, #f8f9fa);
+    border-top: 1px solid var(--ui-border, #e9ecef);
     padding: 24px 0;
     margin-top: 48px;
     font-size: 13px;
-    color: #6c757d;
+    color: var(--ui-muted, #6c757d);
 }
 
 .data-attribution .container {
@@ -24,24 +24,24 @@
 }
 
 .attribution-text strong {
-    color: #495057;
+    color: var(--ui-text, #495057);
 }
 
 .attribution-text a {
-    color: #667eea;
+    color: var(--ui-primary, #667eea);
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 .attribution-text a:hover {
-    color: #764ba2;
+    color: var(--ui-primary-hover, #764ba2);
     text-decoration: underline;
 }
 
 .attribution-note {
     margin: 0;
     font-size: 12px;
-    color: #adb5bd;
+    color: var(--ui-muted, #adb5bd);
 }
 
 /* 列印時隱藏 */

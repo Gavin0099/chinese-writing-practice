@@ -20,7 +20,7 @@ let renderedWorksheetLesson = null;
                     <div class="step-number">2</div>
                     <div class="step-text">選擇 <b>「在瀏覽器中開啟」</b> 或 <b>「使用 Safari 開啟」</b></div>
                 </div>
-                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 1rem;">
+                <p style="font-size: 0.85rem; color: var(--ui-muted, #94a3b8); margin-top: 1rem;">
                     LINE 內建瀏覽器限制較多，切換至系統瀏覽器即可正常列印與下載 PDF。
                 </p>
                 <button class="line-guide-close" onclick="closeLineGuide()">我知道了</button>
@@ -262,7 +262,7 @@ function initApp() {
                         cardContent.innerHTML = `
                             <div class="success-state" style="animation: fadeIn 0.5s; padding: 2rem 0;">
                                 <div style="font-size: 4rem; margin-bottom: 1.5rem;">✅</div>
-                                <h2 class="hero-title" style="margin-bottom: 0.5rem; font-size: 2.2rem; color: var(--primary-sage);">練習簿已準備好</h2>
+                                <h2 class="hero-title" style="margin-bottom: 0.5rem; font-size: 2.2rem; color: var(--ui-success, var(--primary-sage));">練習簿已準備好</h2>
                                 <p class="hero-subtitle" style="margin-bottom: 2.5rem; opacity: 0.8;">
                                     <!-- Hidden Metadata for PDF Filename Engine -->
                                     <span id="heroSubTitle" style="display:none;">${rec.grade}年級 ${rec.semester === 'A' ? '上學期' : '下學期'}</span>
@@ -272,16 +272,16 @@ function initApp() {
                                 </p>
                                 
                                 <div class="hero-actions" style="flex-direction: column; gap: 1rem; max-width: 320px; margin: 0 auto;">
-                                    <button id="heroPrintBtn" class="btn-primary-hero" style="background-color: var(--text-dark); width: 100%;">
+                                    <button id="heroPrintBtn" class="btn-primary-hero" style="background-color: var(--ui-primary, var(--text-dark)); width: 100%;">
                                         <span class="icon">🖨️</span> 
                                         列印 / 儲存為 PDF
                                     </button>
                                     
                                     <div style="display: flex; gap: 10px; width: 100%;">
-                                        <button onclick="location.reload()" class="btn-primary-hero" style="background-color: white; color: var(--text-dark); border: 2px solid #eee; flex: 1; font-size: 0.9rem;">
+                                        <button onclick="location.reload()" class="btn-primary-hero" style="background-color: var(--ui-surface, white); color: var(--ui-text, var(--text-dark)); border: 2px solid var(--ui-input-border, #eee); flex: 1; font-size: 0.9rem;">
                                             明天再來
                                         </button>
-                                        <button id="nextLessonBtn" class="btn-primary-hero" style="background-color: var(--primary-sage); flex: 1; font-size: 0.9rem;">
+                                        <button id="nextLessonBtn" class="btn-primary-hero" style="background-color: var(--ui-secondary, var(--primary-sage)); flex: 1; font-size: 0.9rem;">
                                             下一課
                                         </button>
                                     </div>
@@ -291,7 +291,7 @@ function initApp() {
                                     </button>
 
                                     <!-- Mobile Debug Toggle -->
-                                    <div style="margin-top: 1.5rem; border-top: 1px dashed #eee; padding-top: 1rem;">
+                                    <div style="margin-top: 1.5rem; border-top: 1px dashed var(--ui-border, #eee); padding-top: 1rem;">
                                         <button id="debugToggleBtn" class="btn-text" style="font-size: 0.8rem; opacity: 0.5;">
                                             🔧 開啟列印除錯模式 (抓跳頁蟲)
                                         </button>
@@ -493,7 +493,7 @@ function initApp() {
                 heroActionBtn.innerHTML = outputToday
                     ? '<span class="icon">✅</span> 今天已開啟輸出（可重印）'
                     : `<span class="icon">✨</span> 下載第 ${rec.lesson} 課練習簿 (10秒)`;
-                heroActionBtn.style.backgroundColor = outputToday ? 'var(--text-dark)' : 'var(--primary-sage)';
+                heroActionBtn.style.backgroundColor = outputToday ? 'var(--ui-secondary-hover, var(--text-dark))' : 'var(--ui-secondary, var(--primary-sage))';
             };
 
             // Attach Listeners for Sync

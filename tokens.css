@@ -1,0 +1,47 @@
+/* R3-2 莓果圓讀. Screen only: print keeps the existing declaration fallbacks.
+   Sources and computed contrast pairs: docs/ux-dexp-impl/IMPLEMENTATION.md. */
+@media screen {
+    :root {
+        --ui-bg: #F7F3F5;
+        --ui-surface: #FFFFFF;
+        --ui-text: #54253B;
+        --ui-title: #54253B;
+        --ui-muted: #705566;
+        --ui-primary: #7B243F;
+        --ui-primary-hover: #5E1930;
+        --ui-on-primary: #FFFFFF;
+        --ui-secondary: #F3D9E2;
+        --ui-secondary-hover: #EAC7D5;
+        --ui-on-secondary: #582137;
+        --ui-border: #D3B8C7;
+        --ui-card-border: #AD7E94;
+        --ui-focus: #7B243F;
+        --ui-footer-bg: #E9DCE3;
+        --ui-card-shadow: 5px 5px 0 #D7C4CE;
+        --ui-button-shadow: none;
+        --ui-footer-shadow: none;
+        --ui-font-title: 'Yuanti TC', 'Hiragino Maru Gothic ProN', 'Arial Rounded MT Bold', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+        --ui-font-body: 'Yuanti TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+
+        /* Derived roles; decorative rules are never used as field boundaries. */
+        --ui-input-border: #8A5A73;
+        --ui-disabled-bg: #E9DCE3;
+        --ui-disabled-text: #705566;
+        --ui-selection-bg: #F3D9E2;
+        --ui-selection-text: #582137;
+        --ui-danger: #9B2345;
+        --ui-danger-hover: #751732;
+        --ui-danger-bg: #FBE9EE;
+        --ui-warning: #7A4D19;
+        --ui-warning-bg: #FFF1DC;
+        --ui-success: #2C684A;
+        --ui-faded-text: #2B0B1B;
+        --ui-overlay: rgba(84, 37, 59, 0.50);
+        --ui-overlay-strong: rgba(84, 37, 59, 0.75);
+        --ui-highlight: rgba(255, 255, 255, 0.12);
+        --ui-shadow-soft: rgba(84, 37, 59, 0.08);
+        --ui-shadow: rgba(84, 37, 59, 0.12);
+        --ui-shadow-strong: rgba(84, 37, 59, 0.20);
+        --ui-shadow-primary: rgba(123, 36, 63, 0.30);
+    }
+}

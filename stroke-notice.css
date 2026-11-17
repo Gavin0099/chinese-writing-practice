@@ -4,12 +4,12 @@
 
 /* 筆順說明區塊 */
 .stroke-notice {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--ui-primary, #667eea) 0%, var(--ui-primary, #764ba2) 100%);
+    color: var(--ui-on-primary, white);
     padding: 16px 20px;
     border-radius: 12px;
     margin: 16px 0;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 12px var(--ui-shadow-primary, rgba(102, 126, 234, 0.3));
     font-size: 14px;
     line-height: 1.6;
     position: relative;
@@ -45,7 +45,7 @@
 }
 
 .stroke-notice-highlight {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--ui-highlight, rgba(255, 255, 255, 0.2));
     padding: 2px 8px;
     border-radius: 4px;
     font-weight: 600;
@@ -53,13 +53,13 @@
 
 /* 可愛的提示框 (替代方案) */
 .stroke-tip {
-    background: #fff3cd;
-    border-left: 4px solid #ffc107;
+    background: var(--ui-warning-bg, #fff3cd);
+    border-left: 4px solid var(--ui-warning, #ffc107);
     padding: 12px 16px;
     margin: 12px 0;
     border-radius: 8px;
     font-size: 13px;
-    color: #856404;
+    color: var(--ui-warning, #856404);
     display: flex;
     align-items: start;
     gap: 12px;
@@ -82,7 +82,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: var(--ui-overlay, rgba(0, 0, 0, 0.5));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -98,12 +98,12 @@
 }
 
 .stroke-modal {
-    background: white;
+    background: var(--ui-surface, white);
     border-radius: 20px;
     padding: 32px;
     max-width: 500px;
     width: 90%;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px var(--ui-shadow-strong, rgba(0, 0, 0, 0.3));
     transform: scale(0.9);
     transition: transform 0.3s ease;
 }
@@ -125,24 +125,24 @@
 .stroke-modal-title {
     font-size: 24px;
     font-weight: 700;
-    color: #333;
+    color: var(--ui-title, #333);
     margin-bottom: 8px;
 }
 
 .stroke-modal-subtitle {
     font-size: 14px;
-    color: #666;
+    color: var(--ui-muted, #666);
 }
 
 .stroke-modal-content {
     font-size: 16px;
     line-height: 1.8;
-    color: #444;
+    color: var(--ui-text, #444);
     margin-bottom: 24px;
 }
 
 .stroke-modal-example {
-    background: #f8f9fa;
+    background: var(--ui-bg, #f8f9fa);
     padding: 16px;
     border-radius: 12px;
     margin: 16px 0;
@@ -157,12 +157,12 @@
 
 .stroke-modal-example-text {
     font-size: 13px;
-    color: #666;
+    color: var(--ui-muted, #666);
 }
 
 .stroke-modal-button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--ui-primary, #667eea) 0%, var(--ui-primary, #764ba2) 100%);
+    color: var(--ui-on-primary, white);
     border: none;
     padding: 12px 32px;
     border-radius: 25px;
@@ -175,7 +175,7 @@
 
 .stroke-modal-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 8px 20px var(--ui-shadow-primary, rgba(102, 126, 234, 0.4));
 }
 
 .stroke-modal-button:active {

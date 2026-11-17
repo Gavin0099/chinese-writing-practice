@@ -1,0 +1,37 @@
+✔ backup round trip restores 30 words, the saved 15-question exam, progress and writing history (11.201206ms)
+✔ rejects a bad version, incorrect blank position and dangling class before touching storage (4.832436ms)
+✔ a failed restore rolls back an earlier successful write and keeps unrelated data (0.860728ms)
+✔ refuses to replace records written after the restore preview (1.566234ms)
+✔ groups repeated Han characters and keeps positions, source, and separate writing status (2.247018ms)
+✔ requires confirmed progress in the exact curriculum edition (2.875372ms)
+✔ isolates missing, unresolved, duplicate, or malformed lessons (0.674097ms)
+✔ orders earlier terms and requires a continuous, unambiguous history for negative results (0.584549ms)
+✔ cloud writes bind to one account and keep the last confirmed state on a revision conflict (5.231316ms)
+✔ first import is idempotent, preserves later edits and rejects a different backup (1.606812ms)
+✔ the sign-in return preserves cloud exam context and rejects destinations outside the app (1.201834ms)
+✔ a callback accepts exactly one PKCE code and treats implicit tokens or errors as failures (3.817318ms)
+✔ Google sign-in pins the PKCE flow and resumes only from the same tab and project (2.289409ms)
+✔ manual linking retains the original Auth ID even when the Google email differs (0.524085ms)
+✔ cancelled, stale and conflicting link callbacks cannot exchange into another family (0.635842ms)
+✔ imports real-shaped local data with separate writing and recognition evidence (6.417678ms)
+✔ keeps unmatched, conflicting and unnumbered lessons out of query evidence (0.901866ms)
+✔ requires a matching catalogue report before claiming coverage is complete (1.746972ms)
+✔ accumulates confirmed earlier terms and requires confirmation again after a source version change (1.287999ms)
+✔ word identity is scoped to class and lesson, with edit and batch duplicate protection (7.211414ms)
+✔ confirmation requires one structurally valid contextual reading per Unicode character (0.541829ms)
+✔ explicit first-tone marks from mobile input are omitted from saved readings (0.966271ms)
+✔ book and exam storage survives reopen and does not write a failed mutation (0.884324ms)
+✔ pool deduplicates identical prompts across lessons, records their sources, and excludes ambiguous or draft prompts (0.894698ms)
+✔ 30 eligible prompts produce 15 unique snapshot questions with a repeatable order and exact blank positions (2.728719ms)
+✔ migrates a legacy worksheet recommendation without writing teaching progress (8.517746ms)
+✔ a worksheet output records once and preserves independently confirmed teaching progress (2.871942ms)
+✔ starts empty and ignores invalid or unconfirmed progress records (1.79885ms)
+✔ reads the active progress record from a saved multi-term history (1.510366ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 118.030552

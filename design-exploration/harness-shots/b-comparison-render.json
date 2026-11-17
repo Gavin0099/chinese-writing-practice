@@ -1,0 +1,26 @@
+{
+ "390": {
+  "status": 200,
+  "h": 11690,
+  "sw": 390,
+  "iframes": 7,
+  "title": "首頁視覺探索 01｜生字練習簿小幫手",
+  "textLen": 2324,
+  "errs": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "external": [],
+  "failed": []
+ },
+ "1280": {
+  "status": 200,
+  "h": 5518,
+  "sw": 1280,
+  "iframes": 7,
+  "title": "首頁視覺探索 01｜生字練習簿小幫手",
+  "textLen": 2343,
+  "errs": [],
+  "external": [],
+  "failed": []
+ }
+}

@@ -1,0 +1,74 @@
+{
+ "390:r0-current.html": {
+  "elements": 50,
+  "movedOver1px": null,
+  "maxDeltaPx": null,
+  "moved": [],
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 390,
+  "height": 1871,
+  "pageSelfCheck": null,
+  "pageMismatches": null
+ },
+ "390:r3-1-bluebold.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "moved": [],
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 390,
+  "height": 1871,
+  "pageSelfCheck": "FITTED",
+  "pageMismatches": []
+ },
+ "390:r3-2-berryround.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "moved": [],
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 390,
+  "height": 1871,
+  "pageSelfCheck": "FITTED",
+  "pageMismatches": []
+ },
+ "1280:r0-current.html": {
+  "elements": 50,
+  "movedOver1px": null,
+  "maxDeltaPx": null,
+  "moved": [],
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 1280,
+  "height": 1435,
+  "pageSelfCheck": null,
+  "pageMismatches": null
+ },
+ "1280:r3-1-bluebold.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "moved": [],
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 1280,
+  "height": 1435,
+  "pageSelfCheck": "FITTED",
+  "pageMismatches": []
+ },
+ "1280:r3-2-berryround.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "moved": [],
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 1280,
+  "height": 1435,
+  "pageSelfCheck": "FITTED",
+  "pageMismatches": []
+ }
+}

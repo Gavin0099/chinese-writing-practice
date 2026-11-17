@@ -2,10 +2,9 @@
  * Does not read the calibration reference to decide geometry PASS/FAIL.
  */
 (async () => {
-  const pages = ['r0-current.html', 'r3-1-bluebold.html', 'r3-2-berryround.html',
-    'r3-3-blueming.html', 'r3-4-blueberrykai.html', 'r3-5-berryreading.html', 'r3-6-blueberrysoft.html'];
+  const pages = ['r0-current.html', 'r3-1-bluebold.html', 'r3-2-berryround.html'];
   const report = {status: 'NOT MEASURED', userAgent: navigator.userAgent,
-    tolerance: 1, viewportHeight: 900, widths: []};
+    tolerance: 0, viewportHeight: 900, widths: []};
   const output = document.querySelector('#result');
   function textLines(doc) {
     const walker = doc.createTreeWalker(doc.body, 4);
@@ -69,7 +68,7 @@
           const differences = Object.fromEntries(['x', 'y', 'width', 'height'].map(k => [k, Math.abs(row[k] - base.rows[i][k])]));
           const delta = Math.max(...Object.values(differences));
           maximum = Math.max(maximum, delta);
-          if (delta > 1) mismatches.push({index: i, selector: row.selector, differences});
+          if (delta > report.tolerance) mismatches.push({index: i, selector: row.selector, differences});
         });
         const sameTextAndWrap = JSON.stringify(actual.text) === JSON.stringify(base.text);
         const ready = actual.calibration && actual.calibration.status === 'FITTED';

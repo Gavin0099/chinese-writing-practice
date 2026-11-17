@@ -1,7 +1,7 @@
 /* Browser observation only. No product scripts or storage. */
 (async () => {
-  const pages = ['r0-current.html', 'r2-1-blueprint.html', 'r2-2-berrypress.html',
-    'r2-3-mistink.html', 'r2-4-blueberry.html', 'r2-5-silverlilac.html'];
+  const pages = ['r0-current.html', 'archive/r2-1-blueprint.html', 'archive/r2-2-berrypress.html',
+    'archive/r2-3-mistink.html', 'archive/r2-4-blueberry.html', 'archive/r2-5-silverlilac.html'];
   const output = document.querySelector('#result');
   const report = {status: 'NOT MEASURED', userAgent: navigator.userAgent,
     tolerance: 1, viewportHeight: 900, widths: []};

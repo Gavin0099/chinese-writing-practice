@@ -1,0 +1,12 @@
+/* Shortlist gallery only; historical comparisons and homepage previews do not load this. */
+.shortlist .current-index { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.shortlist .current-index .index-link:first-child { grid-column: auto; }
+.shortlist .index-link { min-height: 52px; justify-content: center; }
+.shortlist-scroll { overflow-x: auto; padding: 4px; margin-inline: -4px; }
+.shortlist-scroll:focus-visible { outline: 3px solid #214eab; outline-offset: 1px; }
+.shortlist .board, .shortlist .board[data-width="1280"] {
+  grid-template-columns: repeat(3, minmax(300px, 1fr));
+}
+.shortlist .board .card-caption { display: block; min-height: 250px !important; }
+.shortlist .board .card-detail { display: block; }
+.shortlist .font-caveat { font-size: 13px; color: var(--ink); line-height: 1.7; }

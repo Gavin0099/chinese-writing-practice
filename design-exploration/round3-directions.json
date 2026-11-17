@@ -32,7 +32,7 @@
     "font_availability": "Requested fallback chain, not an observed installed-font inventory. Windows Chrome / iPhone Safari: NOT MEASURED.",
     "font_transfer_bytes": 0,
     "webfont_note": "未安裝圓體／楷體時會退回黑體；跨平台保證同款字形需要另行核對授權的 web font，本輪未加入。Noto、Nunito、Varela Round 等資料庫字型不下載。",
-    "geometry_strategy": "同頁先以 R0 字型量得 header／home-container 各元素 border box，再保留 width／height／line-height；在原文字節點套字體，必要時字距 ±0.8px、字級最多縮 6% 保留原折行。其餘 footer／說明字型固定 R0。resize 後重算；不新增隱藏頁、不改文案、不裁字。實際 390／1280px：NOT MEASURED。",
+    "geometry_strategy": "先用 R0 字型量取同頁 border box，再保留寬度與行高；老師入口 h2＋p 的外層 div 保留 height:auto，不固定 height／min-height／max-height，讓段落底部 margin 繼續折疊。其餘尺寸及折行校準沿用原策略。修正後 390／1280px bbox 與 r3Metrics：NOT MEASURED。",
     "tokens": {
       "body-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
       "heading-font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
@@ -259,7 +259,14 @@
           "meets_4_5": true
         }
       ]
-    }
+    },
+    "shortlist_status": "shortlisted",
+    "in_comparison": true,
+    "page": "r3-1-bluebold.html",
+    "selection_round": "Round 3 shortlist · STEP 5",
+    "selection_feedback": "1和2就好 其他去掉",
+    "source_page": "archive/r2-1-blueprint.html",
+    "lineage": "R3-1 ← R2-1 ← R1-1 + R1-4"
   },
   {
     "id": "R3-2",
@@ -294,7 +301,7 @@
     "font_availability": "Requested fallback chain, not an observed installed-font inventory. Windows Chrome / iPhone Safari: NOT MEASURED.",
     "font_transfer_bytes": 0,
     "webfont_note": "未安裝圓體／楷體時會退回黑體；跨平台保證同款字形需要另行核對授權的 web font，本輪未加入。Noto、Nunito、Varela Round 等資料庫字型不下載。",
-    "geometry_strategy": "同頁先以 R0 字型量得 header／home-container 各元素 border box，再保留 width／height／line-height；在原文字節點套字體，必要時字距 ±0.8px、字級最多縮 6% 保留原折行。其餘 footer／說明字型固定 R0。resize 後重算；不新增隱藏頁、不改文案、不裁字。實際 390／1280px：NOT MEASURED。",
+    "geometry_strategy": "先用 R0 字型量取同頁 border box，再保留寬度與行高；老師入口 h2＋p 的外層 div 保留 height:auto，不固定 height／min-height／max-height，讓段落底部 margin 繼續折疊。其餘尺寸及折行校準沿用原策略。修正後 390／1280px bbox 與 r3Metrics：NOT MEASURED。",
     "tokens": {
       "body-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
       "heading-font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
@@ -521,7 +528,15 @@
           "meets_4_5": true
         }
       ]
-    }
+    },
+    "shortlist_status": "shortlisted",
+    "in_comparison": true,
+    "page": "r3-2-berryround.html",
+    "selection_round": "Round 3 shortlist · STEP 5",
+    "selection_feedback": "1和2就好 其他去掉",
+    "source_page": "archive/r2-2-berrypress.html",
+    "shortlist_font_note": "Windows Chrome 與 iPhone Safari 的標準安裝都不附繁體中文圓體，R3-2 很可能退回黑體（微軟正黑體／蘋方繁中）。原圓體 font stack 保留；實際 fallback：NOT MEASURED。",
+    "lineage": "R3-2 ← R2-2 ← R1-2 + R1-4"
   },
   {
     "id": "R3-3",
@@ -556,7 +571,7 @@
     "font_availability": "Requested fallback chain, not an observed installed-font inventory. Windows Chrome / iPhone Safari: NOT MEASURED.",
     "font_transfer_bytes": 0,
     "webfont_note": "未安裝圓體／楷體時會退回黑體；跨平台保證同款字形需要另行核對授權的 web font，本輪未加入。Noto、Nunito、Varela Round 等資料庫字型不下載。",
-    "geometry_strategy": "同頁先以 R0 字型量得 header／home-container 各元素 border box，再保留 width／height／line-height；在原文字節點套字體，必要時字距 ±0.8px、字級最多縮 6% 保留原折行。其餘 footer／說明字型固定 R0。resize 後重算；不新增隱藏頁、不改文案、不裁字。實際 390／1280px：NOT MEASURED。",
+    "geometry_strategy": "先用 R0 字型量取同頁 border box，再保留寬度與行高；老師入口 h2＋p 的外層 div 保留 height:auto，不固定 height／min-height／max-height，讓段落底部 margin 繼續折疊。其餘尺寸及折行校準沿用原策略。修正後 390／1280px bbox 與 r3Metrics：NOT MEASURED。",
     "tokens": {
       "body-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
       "heading-font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
@@ -783,7 +798,14 @@
           "meets_4_5": true
         }
       ]
-    }
+    },
+    "shortlist_status": "archived",
+    "in_comparison": false,
+    "page": "archive/r3-3-blueming.html",
+    "selection_round": "Round 3 shortlist · STEP 5",
+    "selection_feedback": "1和2就好 其他去掉",
+    "archive_reason": "Gavin 第 3 輪後只留 R3-1、R3-2",
+    "source_page": "archive/r2-1-blueprint.html"
   },
   {
     "id": "R3-4",
@@ -818,7 +840,7 @@
     "font_availability": "Requested fallback chain, not an observed installed-font inventory. Windows Chrome / iPhone Safari: NOT MEASURED.",
     "font_transfer_bytes": 0,
     "webfont_note": "未安裝圓體／楷體時會退回黑體；跨平台保證同款字形需要另行核對授權的 web font，本輪未加入。Noto、Nunito、Varela Round 等資料庫字型不下載。",
-    "geometry_strategy": "同頁先以 R0 字型量得 header／home-container 各元素 border box，再保留 width／height／line-height；在原文字節點套字體，必要時字距 ±0.8px、字級最多縮 6% 保留原折行。其餘 footer／說明字型固定 R0。resize 後重算；不新增隱藏頁、不改文案、不裁字。實際 390／1280px：NOT MEASURED。",
+    "geometry_strategy": "先用 R0 字型量取同頁 border box，再保留寬度與行高；老師入口 h2＋p 的外層 div 保留 height:auto，不固定 height／min-height／max-height，讓段落底部 margin 繼續折疊。其餘尺寸及折行校準沿用原策略。修正後 390／1280px bbox 與 r3Metrics：NOT MEASURED。",
     "tokens": {
       "body-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
       "heading-font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
@@ -1045,7 +1067,14 @@
           "meets_4_5": true
         }
       ]
-    }
+    },
+    "shortlist_status": "archived",
+    "in_comparison": false,
+    "page": "archive/r3-4-blueberrykai.html",
+    "selection_round": "Round 3 shortlist · STEP 5",
+    "selection_feedback": "1和2就好 其他去掉",
+    "archive_reason": "Gavin 第 3 輪後只留 R3-1、R3-2",
+    "source_page": "archive/r2-4-blueberry.html"
   },
   {
     "id": "R3-5",
@@ -1080,7 +1109,7 @@
     "font_availability": "Requested fallback chain, not an observed installed-font inventory. Windows Chrome / iPhone Safari: NOT MEASURED.",
     "font_transfer_bytes": 0,
     "webfont_note": "未安裝圓體／楷體時會退回黑體；跨平台保證同款字形需要另行核對授權的 web font，本輪未加入。Noto、Nunito、Varela Round 等資料庫字型不下載。",
-    "geometry_strategy": "同頁先以 R0 字型量得 header／home-container 各元素 border box，再保留 width／height／line-height；在原文字節點套字體，必要時字距 ±0.8px、字級最多縮 6% 保留原折行。其餘 footer／說明字型固定 R0。resize 後重算；不新增隱藏頁、不改文案、不裁字。實際 390／1280px：NOT MEASURED。",
+    "geometry_strategy": "先用 R0 字型量取同頁 border box，再保留寬度與行高；老師入口 h2＋p 的外層 div 保留 height:auto，不固定 height／min-height／max-height，讓段落底部 margin 繼續折疊。其餘尺寸及折行校準沿用原策略。修正後 390／1280px bbox 與 r3Metrics：NOT MEASURED。",
     "tokens": {
       "body-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
       "heading-font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
@@ -1307,7 +1336,14 @@
           "meets_4_5": true
         }
       ]
-    }
+    },
+    "shortlist_status": "archived",
+    "in_comparison": false,
+    "page": "archive/r3-5-berryreading.html",
+    "selection_round": "Round 3 shortlist · STEP 5",
+    "selection_feedback": "1和2就好 其他去掉",
+    "archive_reason": "Gavin 第 3 輪後只留 R3-1、R3-2",
+    "source_page": "archive/r2-2-berrypress.html"
   },
   {
     "id": "R3-6",
@@ -1342,7 +1378,7 @@
     "font_availability": "Requested fallback chain, not an observed installed-font inventory. Windows Chrome / iPhone Safari: NOT MEASURED.",
     "font_transfer_bytes": 0,
     "webfont_note": "未安裝圓體／楷體時會退回黑體；跨平台保證同款字形需要另行核對授權的 web font，本輪未加入。Noto、Nunito、Varela Round 等資料庫字型不下載。",
-    "geometry_strategy": "同頁先以 R0 字型量得 header／home-container 各元素 border box，再保留 width／height／line-height；在原文字節點套字體，必要時字距 ±0.8px、字級最多縮 6% 保留原折行。其餘 footer／說明字型固定 R0。resize 後重算；不新增隱藏頁、不改文案、不裁字。實際 390／1280px：NOT MEASURED。",
+    "geometry_strategy": "先用 R0 字型量取同頁 border box，再保留寬度與行高；老師入口 h2＋p 的外層 div 保留 height:auto，不固定 height／min-height／max-height，讓段落底部 margin 繼續折疊。其餘尺寸及折行校準沿用原策略。修正後 390／1280px bbox 與 r3Metrics：NOT MEASURED。",
     "tokens": {
       "body-font": "system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif",
       "heading-font": "'Songti TC', 'PMingLiU', 'MingLiU', serif",
@@ -1569,6 +1605,13 @@
           "meets_4_5": true
         }
       ]
-    }
+    },
+    "shortlist_status": "archived",
+    "in_comparison": false,
+    "page": "archive/r3-6-blueberrysoft.html",
+    "selection_round": "Round 3 shortlist · STEP 5",
+    "selection_feedback": "1和2就好 其他去掉",
+    "archive_reason": "Gavin 第 3 輪後只留 R3-1、R3-2",
+    "source_page": "archive/r2-4-blueberry.html"
   }
 ]

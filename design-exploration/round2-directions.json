@@ -55,7 +55,199 @@
       "R1-4"
     ],
     "geometry_baseline": "R0-0",
-    "copied_from": "r1-1-blue.html"
+    "copied_from": "r1-1-blue.html",
+    "contrast": {
+      "method": "sRGB linearization; (L1 + .05) / (L2 + .05)",
+      "minimum": 5.915,
+      "pairs": [
+        {
+          "pair": "正文／頁底",
+          "foreground": "#22304C",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 13.165,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口標題／頁底",
+          "foreground": "#22304C",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 13.165,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口說明／頁底",
+          "foreground": "#515F77",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.455,
+          "meets_4_5": true
+        },
+        {
+          "pair": "導覽／頁底",
+          "foreground": "#244184",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 9.703,
+          "meets_4_5": true
+        },
+        {
+          "pair": "品牌／頁底",
+          "foreground": "#515F77",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.455,
+          "meets_4_5": true
+        },
+        {
+          "pair": "課名／卡片",
+          "foreground": "#22304C",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 12.063,
+          "meets_4_5": true
+        },
+        {
+          "pair": "年級／卡片",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "提示／卡片",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#244CBC"
+          ],
+          "ratio": 7.408,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#19398F"
+          ],
+          "ratio": 10.379,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙按鈕文字",
+          "foreground": "#244184",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 8.891,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙 hover 文字",
+          "foreground": "#244184",
+          "background": [
+            "#E1E8F6"
+          ],
+          "ratio": 7.889,
+          "meets_4_5": true
+        },
+        {
+          "pair": "署名／頁尾",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "來源連結／頁尾",
+          "foreground": "#22304C",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 12.063,
+          "meets_4_5": true
+        },
+        {
+          "pair": "授權標籤文字",
+          "foreground": "#22304C",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 13.165,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#244CBC"
+          ],
+          "ratio": 7.408,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者說明／卡片",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者標題／卡片",
+          "foreground": "#22304C",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 12.063,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋提示／卡片",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        },
+        {
+          "pair": "版權／頁尾",
+          "foreground": "#515F77",
+          "background": [
+            "#F2F5FC"
+          ],
+          "ratio": 5.915,
+          "meets_4_5": true
+        }
+      ]
+    },
+    "shortlist_status": "archived",
+    "in_comparison": false,
+    "page": "archive/r2-1-blueprint.html",
+    "selection_round": "Round 3 shortlist · STEP 5",
+    "selection_feedback": "1和2就好 其他去掉",
+    "archive_reason": "Gavin 第 3 輪後只留 R3-1、R3-2"
   },
   {
     "id": "R2-2",
@@ -113,7 +305,199 @@
       "R1-4"
     ],
     "geometry_baseline": "R0-0",
-    "copied_from": "r1-2-berry.html"
+    "copied_from": "r1-2-berry.html",
+    "contrast": {
+      "method": "sRGB linearization; (L1 + .05) / (L2 + .05)",
+      "minimum": 4.972,
+      "pairs": [
+        {
+          "pair": "正文／頁底",
+          "foreground": "#54253B",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 11.2,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口標題／頁底",
+          "foreground": "#54253B",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 11.2,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口說明／頁底",
+          "foreground": "#705566",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 6.004,
+          "meets_4_5": true
+        },
+        {
+          "pair": "導覽／頁底",
+          "foreground": "#54253B",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 11.2,
+          "meets_4_5": true
+        },
+        {
+          "pair": "品牌／頁底",
+          "foreground": "#705566",
+          "background": [
+            "#F7F3F5"
+          ],
+          "ratio": 6.004,
+          "meets_4_5": true
+        },
+        {
+          "pair": "課名／卡片",
+          "foreground": "#54253B",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 12.319,
+          "meets_4_5": true
+        },
+        {
+          "pair": "年級／卡片",
+          "foreground": "#705566",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.603,
+          "meets_4_5": true
+        },
+        {
+          "pair": "提示／卡片",
+          "foreground": "#705566",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.603,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#7B243F"
+          ],
+          "ratio": 9.694,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#5E1930"
+          ],
+          "ratio": 12.668,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙按鈕文字",
+          "foreground": "#582137",
+          "background": [
+            "#F3D9E2"
+          ],
+          "ratio": 9.382,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙 hover 文字",
+          "foreground": "#582137",
+          "background": [
+            "#EAC7D5"
+          ],
+          "ratio": 8.076,
+          "meets_4_5": true
+        },
+        {
+          "pair": "署名／頁尾",
+          "foreground": "#705566",
+          "background": [
+            "#E9DCE3"
+          ],
+          "ratio": 4.972,
+          "meets_4_5": true
+        },
+        {
+          "pair": "來源連結／頁尾",
+          "foreground": "#54253B",
+          "background": [
+            "#E9DCE3"
+          ],
+          "ratio": 9.275,
+          "meets_4_5": true
+        },
+        {
+          "pair": "授權標籤文字",
+          "foreground": "#54253B",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 12.319,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#7B243F"
+          ],
+          "ratio": 9.694,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者說明／卡片",
+          "foreground": "#705566",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.603,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者標題／卡片",
+          "foreground": "#54253B",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 12.319,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋提示／卡片",
+          "foreground": "#705566",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 6.603,
+          "meets_4_5": true
+        },
+        {
+          "pair": "版權／頁尾",
+          "foreground": "#705566",
+          "background": [
+            "#E9DCE3"
+          ],
+          "ratio": 4.972,
+          "meets_4_5": true
+        }
+      ]
+    },
+    "shortlist_status": "archived",
+    "in_comparison": false,
+    "page": "archive/r2-2-berrypress.html",
+    "selection_round": "Round 3 shortlist · STEP 5",
+    "selection_feedback": "1和2就好 其他去掉",
+    "archive_reason": "Gavin 第 3 輪後只留 R3-1、R3-2"
   },
   {
     "id": "R2-3",
@@ -171,7 +555,199 @@
       "R1-4"
     ],
     "geometry_baseline": "R0-0",
-    "copied_from": "r1-3-violet.html"
+    "copied_from": "r1-3-violet.html",
+    "contrast": {
+      "method": "sRGB linearization; (L1 + .05) / (L2 + .05)",
+      "minimum": 5.864,
+      "pairs": [
+        {
+          "pair": "正文／頁底",
+          "foreground": "#332C46",
+          "background": [
+            "#EFEDF7"
+          ],
+          "ratio": 11.404,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口標題／頁底",
+          "foreground": "#332C46",
+          "background": [
+            "#EFEDF7"
+          ],
+          "ratio": 11.404,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口說明／頁底",
+          "foreground": "#63566F",
+          "background": [
+            "#EFEDF7"
+          ],
+          "ratio": 5.864,
+          "meets_4_5": true
+        },
+        {
+          "pair": "導覽／頁底",
+          "foreground": "#332C46",
+          "background": [
+            "#EFEDF7"
+          ],
+          "ratio": 11.404,
+          "meets_4_5": true
+        },
+        {
+          "pair": "品牌／頁底",
+          "foreground": "#63566F",
+          "background": [
+            "#EFEDF7"
+          ],
+          "ratio": 5.864,
+          "meets_4_5": true
+        },
+        {
+          "pair": "課名／卡片",
+          "foreground": "#F5F0FF",
+          "background": [
+            "#302A45"
+          ],
+          "ratio": 12.18,
+          "meets_4_5": true
+        },
+        {
+          "pair": "年級／卡片",
+          "foreground": "#CFC3E2",
+          "background": [
+            "#302A45"
+          ],
+          "ratio": 8.139,
+          "meets_4_5": true
+        },
+        {
+          "pair": "提示／卡片",
+          "foreground": "#CFC3E2",
+          "background": [
+            "#302A45"
+          ],
+          "ratio": 8.139,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#57417F"
+          ],
+          "ratio": 8.51,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#443062"
+          ],
+          "ratio": 11.382,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙按鈕文字",
+          "foreground": "#302044",
+          "background": [
+            "#E3D8FA"
+          ],
+          "ratio": 10.926,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙 hover 文字",
+          "foreground": "#302044",
+          "background": [
+            "#F0E9FE"
+          ],
+          "ratio": 12.567,
+          "meets_4_5": true
+        },
+        {
+          "pair": "署名／頁尾",
+          "foreground": "#63566F",
+          "background": [
+            "#EFEDF7"
+          ],
+          "ratio": 5.864,
+          "meets_4_5": true
+        },
+        {
+          "pair": "來源連結／頁尾",
+          "foreground": "#49365F",
+          "background": [
+            "#EFEDF7"
+          ],
+          "ratio": 9.173,
+          "meets_4_5": true
+        },
+        {
+          "pair": "授權標籤文字",
+          "foreground": "#4B355F",
+          "background": [
+            "#FCFAFF"
+          ],
+          "ratio": 10.264,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#57417F"
+          ],
+          "ratio": 8.51,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者說明／卡片",
+          "foreground": "#CFC3E2",
+          "background": [
+            "#302A45"
+          ],
+          "ratio": 8.139,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者標題／卡片",
+          "foreground": "#F5F0FF",
+          "background": [
+            "#302A45"
+          ],
+          "ratio": 12.18,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋提示／卡片",
+          "foreground": "#CFC3E2",
+          "background": [
+            "#302A45"
+          ],
+          "ratio": 8.139,
+          "meets_4_5": true
+        },
+        {
+          "pair": "版權／頁尾",
+          "foreground": "#63566F",
+          "background": [
+            "#EFEDF7"
+          ],
+          "ratio": 5.864,
+          "meets_4_5": true
+        }
+      ]
+    },
+    "shortlist_status": "archived",
+    "in_comparison": false,
+    "page": "archive/r2-3-mistink.html",
+    "selection_round": "Round 3 shortlist · STEP 5",
+    "selection_feedback": "1和2就好 其他去掉",
+    "archive_reason": "Gavin 第 3 輪後只留 R3-1、R3-2"
   },
   {
     "id": "R2-4",
@@ -230,7 +806,199 @@
       "R1-3"
     ],
     "geometry_baseline": "R0-0",
-    "copied_from": "r1-1-blue.html"
+    "copied_from": "r1-1-blue.html",
+    "contrast": {
+      "method": "sRGB linearization; (L1 + .05) / (L2 + .05)",
+      "minimum": 5.964,
+      "pairs": [
+        {
+          "pair": "正文／頁底",
+          "foreground": "#293150",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 11.136,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口標題／頁底",
+          "foreground": "#293150",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 11.136,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口說明／頁底",
+          "foreground": "#62556E",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 6.034,
+          "meets_4_5": true
+        },
+        {
+          "pair": "導覽／頁底",
+          "foreground": "#2A4E9A",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 6.919,
+          "meets_4_5": true
+        },
+        {
+          "pair": "品牌／頁底",
+          "foreground": "#62556E",
+          "background": [
+            "#EAF0FC"
+          ],
+          "ratio": 6.034,
+          "meets_4_5": true
+        },
+        {
+          "pair": "課名／卡片",
+          "foreground": "#772D5C",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 7.844,
+          "meets_4_5": true
+        },
+        {
+          "pair": "年級／卡片",
+          "foreground": "#62556E",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 5.964,
+          "meets_4_5": true
+        },
+        {
+          "pair": "提示／卡片",
+          "foreground": "#62556E",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 5.964,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#2A4E9A"
+          ],
+          "ratio": 7.91,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#203D7A"
+          ],
+          "ratio": 10.448,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#873A6C"
+          ],
+          "ratio": 7.363,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#6A2852"
+          ],
+          "ratio": 10.303,
+          "meets_4_5": true
+        },
+        {
+          "pair": "署名／頁尾",
+          "foreground": "#62556E",
+          "background": [
+            "#F7F4FC"
+          ],
+          "ratio": 6.341,
+          "meets_4_5": true
+        },
+        {
+          "pair": "來源連結／頁尾",
+          "foreground": "#293150",
+          "background": [
+            "#F7F4FC"
+          ],
+          "ratio": 11.701,
+          "meets_4_5": true
+        },
+        {
+          "pair": "授權標籤文字",
+          "foreground": "#293150",
+          "background": [
+            "#FFFFFF"
+          ],
+          "ratio": 12.732,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#2A4E9A"
+          ],
+          "ratio": 7.91,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者說明／卡片",
+          "foreground": "#62556E",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 5.964,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者標題／卡片",
+          "foreground": "#772D5C",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 7.844,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋提示／卡片",
+          "foreground": "#62556E",
+          "background": [
+            "#FBEAF2"
+          ],
+          "ratio": 5.964,
+          "meets_4_5": true
+        },
+        {
+          "pair": "版權／頁尾",
+          "foreground": "#62556E",
+          "background": [
+            "#F7F4FC"
+          ],
+          "ratio": 6.341,
+          "meets_4_5": true
+        }
+      ]
+    },
+    "shortlist_status": "archived",
+    "in_comparison": false,
+    "page": "archive/r2-4-blueberry.html",
+    "selection_round": "Round 3 shortlist · STEP 5",
+    "selection_feedback": "1和2就好 其他去掉",
+    "archive_reason": "Gavin 第 3 輪後只留 R3-1、R3-2"
   },
   {
     "id": "R2-5",
@@ -288,6 +1056,198 @@
       "R1-3"
     ],
     "geometry_baseline": "R0-0",
-    "copied_from": "r1-4-ink.html"
+    "copied_from": "r1-4-ink.html",
+    "contrast": {
+      "method": "sRGB linearization; (L1 + .05) / (L2 + .05)",
+      "minimum": 5.63,
+      "pairs": [
+        {
+          "pair": "正文／頁底",
+          "foreground": "#282532",
+          "background": [
+            "#ECECF0"
+          ],
+          "ratio": 12.722,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口標題／頁底",
+          "foreground": "#282532",
+          "background": [
+            "#ECECF0"
+          ],
+          "ratio": 12.722,
+          "meets_4_5": true
+        },
+        {
+          "pair": "入口說明／頁底",
+          "foreground": "#5F5A6C",
+          "background": [
+            "#ECECF0"
+          ],
+          "ratio": 5.63,
+          "meets_4_5": true
+        },
+        {
+          "pair": "導覽／頁底",
+          "foreground": "#282532",
+          "background": [
+            "#ECECF0"
+          ],
+          "ratio": 12.722,
+          "meets_4_5": true
+        },
+        {
+          "pair": "品牌／頁底",
+          "foreground": "#5F5A6C",
+          "background": [
+            "#ECECF0"
+          ],
+          "ratio": 5.63,
+          "meets_4_5": true
+        },
+        {
+          "pair": "課名／卡片",
+          "foreground": "#302941",
+          "background": [
+            "#F7F6FB"
+          ],
+          "ratio": 12.856,
+          "meets_4_5": true
+        },
+        {
+          "pair": "年級／卡片",
+          "foreground": "#5F5A6C",
+          "background": [
+            "#F7F6FB"
+          ],
+          "ratio": 6.17,
+          "meets_4_5": true
+        },
+        {
+          "pair": "提示／卡片",
+          "foreground": "#5F5A6C",
+          "background": [
+            "#F7F6FB"
+          ],
+          "ratio": 6.17,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#34313D"
+          ],
+          "ratio": 12.706,
+          "meets_4_5": true
+        },
+        {
+          "pair": "詞庫 hover 文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#22202A"
+          ],
+          "ratio": 16.054,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙按鈕文字",
+          "foreground": "#3B2D59",
+          "background": [
+            "#D9D0EF"
+          ],
+          "ratio": 8.337,
+          "meets_4_5": true
+        },
+        {
+          "pair": "練習紙 hover 文字",
+          "foreground": "#3B2D59",
+          "background": [
+            "#C9BEE5"
+          ],
+          "ratio": 7.024,
+          "meets_4_5": true
+        },
+        {
+          "pair": "署名／頁尾",
+          "foreground": "#5F5A6C",
+          "background": [
+            "#ECECF0"
+          ],
+          "ratio": 5.63,
+          "meets_4_5": true
+        },
+        {
+          "pair": "來源連結／頁尾",
+          "foreground": "#282532",
+          "background": [
+            "#ECECF0"
+          ],
+          "ratio": 12.722,
+          "meets_4_5": true
+        },
+        {
+          "pair": "授權標籤文字",
+          "foreground": "#282532",
+          "background": [
+            "#F7F6FB"
+          ],
+          "ratio": 13.941,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋按鈕文字",
+          "foreground": "#FFFFFF",
+          "background": [
+            "#34313D"
+          ],
+          "ratio": 12.706,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者說明／卡片",
+          "foreground": "#5F5A6C",
+          "background": [
+            "#F7F6FB"
+          ],
+          "ratio": 6.17,
+          "meets_4_5": true
+        },
+        {
+          "pair": "作者標題／卡片",
+          "foreground": "#302941",
+          "background": [
+            "#F7F6FB"
+          ],
+          "ratio": 12.856,
+          "meets_4_5": true
+        },
+        {
+          "pair": "回饋提示／卡片",
+          "foreground": "#5F5A6C",
+          "background": [
+            "#F7F6FB"
+          ],
+          "ratio": 6.17,
+          "meets_4_5": true
+        },
+        {
+          "pair": "版權／頁尾",
+          "foreground": "#5F5A6C",
+          "background": [
+            "#ECECF0"
+          ],
+          "ratio": 5.63,
+          "meets_4_5": true
+        }
+      ]
+    },
+    "shortlist_status": "archived",
+    "in_comparison": false,
+    "page": "archive/r2-5-silverlilac.html",
+    "selection_round": "Round 3 shortlist · STEP 5",
+    "selection_feedback": "1和2就好 其他去掉",
+    "archive_reason": "Gavin 第 3 輪後只留 R3-1、R3-2"
   }
 ]

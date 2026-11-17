@@ -1,3 +1,76 @@
+# 驗證紀錄 · Round 3 短名單
+
+2026-11-17。只處理 `design-exploration/`；STEP 5 收斂至 R0-0 + R3-1 + R3-2，尚未定案。以下 PASS 僅指實際完成的保存、資料、連結、HTTP 與語法檢查。**修正後的真實 bbox 與 r3Metrics 仍為 NOT MEASURED。**
+
+## 依據、修正與驗證計畫
+
+- Owner 明確指定：「1和2就好 其他去掉」；短名單順序為 R0-0、R3-1、R3-2，其他版本封存不刪除。父版鏈完整保留。
+- **修正前、由 Owner 提供的 harness 證據**：headless Chrome 的 390px／1280px 中，R3-1／R3-2 `.task-primary` 比 R0 高 16px，其他 49 個元素相同；`r3Metrics` 為 `NEEDS REVIEW`。本輪未重新觀察該量測，不將它當成本輪新實測。
+- 原始程式對所有 target 設定 width／min-width／max-width 及 height／min-height／max-height。實際讀到 `screen.css` 的入口 p 為 `margin: .5rem 0 1rem`，外層 div 沒有指定高度。固定高度破壞最後子元素的底部 margin collapse。
+- **修正**：`typography-round3.js` 對 `.home-task-entry > div` 不寫任何高度約束，只保留原寬度／行高校準；最後 p 的 margin 仍可折疊穿過外層。所有其他 target 的盒子限制與原文字擬合流程不變。不硬補 16px、不改字型／文案／margin。
+- 修正由四個封存 R3 共用。修正前 JS 的原始副本在 `archive/round-3/typography-round3.js`；封存預覽仍讀取根目錄修正後的共用 JS，已在 README 和 archive/README 明示。
+- 低風險 L1 的驗證分兩層：以搬移前 SHA256、原始資料與 Owner 指定三版核對交付；以真正 R0 作瀏覽器幾何預期，逐一比較所有元素。沒有域邏輯、持久化或產品 API 變更，無資料遷移／部署測試。
+
+## 實際技能、操作與命令
+
+重讀本工作目錄的 `.agents/skills/design-exploration/SKILL.md` 與 `.agents/skills/ui-ux-pro-max/SKILL.md`。`design-exploration` 僅執行 STEP 5；依明確短名單需求，沒有再產生約五個新方向、重新提八題或執行 STEP 6。
+
+UI UX Pro Max 使用針對性檢索：
+
+```sh
+python3 -B /Users/macminim4/agent-ab/runs/cwp-dexp-1117/b/.agents/skills/ui-ux-pro-max/scripts/search.py 'text reflow spacing' --domain ux -n 1
+```
+
+結果為 `ux / Accessibility / Text Reflow and Spacing / Web`，與本題相符；採納內容自動高度、避免固定高度造成文字問題的建議。沒有重新選色、重跑 design-system、下載字型、安裝套件或使用不相符的 stack。字型平台預期依 Owner 指定寫入，未做外部字型盤點。
+
+搬移／寫檔使用 `python3 -B` 的 pathlib／shutil／json 及 `apply_patch`；先記錄雜湊、封存原比較與資料，再修改。所有輸出在 design-exploration。驗證命令：
+
+```sh
+python3 -B -m http.server 8765 --bind 127.0.0.1 --directory .
+python3 -B design-exploration/verify-shortlist.py --serve-check
+```
+
+另用 Python 內建 `compile()` 檢查新 verifier 語法，沒有寫 bytecode。Node REPL 將五個 JS 原始碼放入未執行的函式宣告做語法解析；這是 parsing PASS，不是 DOM runtime 或瀏覽器量測。
+
+## 實際觀察結果
+
+| 檢查 | 結果與主張範圍 |
+| --- | --- |
+| 三個保留頁與資源 | `r0-current.html`、`r3-1-bluebold.html`、`r3-2-berryround.html` 與搬移前 SHA256 一致；screen.html／screen.css、兩輪 themes CSS、typography-round3.css 與原比較 CSS／JS 也不變。R3-2 圓體 stack 未改。 |
+| 舊快照搬移 | round-1／round-2 整批搬至 archive，81 份檔案的 SHA256 全部相同，包括其中原有重複快照。未刪除歷史檔案。 |
+| 15 個版本搬移 | 六個 R1、五個 R2、四個未入選 R3 均只在 archive 主要路徑保留；反向還原相對連結後，SHA256 與原檔一致，證明只有 href／src 調整。 |
+| Round 3 比較副本 | archive/round-3/comparison.html 仍有 18 欄；反向還原路徑後雜湊等於修改前的 comparison.html。已留原文件／資料與校準程式副本。 |
+| 目前短名單 | 靜態解析只有依序 R0-0、R3-1、R3-2 三個有 title 的 sandbox iframe；id 無重複；兩條完整父版鏈存在。三欄 CSS 同時適用 390／1280 模式，實際畫面尚未量測。 |
+| 方向資料 | 根目錄 directions／round2-directions／round3-directions 保留 18／5／6 筆、原順序與字型／色票／對比值。新增短名單狀態和實際 page；六個 R3 的 geometry_strategy 更新為修正後描述。三份資料一致。 |
+| 封存索引 | archive/README.md 列出 15 版的 id、名稱、輪次、父版、封存原因，另逐一列出快照中的版本副本與連結。 |
+| 引用檢查 | 57 份 HTML、354 個 HTML href／src 有效，id 無重複；另核對 README、封存索引、Round 3 歷史文件與 layout-check JS 動態頁面路徑。 |
+| 檢查器負向案例 | 錯誤入選版本、缺少檔案、外部 URL、超出探索目錄的路徑、不存在的錨點，都會被拒絕；fixture 僅在記憶體，未寫產品檔。 |
+| 本機 HTTP | 113 個檢查範圍內資源皆回傳 HTTP 200，位元組等於磁碟內容。只監聽 127.0.0.1，沒有部署；檢查後已送 Ctrl-C，觀察到 Keyboard interrupt received, exiting. 與 exit 0。 |
+| 語法 | verify-shortlist.py 的 Python compile 通過；typography-round3.js、layout-check-round3.js、layout-check.js、comparison-round3.js、archive/round-3/layout-check-round3.js 的 JS parsing 通過。未執行其中的 DOM 邏輯。 |
+
+第一次檢查在舊 README 仍指向搬移前 `round-2/comparison.html` 時失敗；沒有把該次當作通過。更新 README 至本輪短名單後重跑，上表為完整通過結果。檔案／HTTP 檢查不等於封存頁視覺完全相同，也不證明 margin 修正在實際瀏覽器已成功。
+
+## 瀏覽器缺口：NOT MEASURED
+
+本輪實際呼叫 `cua.createBrowserTab("iab", "http://127.0.0.1:8765/design-exploration/comparison.html", {visible:true})`，回報 **The browser access host is unavailable**。未直接啟動 headless Chrome，未在工作目錄外讀取或搜尋瀏覽器／字型。
+
+- 修正後 R3-1、R3-2 在 390×900／1280×900 的每個 border box、按鈕 y、最大 delta、實際換行／溢出，以及 `window.r3Metrics` 是否由 NEEDS REVIEW 變為 FITTED：**NOT MEASURED**。
+- 三欄視覺排列、縮圖裁切、橫向捲動、390／1280 切換、所有封存頁的實際渲染、直接 file 開檔與 screenshot：**NOT MEASURED**。
+- Windows Chrome／iPhone Safari 的實際字型與圓體 fallback、200% zoom、使用者文字間距覆寫、鍵盤／螢幕閱讀器及 runtime console／network log：**NOT MEASURED**。
+- 原產品、列印／PDF、考卷／解答、A4、田字格、描紅、筆順、資料與同步：未測；這次沒有修改或接入它們，不能據此宣稱輸出測試通過。
+
+缺口風險：所述 margin collapse 修正仍需在實際字型與 layout engine 下驗證。補足條件：讓外部 harness 或可用瀏覽器執行 [layout-check-round3.html](layout-check-round3.html)，兩個寬度下對 R0 逐項比較，要求所有 x／y／width／height 完全相等（容差 0px）、文字換行一致、r3Metrics.status 為 FITTED 且沒有新增 overflow。原本 1px 檢查頁已收斂為兩版與嚴格相等；不更改 calibration 本身的既有報告閾值來製造 PASS。
+
+**目前未宣稱幾何驗收通過或最終設計定案。** Windows Chrome／iPhone Safari 預設沒有繁中圓體、很可能退回黑體的說明已同時放在 README 與 comparison；stack 不改，裝置實測仍為 NOT MEASURED。
+
+沒有讀寫 `harness-shots/`，沒有修改產品、memory、PLAN、治理或技能檔案，沒有 commit／push／branch／checkout／reset、遠端歷史查詢或部署。沒有啟動 session closeout。本輪紀錄都在此探索資料夾。
+
+---
+
+# 以下為 Round 3／2／1 歷史紀錄
+
+下文保存當時的結論、路徑與數量，不套用到目前短名單。歷史完整文件也在 [archive/round-3/](archive/round-3/README.md)、[archive/round-2/](archive/round-2/README.md)、[archive/round-1/](archive/round-1/README.md)；目前狀態以上方短名單紀錄為準。
+
 # 驗證紀錄 · Round 3
 
 2026-11-17。只驗證 `design-exploration/` 內的字體探索交付物。以下 PASS 都限定於檔案、算術、語法或本機供檔，**沒有瀏覽器幾何／字體實測 PASS**。Round 2／1 原紀錄在本文後方，修改前完整檔案也封存在 `round-2/`。

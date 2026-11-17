@@ -1,71 +1,67 @@
-# 首頁字體探索 · Round 03
+# 首頁探索 · Round 3 短名單
 
-入口：**[comparison.html](comparison.html)**。Round 3 六組新字體放在最前，第一欄仍為 R0-0；接著是全部五個 R2、全部六個 R1，共 18 版。每一版都有獨立頁面。歷史總覽完整封存在 [Round 2](round-2/comparison.html) 與 [Round 1](round-1/comparison.html)。
+入口：**[comparison.html](comparison.html)**。只保留 **R0-0 現況基準 + R3-1 藍墨粗黑 + R3-2 莓果圓讀**，三欄並排。390／1280 切換的是內嵌頁面寬度，兩種模式均維持三欄；窄螢幕可橫向捲動，也可開啟原尺寸頁。
 
-Gavin：「**加入字體變化看看 2-1 2-2 2-4看起來都不錯**」。本輪是 design-exploration **STEP 5：一輪一輪收斂**，保留 R2-1 藍墨書房、R2-2 莓紅印記、R2-4 藍莓雙奏的完整配色與表面處理，只探索字體；仍未定案、未進入產品實作。不提出綠色新方案、不要求挑色碼。
+Gavin 第 3 輪回饋：「**1和2就好 其他去掉**」。依此縮小比較，不新增風格、不要求顏色或 hex；仍為 design-exploration **STEP 5（converge）**，兩個入選方向沒有排名、尚未定案，也未進入產品實作。
 
-## 六組 R3 字體
+## 短名單與父版
 
-| 獨立頁面 | 父版 | 標題 | 正文 | 一句方向／最大差別 | 詞庫／練習紙／最低對比 |
-| --- | --- | --- | --- | --- | --- |
-| [R3-1 藍墨粗黑](r3-1-bluebold.html) | R2-1 | 粗黑體 800 | 系統黑體 400 | 最厚的黑體標題，清楚而有效率。 | 7.408／8.891／5.915:1 |
-| [R3-2 莓果圓讀](r3-2-berryround.html) | R2-2 | 圓體 700 | 圓體優先 400 | 唯一標題、正文都優先圓體，像親切的陪讀文具。 | 9.694／9.382／4.972:1 |
-| [R3-3 藍墨明讀](r3-3-blueming.html) | R2-1 | 明體 700 | 繁中黑體 400 | 與 R3-1 同色，直接比較明體筆畫與粗黑輪廓。 | 7.408／8.891／5.915:1 |
-| [R3-4 藍莓楷語](r3-4-blueberrykai.html) | R2-4 | 楷體 700 | 繁中黑體 400 | 唯一楷體筆意標題；字形只供首頁風格比較。 | 7.910／7.363／5.964:1 |
-| [R3-5 莓紅書頁](r3-5-berryreading.html) | R2-2 | 黑體 700 | 明體 400 | 唯一明體正文，以紙本閱讀感與圓體版對照。 | 9.694／9.382／4.972:1 |
-| [R3-6 藍莓輕圓](r3-6-blueberrysoft.html) | R2-4 | 圓體 500 | 繁中黑體 500 | 輕標題搭配較實的正文，雙色下較清爽的圓潤方向。 | 7.910／7.363／5.964:1 |
+| 頁面 | 狀態 | 父版脈絡 | 標題／正文 |
+| --- | --- | --- | --- |
+| [R0-0 現況重建](r0-current.html) | 比較基準 | 無父版；既有首頁重建 | 課名明體 900、入口系統黑體 700／系統黑體 400 |
+| [R3-1 藍墨粗黑](r3-1-bluebold.html) | 入選 | R3-1 ← R2-1 ← R1-1 + R1-4 | 粗黑體 800／系統黑體 400 |
+| [R3-2 莓果圓讀](r3-2-berryround.html) | 入選 | R3-2 ← R2-2 ← R1-2 + R1-4 | 圓體 700／圓體優先 400 |
 
-字重為 CSS 請求值；實際字面依裝置可用性，可能使用最接近字重或合成粗體。每版標題、正文的**完整 font stack、Windows／iPhone 分別的退回鏈**，均列於比較卡片的展開說明與 [round3-directions.json](round3-directions.json)。標題涵蓋課名及老師入口標題；正文涵蓋品牌、導覽、說明、提示與操作文字。較小的授權與作者頁尾仍固定使用 R0 黑體，避免降低辨讀性。
+三個獨立頁維持原路徑與原始位元組；字型、文案、色票、字重、共用 `screen.css` 不改。每欄都有完整 font stack 和來源說明。
 
-所有配色取自父版，六版共 **120 組指定文字對比皆 ≥4.5:1**，見 [contrast-round3.json](contrast-round3.json)。這是重新執行 sRGB 色票計算；沒有量測字形、抗鋸齒、emoji、邊框或完整 WCAG。
+## 標題與正文 font stack
 
-## 系統字型與下載成本
+| 版本 | 角色 | 完整字型鏈 |
+| --- | --- | --- |
+| R0-0 | 課名標題 | `'Songti TC', 'PMingLiU', 'MingLiU', serif` |
+| R0-0 | 入口標題與正文 | `system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif` |
+| R3-1 | 標題 | `'PingFang TC', 'Microsoft JhengHei', 'Heiti TC', system-ui, sans-serif` |
+| R3-1 | 正文 | `system-ui, -apple-system, 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif` |
+| R3-2 | 標題 | `'Yuanti TC', 'Hiragino Maru Gothic ProN', 'Arial Rounded MT Bold', 'PingFang TC', 'Microsoft JhengHei', sans-serif` |
+| R3-2 | 正文 | `'Yuanti TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif` |
 
-- 黑體：PingFang TC／Microsoft JhengHei／Heiti TC，或 system-ui 的 San Francisco／Segoe UI 與繁中 fallback。
-- 圓體：Yuanti TC 優先；標題另嘗試 Hiragino Maru Gothic ProN、Arial Rounded MT Bold，最後退回 PingFang TC／Microsoft JhengHei。**不是 Windows／iPhone 的保證預裝字型；缺少時中文仍會顯示黑體。** Arial Rounded 只能覆蓋其支援字元，不能把它當繁中圓體。
-- 明體：Songti TC → PMingLiU → MingLiU → serif。Windows 的細明體可能需要繁中補充字型；iOS 以本機 Songti TC 可用性及 Safari 的 serif fallback 為準。
-- 楷體：Kaiti TC → STKaiti → DFKai-SB → BiauKai → KaiTi → PingFang TC → Microsoft JhengHei → serif。沒有楷體時退回清楚的黑體，不能保證每台裝置都顯示楷書。
-- **新增字型資源 0 B，沒有 @font-face、CDN、Google Fonts、@import 或外部請求。** 若要跨平台保證同一款繁中圓體／楷體，需要另行核對授權的 web font，本輪未加。
-- 只讀核對 `fonts/README.md`、`fonts/font-face.css` 與 `fonts/edukai-4.0.ttf` 的大小。檔案為 **15,785,556 bytes（15.05 MiB）**；未引用、未複製、未修改，實際新增傳輸 0 B。README 的授權摘要不是本輪新增授權查核；原頁尾署名保持不變。
+**R3-2 的圓體 stack 保持原樣。Windows Chrome 與 iPhone Safari 的標準安裝都不附繁體中文圓體，這兩者很可能退回黑體（Microsoft JhengHei／PingFang TC）。實際 fallback：NOT MEASURED。** 這是本輪要求明示的平台預期，不是裝置字型盤點；另裝字型可能改變結果。Arial Rounded 不能保證繁中文字形為圓體。
 
-## 同內容、同版面與度量限制
+全部使用本機字型，不新增 web font、CDN 或外部請求。字重為 CSS 請求值，並非實際選中字面證據。原色票對比數值保留於 [contrast-round3.json](contrast-round3.json)，本輪未重做色彩／無障礙量測。
 
-每個 R3 先 `shutil.copyfile` 複製父 R2 頁，再修改新檔。`screen.html` 片段逐字不變，body 的 **51 個元素**與 R0 的標籤順序相同；`screen.css`、所有 R0／R1／R2 頁與樣式均不改。
+## 16px 按鈕位移修正
 
-保留 R0 字級：課名 44.8px、入口標題 24px、主要正文 16px；正文主要行高 1.5／1.6。R3 使用本機 `typography-round3.js`：先在**同一份可見 DOM**暫時使用 R0 字型讀取尺寸，再保留 header／home-container 中各元素的 border-box 寬高及行高，套用新字型。若新字體改變折行，優先調整字距（原值 ±0.8px），必要時字級最多縮 6%，重現原文字節點的換行起點。視窗尺寸改變後重新校準。
+Owner 提供的 headless Chrome harness 診斷：R3-1／R3-2 的 `.task-primary` 在 390px、1280px 比 R0 高 16px，其餘 49 個被比較元素相同；頁面自身 `window.r3Metrics` 因此為 `NEEDS REVIEW`。這是**提供的修正前證據**，不是本輪重新量得。
 
-不新增隱藏基準頁、不重建第二套文字、不改文案、不使用文字圖片／水平壓縮／省略號／新增裁字規則。原本卡片的 overflow 規則未改。校準程式會列出尺寸偏差、無法保留折行與新增溢出，失敗標記 `NEEDS REVIEW`。這是探索用途的尺寸限制，不是產品排版方案；未定案，也未做 zoom／使用者字距覆寫的無障礙驗收。沒有 JavaScript 時仍顯示字體，但不執行尺寸校準，該模式不保證 1px。
+原因是 `typography-round3.js` 對 `.home-task-entry > div`（h2＋p 的外層）固定了 height／min-height／max-height，阻止最後一個 p 的 1rem 底部 margin 折疊穿過自動高度父元素。修正只讓該外層保留自然高度與原有高度限制，仍固定寬度；子元素的 box／行高與原字距、折行校準照舊，不另外補 16px、不改 margin 或文字。
 
-**390／1280px 真實 bounding box、折行、溢出、截圖及實際 fallback：NOT MEASURED。** CUA 回報 `The browser access host is unavailable`；PATH 沒有可用的 Node／Chrome／Playwright CLI，本輪未直接啟動 headless Chrome。靜態結構一致與校準程式存在，都不等於通過外部 harness。
+封存的 R3-3～R3-6 同樣引用此共用 JS，因此也收到修正；詳見 [封存索引](archive/README.md)。修正前 JS 留於 `archive/round-3/typography-round3.js` 供追溯，預覽頁仍引用修正後的共用檔。
 
-[layout-check-round3.html](layout-check-round3.html) 會在本機瀏覽器以 390×900、1280×900，獨立比對 R0 與六版的 body 及所有後代元素（含頁尾與探索說明），列出 x/y/width/height 超過 1px 的位置，另比較原文字節點的換行。它未能在本輪執行；不讀寫 `harness-shots/`。
+**修正後 bbox、換行、溢出與 `r3Metrics`：NOT MEASURED。** 本輪 CUA 開啟頁面回報 `The browser access host is unavailable`，沒有直接啟動 headless Chrome，也未到工作目錄外尋找瀏覽器。不能據靜態檢查宣稱 FITTED／PASS。
 
-## 開啟與重建
+[幾何觀察頁](layout-check-round3.html) 現只檢查入選兩版：390×900、1280×900 下，對真正 R0 的 body 與每個後代元素比較 x／y／width／height，要求完全相等（0px 容差），同時檢查原文字節點換行與 `r3Metrics.status === 'FITTED'`。仍須由可用的真實瀏覽器或外部 harness 執行。
 
-直接開 `comparison.html` 或任一 R3 HTML 可看提案。本機 HTTP 可避免跨檔案來源限制；從 repo 根目錄執行：
+## 封存與資料
+
+- **15 個版本移入 [archive/](archive/README.md)**：六個 R1、五個 R2，以及 R3-3～R3-6。沒有刪除版本。
+- [Round 1 原比較](archive/round-1/comparison.html)、[Round 2 原比較](archive/round-2/comparison.html) 的完整資料夾整批搬入；81 份檔案保持位元組相同。
+- 修改前 [Round 3 的 18 版比較](archive/round-3/comparison.html) 已複製封存，僅重設資源與導覽連結；原 README／VALIDATION／QUESTIONS／來源說明、三份方向資料與幾何觀察程式也有快照。
+- 主要封存頁以 `../` 讀原共用 CSS／JS；R3 比較快照以 `../../` 讀共用資源。快照內既有的自足資源保持原位。
+- 根目錄的 [directions.json](directions.json)、[round2-directions.json](round2-directions.json)、[round3-directions.json](round3-directions.json) 保留全部 18／5／6 筆，新增 `shortlist_status`（baseline／shortlisted／archived）、`in_comparison`、`page`、回饋與封存原因。`slug` 不變，實際開啟位置以 `page` 為準；`copied_from` 保留原複製來源，`source_page` 指向封存父頁。
+
+## 開啟與驗證
+
+直接開 `comparison.html` 或任一入選頁即可閱讀；直接 file 開檔的實際渲染尚未觀察。幾何觀察請用本機 HTTP，從 repo 根目錄執行：
 
 ```sh
 python3 -B -m http.server 8765 --bind 127.0.0.1 --directory .
+python3 -B design-exploration/verify-shortlist.py --serve-check
 ```
 
-進入 `http://127.0.0.1:8765/design-exploration/comparison.html`。完整頁面不載入產品腳本，所有產品按鈕皆為示意。
+進入 `http://127.0.0.1:8765/design-exploration/comparison.html`。`verify-shortlist.py` 只讀檔檢查短名單、搬移／保存、資料與連結；`--serve-check` 另核對本機 HTTP，**不是瀏覽器幾何測試**。
 
-```sh
-python3 -B design-exploration/build-round3.py
-python3 -B design-exploration/verify-round3.py --serve-check
-```
+舊 `build.py`、`build-round2.py`、`build-round3.py` 與舊 `verify*.py` 保留為歷史工具，依賴搬移前結構；**不要在目前根探索資料夾執行它們來重建或驗證短名單**。目前比較頁為此輪靜態交付物，請用 `verify-shortlist.py`。Round 1／2 完整快照仍保有各自當時的工具。
 
-重建器只寫 R3 及當前 `comparison.html`／`directions.json`，不重建歷史。**不要在根探索資料夾執行舊 build.py／build-round2.py**，它們只理解先前輪次，會把總覽退回舊輪。原檔保留供歷史追溯。
+本輪技能只讀工作目錄內版本：`design-exploration` 用 STEP 5；`ui-ux-pro-max` 以 `text reflow spacing --domain ux` 核對內容自動高度的建議，沒有重新選色或字型。完整證據與缺口見 [VALIDATION.md](VALIDATION.md)，假設見 [QUESTIONS.md](QUESTIONS.md)。
 
-## 檔案、保留與實際技能
-
-- 新建：六個 `r3-*.html`、`round3-directions.json`、`contrast-round3.json`、`typography-round3.css`／`.js`、`comparison-round3.css`／`.js`、`build-round3.py`、`verify-round3.py`、`layout-check-round3.html`／`.js`、`round2-preservation.json`。
-- 封存：`round-2/` 原樣複製修改前 59 份檔案（含當時的 Round 1 封存），所有相對連結仍可用。
-- 更新：`comparison.html`、`directions.json`、`README.md`、`QUESTIONS.md`、`SOURCE-NOTES.md`、`VALIDATION.md`。
-- 保留：R0、六個 R1、五個 R2 原頁；共用片段、幾何 CSS、各輪配色、資料與舊生成／驗證器皆保留原位且雜湊不變。對照頁按 Round 3／2／1 分組，R0 第一欄。
-
-本輪重讀工作目錄內兩份 SKILL.md。`design-exploration` 用 STEP 5，沿用 STEP 2 基準與 STEP 4 歷史，補上非互動的 Round 3 假設，未執行 STEP 6。`ui-ux-pro-max` 用需求分析與針對性的 `--domain typography`／`--domain ux` 搜尋；不是新頁面／新配色系統，所以沒有重跑 `--design-system`。精確命令、採納理由、檢查結果見 [VALIDATION.md](VALIDATION.md)／[SOURCE-NOTES.md](SOURCE-NOTES.md)。
-
-假設「2-1、2-2、2-4 不錯」沒有排名；主要使用者仍是手機上的台灣家長／老師；只用已知回饋收斂，不替 Gavin 定案。
-
-所有寫入都在 `design-exploration/`。`harness-shots/`、fonts、產品、測試、memory、PLAN 與治理檔案均未修改。列印／PDF、考卷／解答、練習紙 A4、田字格、描紅、筆順 SVG、資料契約、演算法、Auth／RLS／備份／同步保持受保護。沒有 commit、push、branch、checkout、reset、部署或查看其他 refs／remote history。
+所有寫入都限於 `design-exploration/`，未接觸 `harness-shots/`、產品、memory、PLAN 或字型檔。沒有 commit／push／branch／checkout／reset、遠端歷史查詢或部署。列印／PDF、考卷／解答、練習紙 A4、田字格、描紅、筆順、資料、Auth／同步都未接入此次探索。

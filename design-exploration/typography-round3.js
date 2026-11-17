@@ -79,7 +79,13 @@
     targets.forEach((el, i) => {
       const b = boxes[i];
       for (const prop of ['width', 'min-width', 'max-width']) el.style.setProperty(prop, `${b.width}px`);
-      for (const prop of ['height', 'min-height', 'max-height']) el.style.setProperty(prop, `${b.height}px`);
+      // This auto-height block ends in a paragraph whose bottom margin collapses
+      // through it. Pinning its height stops that collapse and lifts the following
+      // inline-flex .task-primary by 1rem. Keep its natural height; its children
+      // still receive their measured boxes and line heights below.
+      if (!el.matches('.home-task-entry > div')) {
+        for (const prop of ['height', 'min-height', 'max-height']) el.style.setProperty(prop, `${b.height}px`);
+      }
       el.style.lineHeight = b.lineHeight;
       el.style.flexShrink = '0';
     });

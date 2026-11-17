@@ -1,0 +1,188 @@
+{
+  "ink": [
+    {
+      "foreground": "ink",
+      "background": "page",
+      "ratio": 12.9,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "muted",
+      "background": "page",
+      "ratio": 5.06,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "ink",
+      "background": "surface",
+      "ratio": 14.1,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "muted",
+      "background": "surface",
+      "ratio": 5.53,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "on-action",
+      "background": "action",
+      "ratio": 8.48,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "on-action",
+      "background": "practice",
+      "ratio": 5.55,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "muted",
+      "background": "footer",
+      "ratio": 4.73,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "tint-ink",
+      "background": "tint",
+      "ratio": 7.05,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "action",
+      "background": "page",
+      "ratio": 7.76,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "action",
+      "background": "surface",
+      "ratio": 8.48,
+      "passes_4_5": true
+    }
+  ],
+  "clay": [
+    {
+      "foreground": "ink",
+      "background": "page",
+      "ratio": 12.35,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "muted",
+      "background": "page",
+      "ratio": 5.19,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "ink",
+      "background": "surface",
+      "ratio": 13.27,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "muted",
+      "background": "surface",
+      "ratio": 5.57,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "on-action",
+      "background": "action",
+      "ratio": 6.39,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "on-action",
+      "background": "practice",
+      "ratio": 5.8,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "muted",
+      "background": "footer",
+      "ratio": 4.62,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "tint-ink",
+      "background": "tint",
+      "ratio": 5.91,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "action",
+      "background": "page",
+      "ratio": 5.9,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "action",
+      "background": "surface",
+      "ratio": 6.34,
+      "passes_4_5": true
+    }
+  ],
+  "plum": [
+    {
+      "foreground": "ink",
+      "background": "page",
+      "ratio": 12.27,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "muted",
+      "background": "page",
+      "ratio": 5.08,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "ink",
+      "background": "surface",
+      "ratio": 13.39,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "muted",
+      "background": "surface",
+      "ratio": 5.55,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "on-action",
+      "background": "action",
+      "ratio": 6.56,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "on-action",
+      "background": "practice",
+      "ratio": 5.73,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "muted",
+      "background": "footer",
+      "ratio": 4.64,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "tint-ink",
+      "background": "tint",
+      "ratio": 5.92,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "action",
+      "background": "page",
+      "ratio": 5.92,
+      "passes_4_5": true
+    },
+    {
+      "foreground": "action",
+      "background": "surface",
+      "ratio": 6.46,
+      "passes_4_5": true
+    }
+  ]
+}

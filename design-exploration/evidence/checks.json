@@ -1,0 +1,99 @@
+{
+  "scope": "Static exploration only; no product correctness claim",
+  "status": "PASS",
+  "html_files": [
+    "clay.html",
+    "comparison.html",
+    "ink.html",
+    "plum.html"
+  ],
+  "relative_references_checked": 23,
+  "three_preview_bodies_identical": true,
+  "theme_non_paint_properties": [],
+  "source_files_compared": 1028,
+  "outside_folder_modified": [],
+  "outside_folder_added": [],
+  "outside_folder_deleted": [],
+  "hash_scope": "In-workspace files; .git and symlink target contents excluded",
+  "contrast_pairs_per_direction": 10,
+  "minimum_text_contrast": {
+    "ink": 4.73,
+    "clay": 4.62,
+    "plum": 4.64
+  },
+  "http": [
+    {
+      "path": "QUESTIONS.md",
+      "status": 200,
+      "content_type": "application/octet-stream",
+      "bytes": 1863
+    },
+    {
+      "path": "README.md",
+      "status": 200,
+      "content_type": "application/octet-stream",
+      "bytes": 3400
+    },
+    {
+      "path": "clay.html",
+      "status": 200,
+      "content_type": "text/html",
+      "bytes": 3420
+    },
+    {
+      "path": "comparison.css",
+      "status": 200,
+      "content_type": "text/css",
+      "bytes": 9199
+    },
+    {
+      "path": "comparison.html",
+      "status": 200,
+      "content_type": "text/html",
+      "bytes": 6514
+    },
+    {
+      "path": "comparison.js",
+      "status": 200,
+      "content_type": "text/javascript",
+      "bytes": 1251
+    },
+    {
+      "path": "directions.css",
+      "status": 200,
+      "content_type": "text/css",
+      "bytes": 2859
+    },
+    {
+      "path": "home-layout.css",
+      "status": 200,
+      "content_type": "text/css",
+      "bytes": 5249
+    },
+    {
+      "path": "ink.html",
+      "status": 200,
+      "content_type": "text/html",
+      "bytes": 3419
+    },
+    {
+      "path": "plum.html",
+      "status": 200,
+      "content_type": "text/html",
+      "bytes": 3420
+    },
+    {
+      "path": "preview.js",
+      "status": 200,
+      "content_type": "text/javascript",
+      "bytes": 732
+    }
+  ],
+  "browser_390px": "NOT MEASURED",
+  "browser_1280px": "NOT MEASURED",
+  "javascript_runtime_and_keyboard": "NOT MEASURED",
+  "original_live_layout_pixel_equivalence": "NOT MEASURED",
+  "ios_safari": "NOT MEASURED",
+  "print_pdf_and_protected_behaviors": "NOT MEASURED; not executed or changed",
+  "errors": []
+}

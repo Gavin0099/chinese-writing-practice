@@ -1,5 +1,5 @@
 .page-header nav { display: flex; gap: .6rem 1.4rem; flex-wrap: wrap; }
-.skip-link { position: absolute; inset: .25rem auto auto 1rem; z-index: 2; background: white; padding: .5rem; transform: translateY(-200%); }
+.skip-link { position: absolute; inset: .25rem auto auto 1rem; z-index: 2; background: var(--ui-surface, white); padding: .5rem; transform: translateY(-200%); }
 .skip-link:focus { transform: none; }
 .book-bar { margin-bottom: 1rem; }
 .book-bar select { max-width: 34rem; }
@@ -9,13 +9,13 @@
 .entry-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
 .entry-form .wide { grid-column: 1 / -1; }
 .entry-form label { min-width: 0; }
-.entry-form input:not([type='checkbox']), .exam-form input { display: block; width: 100%; border: 1px solid #a8b7ad; border-radius: .4rem; padding: .45rem .5rem; margin-top: .2rem; color: var(--ink); }
+.entry-form input:not([type='checkbox']), .exam-form input { display: block; width: 100%; border: 1px solid var(--ui-input-border, #a8b7ad); border-radius: .4rem; padding: .45rem .5rem; margin-top: .2rem; color: var(--ink); }
 .entry-form .hint { margin-top: -.3rem; }
 .entry-form fieldset legend { font-weight: 620; }
 .entry-form label.check { display: flex; align-items: center; gap: .5rem; min-height: 2.75rem; }
 .blank-choices { display: flex; flex-wrap: wrap; gap: .35rem; }
 .blank-choices label { display: inline-flex; align-items: center; gap: .35rem; min-height: 2.75rem; padding: .3rem .55rem; border: 1px solid var(--line); border-radius: .4rem; }
-.blank-choices label:has(:checked) { border-color: var(--accent); background: #edf4ee; }
+.blank-choices label:has(:checked) { border-color: var(--accent); background: var(--ui-selection-bg, #edf4ee); }
 .subpanel { margin-top: .8rem; padding: .65rem .75rem; background: var(--paper); border-radius: .45rem; }
 .subpanel[open] > summary { margin-bottom: .65rem; }
 .list-controls { display: flex; flex-wrap: wrap; align-items: end; gap: .45rem 1rem; }
@@ -25,7 +25,7 @@
 .word-list h3 { font-size: 1.1rem; overflow-wrap: anywhere; }
 .word-meta { color: var(--muted); font-size: .9rem; overflow-wrap: anywhere; }
 .word-list button { min-height: 2.75rem; }
-.word-list .delete { color: #823932; border-color: #bc8c85; }
+.word-list .delete { color: var(--ui-danger, #823932); border-color: var(--ui-danger, #bc8c85); }
 .batch-rows { padding-left: 1.5rem; margin: 0; overflow-wrap: anywhere; }
 .batch-rows:empty { display: none; }
 .batch-rows [data-error] { color: #902f29; }
@@ -37,8 +37,8 @@
 #examHistory a { display: inline-flex; min-height: 2.75rem; align-items: center; }
 code { overflow-wrap: anywhere; }
 button, a { touch-action: manipulation; }
-button:hover { background: #edf4ee; }
-button.primary:hover { background: #254a39; }
+button:hover { background: var(--ui-selection-bg, #edf4ee); }
+button.primary:hover { background: var(--ui-primary-hover, #254a39); }
 select, input, button { min-height: 2.65rem; }
 input[type='checkbox'] { min-height: 0; accent-color: var(--accent); }
 
@@ -84,4 +84,19 @@ input[type='checkbox'] { min-height: 0; accent-color: var(--accent); }
 @media screen and (max-width: 24rem) {
     .book-actions .primary-link { flex-basis: 100%; }
     .exam-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media screen {
+    .blank-choices label { border-color: var(--ui-input-border); }
+    .blank-choices label:has(:checked) { color: var(--ui-selection-text); }
+    .tool-page .word-list .delete {
+        color: var(--ui-danger);
+        border-color: var(--ui-danger);
+        background-color: var(--ui-surface);
+    }
+    .tool-page .word-list .delete:hover {
+        color: var(--ui-danger-hover);
+        border-color: var(--ui-danger-hover);
+        background-color: var(--ui-danger-bg);
+    }
 }

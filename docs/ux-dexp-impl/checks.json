@@ -1,0 +1,112 @@
+{
+  "print_blocks": {
+    "styles.css": 6,
+    "stroke-notice.css": 1,
+    "attribution.css": 1,
+    "index.html": 1
+  },
+  "print_blocks_unchanged": true,
+  "six_html_original_bytes_recovered_after_removing_link_and_unwrapping_color_values": true,
+  "script_original_bytes_recovered_after_unwrapping_color_values": true,
+  "all_media_css_print_fallbacks_exact": true,
+  "new_css_declarations_are_paint_font_only": true,
+  "tracked_changed_paths": [
+    "attribution.css",
+    "backup.html",
+    "exam.html",
+    "index.html",
+    "learning.css",
+    "learning.html",
+    "script.js",
+    "stroke-notice.css",
+    "styles.css",
+    "sync.html",
+    "vocabulary.css",
+    "vocabulary.html"
+  ],
+  "protected_tracked_paths_unchanged": true,
+  "node_tests": {
+    "command": "node --test tests/*.test.mjs",
+    "status": "NOT RUN",
+    "exit_code": 127,
+    "reason": "zsh: command not found: node",
+    "expected_count_from_owner": 29
+  },
+  "browser": {
+    "status": "NOT MEASURED",
+    "reason": "CUA: The browser access host is unavailable; no browser executable found on PATH; Python Playwright/Selenium unavailable",
+    "bbox_widths": [
+      390,
+      1280
+    ],
+    "harness_states": 9,
+    "pixel_comparisons": "NOT MEASURED",
+    "windows_chrome_fallback": "NOT MEASURED",
+    "iphone_safari_fallback": "NOT MEASURED"
+  },
+  "http": {
+    "index.html": 200,
+    "learning.html": 200,
+    "vocabulary.html": 200,
+    "exam.html": 200,
+    "backup.html": 200,
+    "sync.html": 200,
+    "tokens.css": 200
+  },
+  "scope": "Source and HTTP checks only; no runtime layout, printing, PDF, or JS test execution claim.",
+  "base_commit": "c36b4077b1ff8ac0938896f357babc31ff12349a",
+  "product_baseline_matches_owner_commit": true,
+  "exploration": "Existing R0–R3 artifacts differ from the product base and are unchanged during this task.",
+  "source_hashes": {
+    "styles.css": "c8e18fc123429487d716d6e52da7faa63951b80796cdb46cddb59397bd3ffc32",
+    "learning.css": "7646a998445c83ab6353cc0251a510bf160c8dc8344fe1e9722751ca9cff8f3b",
+    "vocabulary.css": "38e0a5e3cb456f472c3500b9a391d51f35f5e9f42c47fad7a31d7c6f49487e31",
+    "stroke-notice.css": "0a30e5f61bb192ab397be9cf32cfe224a4f6abf8a52b1187f23d4b2b8fa4d697",
+    "attribution.css": "5ab7dbd7471015364d1ea2223627094f7ba6df4d5be2a3706eed05e80237a706",
+    "index.html": "e53cec520377bbc42107927bc8aa4ca6390adb9af5b420eb3da2394401078f1a",
+    "learning.html": "06e5b484b58b4fb5dcef7c4a9d435dffd33375e691366f1b69ad272562a15d09",
+    "vocabulary.html": "0c5e51c417af795db2b2ccb30f55ab146281943ec0f2ef8d535d37c8a4b4a5ba",
+    "exam.html": "c5651065d556660a67a92e95c947c4232dd2062622f279528f3d0e807bf764ca",
+    "backup.html": "a8775ce995ab3d58ce0674eba23d7f00d84b423039e7d2c56ea9e9de15ae77e8",
+    "sync.html": "a838b196466b9ace0bf191324c7b3d284707a3b0950eb8b7294eada497edc19a",
+    "script.js": "5291d6f53da5e388f4f779878afbf9c219942602e09412feb23a16f581277c74",
+    "tokens.css": "a1ce4402109087f05f8f09d6c782957aadcb8a1ef4b261c3a529c39361a953a2"
+  },
+  "inventory": {
+    "changed_literal_occurrences": 188,
+    "kept_literal_occurrences": 61,
+    "changed_groups": 131,
+    "kept_groups": 28,
+    "ui_variable_color_substitutions": 7,
+    "token_count": 39,
+    "derived_tokens": [
+      "danger",
+      "danger-bg",
+      "danger-hover",
+      "disabled-bg",
+      "disabled-text",
+      "faded-text",
+      "highlight",
+      "input-border",
+      "overlay",
+      "overlay-strong",
+      "selection-bg",
+      "selection-text",
+      "shadow",
+      "shadow-primary",
+      "shadow-soft",
+      "shadow-strong",
+      "success",
+      "warning",
+      "warning-bg"
+    ],
+    "contrast_pair_count": 54
+  },
+  "contrast_pairs_computed": 54,
+  "contrast_pairs_meeting_applicable_threshold": 49,
+  "token_references_resolve": true,
+  "new_rules_all_screen_only": true,
+  "all_changed_product_files_http_200": true,
+  "diff_check": "PASS",
+  "source_validation_after_final_css_changes": "PASS"
+}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>首頁視覺方向比較 · 生字練習簿小幫手</title>
+  <link rel="stylesheet" href="comparison.css">
+  <script src="comparison.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#directions">跳至三案預覽</a>
+  <div class="exploration">
+    <header class="masthead">
+      <p class="project-name">生字練習簿小幫手 <span>／ 首頁視覺探索</span></p>
+      <span class="edition">DESIGN STUDY <b>01</b></span>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="study-title">
+        <div>
+          <p class="eyebrow">給家長與老師的日常工具</p>
+          <h1 id="study-title">同一個版型，<br class="mobile-break">三種氣質。</h1>
+          <p class="intro-copy">保留熟悉的操作順序，換一個看起來舒服的首頁。<br class="desktop-break">三案使用相同內容、字級與間距，專心看配色。</p>
+        </div>
+        <aside class="recommendation"><span class="recommendation-mark">A</span><div><strong>建議先看「墨藍書房」</strong><p>穩定清楚，適合反覆備課與列印。</p></div></aside>
+      </section>
+      <fieldset class="view-controls">
+        <legend>比較方式</legend>
+        <label><input type="radio" name="view" value="all" checked><span>三案並排</span></label>
+        <label><input type="radio" name="view" value="ink"><span>A 放大</span></label>
+        <label><input type="radio" name="view" value="clay"><span>B 放大</span></label>
+        <label><input type="radio" name="view" value="plum"><span>C 放大</span></label>
+        <p class="view-hint">窄螢幕依序排列；放大後使用整欄寬度。</p>
+      </fieldset>
+      <p class="preview-caption" id="preview-caption" aria-live="polite">以下為三案首頁靜態預覽。按鈕僅示意，不會出卷或儲存資料。</p>
+      <div class="directions" id="directions" data-view="all">
+        <article class="direction-card" data-direction="ink" aria-labelledby="ink-title">
+          <div class="direction-info">
+            <div class="direction-heading"><span class="direction-letter">A</span><h2 id="ink-title">墨藍書房</h2><span class="recommended-tag">首選建議</span></div>
+            <p class="direction-description">墨藍按鈕 × 清透灰白<br>像整齊的筆記本，安定、俐落。</p>
+            <div class="swatches" aria-label="墨藍、鋼筆藍、灰藍、白、淺灰藍"><i></i><i></i><i></i><i></i><i></i></div>
+            <a class="open-preview" href="ink.html" target="_blank" rel="noopener">單獨開啟完整首頁 <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="frame-label"><span class="frame-dot" aria-hidden="true"></span>首頁預覽<span>同版型 · 同內容</span></div>
+          <iframe src="ink.html" title="A 墨藍書房：首頁靜態預覽" sandbox="allow-scripts allow-top-navigation-by-user-activation" scrolling="no"></iframe>
+          <div class="direction-note"><strong>適合的感覺</strong><p>每天都能安心打開的備課工具。</p><strong>選擇時留意</strong><p>三案中最冷靜，活潑感較少。</p></div>
+        </article>
+        <article class="direction-card" data-direction="clay" aria-labelledby="clay-title">
+          <div class="direction-info">
+            <div class="direction-heading"><span class="direction-letter">B</span><h2 id="clay-title">陶紅紙箋</h2><span class="mood-tag">溫暖紙感</span></div>
+            <p class="direction-description">陶紅按鈕 × 奶油紙白<br>像桌上的文具，溫暖、有生活感。</p>
+            <div class="swatches" aria-label="陶紅、暖棕紅、米棕、奶白、淺米色"><i></i><i></i><i></i><i></i><i></i></div>
+            <a class="open-preview" href="clay.html" target="_blank" rel="noopener">單獨開啟完整首頁 <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="frame-label"><span class="frame-dot" aria-hidden="true"></span>首頁預覽<span>同版型 · 同內容</span></div>
+          <iframe src="clay.html" title="B 陶紅紙箋：首頁靜態預覽" sandbox="allow-scripts allow-top-navigation-by-user-activation" scrolling="no"></iframe>
+          <div class="direction-note"><strong>適合的感覺</strong><p>陪孩子寫字時，親切的桌邊小幫手。</p><strong>選擇時留意</strong><p>暖色最鮮明；正式套用時需與錯誤紅分開。</p></div>
+        </article>
+        <article class="direction-card" data-direction="plum" aria-labelledby="plum-title">
+          <div class="direction-info">
+            <div class="direction-heading"><span class="direction-letter">C</span><h2 id="plum-title">霧紫書桌</h2><span class="mood-tag">柔和親切</span></div>
+            <p class="direction-description">灰紫按鈕 × 淡霧紫白<br>像安靜的閱讀角，柔和、有辨識度。</p>
+            <div class="swatches" aria-label="灰紫、柔紫、霧紫、紫白、淺紫色"><i></i><i></i><i></i><i></i><i></i></div>
+            <a class="open-preview" href="plum.html" target="_blank" rel="noopener">單獨開啟完整首頁 <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="frame-label"><span class="frame-dot" aria-hidden="true"></span>首頁預覽<span>同版型 · 同內容</span></div>
+          <iframe src="plum.html" title="C 霧紫書桌：首頁靜態預覽" sandbox="allow-scripts allow-top-navigation-by-user-activation" scrolling="no"></iframe>
+          <div class="direction-note"><strong>適合的感覺</strong><p>家長與孩子都容易親近的學習空間。</p><strong>選擇時留意</strong><p>品牌個性較突出，是否耐看以 Gavin 感受為準。</p></div>
+        </article>
+      </div>
+      <section class="decision-footer" aria-labelledby="next-title">
+        <div><p class="eyebrow">下一輪</p><h2 id="next-title">挑氣質就好，<br>不用挑色碼。</h2></div>
+        <p>選定 A、B 或 C 後，再把那一案的背景、文字、按鈕與頁尾色彩套入正式首頁。這一輪只看視覺方向；練習紙、考卷與 A4 列印都維持原樣。</p>
+      </section>
+    </main>
+    <footer class="study-footer"><span>視覺探索 · 尚未套用至產品</span><a href="README.md">說明與驗證範圍</a><a href="QUESTIONS.md">本輪假設</a></footer>
+  </div>
+</body>
+</html>

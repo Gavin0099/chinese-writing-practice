@@ -1,0 +1,12 @@
+/* Gallery only; no homepage layout overrides. */
+.current-index { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+#round3 .card-caption { min-height: 230px; }
+.type-spec { margin: 12px 0 16px; font-size: 12px; color: var(--muted); }
+.type-spec summary { color: var(--ink); }
+.type-spec dt { font-weight: 700; margin-top: 10px; color: var(--ink); }
+.type-spec dd { margin: 2px 0 6px; overflow-wrap: anywhere; }
+.type-pair { font-size: 13px; color: #273b64; line-height: 1.6; margin: 0 0 8px; }
+.round-note { border-left: 3px solid #5c5277; padding: 10px 16px; color: #505766; background: #fff; font-size: 13px; }
+.board[data-width="1280"] .type-spec { grid-column: 1 / -1; }
+@media (max-width: 1050px) { .current-index { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 650px) { .current-index { grid-template-columns: repeat(3, minmax(0, 1fr)); } #round3 .card-caption { min-height: 0; } }

@@ -1,0 +1,52 @@
+/* R3 font choices only. R2 palettes and screen.css remain unchanged. */
+
+body.r3-1-bluebold {
+  --r3-title-font: 'PingFang TC', 'Microsoft JhengHei', 'Heiti TC', system-ui, sans-serif;
+  --r3-body-font: system-ui, -apple-system, 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --r3-title-weight: 800;
+  --r3-body-weight: 400;
+}
+
+body.r3-2-berryround {
+  --r3-title-font: 'Yuanti TC', 'Hiragino Maru Gothic ProN', 'Arial Rounded MT Bold', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --r3-body-font: 'Yuanti TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+  --r3-title-weight: 700;
+  --r3-body-weight: 400;
+}
+
+body.r3-3-blueming {
+  --r3-title-font: 'Songti TC', 'PMingLiU', 'MingLiU', serif;
+  --r3-body-font: 'PingFang TC', 'Microsoft JhengHei', 'Heiti TC', system-ui, sans-serif;
+  --r3-title-weight: 700;
+  --r3-body-weight: 400;
+}
+
+body.r3-4-blueberrykai {
+  --r3-title-font: 'Kaiti TC', 'STKaiti', 'DFKai-SB', 'BiauKai', 'KaiTi', 'PingFang TC', 'Microsoft JhengHei', serif;
+  --r3-body-font: 'PingFang TC', 'Microsoft JhengHei', 'Heiti TC', system-ui, sans-serif;
+  --r3-title-weight: 700;
+  --r3-body-weight: 400;
+}
+
+body.r3-5-berryreading {
+  --r3-title-font: 'PingFang TC', 'Microsoft JhengHei', 'Heiti TC', system-ui, sans-serif;
+  --r3-body-font: 'Songti TC', 'PMingLiU', 'MingLiU', serif;
+  --r3-title-weight: 700;
+  --r3-body-weight: 400;
+}
+
+body.r3-6-blueberrysoft {
+  --r3-title-font: 'Yuanti TC', 'Hiragino Maru Gothic ProN', 'Arial Rounded MT Bold', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --r3-body-font: 'PingFang TC', 'Microsoft JhengHei', 'Heiti TC', system-ui, sans-serif;
+  --r3-title-weight: 500;
+  --r3-body-weight: 500;
+}
+
+html.r3-type-ready body { font-family: var(--r3-body-font); font-weight: var(--r3-body-weight); }
+html.r3-type-ready .hero-title, html.r3-type-ready .home-task-entry h2 { font-family: var(--r3-title-font); font-weight: var(--r3-title-weight); letter-spacing: normal; }
+html.r3-type-ready .hero-subtitle { font-family: var(--r3-body-font); }
+/* Emoji geometry, small legal text, attribution and study notes remain R0. */
+html.r3-type-ready .minimal-header .icon, html.r3-type-ready .hero-actions .icon, html.r3-type-ready .icon-shield { font-family: system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif; }
+html.r3-type-ready .icon-shield { font-weight: 400; }
+html.r3-type-ready .ui-pro-footer { font-weight: 400; }
+/* No hidden reference DOM, pseudo text, absolute text, transforms or clipping. */

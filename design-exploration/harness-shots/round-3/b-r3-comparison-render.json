@@ -1,0 +1,26 @@
+{
+ "390": {
+  "status": 200,
+  "h": 29736,
+  "sw": 390,
+  "iframes": 18,
+  "title": "Round 3 字體探索｜生字練習簿小幫手",
+  "textLen": 6227,
+  "errs": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "external": [],
+  "failed": []
+ },
+ "1280": {
+  "status": 200,
+  "h": 12831,
+  "sw": 1280,
+  "iframes": 18,
+  "title": "Round 3 字體探索｜生字練習簿小幫手",
+  "textLen": 6243,
+  "errs": [],
+  "external": [],
+  "failed": []
+ }
+}

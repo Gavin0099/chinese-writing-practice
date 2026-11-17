@@ -1,0 +1,1093 @@
+{
+  "method": "sRGB linearization; (lighter + 0.05) / (darker + 0.05); normal-text target 4.5:1",
+  "scope": "17 specified text pairs per direction; not a browser or full accessibility audit",
+  "directions": {
+    "R0-0": [
+      {
+        "pair": "正文／頁底",
+        "foreground": "#212529",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 15.426,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口標題／頁底",
+        "foreground": "#24352D",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 12.946,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口說明／頁底",
+        "foreground": "#52645A",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 6.308,
+        "meets_4_5": true
+      },
+      {
+        "pair": "導覽／頁底",
+        "foreground": "#305B47",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 7.74,
+        "meets_4_5": true
+      },
+      {
+        "pair": "品牌／頁底",
+        "foreground": "#64748B",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 4.759,
+        "meets_4_5": true
+      },
+      {
+        "pair": "課名／卡片",
+        "foreground": "#334155",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 10.355,
+        "meets_4_5": true
+      },
+      {
+        "pair": "年級／卡片",
+        "foreground": "#64748B",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 4.759,
+        "meets_4_5": true
+      },
+      {
+        "pair": "提示／卡片",
+        "foreground": "#A0AEC0",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 2.256,
+        "meets_4_5": false
+      },
+      {
+        "pair": "詞庫按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#305B47"
+        ],
+        "ratio": 7.74,
+        "meets_4_5": true
+      },
+      {
+        "pair": "詞庫 hover 文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#254A39"
+        ],
+        "ratio": 9.918,
+        "meets_4_5": true
+      },
+      {
+        "pair": "練習紙按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#8DA399"
+        ],
+        "ratio": 2.682,
+        "meets_4_5": false
+      },
+      {
+        "pair": "練習紙 hover 文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#7B8E84"
+        ],
+        "ratio": 3.474,
+        "meets_4_5": false
+      },
+      {
+        "pair": "署名／頁尾",
+        "foreground": "#94A3B8",
+        "background": [
+          "#F8FAFC",
+          "#F1F5F9"
+        ],
+        "ratio": 2.34,
+        "meets_4_5": false
+      },
+      {
+        "pair": "來源連結／頁尾",
+        "foreground": "#64748B",
+        "background": [
+          "#F8FAFC",
+          "#F1F5F9"
+        ],
+        "ratio": 4.344,
+        "meets_4_5": false
+      },
+      {
+        "pair": "授權標籤文字",
+        "foreground": "#166534",
+        "background": [
+          "#F0FDF4"
+        ],
+        "ratio": 6.812,
+        "meets_4_5": true
+      },
+      {
+        "pair": "回饋按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#60A5FA"
+        ],
+        "ratio": 2.542,
+        "meets_4_5": false
+      },
+      {
+        "pair": "作者說明／卡片",
+        "foreground": "#64748B",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 4.759,
+        "meets_4_5": true
+      }
+    ],
+    "R1-1": [
+      {
+        "pair": "正文／頁底",
+        "foreground": "#182B49",
+        "background": [
+          "#F1F6FF"
+        ],
+        "ratio": 13.08,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口標題／頁底",
+        "foreground": "#182B49",
+        "background": [
+          "#F1F6FF"
+        ],
+        "ratio": 13.08,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口說明／頁底",
+        "foreground": "#52627B",
+        "background": [
+          "#F1F6FF"
+        ],
+        "ratio": 5.71,
+        "meets_4_5": true
+      },
+      {
+        "pair": "導覽／頁底",
+        "foreground": "#234AA0",
+        "background": [
+          "#F1F6FF"
+        ],
+        "ratio": 7.569,
+        "meets_4_5": true
+      },
+      {
+        "pair": "品牌／頁底",
+        "foreground": "#52627B",
+        "background": [
+          "#F1F6FF"
+        ],
+        "ratio": 5.71,
+        "meets_4_5": true
+      },
+      {
+        "pair": "課名／卡片",
+        "foreground": "#182B49",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 14.183,
+        "meets_4_5": true
+      },
+      {
+        "pair": "年級／卡片",
+        "foreground": "#52627B",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 6.191,
+        "meets_4_5": true
+      },
+      {
+        "pair": "提示／卡片",
+        "foreground": "#52627B",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 6.191,
+        "meets_4_5": true
+      },
+      {
+        "pair": "詞庫按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#2454C6"
+        ],
+        "ratio": 6.649,
+        "meets_4_5": true
+      },
+      {
+        "pair": "詞庫 hover 文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#1D43A0"
+        ],
+        "ratio": 8.888,
+        "meets_4_5": true
+      },
+      {
+        "pair": "練習紙按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#2454C6"
+        ],
+        "ratio": 6.649,
+        "meets_4_5": true
+      },
+      {
+        "pair": "練習紙 hover 文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#1D43A0"
+        ],
+        "ratio": 8.888,
+        "meets_4_5": true
+      },
+      {
+        "pair": "署名／頁尾",
+        "foreground": "#52627B",
+        "background": [
+          "#F1F6FF"
+        ],
+        "ratio": 5.71,
+        "meets_4_5": true
+      },
+      {
+        "pair": "來源連結／頁尾",
+        "foreground": "#182B49",
+        "background": [
+          "#F1F6FF"
+        ],
+        "ratio": 13.08,
+        "meets_4_5": true
+      },
+      {
+        "pair": "授權標籤文字",
+        "foreground": "#182B49",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 14.183,
+        "meets_4_5": true
+      },
+      {
+        "pair": "回饋按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#2454C6"
+        ],
+        "ratio": 6.649,
+        "meets_4_5": true
+      },
+      {
+        "pair": "作者說明／卡片",
+        "foreground": "#52627B",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 6.191,
+        "meets_4_5": true
+      }
+    ],
+    "R1-2": [
+      {
+        "pair": "正文／頁底",
+        "foreground": "#492337",
+        "background": [
+          "#FCEFF4"
+        ],
+        "ratio": 11.902,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口標題／頁底",
+        "foreground": "#492337",
+        "background": [
+          "#FCEFF4"
+        ],
+        "ratio": 11.902,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口說明／頁底",
+        "foreground": "#795269",
+        "background": [
+          "#FCEFF4"
+        ],
+        "ratio": 5.829,
+        "meets_4_5": true
+      },
+      {
+        "pair": "導覽／頁底",
+        "foreground": "#492337",
+        "background": [
+          "#FCEFF4"
+        ],
+        "ratio": 11.902,
+        "meets_4_5": true
+      },
+      {
+        "pair": "品牌／頁底",
+        "foreground": "#795269",
+        "background": [
+          "#FCEFF4"
+        ],
+        "ratio": 5.829,
+        "meets_4_5": true
+      },
+      {
+        "pair": "課名／卡片",
+        "foreground": "#492337",
+        "background": [
+          "#FFFAFC"
+        ],
+        "ratio": 12.877,
+        "meets_4_5": true
+      },
+      {
+        "pair": "年級／卡片",
+        "foreground": "#795269",
+        "background": [
+          "#FFFAFC"
+        ],
+        "ratio": 6.307,
+        "meets_4_5": true
+      },
+      {
+        "pair": "提示／卡片",
+        "foreground": "#795269",
+        "background": [
+          "#FFFAFC"
+        ],
+        "ratio": 6.307,
+        "meets_4_5": true
+      },
+      {
+        "pair": "詞庫按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#9B315E"
+        ],
+        "ratio": 7.012,
+        "meets_4_5": true
+      },
+      {
+        "pair": "詞庫 hover 文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#7C2349"
+        ],
+        "ratio": 9.573,
+        "meets_4_5": true
+      },
+      {
+        "pair": "練習紙按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#9B315E"
+        ],
+        "ratio": 7.012,
+        "meets_4_5": true
+      },
+      {
+        "pair": "練習紙 hover 文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#7C2349"
+        ],
+        "ratio": 9.573,
+        "meets_4_5": true
+      },
+      {
+        "pair": "署名／頁尾",
+        "foreground": "#795269",
+        "background": [
+          "#FCEFF4"
+        ],
+        "ratio": 5.829,
+        "meets_4_5": true
+      },
+      {
+        "pair": "來源連結／頁尾",
+        "foreground": "#492337",
+        "background": [
+          "#FCEFF4"
+        ],
+        "ratio": 11.902,
+        "meets_4_5": true
+      },
+      {
+        "pair": "授權標籤文字",
+        "foreground": "#492337",
+        "background": [
+          "#FFFAFC"
+        ],
+        "ratio": 12.877,
+        "meets_4_5": true
+      },
+      {
+        "pair": "回饋按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#9B315E"
+        ],
+        "ratio": 7.012,
+        "meets_4_5": true
+      },
+      {
+        "pair": "作者說明／卡片",
+        "foreground": "#795269",
+        "background": [
+          "#FFFAFC"
+        ],
+        "ratio": 6.307,
+        "meets_4_5": true
+      }
+    ],
+    "R1-3": [
+      {
+        "pair": "正文／頁底",
+        "foreground": "#34284D",
+        "background": [
+          "#F4F1FC"
+        ],
+        "ratio": 12.099,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口標題／頁底",
+        "foreground": "#34284D",
+        "background": [
+          "#F4F1FC"
+        ],
+        "ratio": 12.099,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口說明／頁底",
+        "foreground": "#6A5A7B",
+        "background": [
+          "#F4F1FC"
+        ],
+        "ratio": 5.603,
+        "meets_4_5": true
+      },
+      {
+        "pair": "導覽／頁底",
+        "foreground": "#60408D",
+        "background": [
+          "#F4F1FC"
+        ],
+        "ratio": 7.202,
+        "meets_4_5": true
+      },
+      {
+        "pair": "品牌／頁底",
+        "foreground": "#6A5A7B",
+        "background": [
+          "#F4F1FC"
+        ],
+        "ratio": 5.603,
+        "meets_4_5": true
+      },
+      {
+        "pair": "課名／卡片",
+        "foreground": "#34284D",
+        "background": [
+          "#FCFBFF"
+        ],
+        "ratio": 13.093,
+        "meets_4_5": true
+      },
+      {
+        "pair": "年級／卡片",
+        "foreground": "#6A5A7B",
+        "background": [
+          "#FCFBFF"
+        ],
+        "ratio": 6.064,
+        "meets_4_5": true
+      },
+      {
+        "pair": "提示／卡片",
+        "foreground": "#6A5A7B",
+        "background": [
+          "#FCFBFF"
+        ],
+        "ratio": 6.064,
+        "meets_4_5": true
+      },
+      {
+        "pair": "詞庫按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#6C42AC"
+        ],
+        "ratio": 6.971,
+        "meets_4_5": true
+      },
+      {
+        "pair": "詞庫 hover 文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#533181"
+        ],
+        "ratio": 9.886,
+        "meets_4_5": true
+      },
+      {
+        "pair": "練習紙按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#6C42AC"
+        ],
+        "ratio": 6.971,
+        "meets_4_5": true
+      },
+      {
+        "pair": "練習紙 hover 文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#533181"
+        ],
+        "ratio": 9.886,
+        "meets_4_5": true
+      },
+      {
+        "pair": "署名／頁尾",
+        "foreground": "#6A5A7B",
+        "background": [
+          "#F4F1FC"
+        ],
+        "ratio": 5.603,
+        "meets_4_5": true
+      },
+      {
+        "pair": "來源連結／頁尾",
+        "foreground": "#34284D",
+        "background": [
+          "#F4F1FC"
+        ],
+        "ratio": 12.099,
+        "meets_4_5": true
+      },
+      {
+        "pair": "授權標籤文字",
+        "foreground": "#34284D",
+        "background": [
+          "#FCFBFF"
+        ],
+        "ratio": 13.093,
+        "meets_4_5": true
+      },
+      {
+        "pair": "回饋按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#6C42AC"
+        ],
+        "ratio": 6.971,
+        "meets_4_5": true
+      },
+      {
+        "pair": "作者說明／卡片",
+        "foreground": "#6A5A7B",
+        "background": [
+          "#FCFBFF"
+        ],
+        "ratio": 6.064,
+        "meets_4_5": true
+      }
+    ],
+    "R1-4": [
+      {
+        "pair": "正文／頁底",
+        "foreground": "#202020",
+        "background": [
+          "#F4F4F4"
+        ],
+        "ratio": 14.814,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口標題／頁底",
+        "foreground": "#202020",
+        "background": [
+          "#F4F4F4"
+        ],
+        "ratio": 14.814,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口說明／頁底",
+        "foreground": "#626262",
+        "background": [
+          "#F4F4F4"
+        ],
+        "ratio": 5.546,
+        "meets_4_5": true
+      },
+      {
+        "pair": "導覽／頁底",
+        "foreground": "#202020",
+        "background": [
+          "#F4F4F4"
+        ],
+        "ratio": 14.814,
+        "meets_4_5": true
+      },
+      {
+        "pair": "品牌／頁底",
+        "foreground": "#626262",
+        "background": [
+          "#F4F4F4"
+        ],
+        "ratio": 5.546,
+        "meets_4_5": true
+      },
+      {
+        "pair": "課名／卡片",
+        "foreground": "#202020",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 16.293,
+        "meets_4_5": true
+      },
+      {
+        "pair": "年級／卡片",
+        "foreground": "#626262",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 6.1,
+        "meets_4_5": true
+      },
+      {
+        "pair": "提示／卡片",
+        "foreground": "#626262",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 6.1,
+        "meets_4_5": true
+      },
+      {
+        "pair": "詞庫按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#242424"
+        ],
+        "ratio": 15.523,
+        "meets_4_5": true
+      },
+      {
+        "pair": "詞庫 hover 文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#000000"
+        ],
+        "ratio": 21.0,
+        "meets_4_5": true
+      },
+      {
+        "pair": "練習紙按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#242424"
+        ],
+        "ratio": 15.523,
+        "meets_4_5": true
+      },
+      {
+        "pair": "練習紙 hover 文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#000000"
+        ],
+        "ratio": 21.0,
+        "meets_4_5": true
+      },
+      {
+        "pair": "署名／頁尾",
+        "foreground": "#626262",
+        "background": [
+          "#F4F4F4"
+        ],
+        "ratio": 5.546,
+        "meets_4_5": true
+      },
+      {
+        "pair": "來源連結／頁尾",
+        "foreground": "#202020",
+        "background": [
+          "#F4F4F4"
+        ],
+        "ratio": 14.814,
+        "meets_4_5": true
+      },
+      {
+        "pair": "授權標籤文字",
+        "foreground": "#202020",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 16.293,
+        "meets_4_5": true
+      },
+      {
+        "pair": "回饋按鈕文字",
+        "foreground": "#FFFFFF",
+        "background": [
+          "#242424"
+        ],
+        "ratio": 15.523,
+        "meets_4_5": true
+      },
+      {
+        "pair": "作者說明／卡片",
+        "foreground": "#626262",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 6.1,
+        "meets_4_5": true
+      }
+    ],
+    "R1-5": [
+      {
+        "pair": "正文／頁底",
+        "foreground": "#27272A",
+        "background": [
+          "#F1F2F4"
+        ],
+        "ratio": 13.297,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口標題／頁底",
+        "foreground": "#27272A",
+        "background": [
+          "#F1F2F4"
+        ],
+        "ratio": 13.297,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口說明／頁底",
+        "foreground": "#5B5A53",
+        "background": [
+          "#F1F2F4"
+        ],
+        "ratio": 6.183,
+        "meets_4_5": true
+      },
+      {
+        "pair": "導覽／頁底",
+        "foreground": "#27272A",
+        "background": [
+          "#F1F2F4"
+        ],
+        "ratio": 13.297,
+        "meets_4_5": true
+      },
+      {
+        "pair": "品牌／頁底",
+        "foreground": "#5B5A53",
+        "background": [
+          "#F1F2F4"
+        ],
+        "ratio": 6.183,
+        "meets_4_5": true
+      },
+      {
+        "pair": "課名／卡片",
+        "foreground": "#27272A",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 14.895,
+        "meets_4_5": true
+      },
+      {
+        "pair": "年級／卡片",
+        "foreground": "#5B5A53",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 6.926,
+        "meets_4_5": true
+      },
+      {
+        "pair": "提示／卡片",
+        "foreground": "#5B5A53",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 6.926,
+        "meets_4_5": true
+      },
+      {
+        "pair": "詞庫按鈕文字",
+        "foreground": "#272111",
+        "background": [
+          "#F2CC4D"
+        ],
+        "ratio": 10.305,
+        "meets_4_5": true
+      },
+      {
+        "pair": "詞庫 hover 文字",
+        "foreground": "#272111",
+        "background": [
+          "#DAB43B"
+        ],
+        "ratio": 8.059,
+        "meets_4_5": true
+      },
+      {
+        "pair": "練習紙按鈕文字",
+        "foreground": "#272111",
+        "background": [
+          "#F2CC4D"
+        ],
+        "ratio": 10.305,
+        "meets_4_5": true
+      },
+      {
+        "pair": "練習紙 hover 文字",
+        "foreground": "#272111",
+        "background": [
+          "#DAB43B"
+        ],
+        "ratio": 8.059,
+        "meets_4_5": true
+      },
+      {
+        "pair": "署名／頁尾",
+        "foreground": "#5B5A53",
+        "background": [
+          "#F1F2F4"
+        ],
+        "ratio": 6.183,
+        "meets_4_5": true
+      },
+      {
+        "pair": "來源連結／頁尾",
+        "foreground": "#27272A",
+        "background": [
+          "#F1F2F4"
+        ],
+        "ratio": 13.297,
+        "meets_4_5": true
+      },
+      {
+        "pair": "授權標籤文字",
+        "foreground": "#27272A",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 14.895,
+        "meets_4_5": true
+      },
+      {
+        "pair": "回饋按鈕文字",
+        "foreground": "#272111",
+        "background": [
+          "#F2CC4D"
+        ],
+        "ratio": 10.305,
+        "meets_4_5": true
+      },
+      {
+        "pair": "作者說明／卡片",
+        "foreground": "#5B5A53",
+        "background": [
+          "#FFFFFF"
+        ],
+        "ratio": 6.926,
+        "meets_4_5": true
+      }
+    ],
+    "R1-6": [
+      {
+        "pair": "正文／頁底",
+        "foreground": "#F1F4FF",
+        "background": [
+          "#141C30"
+        ],
+        "ratio": 15.441,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口標題／頁底",
+        "foreground": "#F1F4FF",
+        "background": [
+          "#141C30"
+        ],
+        "ratio": 15.441,
+        "meets_4_5": true
+      },
+      {
+        "pair": "入口說明／頁底",
+        "foreground": "#B8C3DC",
+        "background": [
+          "#141C30"
+        ],
+        "ratio": 9.59,
+        "meets_4_5": true
+      },
+      {
+        "pair": "導覽／頁底",
+        "foreground": "#C9D7FF",
+        "background": [
+          "#141C30"
+        ],
+        "ratio": 11.827,
+        "meets_4_5": true
+      },
+      {
+        "pair": "品牌／頁底",
+        "foreground": "#B8C3DC",
+        "background": [
+          "#141C30"
+        ],
+        "ratio": 9.59,
+        "meets_4_5": true
+      },
+      {
+        "pair": "課名／卡片",
+        "foreground": "#F1F4FF",
+        "background": [
+          "#202C45"
+        ],
+        "ratio": 12.685,
+        "meets_4_5": true
+      },
+      {
+        "pair": "年級／卡片",
+        "foreground": "#B8C3DC",
+        "background": [
+          "#202C45"
+        ],
+        "ratio": 7.878,
+        "meets_4_5": true
+      },
+      {
+        "pair": "提示／卡片",
+        "foreground": "#B8C3DC",
+        "background": [
+          "#202C45"
+        ],
+        "ratio": 7.878,
+        "meets_4_5": true
+      },
+      {
+        "pair": "詞庫按鈕文字",
+        "foreground": "#192744",
+        "background": [
+          "#B8CCFF"
+        ],
+        "ratio": 9.271,
+        "meets_4_5": true
+      },
+      {
+        "pair": "詞庫 hover 文字",
+        "foreground": "#192744",
+        "background": [
+          "#D0DDFF"
+        ],
+        "ratio": 10.932,
+        "meets_4_5": true
+      },
+      {
+        "pair": "練習紙按鈕文字",
+        "foreground": "#192744",
+        "background": [
+          "#B8CCFF"
+        ],
+        "ratio": 9.271,
+        "meets_4_5": true
+      },
+      {
+        "pair": "練習紙 hover 文字",
+        "foreground": "#192744",
+        "background": [
+          "#D0DDFF"
+        ],
+        "ratio": 10.932,
+        "meets_4_5": true
+      },
+      {
+        "pair": "署名／頁尾",
+        "foreground": "#B8C3DC",
+        "background": [
+          "#141C30"
+        ],
+        "ratio": 9.59,
+        "meets_4_5": true
+      },
+      {
+        "pair": "來源連結／頁尾",
+        "foreground": "#F1F4FF",
+        "background": [
+          "#141C30"
+        ],
+        "ratio": 15.441,
+        "meets_4_5": true
+      },
+      {
+        "pair": "授權標籤文字",
+        "foreground": "#F1F4FF",
+        "background": [
+          "#202C45"
+        ],
+        "ratio": 12.685,
+        "meets_4_5": true
+      },
+      {
+        "pair": "回饋按鈕文字",
+        "foreground": "#192744",
+        "background": [
+          "#B8CCFF"
+        ],
+        "ratio": 9.271,
+        "meets_4_5": true
+      },
+      {
+        "pair": "作者說明／卡片",
+        "foreground": "#B8C3DC",
+        "background": [
+          "#202C45"
+        ],
+        "ratio": 7.878,
+        "meets_4_5": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,110 @@
+{
+ "390:r0-current.html": {
+  "elements": 50,
+  "movedOver1px": null,
+  "maxDeltaPx": null,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 390,
+  "height": 1871
+ },
+ "390:r2-1-blueprint.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 390,
+  "height": 1871
+ },
+ "390:r2-2-berrypress.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 390,
+  "height": 1871
+ },
+ "390:r2-3-mistink.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 390,
+  "height": 1871
+ },
+ "390:r2-4-blueberry.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 390,
+  "height": 1871
+ },
+ "390:r2-5-silverlilac.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 390,
+  "height": 1871
+ },
+ "1280:r0-current.html": {
+  "elements": 50,
+  "movedOver1px": null,
+  "maxDeltaPx": null,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 1280,
+  "height": 1435
+ },
+ "1280:r2-1-blueprint.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 1280,
+  "height": 1435
+ },
+ "1280:r2-2-berrypress.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 1280,
+  "height": 1435
+ },
+ "1280:r2-3-mistink.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 1280,
+  "height": 1435
+ },
+ "1280:r2-4-blueberry.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 1280,
+  "height": 1435
+ },
+ "1280:r2-5-silverlilac.html": {
+  "elements": 50,
+  "movedOver1px": 0,
+  "maxDeltaPx": 0,
+  "textOverlaps": 0,
+  "overlapSamples": [],
+  "scrollWidth": 1280,
+  "height": 1435
+ }
+}

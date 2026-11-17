@@ -1,0 +1,226 @@
+/* Round 2 only: colors and paint. All layout CSS and text metrics remain R0. */
+
+body.r2-1-blueprint {
+  --body-font: system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --heading-font: 'Songti TC', 'PMingLiU', 'MingLiU', serif;
+  --label-font: system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --heading-weight: 900;
+  --entry-weight: 700;
+  --label-weight: 400;
+  --heading-tracking: normal;
+  --card-shadow: none;
+  --button-shadow: inset 0 0 0 1px #7186B0;
+  --footer-shadow: none;
+  --page: #FFFFFF;
+  --surface: #F2F5FC;
+  --text: #22304C;
+  --title: #22304C;
+  --entry-text: #22304C;
+  --muted: #515F77;
+  --description: #515F77;
+  --hint: #515F77;
+  --nav: #244184;
+  --primary: #244CBC;
+  --primary-hover: #19398F;
+  --on-primary: #FFFFFF;
+  --secondary: #F2F5FC;
+  --secondary-hover: #E1E8F6;
+  --on-secondary: #244184;
+  --rule: #B6C2D8;
+  --card-border: #7D91B7;
+  --focus: #244CBC;
+  --footer-bg: #F2F5FC;
+  --footer-border: #B6C2D8;
+  --footer-text: #22304C;
+  --credit: #515F77;
+  --credit-link: #22304C;
+  --badge-bg: #FFFFFF;
+  --badge-text: #22304C;
+  --badge-border: #B6C2D8;
+  --feedback: #244CBC;
+  --on-feedback: #FFFFFF;
+  --card-muted: #515F77;
+}
+
+body.r2-1-blueprint .hero-subtitle, body.r2-1-blueprint .author-text p, body.r2-1-blueprint .feedback-hint { color: var(--card-muted); }
+
+body.r2-2-berrypress {
+  --body-font: system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --heading-font: 'Songti TC', 'PMingLiU', 'MingLiU', serif;
+  --label-font: system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --heading-weight: 900;
+  --entry-weight: 700;
+  --label-weight: 400;
+  --heading-tracking: normal;
+  --card-shadow: 5px 5px 0 #D7C4CE;
+  --button-shadow: none;
+  --footer-shadow: none;
+  --page: #F7F3F5;
+  --surface: #FFFFFF;
+  --text: #54253B;
+  --title: #54253B;
+  --entry-text: #54253B;
+  --muted: #705566;
+  --description: #705566;
+  --hint: #705566;
+  --nav: #54253B;
+  --primary: #7B243F;
+  --primary-hover: #5E1930;
+  --on-primary: #FFFFFF;
+  --secondary: #F3D9E2;
+  --secondary-hover: #EAC7D5;
+  --on-secondary: #582137;
+  --rule: #D3B8C7;
+  --card-border: #AD7E94;
+  --focus: #7B243F;
+  --footer-bg: #E9DCE3;
+  --footer-border: #D3B8C7;
+  --footer-text: #54253B;
+  --credit: #705566;
+  --credit-link: #54253B;
+  --badge-bg: #FFFFFF;
+  --badge-text: #54253B;
+  --badge-border: #D3B8C7;
+  --feedback: #7B243F;
+  --on-feedback: #FFFFFF;
+  --card-muted: #705566;
+}
+
+body.r2-2-berrypress .hero-subtitle, body.r2-2-berrypress .author-text p, body.r2-2-berrypress .feedback-hint { color: var(--card-muted); }
+
+body.r2-3-mistink {
+  --body-font: system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --heading-font: 'Songti TC', 'PMingLiU', 'MingLiU', serif;
+  --label-font: system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --heading-weight: 900;
+  --entry-weight: 700;
+  --label-weight: 400;
+  --heading-tracking: normal;
+  --card-shadow: none;
+  --button-shadow: none;
+  --footer-shadow: none;
+  --page: #EFEDF7;
+  --surface: #302A45;
+  --text: #332C46;
+  --title: #F5F0FF;
+  --entry-text: #332C46;
+  --muted: #63566F;
+  --description: #63566F;
+  --hint: #CFC3E2;
+  --nav: #332C46;
+  --primary: #57417F;
+  --primary-hover: #443062;
+  --on-primary: #FFFFFF;
+  --secondary: #E3D8FA;
+  --secondary-hover: #F0E9FE;
+  --on-secondary: #302044;
+  --rule: #CABFDB;
+  --card-border: #695A82;
+  --focus: #57417F;
+  --footer-bg: #EFEDF7;
+  --footer-border: #CABFDB;
+  --footer-text: #332C46;
+  --credit: #63566F;
+  --credit-link: #49365F;
+  --badge-bg: #FCFAFF;
+  --badge-text: #4B355F;
+  --badge-border: #CABFDB;
+  --feedback: #57417F;
+  --on-feedback: #FFFFFF;
+  --card-muted: #CFC3E2;
+}
+
+body.r2-3-mistink .hero-subtitle, body.r2-3-mistink .author-text p, body.r2-3-mistink .feedback-hint { color: var(--card-muted); }
+
+body.r2-4-blueberry {
+  --body-font: system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --heading-font: 'Songti TC', 'PMingLiU', 'MingLiU', serif;
+  --label-font: system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --heading-weight: 900;
+  --entry-weight: 700;
+  --label-weight: 400;
+  --heading-tracking: normal;
+  --card-shadow: 0 10px 24px -12px rgba(75,55,110,.25);
+  --button-shadow: none;
+  --footer-shadow: none;
+  --page: #EAF0FC;
+  --surface: #FBEAF2;
+  --text: #293150;
+  --title: #772D5C;
+  --entry-text: #293150;
+  --muted: #62556E;
+  --description: #62556E;
+  --hint: #62556E;
+  --nav: #2A4E9A;
+  --primary: #2A4E9A;
+  --primary-hover: #203D7A;
+  --on-primary: #FFFFFF;
+  --secondary: #873A6C;
+  --secondary-hover: #6A2852;
+  --on-secondary: #FFFFFF;
+  --rule: #C6C8E3;
+  --card-border: #DAB6CF;
+  --focus: #2A4E9A;
+  --footer-bg: #F7F4FC;
+  --footer-border: #C6C8E3;
+  --footer-text: #293150;
+  --credit: #62556E;
+  --credit-link: #293150;
+  --badge-bg: #FFFFFF;
+  --badge-text: #293150;
+  --badge-border: #C6C8E3;
+  --feedback: #2A4E9A;
+  --on-feedback: #FFFFFF;
+  --card-muted: #62556E;
+}
+
+body.r2-4-blueberry .hero-subtitle, body.r2-4-blueberry .author-text p, body.r2-4-blueberry .feedback-hint { color: var(--card-muted); }
+
+body.r2-5-silverlilac {
+  --body-font: system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --heading-font: 'Songti TC', 'PMingLiU', 'MingLiU', serif;
+  --label-font: system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --heading-weight: 900;
+  --entry-weight: 700;
+  --label-weight: 400;
+  --heading-tracking: normal;
+  --card-shadow: inset 0 0 0 4px #E4E1EA;
+  --button-shadow: none;
+  --footer-shadow: none;
+  --page: #ECECF0;
+  --surface: #F7F6FB;
+  --text: #282532;
+  --title: #302941;
+  --entry-text: #282532;
+  --muted: #5F5A6C;
+  --description: #5F5A6C;
+  --hint: #5F5A6C;
+  --nav: #282532;
+  --primary: #34313D;
+  --primary-hover: #22202A;
+  --on-primary: #FFFFFF;
+  --secondary: #D9D0EF;
+  --secondary-hover: #C9BEE5;
+  --on-secondary: #3B2D59;
+  --rule: #C0BDCA;
+  --card-border: #8E8A9C;
+  --focus: #34313D;
+  --footer-bg: #ECECF0;
+  --footer-border: #C0BDCA;
+  --footer-text: #282532;
+  --credit: #5F5A6C;
+  --credit-link: #282532;
+  --badge-bg: #F7F6FB;
+  --badge-text: #282532;
+  --badge-border: #C0BDCA;
+  --feedback: #34313D;
+  --on-feedback: #FFFFFF;
+  --card-muted: #5F5A6C;
+}
+
+body.r2-5-silverlilac .hero-subtitle, body.r2-5-silverlilac .author-text p, body.r2-5-silverlilac .feedback-hint { color: var(--card-muted); }
+
+.study-disclaimer { margin: 0; padding: 20px 24px; background: #eef0f4; color: #374151; font: 14px/1.6 system-ui, sans-serif; }
+.study-disclaimer p { margin: 0 0 8px; }
+.study-disclaimer a { color: #244989; min-height: 44px; display: inline-flex; align-items: center; }
+.study-disclaimer a:focus-visible { outline: 3px solid #244989; outline-offset: 3px; }

@@ -1,0 +1,290 @@
+{
+ "r0-current.html": {
+  "title": {
+   "family": "\"Songti TC\", PMingLiU, MingLiU, serif",
+   "weight": "900",
+   "size": "44.8px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Serif CJK TC ×9"
+   ]
+  },
+  "entry": {
+   "family": "system-ui, -apple-system, \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "weight": "700",
+   "size": "24px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×15"
+   ]
+  },
+  "body": {
+   "family": "system-ui, -apple-system, \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "weight": "400",
+   "size": "16px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×21"
+   ]
+  },
+  "button": {
+   "family": "system-ui, -apple-system, \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "weight": "600",
+   "size": "18.4px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×8",
+    "Noto Color Emoji ×1",
+    "Noto Sans ×8"
+   ]
+  },
+  "nav": null
+ },
+ "r3-1-bluebold.html": {
+  "title": {
+   "family": "\"PingFang TC\", \"Microsoft JhengHei\", \"Heiti TC\", system-ui, sans-serif",
+   "weight": "800",
+   "size": "44.8px",
+   "spacing": "-0.1px",
+   "rendered": [
+    "Noto Sans CJK TC ×6",
+    "Noto Sans ×3"
+   ]
+  },
+  "entry": {
+   "family": "\"PingFang TC\", \"Microsoft JhengHei\", \"Heiti TC\", system-ui, sans-serif",
+   "weight": "800",
+   "size": "24px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×15"
+   ]
+  },
+  "body": {
+   "family": "system-ui, -apple-system, \"Segoe UI\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "weight": "400",
+   "size": "16px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×21"
+   ]
+  },
+  "button": {
+   "family": "system-ui, -apple-system, \"Segoe UI\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "weight": "600",
+   "size": "18.4px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×8",
+    "Noto Color Emoji ×1",
+    "Noto Sans ×8"
+   ]
+  },
+  "nav": null
+ },
+ "r3-2-berryround.html": {
+  "title": {
+   "family": "\"Yuanti TC\", \"Hiragino Maru Gothic ProN\", \"Arial Rounded MT Bold\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "weight": "700",
+   "size": "44.8px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×9"
+   ]
+  },
+  "entry": {
+   "family": "\"Yuanti TC\", \"Hiragino Maru Gothic ProN\", \"Arial Rounded MT Bold\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "weight": "700",
+   "size": "24px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×15"
+   ]
+  },
+  "body": {
+   "family": "\"Yuanti TC\", \"PingFang TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "weight": "400",
+   "size": "16px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×21"
+   ]
+  },
+  "button": {
+   "family": "\"Yuanti TC\", \"PingFang TC\", \"Microsoft JhengHei\", system-ui, sans-serif",
+   "weight": "600",
+   "size": "18.4px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×8",
+    "Noto Color Emoji ×1",
+    "Noto Sans ×8"
+   ]
+  },
+  "nav": null
+ },
+ "r3-3-blueming.html": {
+  "title": {
+   "family": "\"Songti TC\", PMingLiU, MingLiU, serif",
+   "weight": "700",
+   "size": "44.8px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Serif CJK TC ×9"
+   ]
+  },
+  "entry": {
+   "family": "\"Songti TC\", PMingLiU, MingLiU, serif",
+   "weight": "700",
+   "size": "24px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Serif CJK TC ×15"
+   ]
+  },
+  "body": {
+   "family": "\"PingFang TC\", \"Microsoft JhengHei\", \"Heiti TC\", system-ui, sans-serif",
+   "weight": "400",
+   "size": "16px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×21"
+   ]
+  },
+  "button": {
+   "family": "\"PingFang TC\", \"Microsoft JhengHei\", \"Heiti TC\", system-ui, sans-serif",
+   "weight": "600",
+   "size": "18.4px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×8",
+    "Noto Color Emoji ×1",
+    "Noto Sans ×8"
+   ]
+  },
+  "nav": null
+ },
+ "r3-4-blueberrykai.html": {
+  "title": {
+   "family": "\"Kaiti TC\", STKaiti, DFKai-SB, BiauKai, KaiTi, \"PingFang TC\", \"Microsoft JhengHei\", serif",
+   "weight": "700",
+   "size": "44.8px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Serif CJK TC ×9"
+   ]
+  },
+  "entry": {
+   "family": "\"Kaiti TC\", STKaiti, DFKai-SB, BiauKai, KaiTi, \"PingFang TC\", \"Microsoft JhengHei\", serif",
+   "weight": "700",
+   "size": "24px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Serif CJK TC ×15"
+   ]
+  },
+  "body": {
+   "family": "\"PingFang TC\", \"Microsoft JhengHei\", \"Heiti TC\", system-ui, sans-serif",
+   "weight": "400",
+   "size": "16px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×21"
+   ]
+  },
+  "button": {
+   "family": "\"PingFang TC\", \"Microsoft JhengHei\", \"Heiti TC\", system-ui, sans-serif",
+   "weight": "600",
+   "size": "18.4px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×8",
+    "Noto Color Emoji ×1",
+    "Noto Sans ×8"
+   ]
+  },
+  "nav": null
+ },
+ "r3-5-berryreading.html": {
+  "title": {
+   "family": "\"PingFang TC\", \"Microsoft JhengHei\", \"Heiti TC\", system-ui, sans-serif",
+   "weight": "700",
+   "size": "44.8px",
+   "spacing": "-0.05px",
+   "rendered": [
+    "Noto Sans CJK TC ×6",
+    "Noto Sans ×3"
+   ]
+  },
+  "entry": {
+   "family": "\"PingFang TC\", \"Microsoft JhengHei\", \"Heiti TC\", system-ui, sans-serif",
+   "weight": "700",
+   "size": "24px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×15"
+   ]
+  },
+  "body": {
+   "family": "\"Songti TC\", PMingLiU, MingLiU, serif",
+   "weight": "400",
+   "size": "16px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Serif CJK TC ×21"
+   ]
+  },
+  "button": {
+   "family": "\"Songti TC\", PMingLiU, MingLiU, serif",
+   "weight": "600",
+   "size": "18.4px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Color Emoji ×1",
+    "Noto Serif CJK TC ×16"
+   ]
+  },
+  "nav": null
+ },
+ "r3-6-blueberrysoft.html": {
+  "title": {
+   "family": "\"Yuanti TC\", \"Hiragino Maru Gothic ProN\", \"Arial Rounded MT Bold\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "weight": "500",
+   "size": "44.8px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×9"
+   ]
+  },
+  "entry": {
+   "family": "\"Yuanti TC\", \"Hiragino Maru Gothic ProN\", \"Arial Rounded MT Bold\", \"PingFang TC\", \"Microsoft JhengHei\", sans-serif",
+   "weight": "500",
+   "size": "24px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×15"
+   ]
+  },
+  "body": {
+   "family": "\"PingFang TC\", \"Microsoft JhengHei\", \"Heiti TC\", system-ui, sans-serif",
+   "weight": "500",
+   "size": "16px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×21"
+   ]
+  },
+  "button": {
+   "family": "\"PingFang TC\", \"Microsoft JhengHei\", \"Heiti TC\", system-ui, sans-serif",
+   "weight": "600",
+   "size": "18.4px",
+   "spacing": "normal",
+   "rendered": [
+    "Noto Sans CJK TC ×8",
+    "Noto Color Emoji ×1",
+    "Noto Sans ×8"
+   ]
+  },
+  "nav": null
+ }
+}

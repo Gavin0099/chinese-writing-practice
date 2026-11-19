@@ -91,16 +91,6 @@ async function readBookCatalog() {
     return { courses: mergeCourses(catalog.review, catalog.published, local), confirmed, catalogUnavailable };
 }
 
-async function readBookLessons(book, reference) {
-    if (!book) return [];
-    const { courses, confirmed } = reference;
-    const lessons = bookWritingLessons(book, courses, null, confirmed);
-    if (lessons.length || book.curriculumSourceVersion || book.edition.trim() || book.year !== 113 ||
-        book.publisher.trim() !== '康軒') return lessons;
-    await import('./curriculum_data.js');
-    return bookWritingLessons(book, courses, window.CURRICULUM_KANGHSUAN?.structure, confirmed);
-}
-
 const photo = initPhotoImport({
     cloud: Boolean(cloud),
     currentBook: () => data.books.find(book => book.id === activeId),
@@ -433,7 +423,6 @@ function renderExamCurriculum(request) {
     if (request.error) message = request.error.message;
     else if (request.versions === null) message = '正在讀取可用的教材版次…';
     else if (bound) message = `此班已套用 ${bound.versionLabel.trim() || bound.sourceVersion}。`;
-    else if (!versions.length && request.characters?.size) message = '此班目前可使用內建教材。';
     else if (!versions.length && request.catalogUnavailable) message = '暫時無法讀取雲端教材，請重新選擇挖空方式後再試。';
     else if (!versions.length) message = '目前沒有此班可用的已核對教材。請確認登入的帳號有教材查閱權限。';
     else if (request.book?.curriculumSourceVersion) message = '此班原先套用的教材目前無法讀取，請選擇可用的版次。';
@@ -449,12 +438,12 @@ function loadExamLessonCharacters(bookId) {
     const request = { bookId, book, characters: null, versions: null, error: null, ready: null };
     examLessonRequest = request;
     renderExamCurriculum(request);
-    request.ready = readBookCatalog().then(async reference => {
-        request.catalogUnavailable = reference.catalogUnavailable;
-        request.versions = matchingBookCourses(book, reference.courses).filter(course =>
-            bookWritingLessons({ ...book, curriculumSourceVersion: course.sourceVersion }, [course], null)
+    request.ready = readBookCatalog().then(({ courses, confirmed, catalogUnavailable }) => {
+        request.catalogUnavailable = catalogUnavailable;
+        request.versions = matchingBookCourses(book, courses).filter(course =>
+            bookWritingLessons({ ...book, curriculumSourceVersion: course.sourceVersion }, [course])
                 .some(lesson => lesson.characters.length));
-        const lessons = await readBookLessons(book, reference);
+        const lessons = bookWritingLessons(book, courses, confirmed);
         request.characters = new Map(lessons.map(({ number, characters }) => [number, new Set(characters)]));
     }).catch(() => {
         request.error = new Error('無法載入應寫生字表。請重新選擇挖空方式後再試。');
@@ -575,16 +564,16 @@ examForm.addEventListener('submit', async event => {
     const seed = examForm.elements.seed.value.trim() || crypto.randomUUID().replaceAll('-', '').slice(0, 16);
     const settings = examSettings();
     const bookId = activeId;
-    let lessonBook;
+    let lessonRequest;
     try {
         if (usesLessonCharacters(settings.blankMode)) {
-            const request = loadExamLessonCharacters(bookId);
-            if (!request.characters) notice('examNotice', '正在查對本課的應寫生字表…');
-            await request.ready;
+            lessonRequest = loadExamLessonCharacters(bookId);
+            if (!lessonRequest.characters) notice('examNotice', '正在查對本課的應寫生字表…');
+            await lessonRequest.ready;
             if (activeId !== bookId || examForm.elements.blankMode?.value !== settings.blankMode) return;
-            if (request.error) throw request.error;
-            settings.lessonCharacters = request.characters;
-            lessonBook = request.book;
+            if (lessonRequest !== examLessonRequest) throw new Error('應寫生字表已更新，請確認可抽題數後再出卷。');
+            if (lessonRequest.error) throw lessonRequest.error;
+            settings.lessonCharacters = lessonRequest.characters;
         }
         let priorityWords = null;
         if (examForm.elements.prioritize.checked) {
@@ -599,9 +588,10 @@ examForm.addEventListener('submit', async event => {
         if (!await persist(state => {
             const book = state.books.find(candidate => candidate.id === bookId);
             if (!book) throw new Error('請重新選擇班級詞庫。');
-            if (lessonBook && (book.curriculumSourceVersion !== lessonBook.curriculumSourceVersion ||
-                book.edition !== lessonBook.edition)) {
-                throw new Error('班級教材版次已更新，請重新載入頁面再出卷。');
+            if (lessonRequest && (lessonRequest !== examLessonRequest ||
+                book.curriculumSourceVersion !== lessonRequest.book.curriculumSourceVersion ||
+                book.edition !== lessonRequest.book.edition)) {
+                throw new Error('班級教材或應寫生字表已更新，請確認可抽題數後再出卷。');
             }
             state.exams.push(makeExam({ ...settings, id: crypto.randomUUID(), createdAt: new Date().toISOString(),
                 book, words: state.words, seed, priorityWords }));

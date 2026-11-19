@@ -19,16 +19,15 @@ test('lesson writing characters come from the exact authorized edition and verif
     const wrongGrade = { ...selected, grade: 3, sourceVersion: 'wrong-grade' };
     const tied = { ...book, edition: '舊版備註', curriculumSourceVersion: selected.sourceVersion };
     assert.deepEqual(matchingBookCourses(book, [other, wrongGrade, selected]), [other, selected]);
-    assert.deepEqual(bookWritingLessons(tied, [other, selected], null), [{ number: 7, characters: ['春'] }]);
-    assert.deepEqual(bookWritingLessons(tied, [other, wrongGrade], null), []);
-    assert.deepEqual(bookWritingLessons(book, [other, selected], null), []);
-    assert.deepEqual(bookWritingLessons(book, [other, selected], null, other), [{ number: 7, characters: ['河'] }]);
+    assert.deepEqual(bookWritingLessons(tied, [other, selected]), [{ number: 7, characters: ['春'] }]);
+    assert.deepEqual(bookWritingLessons(tied, [other, wrongGrade]), []);
+    assert.deepEqual(bookWritingLessons(book, [other, selected]), []);
+    assert.deepEqual(bookWritingLessons(book, [other, selected], other), [{ number: 7, characters: ['河'] }]);
 });
 
-test('only an unbound matching 113 class can fall back to the bundled lessons', () => {
-    const legacy = { 2: { A: [{ lesson: 7, vocab: ['春', '春', '風', 'A'] }] } };
-    const legacyBook = { ...book, year: 113 };
-    assert.deepEqual(bookWritingLessons(legacyBook, [], legacy), [{ number: 7, characters: ['春', '風'] }]);
-    assert.deepEqual(bookWritingLessons({ ...legacyBook, curriculumSourceVersion: 'unavailable' }, [], legacy), []);
-    assert.deepEqual(bookWritingLessons(book, [], legacy), []);
+test('a 113 class requires a verified writing catalog entry just like later years', () => {
+    const olderBook = { ...book, year: 113 };
+    const olderCourse = { ...version, academicYear: 113, lessons: [lesson(7, '春')] };
+    assert.deepEqual(bookWritingLessons(olderBook, []), []);
+    assert.deepEqual(bookWritingLessons(olderBook, [olderCourse]), [{ number: 7, characters: ['春'] }]);
 });

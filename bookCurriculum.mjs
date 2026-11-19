@@ -13,7 +13,7 @@ export function matchingBookCourses(book, courses) {
         course.semester === book.semester && label(course.publisher) === label(book.publisher));
 }
 
-export function bookWritingLessons(book, courses, legacy, confirmed = null) {
+export function bookWritingLessons(book, courses, confirmed = null) {
     if (!book) return [];
     let matching = matchingBookCourses(book, courses);
     const edition = label(book.edition);
@@ -28,29 +28,18 @@ export function bookWritingLessons(book, courses, legacy, confirmed = null) {
             course.publisher === confirmed.publisher && course.sourceVersion === confirmed.sourceVersion);
         if (pinned.length === 1) matching = pinned;
     }
-    if (matching.length === 1) {
-        const course = matching[0];
-        const expected = new Set(course.expectedLessons);
-        const seen = new Map();
-        for (const lesson of course.lessons) {
-            const number = lessonNumber(lesson?.number);
-            if (number === null || !expected.has(number)) continue;
-            seen.set(number, seen.has(number) || !isVerifiedLesson(lesson) ? null : {
-                number,
-                characters: lesson.characters.filter(entry => entry.kind === 'writing')
-                    .map(entry => entry.character)
-            });
-        }
-        return [...seen.values()].filter(Boolean);
+    if (matching.length !== 1) return [];
+    const course = matching[0];
+    const expected = new Set(course.expectedLessons);
+    const seen = new Map();
+    for (const lesson of course.lessons) {
+        const number = lessonNumber(lesson?.number);
+        if (number === null || !expected.has(number)) continue;
+        seen.set(number, seen.has(number) || !isVerifiedLesson(lesson) ? null : {
+            number,
+            characters: lesson.characters.filter(entry => entry.kind === 'writing')
+                .map(entry => entry.character)
+        });
     }
-    if (matching.length || book.curriculumSourceVersion || edition || book.year !== 113 ||
-        label(book.publisher) !== '康軒') return [];
-    const rows = legacy?.[book.grade]?.[book.semester === 1 ? 'A' : 'B'];
-    const firstLesson = new Map();
-    for (const row of rows ?? []) {
-        if (!lessonNumber(row.lesson) || firstLesson.has(row.lesson) || !Array.isArray(row.vocab)) continue;
-        firstLesson.set(row.lesson, { number: row.lesson,
-            characters: [...new Set(row.vocab.filter(char => typeof char === 'string' && /^\p{Script=Han}$/u.test(char)))] });
-    }
-    return [...firstLesson.values()];
+    return [...seen.values()].filter(Boolean);
 }

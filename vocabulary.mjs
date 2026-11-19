@@ -1,11 +1,14 @@
 import { bookLabel, makeBook, makeWord, previewBatch, readVocabulary, saveWord, updateVocabulary, vocabularyStorageKey } from './vocabularyData.mjs';
-import { makeExam, questionPool } from './examData.mjs';
+import { makeExam, questionPool, usesLessonCharacters } from './examData.mjs';
 import { cloudPageUrl, openPageStorage } from './cloudStorage.mjs';
 import { readAttempts, recentWrongTerms } from './reviewData.mjs';
 import { mergeReviewAttempts } from './reviewSync.mjs';
 import { applyVocabularyShare, compatibleShareBooks, createVocabularyShare, parseVocabularyShare,
     previewVocabularyShare, vocabularyShareMaxBytes } from './vocabularyShare.mjs';
 import { initPhotoImport } from './photoImport.mjs';
+import { matchingBookCourses, bookWritingLessons } from './bookCurriculum.mjs';
+import { courseKey } from './characterLookup.mjs';
+import { curriculumStorageKey, mergeCourses, progressStorageKey, readProgress, readStoredValue } from './learningData.mjs';
 import { deploymentCloud } from './cloudConfig.mjs';
 
 const cloud = await openPageStorage();
@@ -17,6 +20,8 @@ const wordForm = byId('wordForm');
 const wordFields = wordForm.elements;
 const batchForm = byId('batchForm');
 const examForm = byId('examForm');
+const examCurriculumVersion = byId('examCurriculumVersion');
+const applyExamCurriculum = byId('applyExamCurriculum');
 const shareExportForm = byId('shareExportForm');
 const shareFile = byId('shareFile');
 const shareTarget = byId('shareTarget');
@@ -34,6 +39,8 @@ let workspaceView = 'exam';
 let sharedVocabulary = null;
 let importPreview = null;
 let creatingExam = false;
+let bindingExamCurriculum = false;
+let examLessonRequest = null;
 
 byId('vocabularyMode').textContent = cloud
     ? '雲端資料 · 詞庫與考卷同步到此帳號'
@@ -67,6 +74,31 @@ async function persist(update, messageId) {
             main.removeAttribute('aria-busy');
         }
     }
+}
+
+async function readBookCatalog() {
+    const local = readStoredValue(localStorage, curriculumStorageKey);
+    const { activeKey, records } = readProgress(readStoredValue(cloud ?? localStorage, progressStorageKey));
+    const confirmed = records.find(record => courseKey(record) === activeKey);
+    let catalog = {};
+    let catalogUnavailable = false;
+    try {
+        if (cloud) catalog = await cloud.readCurriculumCatalog();
+    } catch {
+        // A catalog outage still permits use of this browser's verified material.
+        catalogUnavailable = true;
+    }
+    return { courses: mergeCourses(catalog.review, catalog.published, local), confirmed, catalogUnavailable };
+}
+
+async function readBookLessons(book, reference) {
+    if (!book) return [];
+    const { courses, confirmed } = reference;
+    const lessons = bookWritingLessons(book, courses, null, confirmed);
+    if (lessons.length || book.curriculumSourceVersion || book.edition.trim() || book.year !== 113 ||
+        book.publisher.trim() !== '康軒') return lessons;
+    await import('./curriculum_data.js');
+    return bookWritingLessons(book, courses, window.CURRICULUM_KANGHSUAN?.structure, confirmed);
 }
 
 const photo = initPhotoImport({
@@ -367,7 +399,8 @@ byId('commitBatch').addEventListener('click', async () => {
 
 function examSettings() {
     const fields = examForm.elements;
-    return { from: Number(fields.from.value), to: Number(fields.to.value), count: Number(fields.count.value) };
+    return { from: Number(fields.from.value), to: Number(fields.to.value), count: Number(fields.count.value),
+        blankMode: fields.blankMode?.value };
 }
 
 async function readPriorityTerms(bookId) {
@@ -377,14 +410,96 @@ async function readPriorityTerms(bookId) {
     return recentWrongTerms(mergeReviewAttempts(local, remote), bookId);
 }
 
+function updateCurriculumAction() {
+    const version = examCurriculumVersion.value;
+    applyExamCurriculum.disabled = bindingExamCurriculum || !version ||
+        version === examLessonRequest?.book?.curriculumSourceVersion;
+}
+
+function renderExamCurriculum(request) {
+    examCurriculumVersion.replaceChildren(new Option('選擇已核對的教材版次', ''));
+    const versions = request.versions ?? [];
+    examCurriculumVersion.disabled = !versions.length;
+    for (const course of versions) {
+        const label = course.versionLabel.trim() || course.sourceVersion;
+        const duplicate = versions.some(other => other !== course && other.versionLabel.trim() === label);
+        examCurriculumVersion.add(new Option(
+            duplicate ? `${label} · ${course.sourceVersion.slice(0, 8)}` : label, course.sourceVersion));
+    }
+    const bound = versions.find(course => course.sourceVersion === request.book?.curriculumSourceVersion);
+    examCurriculumVersion.value = bound?.sourceVersion ?? '';
+    updateCurriculumAction();
+    let message = '選擇此班級使用的教材版次。';
+    if (request.error) message = request.error.message;
+    else if (request.versions === null) message = '正在讀取可用的教材版次…';
+    else if (bound) message = `此班已套用 ${bound.versionLabel.trim() || bound.sourceVersion}。`;
+    else if (!versions.length && request.characters?.size) message = '此班目前可使用內建教材。';
+    else if (!versions.length && request.catalogUnavailable) message = '暫時無法讀取雲端教材，請重新選擇挖空方式後再試。';
+    else if (!versions.length) message = '目前沒有此班可用的已核對教材。請確認登入的帳號有教材查閱權限。';
+    else if (request.book?.curriculumSourceVersion) message = '此班原先套用的教材目前無法讀取，請選擇可用的版次。';
+    else if (request.book?.edition && !request.characters?.size) {
+        message = `此班填寫的「${request.book.edition}」未對應到可用的教材，請選擇要套用的版次。`;
+    }
+    notice('examCurriculumNotice', message, Boolean(request.error));
+}
+
+function loadExamLessonCharacters(bookId) {
+    if (examLessonRequest?.bookId === bookId) return examLessonRequest;
+    const book = data.books.find(candidate => candidate.id === bookId);
+    const request = { bookId, book, characters: null, versions: null, error: null, ready: null };
+    examLessonRequest = request;
+    renderExamCurriculum(request);
+    request.ready = readBookCatalog().then(async reference => {
+        request.catalogUnavailable = reference.catalogUnavailable;
+        request.versions = matchingBookCourses(book, reference.courses).filter(course =>
+            bookWritingLessons({ ...book, curriculumSourceVersion: course.sourceVersion }, [course], null)
+                .some(lesson => lesson.characters.length));
+        const lessons = await readBookLessons(book, reference);
+        request.characters = new Map(lessons.map(({ number, characters }) => [number, new Set(characters)]));
+    }).catch(() => {
+        request.error = new Error('無法載入應寫生字表。請重新選擇挖空方式後再試。');
+    }).finally(() => {
+        if (examLessonRequest === request && activeId === bookId) {
+            renderExamCurriculum(request);
+            renderPool();
+        }
+    });
+    return request;
+}
+
 function renderPool() {
     if (!activeId) return;
     try {
-        const { from, to } = examSettings();
+        const { from, to, blankMode } = examSettings();
         const distinctWords = examForm.elements.prioritize.checked;
-        const { available, ambiguous } = questionPool(ownWords(), activeId, from, to, distinctWords);
-        const excluded = ambiguous ? `。${ambiguous} 組提示會對到多個答案，已排除` : '';
-        notice('examPool', `這個範圍有 ${available.length} 題可抽${excluded}。`);
+        const lessonMode = usesLessonCharacters(blankMode);
+        byId('examCurriculum').hidden = !lessonMode;
+        let lessonCharacters;
+        if (lessonMode) {
+            const request = loadExamLessonCharacters(activeId);
+            if (request.error) throw request.error;
+            if (!request.characters) {
+                notice('examPool', '正在查對本課的應寫生字表…');
+                return;
+            }
+            lessonCharacters = request.characters;
+        } else {
+            examLessonRequest = null;
+        }
+        const { available, ambiguous, missingLessons, noMatchingCharacter } =
+            questionPool(ownWords(), activeId, from, to, distinctWords, blankMode, lessonCharacters);
+        const messages = [`這個範圍有 ${available.length} 題可抽。`];
+        if (ambiguous) messages.push(`${ambiguous} 組提示會對到多個答案，已排除。`);
+        const allowFallback = blankMode === 'lesson-preferred';
+        if (noMatchingCharacter) {
+            const action = allowFallback ? '各挖一字' : '已排除';
+            messages.push(`${noMatchingCharacter} 個詞未含原課次的應寫生字，${action}。`);
+        }
+        if (missingLessons?.length) {
+            const action = allowFallback ? '，這些課的詞語各挖一字' : '';
+            messages.push(`第 ${missingLessons.join('、')} 課缺少已核對的應寫生字表${action}。`);
+        }
+        notice('examPool', messages.join(''));
     } catch (error) {
         notice('examPool', error.message, true);
     }
@@ -415,6 +530,36 @@ function renderExams() {
     }));
 }
 
+window.addEventListener('storage', event => {
+    if (![null, curriculumStorageKey, progressStorageKey].includes(event.key)) return;
+    examLessonRequest = null;
+    renderPool();
+});
+
+examCurriculumVersion.addEventListener('input', updateCurriculumAction);
+examCurriculumVersion.addEventListener('change', updateCurriculumAction);
+applyExamCurriculum.addEventListener('click', async () => {
+    if (bindingExamCurriculum || creatingExam) return;
+    const request = examLessonRequest;
+    const course = request?.versions?.find(item => item.sourceVersion === examCurriculumVersion.value);
+    if (!course || request.bookId !== activeId) return;
+    bindingExamCurriculum = true;
+    updateCurriculumAction();
+    try {
+        if (!await persist(state => {
+            const book = state.books.find(candidate => candidate.id === request.bookId);
+            if (!book || !matchingBookCourses(book, [course]).length) throw new Error('請重新選擇班級教材版次。');
+            book.curriculumSourceVersion = course.sourceVersion;
+        }, 'examCurriculumNotice')) return;
+        examLessonRequest = null;
+        notice('examNotice');
+        renderPool();
+    } finally {
+        bindingExamCurriculum = false;
+        updateCurriculumAction();
+    }
+});
+
 examForm.addEventListener('input', () => {
     notice('examNotice');
     renderPool();
@@ -425,12 +570,22 @@ byId('newExamSeed').addEventListener('click', () => {
 });
 examForm.addEventListener('submit', async event => {
     event.preventDefault();
-    if (creatingExam) return;
+    if (creatingExam || bindingExamCurriculum) return;
     creatingExam = true;
     const seed = examForm.elements.seed.value.trim() || crypto.randomUUID().replaceAll('-', '').slice(0, 16);
     const settings = examSettings();
     const bookId = activeId;
+    let lessonBook;
     try {
+        if (usesLessonCharacters(settings.blankMode)) {
+            const request = loadExamLessonCharacters(bookId);
+            if (!request.characters) notice('examNotice', '正在查對本課的應寫生字表…');
+            await request.ready;
+            if (activeId !== bookId || examForm.elements.blankMode?.value !== settings.blankMode) return;
+            if (request.error) throw request.error;
+            settings.lessonCharacters = request.characters;
+            lessonBook = request.book;
+        }
         let priorityWords = null;
         if (examForm.elements.prioritize.checked) {
             notice('examNotice', '正在讀取最近的批改紀錄…');
@@ -444,6 +599,10 @@ examForm.addEventListener('submit', async event => {
         if (!await persist(state => {
             const book = state.books.find(candidate => candidate.id === bookId);
             if (!book) throw new Error('請重新選擇班級詞庫。');
+            if (lessonBook && (book.curriculumSourceVersion !== lessonBook.curriculumSourceVersion ||
+                book.edition !== lessonBook.edition)) {
+                throw new Error('班級教材版次已更新，請重新載入頁面再出卷。');
+            }
             state.exams.push(makeExam({ ...settings, id: crypto.randomUUID(), createdAt: new Date().toISOString(),
                 book, words: state.words, seed, priorityWords }));
         }, 'examNotice')) return;

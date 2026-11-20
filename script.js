@@ -50,6 +50,12 @@ function showLineGuide() {
 })();
 
 const CHARS_PER_PAGE = 6;
+const WORKSHEET_ASSET_TIMEOUT_MS = 3000;
+const WORKSHEET_PDF_ASSET_TIMEOUT_MS = 6000;
+const STROKE_COORDINATE_PAIR = '-?\\d{1,4} -?\\d{1,4}';
+const STROKE_PATH = new RegExp(
+    `^M${STROKE_COORDINATE_PAIR}(?:C${STROKE_COORDINATE_PAIR} ${STROKE_COORDINATE_PAIR} ${STROKE_COORDINATE_PAIR}|Q${STROKE_COORDINATE_PAIR} ${STROKE_COORDINATE_PAIR})+Z$`
+);
 
 // A. Global DB & Init
 let charDB = {};
@@ -555,9 +561,44 @@ function worksheetTitle(lesson) {
         .replace(/[\\/:*?"<>|\r\n]/g, '-');
 }
 
+function waitForWorksheetAssets(pages, timeoutMs = WORKSHEET_ASSET_TIMEOUT_MS) {
+    const images = [...pages].flatMap(page => [...page.querySelectorAll('img')]);
+    const hasTextGlyphs = [...pages].some(page =>
+        [...page.querySelectorAll('.char-text')].some(glyph => glyph.textContent)
+    );
+    const font = hasTextGlyphs ? document.fonts?.load('48px edukai') : undefined;
+    const ready = Promise.allSettled([font, ...images.map(image => image.decode?.())]);
+    return new Promise(resolve => {
+        const timeout = setTimeout(() => resolve(false), timeoutMs);
+        ready.then(() => {
+            clearTimeout(timeout);
+            resolve(true);
+        });
+    });
+}
+
+function captureWorksheetPage(page, useSystemFont) {
+    if (useSystemFont) document.body.classList.add('worksheet-pdf-system-font');
+    try {
+        // html2canvas clones synchronously, then waits for the clone's fonts before onclone.
+        return html2canvas(page, {
+            scale: 2,
+            allowTaint: true,
+            logging: false,
+            windowWidth: Math.max(window.innerWidth, 1024),
+            onclone(_document, sheet) {
+                sheet.style.width = 'var(--a4-width)';
+                sheet.style.minWidth = 'var(--a4-width)';
+            }
+        });
+    } finally {
+        if (useSystemFont) document.body.classList.remove('worksheet-pdf-system-font');
+    }
+}
+
 function printWorksheet(button) {
-    const page = document.querySelector('.sheet-page');
-    if (!page) return;
+    const pages = document.querySelectorAll('.sheet-page');
+    if (pages.length === 0) return;
     if (/Line\//i.test(navigator.userAgent)) showLineGuide();
     const originalContent = button.innerHTML;
     const originalTitle = document.title;
@@ -566,9 +607,10 @@ function printWorksheet(button) {
     button.disabled = true;
     document.title = worksheetTitle(lesson);
     document.body.classList.add('is-printing-now');
-    setTimeout(() => {
+    setTimeout(async () => {
         try {
-            if (page.isConnected) {
+            await waitForWorksheetAssets(pages);
+            if (pages[0].isConnected) {
                 recordWorksheetOutput(lesson);
                 window.print();
             }
@@ -599,8 +641,11 @@ downloadBtn.addEventListener('click', async () => {
     // v1.1 Mobile Strategy (v1.4 Updated to Native Print for all mobile)
     if (isMobile) {
         console.log('[Main] Mobile detected, triggering window.print()');
-        recordWorksheetOutput(outputLesson);
-        window.print();
+        await waitForWorksheetAssets(pages);
+        if (pages[0].isConnected) {
+            recordWorksheetOutput(outputLesson);
+            window.print();
+        }
         return;
     }
     // Check libraries
@@ -619,9 +664,12 @@ downloadBtn.addEventListener('click', async () => {
     downloadBtn.innerText = "⏳ 轉檔中...";
     downloadBtn.disabled = true;
     const worksheetPdf = document.getElementById('worksheetPdf');
-    const controls = document.getElementById('currentWorksheet').hidden ? []
-        : [worksheetPdf, worksheetPrint, generateBtn, document.getElementById('worksheetLesson'),
-            document.getElementById('prepareWorksheet')].filter(control => !control.disabled);
+    const activePdfButton = document.getElementById('worksheetPreviewActions').hidden
+        ? document.getElementById('downloadPdfBtn') ?? worksheetPdf
+        : worksheetPdf;
+    activePdfButton.textContent = '準備字型與筆順…';
+    const controls = [worksheetPdf, worksheetPrint, generateBtn, document.getElementById('worksheetLesson'),
+        document.getElementById('prepareWorksheet')].filter(control => !control.disabled);
     for (const control of controls) control.disabled = true;
 
     // FORCE VISIBILITY for html2canvas
@@ -637,29 +685,18 @@ downloadBtn.addEventListener('click', async () => {
     }
 
     try {
+        const useSystemFont = !await waitForWorksheetAssets(pages, WORKSHEET_PDF_ASSET_TIMEOUT_MS);
+        if (!pages[0].isConnected) return;
         const totalPages = pages.length;
-        const visibleDownloadBtn = document.getElementById('downloadPdfBtn') ?? worksheetPdf;
-
         for (let i = 0; i < totalPages; i++) {
             const progressText = `⏳ 轉檔中 (${i + 1}/${totalPages})...`;
             downloadBtn.innerText = progressText;
-            if (visibleDownloadBtn) visibleDownloadBtn.innerText = progressText;
+            activePdfButton.textContent = useSystemFont ? `使用系統字型轉檔 (${i + 1}/${totalPages})…` : progressText;
 
             if (i > 0) doc.addPage();
 
             const page = pages[i];
-
-            // Keep the responsive preview from narrowing the A4 capture.
-            const canvas = await html2canvas(page, {
-                scale: 2, // Retain quality
-                allowTaint: true, // CRITICAL: Allow cross-origin resources
-                logging: false,
-                windowWidth: Math.max(window.innerWidth, 1024),
-                onclone(_document, sheet) {
-                    sheet.style.width = 'var(--a4-width)';
-                    sheet.style.minWidth = 'var(--a4-width)';
-                }
-            });
+            const canvas = await captureWorksheetPage(page, useSystemFont);
 
             // Use toBlob instead of toDataURL to avoid security errors
             const blob = await new Promise((resolve) => {
@@ -743,9 +780,10 @@ function renderSheets(text, metadata = null) {
         container.appendChild(pageDOM);
     }
     renderedWorksheetLesson = metadata ? { ...metadata, text: cleanText } : null;
-    if (!document.getElementById('currentWorksheet').hidden) {
+    const hasPreviewActions = !metadata || !document.getElementById('currentWorksheet').hidden;
+    document.getElementById('worksheetPreviewActions').hidden = !hasPreviewActions;
+    if (hasPreviewActions) {
         previewArea.querySelector(':scope > .empty-state').hidden = true;
-        document.getElementById('worksheetPreviewActions').hidden = false;
         document.getElementById('worksheetPdf').hidden = isIOS() || /Android/i.test(navigator.userAgent);
     }
     // Enable Download (Force update)
@@ -829,6 +867,8 @@ function createCharColumn(char) {
     const col = document.createElement('div');
     col.className = 'char-col';
 
+    const strokes = verifiedWorksheetStrokes(char);
+
     // 1. Fetch Metadata (Priority: MOE > cnchar)
     let charData = { zhuyin: '', radical: '', strokeCount: '' };
 
@@ -890,9 +930,11 @@ function createCharColumn(char) {
              ${toneHTML}
         </div>
         <div class="big-char-box tian-zi-ge">
-             <span class="char-text">${char}</span>
+             <span class="char-text"></span>
         </div>
     `;
+    const sample = header.querySelector('.char-text');
+    sample.replaceChildren(strokes ? createWorksheetGlyph(strokes, '#000', char) : char);
     col.appendChild(header);
 
     // B. Meta
@@ -901,7 +943,7 @@ function createCharColumn(char) {
 
     if (char) {
         meta.innerHTML = `
-            <div class="meta-row meta-strokes">${charData.strokeCount}</div>
+            <div class="meta-row meta-strokes">${strokes?.length ?? charData.strokeCount}</div>
             <div class="meta-row meta-radical">${charData.radical || ''}</div>
         `;
     } else {
@@ -914,8 +956,7 @@ function createCharColumn(char) {
     strokesContainer.className = 'sec-strokes';
     col.appendChild(strokesContainer);
 
-    // Call renderer
-    renderStrokeOrder(strokesContainer, char);
+    renderStrokeOrder(strokesContainer, char, strokes);
 
     // D & E. Practice Group
     const practiceGroup = document.createElement('div');
@@ -924,7 +965,12 @@ function createCharColumn(char) {
     for (let t = 0; t < 2; t++) {
         const cell = document.createElement('div');
         cell.className = 'practice-cell tian-zi-ge';
-        if (char) cell.innerHTML = `<span class="char-trace">${char}</span>`;
+        if (char) {
+            const trace = document.createElement('span');
+            trace.className = 'char-trace';
+            trace.append(strokes ? createWorksheetGlyph(strokes, '#ccc') : char);
+            cell.append(trace);
+        }
         practiceGroup.appendChild(cell);
     }
     for (let p = 0; p < 5; p++) {
@@ -937,60 +983,45 @@ function createCharColumn(char) {
     return col;
 }
 
-// Dedicated Stroke Renderer using HanziWriter RAW Data (Static Mode)
-async function renderStrokeOrder(container, char) {
-    if (!char) return;
-    container.innerHTML = '<div style="font-size:12px; color:#999; padding: 10px;">載入中...</div>';
+function verifiedWorksheetStrokes(char) {
+    const { strokes, strokeCount } = window.VERIFIED_TW_STROKES?.characters?.[char] ?? {};
+    // The existing print grid can show 30 full steps.
+    if (!Array.isArray(strokes) || strokes.length === 0 || strokes.length > 30) return null;
+    if (strokeCount !== strokes.length) return null;
+    return strokes.every(path => typeof path === 'string' && STROKE_PATH.test(path)) ? strokes : null;
+}
 
-    try {
-        // 1. Fetch RAW Data using HanziWriter (MIT License - 可商業使用)
-        if (typeof HanziWriter === 'undefined') {
-            throw new Error('HanziWriter not loaded');
-        }
+function createWorksheetGlyph(strokes, fill, label = '') {
+    // AnimCJK Taiwan paths already use SVG's downward y-axis.
+    const paths = strokes.map(path => `<path d="${path}" fill="${fill}"/>`).join('');
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">${paths}</svg>`;
+    const image = document.createElement('img');
+    image.alt = label;
+    image.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    return image;
+}
 
-        // ✅ 使用 HanziWriter (MIT License - 完全開放,可商業使用)
-        const charData = await HanziWriter.loadCharacterData(char);
-        console.log(`✅ 使用 HanziWriter 筆順資料: ${char}`);
-        container.innerHTML = ''; // Clear loading
+function renderStrokeOrder(container, char, strokes) {
+    if (!strokes) {
+        if (!/\p{Script=Han}/u.test(char)) return;
 
-        const strokes = charData.strokes;
+        const link = document.createElement('a');
+        link.className = 'stroke-reference';
+        link.href = 'https://stroke-order.learningweb.moe.edu.tw/searchW.jsp?WORD=' + encodeURIComponent(char);
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = '查教育部筆順';
+        link.setAttribute('aria-label', `查教育部的「${char}」筆順`);
+        link.setAttribute('data-html2canvas-ignore', '');
+        container.append(link);
+        return;
+    }
 
-        if (!strokes || strokes.length === 0) {
-            container.innerHTML = '<span style="color:#ccc; font-size:10px;">無資料</span>';
-            return;
-        }
-
-        // 2. Render Loop (Progressive)
-        // Adjusting for 3x10 vertical grid (30 steps max)
-        const maxSteps = Math.min(strokes.length, 30);
-
-        for (let step = 0; step < maxSteps; step++) {
-            const stepDiv = document.createElement('div');
-            stepDiv.className = 'stroke-step';
-
-            // Build SVG String
-            const svgString = `
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
-                    <g transform="scale(1, -1) translate(0, -900)">
-                        ${strokes.slice(0, step + 1).map(path => `<path d="${path}" fill="#000000" />`).join('')}
-                    </g>
-                </svg>
-            `.trim();
-
-            // Convert to Atomic Image (Prevents print engines from "exploding" the SVG internal paths)
-            const img = document.createElement('img');
-            img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.display = 'block';
-
-            stepDiv.appendChild(img);
-            container.appendChild(stepDiv);
-        }
-
-    } catch (e) {
-        console.error("❌ 筆順資料加載失敗:", e);
-        container.innerHTML = `<span style="color:red; font-size:10px;">渲染失敗</span>`;
+    for (let step = 1; step <= strokes.length; step++) {
+        const cell = document.createElement('div');
+        cell.className = 'stroke-step';
+        cell.append(createWorksheetGlyph(strokes.slice(0, step), '#000'));
+        container.append(cell);
     }
 }
 

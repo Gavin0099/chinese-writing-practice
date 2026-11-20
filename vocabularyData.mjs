@@ -27,12 +27,18 @@ export function updateVocabulary(update, storage = localStorage) {
 
 const integerIn = (value, min, max) => Number.isInteger(value) && value >= min && value <= max;
 
-export function makeBook({ id, name, publisher, year, grade, semester, edition }) {
+export function makeBook({ id, name, publisher, year, grade, semester, edition, curriculumSourceVersion }) {
     const book = { id, name: name.trim(), publisher: publisher.trim(), year: Number(year), grade: Number(grade),
         semester: Number(semester), edition: edition.trim() };
     if (!book.name || book.name.length > 40 || !book.publisher || book.publisher.length > 24 || book.edition.length > 40 ||
         !integerIn(book.year, 1, 999) || !integerIn(book.grade, 1, 6) || !integerIn(book.semester, 1, 2)) {
         throw new Error('請填寫班級名稱、出版社、學年度、年級與學期。');
+    }
+    if (curriculumSourceVersion !== undefined) {
+        if (typeof curriculumSourceVersion !== 'string' || !curriculumSourceVersion.trim()) {
+            throw new Error('班級的教材版本識別有誤。');
+        }
+        book.curriculumSourceVersion = curriculumSourceVersion;
     }
     return book;
 }

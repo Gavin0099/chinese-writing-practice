@@ -116,3 +116,137 @@ test('priority includes current mistakes across selected lessons once and fills 
     assert.deepEqual(filled, makeExam({ ...options, count: 3, words: words.slice().reverse() }));
     assert.throws(() => makeExam({ ...options, count: 4 }), /只有 3 題/);
 });
+
+test('exam blank modes write only the snapshot and count Unicode characters correctly', () => {
+    const words = [
+        entry({ word: '𠮷天', pronunciation: 'ㄐㄧˊ ㄊㄧㄢ', blanks: [2] }),
+        entry({ id: 'single', word: '晴', pronunciation: 'ㄑㄧㄥˊ' })
+    ];
+    const options = { id: 'layout', createdAt: '2026-11-19T00:00:00Z', book, words,
+        from: 1, to: 1, count: 2, seed: 'fixed-masks' };
+    const blanksByWord = exam => Object.fromEntries(exam.questions.map(question => [question.word, question.blanks]));
+    const original = structuredClone(words);
+    assert.deepEqual(blanksByWord(makeExam(options)), { '𠮷天': [2], '晴': [1] });
+    assert.deepEqual(makeExam(options), makeExam({ ...options, blankMode: 'vocabulary' }));
+    assert.deepEqual(blanksByWord(makeExam({ ...options, blankMode: 'all' })), { '𠮷天': [1, 2], '晴': [1] });
+    const single = blanksByWord(makeExam({ ...options, blankMode: 'single' }));
+    assert.deepEqual(single['晴'], [1]);
+    assert.equal(single['𠮷天'].length, 1);
+    assert.ok([1, 2].includes(single['𠮷天'][0]));
+    assert.deepEqual(single, blanksByWord(makeExam({ ...options, blankMode: 'single', seed: 'new-order' })));
+    assert.deepEqual(words, original);
+    assert.throws(() => makeExam({ ...options, blankMode: 'invalid' }), /挖空方式/);
+});
+
+test('the selected mask controls prompt ambiguity and deduplication before drawing', () => {
+    const words = [
+        entry({ id: 'authority', word: '權力', pronunciation: 'ㄑㄩㄢˊ ㄌㄧˋ', blanks: [2] }),
+        entry({ id: 'effort', word: '全力', pronunciation: 'ㄑㄩㄢˊ ㄌㄧˋ', blanks: [2] })
+    ];
+    assert.equal(questionPool(words, book.id, 1, 1).available.length, 2);
+    assert.deepEqual(questionPool(words, book.id, 1, 1, false, 'all'), { available: [], ambiguous: 1 });
+    assert.throws(() => makeExam({ id: 'ambiguous', book, words, from: 1, to: 1, count: 1,
+        seed: 'ambiguous-masks', blankMode: 'all' }), /只有 0 題/);
+
+    const duplicates = [entry(), entry({ id: 'same-term', lesson: 2, blanks: [2] })];
+    assert.equal(questionPool(duplicates, book.id, 1, 2).available.length, 2);
+    for (const mode of ['all', 'single']) {
+        const { available } = questionPool(duplicates, book.id, 1, 2, false, mode);
+        assert.equal(available.length, 1);
+        assert.deepEqual(available[0].sources.map(source => source.lesson), [1, 2]);
+    }
+});
+
+test('lesson mode selects from each source lesson, covers different characters and skips missing material', () => {
+    const words = [
+        entry({ id: 'spring-wind', word: '春風', lesson: 7, pronunciation: 'ㄔㄨㄣ ㄈㄥ' }),
+        entry({ id: 'strong-wind', word: '大風', lesson: 7, pronunciation: 'ㄉㄚˋ ㄈㄥ' }),
+        entry({ id: 'spring-rain', word: '春雨', lesson: 8, pronunciation: 'ㄔㄨㄣ ㄩˇ' }),
+        entry({ id: 'wrong-lesson', word: '清風', lesson: 8, pronunciation: 'ㄑㄧㄥ ㄈㄥ' }),
+        entry({ id: 'unknown-material', word: '雨天', lesson: 9, pronunciation: 'ㄩˇ ㄊㄧㄢ' })
+    ];
+    const lessonCharacters = new Map([[7, new Set('春風')], [8, new Set('雨')]]);
+    const original = structuredClone(words);
+    const options = { id: 'lesson-exam', createdAt: '2026-11-19T00:00:00Z', book, words, from: 7, to: 9,
+        count: 3, blankMode: 'lesson', lessonCharacters };
+    const pool = questionPool(words, book.id, 7, 9, false, 'lesson', lessonCharacters);
+    assert.equal(pool.available.length, 3);
+    assert.deepEqual(pool.missingLessons, [9]);
+    assert.equal(pool.noMatchingCharacter, 1);
+    for (const seed of ['lesson-a', 'lesson-b', 'lesson-c']) {
+        const exam = makeExam({ ...options, seed });
+        const maskByTerm = Object.fromEntries(exam.questions.map(question => [question.word, question.blanks]));
+        assert.deepEqual(maskByTerm, { 春風: [1], 大風: [2], 春雨: [2] });
+        assert.deepEqual(exam, makeExam({ ...options, seed, words: words.slice().reverse() }));
+    }
+    const wrongFirst = makeExam({ ...options, seed: 'wrong-first', count: 2, priorityWords: new Set(['大風']) });
+    assert.ok(wrongFirst.questions.some(question => question.word === '大風'));
+    assert.equal(new Set(wrongFirst.questions.map(({ word, blanks }) => [...word][blanks[0] - 1])).size, 2);
+    assert.deepEqual(words, original);
+    assert.throws(() => makeExam({ ...options, seed: 'missing', from: 9, to: 9, count: 1 }), /只有 0 題/);
+    assert.throws(() => makeExam({ ...options, seed: 'too-many', count: 4 }), /只有 3 題/);
+});
+
+test('lesson mode keeps viable alternate prompts and attributes them to the matching source', () => {
+    const words = [
+        entry({ id: 'power-7', word: '權力', lesson: 7, pronunciation: 'ㄑㄩㄢˊ ㄌㄧˋ' }),
+        entry({ id: 'effort-7', word: '全力', lesson: 7, pronunciation: 'ㄑㄩㄢˊ ㄌㄧˋ' }),
+        entry({ id: 'power-8', word: '權力', lesson: 8, pronunciation: 'ㄑㄩㄢˊ ㄌㄧˋ' })
+    ];
+    const lessonCharacters = new Map([[7, new Set('權全力')], [8, new Set('權')]]);
+    const pool = questionPool(words, book.id, 7, 8, false, 'lesson', lessonCharacters);
+    assert.equal(pool.ambiguous, 1);
+    assert.equal(pool.available.length, 2);
+    for (const group of pool.available) {
+        assert.equal(group.variants.length, 1);
+        assert.deepEqual(group.variants[0].entry.blanks, [2]);
+        assert.deepEqual(group.variants[0].sources.map(source => source.lesson), [7]);
+    }
+    const exam = makeExam({ id: 'single-lesson', book, words, from: 8, to: 8, count: 1, seed: 'one',
+        blankMode: 'lesson', lessonCharacters });
+    assert.deepEqual(exam.questions[0].blanks, [1]);
+    assert.deepEqual(exam.questions[0].sources, [{ id: 'power-8', lesson: 8 }]);
+});
+
+test('lesson-preferred uses each term’s lesson and gives the remaining terms a single blank', () => {
+    const words = [
+        entry({ id: 'wind-7', word: '春風', lesson: 7, pronunciation: 'ㄔㄨㄣ ㄈㄥ', blanks: [2] }),
+        entry({ id: 'wind-8', word: '大風', lesson: 8, pronunciation: 'ㄉㄚˋ ㄈㄥ', blanks: [1, 2] }),
+        entry({ id: 'sky-8', lesson: 8, blanks: [1, 2] }),
+        entry({ id: 'rain-9', word: '雨天', lesson: 9, pronunciation: 'ㄩˇ ㄊㄧㄢ', blanks: [1, 2] }),
+        entry({ id: 'draft', word: '清風', lesson: 7, pronunciation: 'ㄑㄧㄥ ㄈㄥ', confirmed: false })
+    ];
+    const lessonCharacters = new Map([[7, new Set('春大')], [8, new Set('風')]]);
+    const original = structuredClone(words);
+    const options = { id: 'preferred-exam', book, words, from: 7, to: 9, count: 4, seed: 'mixed-lessons',
+        blankMode: 'lesson-preferred', lessonCharacters };
+    const pool = questionPool(words, book.id, 7, 9, false, 'lesson-preferred', lessonCharacters);
+    assert.equal(pool.available.length, 4);
+    assert.deepEqual(pool.missingLessons, [9]);
+    assert.equal(pool.noMatchingCharacter, 1);
+    const exam = makeExam(options);
+    const masks = Object.fromEntries(exam.questions.map(({ word, blanks }) => [word, blanks]));
+    assert.deepEqual(Object.keys(masks).sort(), ['大風', '春風', '晴天', '雨天'].sort());
+    assert.deepEqual(masks.春風, [1]);
+    assert.deepEqual(masks.大風, [2]);
+    for (const word of ['晴天', '雨天']) {
+        assert.equal(masks[word].length, 1);
+        assert.ok([1, 2].includes(masks[word][0]));
+    }
+    assert.deepEqual(exam, makeExam({ ...options, words: words.toReversed() }));
+    const priority = makeExam({ ...options, count: 1, priorityWords: new Set(['晴天']) });
+    assert.equal(priority.questions[0].word, '晴天');
+    assert.deepEqual(words, original);
+    assert.throws(() => makeExam({ ...options, count: 5 }), /只有 4 題可抽。請減少題數/);
+});
+
+test('lesson-preferred still rejects a prompt with two possible answers', () => {
+    const words = [
+        entry({ id: 'merit', word: '功', lesson: 7, pronunciation: 'ㄍㄨㄥ' }),
+        entry({ id: 'work', word: '工', lesson: 7, pronunciation: 'ㄍㄨㄥ' })
+    ];
+    const lessonCharacters = new Map([[7, new Set('功')]]);
+    const pool = questionPool(words, book.id, 7, 7, false, 'lesson-preferred', lessonCharacters);
+    assert.equal(pool.available.length, 0);
+    assert.equal(pool.ambiguous, 1);
+});

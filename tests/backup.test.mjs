@@ -41,6 +41,21 @@ test('backup round trip restores 30 words, the saved 15-question exam, progress 
     assert.deepEqual(JSON.parse(to.getItem(curriculumStorageKey)), [{ contents: 'existing textbook data' }]);
 });
 
+test('backup and cloud validation keep a long class curriculum identifier and the earlier exam snapshot', () => {
+    const original = sampleRecords();
+    const { books, words, exams } = original[vocabularyStorageKey];
+    const previousExam = structuredClone(exams[0]);
+    const version = 'b'.repeat(64);
+    books[0].curriculumSourceVersion = version;
+    const backup = exportBackup(mockStorage(original));
+    const restored = parseBackup(JSON.stringify(backup)).vocabulary;
+    assert.equal(restored.books[0].curriculumSourceVersion, version);
+    assert.equal(restored.books[0].edition, '測試版');
+    assert.deepEqual(restored.words, words);
+    assert.deepEqual(restored.exams, [previousExam]);
+    assert.throws(() => makeBook({ ...books[0], curriculumSourceVersion: '' }), /教材版本識別/);
+});
+
 test('rejects a bad version, incorrect blank position and dangling class before touching storage', () => {
     const storage = mockStorage(sampleRecords());
     const before = readBackupTarget(storage);

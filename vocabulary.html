@@ -189,6 +189,23 @@
                     <label>起始課次<input name="from" type="number" min="1" max="60" value="1" required></label>
                     <label>結束課次<input name="to" type="number" min="1" max="60" value="8" required></label>
                     <label>抽題數<input name="count" type="number" min="1" max="60" value="15" required></label>
+                    <label class="exam-blank-mode">挖空方式
+                        <select name="blankMode">
+                            <option value="vocabulary">沿用詞庫設定</option>
+                            <option value="single">每題只挖一字</option>
+                            <option value="lesson">每題挖一個本課生字</option>
+                            <option value="lesson-preferred">優先挖本課生字</option>
+                            <option value="all">整詞挖空</option>
+                        </select>
+                    </label>
+                    <div class="exam-curriculum" id="examCurriculum" hidden>
+                        <label for="examCurriculumVersion">班級教材版次</label>
+                        <select id="examCurriculumVersion" aria-describedby="examCurriculumNotice" disabled>
+                            <option value="">選擇已核對的教材版次</option>
+                        </select>
+                        <button type="button" id="applyExamCurriculum" disabled>套用到此班級</button>
+                        <p class="hint" id="examCurriculumNotice" role="status"></p>
+                    </div>
                     <div><label class="check"><input name="prioritize" type="checkbox">優先抽最近答錯的詞語</label></div>
                     <p class="hint" id="examPool" role="status"></p>
                     <details class="subpanel exam-advanced">

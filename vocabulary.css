@@ -53,7 +53,7 @@
 .entry-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
 .entry-form .wide { grid-column: 1 / -1; }
 .entry-form label { min-width: 0; }
-.entry-form input:not([type='checkbox']), .exam-form input { display: block; width: 100%; border: 1px solid #a8b7ad; border-radius: .4rem; padding: .45rem .5rem; margin-top: .2rem; color: var(--ink); }
+.entry-form input:not([type='checkbox']), .exam-form :is(input, select) { display: block; width: 100%; border: 1px solid #a8b7ad; border-radius: .4rem; padding: .45rem .5rem; margin-top: .2rem; color: var(--ink); }
 .entry-form .hint { margin-top: -.3rem; }
 .entry-form fieldset legend { font-weight: 620; }
 .entry-form label.check { display: flex; align-items: center; gap: .5rem; min-height: 2.75rem; }
@@ -75,6 +75,9 @@
 .batch-rows [data-error] { color: #902f29; }
 .exam-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .55rem .65rem; }
 .exam-form label { min-width: 0; }
+.exam-blank-mode { grid-column: 1 / -1; max-width: 24rem; }
+.exam-curriculum { max-width: 34rem; }
+.exam-curriculum button { margin-top: .35rem; }
 .exam-form > :not(label) { grid-column: 1 / -1; }
 .exam-form input[type='checkbox'] { display: inline-block; width: auto; margin: 0; }
 .share-entries { max-block-size: 17rem; overflow: auto; padding-inline: .65rem; margin: .6rem 0; }

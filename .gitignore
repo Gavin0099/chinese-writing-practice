@@ -1,5 +1,8 @@
 # Dependencies
 node_modules/
+supabase/.temp/
+supabase/.branches/
+/cloudConfig.local.mjs
 
 # Build outputs
 dist/
@@ -18,6 +21,7 @@ Thumbs.db
 
 # Backup files
 *_backup.*
+chinese-writing-practice_backup_*.json
 *_old.*
 *.bak
 

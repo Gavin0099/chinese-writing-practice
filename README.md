@@ -4,6 +4,8 @@
 
 共用 AI Governance 框架由 Git submodule 固定版本。安裝與驗證步驟見 [AI Governance 導入指南](docs/GOVERNANCE_ONBOARDING.md)，專案規則見 [AGENTS.md](AGENTS.md)。
 
+要在本機試用新版，可從 [UX／UI 審查入口](docs/UX_REVIEW.md) 產生合成資料並重現主要操作流程。
+
 ## 目錄結構
 - `/memory`: 長期不變的專案背景與規程。
 - `/work/tickets`: 存放開發工單。

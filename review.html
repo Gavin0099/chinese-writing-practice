@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#FAF8F4">
+    <title>錯題複習｜國字學習小幫手</title>
+    <link rel="stylesheet" href="learning.css">
+    <link rel="stylesheet" href="vocabulary.css">
+    <link rel="stylesheet" href="task-layout.css" media="screen">
+    <link rel="stylesheet" href="tokens.css" media="screen">
+    <script type="module" src="review.mjs"></script>
+</head>
+<body>
+    <header class="page-header">
+        <nav class="task-nav" aria-label="學習工具">
+            <a href="index.html" data-workspace-link>首頁</a>
+            <a href="vocabulary.html" data-workspace-link>老師詞庫</a>
+            <a href="learning.html" data-workspace-link>國字查詢</a>
+            <a href="review.html" data-workspace-link aria-current="page">錯題複習</a>
+        </nav>
+    </header>
+    <main>
+        <h1>錯題複習</h1>
+        <p class="intro">批改後記錄錯題，再抽錯題或混合新題重考。</p>
+        <p class="notice" id="reviewNotice" role="status"></p>
+        <div class="actions" id="reviewSyncActions" hidden>
+            <button id="retryReviewSync" type="button">重新同步紀錄</button>
+            <button id="importLocalReview" type="button" hidden>將此瀏覽器的本機紀錄匯入此帳號</button>
+        </div>
+        <p class="notice" id="reviewSyncStatus" role="status" hidden></p>
+        <p class="notice" id="unmatchedLocalReview" hidden>
+            有本機紀錄的班級尚未匯入此帳號。可在<a href="review.html?local=1">本機錯題複習</a>查看原紀錄。
+        </p>
+        <p id="noReviewBooks" hidden>先在 <a href="vocabulary.html" data-workspace-link>老師詞庫</a> 建立班級。</p>
+        <div id="reviewWorkspace" hidden>
+            <label for="reviewBook">班級詞庫</label>
+            <select id="reviewBook"></select>
+            <div class="panels results-section">
+                <section class="panel" aria-labelledby="gradeHeading">
+                    <h2 id="gradeHeading">批改已存考卷</h2>
+                    <p id="noReviewExams" class="hint" hidden>這個班級還沒有已儲存的考卷。</p>
+                    <form id="gradeExamForm" hidden>
+                        <label for="reviewExam">選擇考卷</label><select id="reviewExam"></select>
+                        <p><a id="reviewExamPreview" href="exam.html">開啟這份考卷與解答</a></p>
+                        <p class="hint">勾選寫錯的題目，儲存時其餘題目會記為答對。</p>
+                        <fieldset id="reviewQuestions"></fieldset>
+                        <button class="primary" id="saveReviewGrade" type="submit">儲存這次批改</button>
+                        <button id="gradeAgain" type="button" hidden>記錄另一次批改</button>
+                    </form>
+                    <details class="subpanel">
+                        <summary>新增紙本考卷錯題</summary>
+                        <form id="paperReviewForm" class="entry-form">
+                            <label>詞語 <input name="word" maxlength="20" required></label>
+                            <label>課次 <input name="lesson" type="number" min="1" max="60" required></label>
+                            <label>注音（每字以空格分開） <input name="pronunciation" required></label>
+                            <label>挖空位置（從 1 開始，以空格分開） <input name="blanks" placeholder="例如 1 2" required></label>
+                            <button type="submit">記錄這一題</button>
+                        </form>
+                    </details>
+                </section>
+                <section class="panel" aria-labelledby="retakeHeading">
+                    <h2 id="retakeHeading">出複習考卷</h2>
+                    <form id="retakeForm" class="exam-form">
+                        <div>
+                            <label for="reviewMode">複習範圍</label>
+                            <select id="reviewMode" name="mode">
+                                <option value="recent">最近一次答錯的詞語</option>
+                                <option value="history">所有曾經答錯的詞語</option>
+                                <option value="mixed">錯題與一般詞庫混合</option>
+                            </select>
+                        </div>
+                        <p id="pendingReview" class="notice" role="status"></p>
+                        <fieldset id="reviewPreset">
+                            <label>抽題數量
+                                <select name="size">
+                                    <option value="all">全部（最多 60 題）</option>
+                                    <option value="5">5 題</option>
+                                    <option value="10">10 題</option>
+                                    <option value="15">15 題</option>
+                                </select>
+                            </label>
+                            <p class="hint">可抽的題目較少時，會出完現有題目。</p>
+                        </fieldset>
+                        <fieldset id="reviewMixed" class="course-fields" hidden disabled>
+                            <legend class="visually-hidden">混合出卷題數與課次</legend>
+                            <label>最近答錯的題數 <input name="wrong" type="number" min="0" max="60" value="1" required></label>
+                            <label>一般詞庫題數 <input name="fresh" type="number" min="0" max="60" value="1" required></label>
+                            <label>一般詞庫起始課次 <input name="from" type="number" min="1" max="60" value="1" required></label>
+                            <label>一般詞庫結束課次 <input name="to" type="number" min="1" max="60" value="60" required></label>
+                        </fieldset>
+                        <button class="primary" id="retakeSubmit" type="submit">產生複習考卷</button>
+                    </form>
+                </section>
+            </div>
+            <section class="panel results-section" aria-labelledby="historyHeading">
+                <h2 id="historyHeading">批改紀錄</h2>
+                <p id="noReviewHistory" class="hint">這個班級還沒有批改紀錄。</p>
+                <ul id="reviewHistory"></ul>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

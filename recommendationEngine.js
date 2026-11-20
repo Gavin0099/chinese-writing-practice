@@ -4,7 +4,7 @@
  * 
  * 核心原則：
  * 1. 預設 > 選擇
- * 2. Target = lastLesson + 1
+ * 2. 從上次輸出的練習紙推薦下一課
  */
 
 class RecommendationEngine {
@@ -26,7 +26,7 @@ class RecommendationEngine {
 
         const grade = settings.grade || 1;
         const semester = settings.semester || "A";
-        const lastLesson = settings.lastLesson || 0;
+        const lastOutputLesson = settings.lastOutputLesson || 0;
         const pinnedLesson = settings.pinnedLesson;
 
         // 1. Pinned Lesson 優先 (v1.1 核心原則)
@@ -44,11 +44,11 @@ class RecommendationEngine {
 
         // 3. 找出下一個目標
         // 如果從未下載，從第一課開始
-        if (lastLesson === 0) {
+        if (lastOutputLesson === 0) {
             return this._formatResult(grade, semester, lessons[0] || 1, "new-start", false);
         }
 
-        const currentIndex = lessons.indexOf(lastLesson);
+        const currentIndex = lessons.indexOf(lastOutputLesson);
 
         // 情況 A: 還有下一課
         if (currentIndex >= 0 && currentIndex + 1 < lessons.length) {
@@ -67,7 +67,7 @@ class RecommendationEngine {
         }
 
         // 情況 D: 全數完成
-        return this._formatResult(grade, semester, lastLesson, "all-finished", false);
+        return this._formatResult(grade, semester, lastOutputLesson, "all-finished", false);
     }
 
     _formatResult(grade, semester, lesson, reason, isNewSemester) {

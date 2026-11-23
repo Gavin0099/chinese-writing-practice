@@ -1,0 +1,35 @@
+{
+  "receipt_version": "0.1",
+  "receipt_type": "ai_governance_update",
+  "tool": "external_governance_submodule_updater",
+  "tool_mode": "apply",
+  "repo_root": "E:\\BackUp\\CodexWorktrees\\chinese-writing-practice-f7-main-20261123",
+  "framework_root": "E:\\BackUp\\CodexWorktrees\\chinese-writing-practice-f7-main-20261123\\ai-governance-framework",
+  "framework_before": "acd0243f1ef6fd197666fa7502971d8fc0056955",
+  "framework_after": "1a30faedbaa8f4a4af14656b15797ccdbb6ed3fb",
+  "lock_adopted_commit": "1a30faedbaa8f4a4af14656b15797ccdbb6ed3fb",
+  "lock_matches_checkout": true,
+  "update_status": "updated",
+  "generated_at_utc": "2026-11-23T06:20:16Z",
+  "claim_boundary": [
+    "receipt is review evidence, not proof",
+    "no fetch truth is implied unless explicitly recorded",
+    "consumer repo adoption is not proven complete"
+  ],
+  "not_claimed": [
+    "full governance adoption",
+    "hook/CI enforcement",
+    "memory completeness",
+    "domain correctness",
+    "release readiness"
+  ],
+  "remote_evidence": {
+    "target_ref": "1a30faedbaa8f4a4af14656b15797ccdbb6ed3fb",
+    "fetch_remote": "origin",
+    "fetch_ref": "main",
+    "target_source": "explicit_target_ref",
+    "target_fresh_upstream_verified": false,
+    "target_claim_boundary": "target resolved from explicit ref without upstream fetch; latest-framework freshness was not verified",
+    "target_head": "1a30faedbaa8f4a4af14656b15797ccdbb6ed3fb"
+  }
+}

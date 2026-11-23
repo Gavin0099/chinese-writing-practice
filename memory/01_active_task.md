@@ -8,4 +8,4 @@
 
 - Update this file when task state changes.
 
-- F-04 修正及範圍審查已完成，QA-01 iPhone 和私人站驗收仍待實機。 <!-- memory_record_projection:active-task-summary:1ac62b20a4ae7d812966b468e8e595760aaed1d4c9feccd1becafb78bf2df4a8 -->
+- 獨立 clone 的 AI Governance 已更新至 1a30fae（本機提交 2d6b7cb）。F-7 提交後重驗完成，版本帳本一致。 <!-- memory_record_projection:active-task-summary:39856dad920deedb89302281c99891fb64a0910540a55386b91e0c02f0ac8dda -->

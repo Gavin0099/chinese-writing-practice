@@ -20,163 +20,20 @@ Quick start:
 
 ## AI Governance Update Intent Rule
 
-This is the ALWAYS-READ F-7 routing and truthfulness boundary. The complete
-work instructions, result vocabulary, evidence shapes, stage details and
-reporting examples live in the canonical pinned framework documents:
-- `governance/AI_GOVERNANCE_UPDATE_PROTOCOL.md`
-- `governance/F7_FULL_UPDATE.md`
-- `governance/RESPONSE_ENVELOPE_CONTRACT.md`
-
-Resolve these against the consumer's installed governance documents or the
-active, pinned framework checkout (which may be a submodule). Do not consult
-an unrelated version and assume it matches the current consumer. For F-7
-updates, load the canonical update and F-7 documents before acting or
-claiming completion. Missing instructions or unverified evidence mean
-`not_verified` / `blocked`, **not** `updated` or `already_current`.
-On-demand documents cannot authorize commit, push, release or destructive
-work that the current Owner has not authorized.
-
-### AI Governance Check Vs Update Intent
-
-- For `check` intent (e.g., 「檢查 AI Governance 是否最新」), verify only.
-  Never update the framework pointer.
-- For `update` intent (e.g., 「幫我更新最新版 AI Governance」 or
-  "Update AI Governance to latest"), invoke
-  `governance_tools.f7_full_update` as the primary orchestrator.
-  The submodule updater alone is only one stage, not complete F-7.
-  Do not repeat a request for authorization already granted within the
-  approved scope; stop only for a real blocker or an Owner-gated action.
-
-Never claim `already_current` solely from `AGENTS.md` unchanged,
-`AGENTS.base.md` unchanged, clean parent git status, parent
-`HEAD == origin/main`, or `git pull --ff-only`. A defensible
-submodule status requires the actual governance submodule path,
-nested framework HEAD, target approved framework HEAD, and governed
-updater dry-run result. `update_available` is not a completed update.
-
-Full technical shape and terminal report definitions must come from the
-canonical docs above. Status line (never fabricate values):
-
-```text
-AI Governance update check: <already_current | update_available | updated | manual_update | destructive_manual_update | not_submodule_consumer | not_verified>
-```
-
-This baseline is a propagated, managed consumer instruction copy of the
-canonical manual-update reporting vocabulary in
-`governance/AI_GOVERNANCE_UPDATE_PROTOCOL.md`. The canonical file is the
-authority; this compact copy is an execution entrypoint, not another status
-definition. `manual_update` and `destructive_manual_update` are truthful
-fallbacks for pointer/lock/checkout changes without the governed F-7 path,
-**never** evidence for completed/latest/full adoption. Disclose discarded
-modified and untracked paths before claiming destructive cleanup; obtain
-Owner authorization before discarding anything. If a parent repo commit
-was not created, report `parent repo commit: NOT CREATED`.
-
-Manual update conclusion template:
-
-```text
-AI Governance update check: manual_update
-ai_governance_update_result: REPORTED
-framework_update_status: manual_update
-governance maturity summary: <RUN | NOT RUN | NOT AVAILABLE>
-adoption_status: <from maturity summary | unknown>
-human_readable_adoption_summary: <REPORTED | NOT REPORTED>
-reason: governed updater/F-7 was not used
-claim boundary: manual pointer/lock/checkout changes may be reported; do not claim completed/latest/full adoption
-```
-
-Destructive manual update conclusion template:
-
-```text
-AI Governance update check: destructive_manual_update
-ai_governance_update_result: REPORTED
-framework_update_status: destructive_manual_update
-discarded_modified_paths: <list | none reported>
-discarded_untracked_paths: <list | none reported>
-governance maturity summary: <RUN | NOT RUN | NOT AVAILABLE>
-human_readable_adoption_summary: <REPORTED | NOT REPORTED>
-claim boundary: destructive local cleanup occurred; do not claim completed/latest/full adoption
-```
-
-### Response Envelope Boundary
-
-- Response envelope contract version: v0.8. Compact human responses are the default.
-- Failed/partial work and owner decisions may remain compact if the
-  blocker, ability to proceed, risk, claim boundary and Owner choice are clear.
-  Expand when canonical evidence is unavailable, an explanation cannot be
-  preserved briefly, or full evidence is requested.
-- Keep all raw fields in canonical evidence; use plain-language meanings for
-  decision-relevant status tokens.
-- For review, diagnosis and concepts, use Engineering Explanation
-  without forcing an irrelevant next action.
-- For completion or partial-completion F-7 reports, retain the first three
-  non-empty lines as 結果 / 原因 / 下一步 (translated in other session
-  languages). Explain local completion, commit/push/merge state and important
-  unverified behavior in plain language before the complete adoption table;
-  suggested actions do not grant
-authorization.
-
-If the session only updates `AGENTS.md` or other local instruction files,
-mark governance framework status `not_verified` and do not claim a complete
-update. The examples below remain an explicit negative/positive boundary.
-
-Invalid conclusion:
-
-```text
-AGENTS.md was updated and the parent repo is up to date, so AI Governance is current.
-```
-
-Valid partial conclusion:
-
-```text
-結果：這次只更新了指令文件，尚不能確認治理框架更新完成；沒有建立提交，上傳與合併狀態未確認。
-原因：治理框架的版本與導入狀態尚未檢查。
-下一步：先檢查框架版本及導入狀態，再判定是否需要更新；不因此取得更新或上傳授權。
-
-AI Governance update check: not_verified
-governance submodule path: NOT CHECKED
-nested governance HEAD: NOT CHECKED
-target framework HEAD: NOT CHECKED
-dry-run: NOT RUN
-update mode: NOT CLAIMED
-parent repo commit: NOT CREATED
-governance maturity summary: NOT RUN
-user-facing adoption status: NOT REPORTED
-human_readable_adoption_summary: NOT REPORTED
-```
-
-For every F-7 terminal result, relay actual
-`[human_readable_adoption_summary]` rows as a TABLE. A clean build,
-`adoption_doctor: findings 0` or a pointer update is no substitute.
-If the real table cannot be produced or relayed, report
-`human_readable_adoption_summary: NOT REPORTED` and the reason;
-also set `update_report_complete=false` and
-`completion_claim_allowed=false`. Never fabricate rows or claim complete
-adoption. Report completeness is separate from update success.
-
-### Test Quality Expectations
-
-Non-trivial changes require evidence beyond happy-path-only tests:
-bug regressions where feasible, independently sourced expected results,
-and validator pass/fail cases. Mock-only success and
-`test_signal_quality_audit` are not proof of correctness or enforcement.
-Read the detailed `governance/TESTING.md` for testing decisions.
-
-### F-7 Full Update Semantics
-
-F-7 has six necessary stages: framework pointer, repo-local instructions,
-memory writer coverage, hook/validator coverage, existing memory
-normalization status, and user-facing maturity/adoption report. A raw
-submodule pointer update alone is `partially_updated`, not completed.
-
-`full_update_completed` is permitted only when every required stage is
-actually verified as updated, already_current, verified, completed or
-not_applicable. Missing, needed, blocked or not_verified surfaces are NOT
-complete. Read `governance/F7_FULL_UPDATE.md` for the layered status
-fields and the exact final adoption report. Successful structural checks
-do not prove real-session hook execution or that legacy memory was
-normalized.
-
+- For check intent, verify only; do not update the framework pointer.
+- For update intent, including "幫我更新最新版 AI Governance", invoke
+  `governance_tools.f7_full_update`; a pointer update alone is not full F-7.
+- Before acting, read `governance/AI_GOVERNANCE_UPDATE_PROTOCOL.md` and
+  `governance/F7_FULL_UPDATE.md` from installed documents or the
+  active, pinned framework checkout. They own evidence, stages, manual-update vocabulary,
+  report templates and examples. Missing instructions or evidence mean
+  `not_verified` / `blocked`; never claim completion or fabricate table rows.
+- Relay the actual adoption table for every terminal F-7 result. If unavailable,
+  report `human_readable_adoption_summary: NOT REPORTED` with the reason,
+  `update_report_complete=false`, and `completion_claim_allowed=false`.
+- Response envelope contract version: v0.8; follow
+  `governance/RESPONSE_ENVELOPE_CONTRACT.md` for reporting and
+  `governance/TESTING.md` for non-trivial testing decisions.
 
 ## AI Governance Memory Workflow Router
 <!-- governance:key=memory_workflow -->
@@ -358,7 +215,7 @@ Identical on every agent surface. Repository rules may add duties; they never re
 1. **Owner Gate.** Every agent needs explicit owner approval before merging into main, publishing or releasing, deleting branches, closing another person's PR, any irreversible operation, firmware operations, data-integrity operations, and any high-risk operation this repository's own rules name. No directive, slice approval or protocol relaxes this gate.
 2. **Commit and push.** Memory and delivery protocols define order, not git authority. Commit and push follow the owner's current authorization and this repository's rules; inside an owner-authorized slice they may continue without re-asking. If either is missing from your context, ask.
 3. **Task DONE is not session end.** After task DONE, stop and do no extra work. A confirmed session end still requires the existing session-end closeout. An ordinary Stop event, a final answer, or a subagent finishing is not session end.
-4. **Must-record events.** Memory or PLAN updates these events require are part of that delivery, not extra work. A task limited to named files still includes these records unless the owner explicitly excludes them. After DONE, add no unrelated rollups or new PRs; do not record micro-steps or duplicate a record. Repository-specific record duties still apply. An agent's private or tool-provided memory (for example Claude auto-memory or the Copilot memory tool) may help the agent, but never satisfies these records; only the records named here or by this repository, written through their own contracts, do.
+4. **Must-record events.** Memory or PLAN updates these events require are part of that delivery, not extra work. A task limited to named files still includes these records unless the owner explicitly excludes them. Honor explicit edit bans covering a record, including bans on changes outside named files or directories or on creating its file, and report that record as unwritten. After DONE, add no unrelated rollups or new PRs; do not record micro-steps or duplicate a record. Repository-specific record duties still apply. An agent's private or tool-provided memory (for example Claude auto-memory or the Copilot memory tool) may help the agent, but never satisfies these records; only the records named here or by this repository, written through their own contracts, do.
 
 | Event | Record in |
 |---|---|
@@ -372,8 +229,9 @@ Identical on every agent surface. Repository rules may add duties; they never re
 Use an alias only when this repository has adopted the `SYSTEM_PROMPT.md` section 6.1 alias schema (`02_project_facts.md`, `03_decisions.md`, `04_validation_log.md`); never assume an alias that does not exist.
 
 5. **No fabricated evidence.** Never claim a document was loaded, an authorization was given, or work was completed without evidence in this context. Filling `LOADED` or any other contract field by inference, or reusing a stale `[Governance Contract]` block such as one from an earlier session, is a governance failure. The block is evidence of what was loaded, not a formatting ritual.
-6. **Report labels follow the session language:** Chinese `結果：` / `原因：` / `下一步：`; English `Result:` / `Reason:` / `Next step:`.
+6. **Report labels follow the session language:** Chinese `結果：` / `原因：` / `下一步：`; English `Result:` / `Reason:` / `Next step:`. In owner-facing reports, lead with the original goal, what happened, its impact on that goal, and any owner decision actually needed, preserving evidence and authority limits.
 7. **Secrets.** Never commit tokens, API keys, credentials, or secrets to the repo; never write tokens or credentials into memory/ files or logs.
+8. **Reuse prior evidence.** Before proposing a rerun, revalidation, or next slice, or relying on PR status, check relevant PLAN, memory, and evidence. For each decision, open relevant PRs or issues and their evidence, including Draft PRs at their own ref or commit. Search by topic only without a relevant lead. Distinguish work done, verified evidence, formal eligibility, remaining gaps, and the smallest authorized next step. Reuse qualifying evidence. Refresh live status when it affects the decision. If evidence is unavailable, mark the decision `UNKNOWN`. Do not infer the work was never done or needs a rerun. No table is required for this check.
 <!-- ai-governance:agent-core-rules END -->
 
 ## Formal Closeout on Request (MANDATORY)
@@ -384,11 +242,19 @@ Prepare a formal closeout only at a defined session end: the owner explicitly as
 python -B <framework>/governance_tools/prepare_closeout_candidate.py --consumer-root <repo> --framework-root <framework> --session-id <session-id> --input <input.json>
 ```
 
-- `<session-id>`: your platform's own session id (`CODEX_THREAD_ID` in Codex, `CLAUDE_CODE_SESSION_ID` in Claude Code). It must equal `session_id` in `artifacts/runtime/.current-session-id`, which names the most recently started or resumed session and may belong to another session sharing this checkout. If the platform exposes no native id, or the two differ, do not prepare: report the closeout as not persisted.
+- `<session-id>`: your platform's own session id (`CODEX_THREAD_ID` in Codex, `CLAUDE_CODE_SESSION_ID` in Claude Code; in VS Code Copilot or Copilot CLI, the id that the governed SessionStart hook adds to the conversation as `additionalContext`; in Gemini CLI, `GEMINI_SESSION_ID` or the id added as `additionalContext`). It must equal `session_id` in `artifacts/runtime/.current-session-id`, which names the most recently started or resumed session and may belong to another session sharing this checkout; never take an id from `artifacts/runtime/.current-session-id`. If the platform exposes no native id, or the two differ, do not prepare: report the closeout as not persisted.
 - `<input.json>`: a JSON object with `task_intent`, `work_summary`, `tools_used`, `artifacts_referenced` and `open_risks`; field guidance is in `<framework>/.agents/skills/wrap-up/SKILL.md`.
-- `PREPARED` is preparation, not closeout: do not run the closeout yourself. The manual fallback cannot release an R2-prepared candidate (it is refused with `RELEASE_PROOF_INVALID`), so do not attempt it after `PREPARED`. If `python -m governance_tools.manage_agent_closeout --project-root <repo> verify --agent <agent>`, run from the framework checkout, reports a closeout hook as installed and says the closeout is left to it (today only the Codex Stop hook; a hook that only writes a checkpoint does not count), the closeout is left to that hook after your turn: report `PREPARED` / `PENDING_HOOK` (closeout prepared, waiting for the session-end hook), not `NOT PERSISTED`. An installed hook is not proof that it will run or succeed, and you cannot observe it during your own turn; only the existing R2 evidence (a valid canonical closeout and released ownership) confirms `VALID` / `RELEASED` afterwards. Otherwise report the closeout as not persisted: the manual attempt cannot release a `PREPARED` candidate, so that report is its outcome.
+- **Claude Code and Gemini CLI:** SessionEnd saves a resumable checkpoint. On an explicit owner request, prepare first, then run this from the registered framework checkout with your session ID and the absolute path to its transcript (`claude_formal_closeout` for Claude Code, `gemini_formal_closeout` for Gemini CLI):
+
+  ```text
+  python -B -m governance_tools.claude_formal_closeout --owner-request "<what the owner asked>" --project-root <repo> --session-id <session-id> --transcript-path <session.jsonl>
+  python -B -m governance_tools.gemini_formal_closeout --owner-request "<what the owner asked>" --project-root <repo> --session-id <session-id> --transcript-path <session.jsonl>
+  ```
+
+  For a standing owner authorization, see `manage_agent_closeout print-manual --agent claude` (or `--agent gemini`). Confirm formal closeout from the resulting R2 evidence.
+- **Codex and Copilot:** Leave prepared closeout to the harness. The manual fallback cannot release an R2-prepared candidate (it is refused with `RELEASE_PROOF_INVALID`), so do not attempt it after `PREPARED`. If `python -m governance_tools.manage_agent_closeout --project-root <repo> verify --agent <agent>`, run from the framework checkout, reports a closeout hook as installed and says the closeout is left to it (today the Codex Stop hook and the VS Code Copilot Stop hook, and the Copilot CLI sessionEnd hook; a hook that only writes a checkpoint does not count), the closeout is left to that hook at its execution point: after the turn for Codex and VS Code, or when the CLI session ends (not after the turn). Report `PREPARED` / `PENDING_HOOK` (closeout prepared, waiting for the session-end hook), not `NOT PERSISTED`. An installed hook is not proof that it will run or succeed, and you cannot observe it during your own turn; only the existing R2 evidence (a valid canonical closeout and released ownership) confirms `VALID` / `RELEASED` afterwards. Otherwise report the closeout as not persisted: the manual attempt cannot release a `PREPARED` candidate, so that report is its outcome.
 - Report `REJECTED` verbatim and never substitute a hand-written `artifacts/session-closeout.txt`.
-- Supported only in a registered-submodule consumer whose session has a qualified (schema 1.1) identity. A Copilot CLI session (provider `github-copilot`) is rejected: report the closeout as not persisted.
+- Supported only in a registered-submodule consumer whose session has a qualified (schema 1.1) identity. The Copilot paths are separate: a VS Code Copilot session prepares with the id above and its Stop hook runs the closeout. A Copilot CLI session receives its id from the SessionStart hook only when the current start verifies its CLI identity and the governed sessionEnd hook is installed. It then prepares like VS Code; its sessionEnd hook closes out a prepared session when the session ends (not after the turn). Without that id, report the closeout as not persisted. A resumed CLI session loads repository hooks only with persistent folder trust; `--trust-folder` cannot be combined with `--resume`.
 
 Details: `AGENTS.base.md`, Session Closeout Obligation.
 

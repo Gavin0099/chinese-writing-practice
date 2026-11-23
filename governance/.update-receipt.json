@@ -1,0 +1,35 @@
+{
+  "receipt_version": "0.1",
+  "receipt_type": "ai_governance_update",
+  "tool": "f7_full_update",
+  "tool_mode": "apply",
+  "repo_root": "E:\\BackUp\\CodexWorktrees\\chinese-writing-practice-f7-main-20261123",
+  "framework_root": "E:\\BackUp\\CodexWorktrees\\chinese-writing-practice-f7-main-20261123\\ai-governance-framework",
+  "framework_before": "5e6985c6f7786b7e609f8c29df209207c1d55e68",
+  "framework_after": "acd0243f1ef6fd197666fa7502971d8fc0056955",
+  "lock_adopted_commit": "acd0243f1ef6fd197666fa7502971d8fc0056955",
+  "lock_matches_checkout": true,
+  "update_status": "partially_updated",
+  "generated_at_utc": "2026-11-23T06:05:39Z",
+  "claim_boundary": [
+    "receipt is review evidence, not proof",
+    "no fetch truth is implied unless explicitly recorded",
+    "consumer repo adoption is not proven complete"
+  ],
+  "not_claimed": [
+    "full governance adoption",
+    "hook/CI enforcement",
+    "memory completeness",
+    "domain correctness",
+    "release readiness"
+  ],
+  "remote_evidence": {
+    "target_ref": "origin/main",
+    "fetch_remote": "origin",
+    "fetch_ref": "main",
+    "target_source": "fresh_remote_fetch_head",
+    "target_fresh_upstream_verified": true,
+    "target_claim_boundary": "fresh upstream target verified; already_current/updated claims are allowed",
+    "target_head": "acd0243f1ef6fd197666fa7502971d8fc0056955"
+  }
+}

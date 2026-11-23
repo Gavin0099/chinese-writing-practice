@@ -1,0 +1,22 @@
+{
+  "receipt_schema": "test_evidence_receipt.v0.1",
+  "status": "report_only",
+  "command": "python -X utf8 -B E:\\BackUp\\CodexWorktrees\\chinese-writing-practice-f7-main-20261123\\scripts\\check_governance.py",
+  "exit_code": 0,
+  "started_at": "2026-11-23T06:22:52Z",
+  "finished_at": "2026-11-23T06:22:56Z",
+  "runner": "governance_tools.test_evidence_receipt_writer",
+  "linked_commit": "2d6b7cbfdbbe61393d00626b14c05706c542445c",
+  "output_artifacts": [
+    "artifacts/evidence/test-results/receipt-f7-1a30fae-20261123.txt.gz"
+  ],
+  "cannot_claim": [
+    "semantic correctness of the tested behavior",
+    "receipt authenticity: every field is fabricatable by a direct writer"
+  ],
+  "raw_output": {
+    "bytes": 13691,
+    "lines": 263,
+    "sha256": "fcd08ddfd8874f0566a085222fbfb64b489f32f36865b67ffc85cea3acc3c422"
+  }
+}

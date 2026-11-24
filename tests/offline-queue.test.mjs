@@ -319,6 +319,10 @@ test('resolution requires an idle queue, the current draft id, a valid action an
     const context = fixture();
     const empty = await context.open();
     await assert.rejects(empty.resolveConflict(resolution()), /No offline conflict/);
+    await assert.rejects(empty.resolveConflict(null), {
+        name: 'TypeError',
+        message: 'Invalid offline conflict options.'
+    });
     assert.equal(context.stored(), undefined);
 
     const queue = await createConflict(context);

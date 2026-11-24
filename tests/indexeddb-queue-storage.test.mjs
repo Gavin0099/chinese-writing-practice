@@ -6,7 +6,9 @@ import { createOfflineQueue } from '../offlineQueue.mjs';
 function mockIndexedDB() {
     const stores = new Map();
     const events = [];
-    const db = {
+    const requests = [];
+    const createConnection = () => ({
+        close() { events.push(['close']); },
         objectStoreNames: { contains: name => stores.has(name) },
         createObjectStore(name) {
             assert.equal(stores.has(name), false);
@@ -53,15 +55,17 @@ function mockIndexedDB() {
             };
             return transaction;
         }
-    };
+    });
 
     let initialized = false;
     let nextFailure;
     return {
         events,
+        requests,
         failNext(type, error) { nextFailure = { type, error }; },
         open(name, version) {
-            const request = { result: db };
+            const request = { result: createConnection() };
+            requests.push(request);
             events.push(['open', name, version]);
             queueMicrotask(() => {
                 if (!initialized) {
@@ -76,6 +80,59 @@ function mockIndexedDB() {
 }
 
 const openStorage = indexedDB => createIndexedDbQueueStorage({ indexedDB, dbName: 'test-db', storeName: 'snapshots' });
+
+test('rejects a blocked open for all callers and closes a late connection without losing the retry', async () => {
+    const mock = mockIndexedDB();
+    const blocked = { result: { close() { mock.events.push(['close stale']); } } };
+    let openCount = 0;
+    const storage = openStorage({
+        open(...args) {
+            openCount++;
+            return openCount === 1 ? blocked : mock.open(...args);
+        }
+    });
+    const first = assert.rejects(storage.getItem('key'), /open blocked/);
+    const second = assert.rejects(storage.getItem('key'), /open blocked/);
+    blocked.onblocked?.();
+    await Promise.all([first, second]);
+    assert.equal(await storage.getItem('key'), null);
+    blocked.onsuccess();
+    assert.equal(await storage.getItem('key'), null);
+    assert.equal(openCount, 2);
+    assert.deepEqual(mock.events.filter(([event]) => event === 'close stale'), [['close stale']]);
+});
+
+test('close cancels a pending open, disposes its late connection and reopens', async () => {
+    const mock = mockIndexedDB();
+    const storage = openStorage(mock);
+    const pending = assert.rejects(storage.getItem('key'), /closed while opening/);
+    storage.close?.();
+    const reopened = storage.getItem('key');
+    await pending;
+    assert.equal(await reopened, null);
+    assert.equal(await storage.getItem('key'), null);
+    assert.equal(mock.requests.length, 2);
+    assert.deepEqual(mock.events.filter(([event]) => event === 'close'), [['close']]);
+});
+
+test('close and connection lifecycle events invalidate only the matching connection', async () => {
+    const mock = mockIndexedDB();
+    const storage = openStorage(mock);
+    await storage.setItem('key', 'saved');
+    const first = mock.requests[0].result;
+    storage.close();
+    storage.close();
+    assert.equal(await storage.getItem('key'), 'saved');
+    first.onclose();
+    assert.equal(await storage.getItem('key'), 'saved');
+    assert.equal(mock.requests.length, 2);
+    mock.requests[1].result.onversionchange();
+    assert.equal(await storage.getItem('key'), 'saved');
+    mock.requests[2].result.onclose();
+    assert.equal(await storage.getItem('key'), 'saved');
+    assert.equal(mock.requests.length, 4);
+    assert.deepEqual(mock.events.filter(([event]) => event === 'close'), [['close'], ['close']]);
+});
 
 test('creates the store and reads, replaces and removes independent keys', async () => {
     const indexedDB = mockIndexedDB();
@@ -107,6 +164,8 @@ test('rejects when a successful request is followed by an abort or a request err
     const failure = new Error('request failed');
     indexedDB.failNext('error', failure);
     await assert.rejects(storage.removeItem('key'), failure);
+    indexedDB.failNext('error', null);
+    await assert.rejects(storage.removeItem('key'), /transaction failed/);
     assert.equal(await storage.getItem('key'), 'original');
 });
 
@@ -116,14 +175,15 @@ test('rejects invalid factories and reports open failures while allowing a later
     const error = new Error('open failed');
     const storage = openStorage({
         open(...args) {
-            if (mock.events.length) return mock.open(...args);
+            if (mock.events.length >= 2) return mock.open(...args);
             mock.events.push(['failed open']);
-            const request = { error };
+            const request = { error: mock.events.length === 1 ? error : null };
             queueMicrotask(() => request.onerror());
             return request;
         }
     });
     await assert.rejects(storage.getItem('key'), error);
+    await assert.rejects(storage.getItem('key'), /open failed/);
     assert.equal(await storage.getItem('key'), null);
 });
 

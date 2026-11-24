@@ -209,7 +209,9 @@ export async function createOfflineQueue({ storage, key, now, baseDelayMs = 1000
 
 
     // Resolve only the draft the caller reviewed, using a confirmed server revision.
-    async function resolveConflict({ action, expectedConflictId, latestRevision } = {}) {
+    async function resolveConflict(options = {}) {
+        if (options === null) throw new TypeError('Invalid offline conflict options.');
+        const { action, expectedConflictId, latestRevision } = options;
         if (flushing) throw new Error('Cannot resolve a conflict while flushing.');
         return withState(() => {
             if (flushing) throw new Error('Cannot resolve a conflict while flushing.');

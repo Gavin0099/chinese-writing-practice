@@ -29,6 +29,15 @@ function fixture() {
     };
 }
 
+test('undefined from storage opens an empty queue while restore requires JSON text', async () => {
+    const queue = await fixture().open({ storage: {
+        getItem: async () => undefined,
+        setItem: () => assert.fail('wrote to storage')
+    } });
+    assert.deepEqual(await queue.snapshot(), { version: 1, queueKey: key, latestRevision: null, pending: [], conflictDraft: null });
+    await assert.rejects(queue.restore(undefined), TypeError);
+});
+
 test('enqueue persists independent edits in order and deduplicates only matching operation ids', async () => {
     const context = fixture();
     const queue = await context.open();
@@ -120,6 +129,33 @@ test('a distinct base revision is preserved and HTTP 409 blocks the whole family
     assert.deepEqual((await reopened.snapshot()).pending.map(entry => entry.id), ['waiting']);
     assert.equal(await reopened.enqueue(write('stale', { baseRevision: 3, payload: { word: '舊稿' } })), false);
     assert.deepEqual(await reopened.flush(() => assert.fail('sent after conflict')), { status: 'conflict', revision: 5 });
+});
+
+test('a 40001 error code persists the conflict draft and blocks later writes', async () => {
+    const context = fixture();
+    const queue = await context.open();
+    const draft = write('stale');
+    await queue.enqueue(draft);
+    await queue.enqueue(write('waiting'));
+
+    assert.deepEqual(await queue.flush(() => ({ code: '40001' })), { status: 'conflict', revision: null });
+    const stored = JSON.parse(context.stored());
+    assert.deepEqual(stored.conflictDraft, { ...draft, timestamp: 1000, expectedRevision: 4,
+        retryCount: 0, nextRetryAt: null });
+    assert.deepEqual(stored.pending.map(entry => entry.id), ['waiting']);
+    assert.deepEqual(await queue.flush(() => assert.fail('sent after conflict')), { status: 'conflict', revision: null });
+});
+
+test('enqueue rejects different content for an id held in a conflict draft', async () => {
+    const context = fixture();
+    const queue = await context.open();
+    await queue.enqueue(write('stale'));
+    assert.deepEqual(await queue.flush(() => ({ status: 409 })), { status: 'conflict', revision: null });
+    const before = context.stored();
+
+    await assert.rejects(queue.enqueue(write('stale', { payload: { word: 'different content' } })), /different content/);
+    assert.equal(context.stored(), before);
+    assert.deepEqual(await queue.snapshot(), JSON.parse(before));
 });
 
 test('a thrown version conflict preserves the failed write and its retry metadata through export and restore', async () => {

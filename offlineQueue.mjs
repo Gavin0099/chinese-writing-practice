@@ -75,6 +75,7 @@ function sendFailure(result) {
 /**
  * Use a family-scoped storage key and one active instance per key.
  * Storage getItem/setItem accept a key and read/write JSON text (sync or async).
+ * getItem may return null or undefined for a missing key.
  * setItem must replace atomically and reject on failure. now() supplies epoch milliseconds.
  * An operation uses a caller-supplied stable id, a resource key and a JSON payload.
  * Equal ids deduplicate active operations. Distinct ids retain FIFO order.
@@ -88,7 +89,7 @@ export async function createOfflineQueue({ storage, key, now, baseDelayMs = 1000
     }
 
     const serialized = await storage.getItem(key);
-    let state = serialized === null
+    let state = serialized === null || serialized === undefined
         ? { version, queueKey: key, latestRevision: null, pending: [], conflictDraft: null }
         : readState(serialized, key);
     let stateOperations = Promise.resolve();

@@ -299,3 +299,87 @@ test('restore rejects malformed or internally inconsistent snapshots without rep
     await assert.rejects(context.open({ storage: { getItem: () => 'corrupt', setItem: () => assert.fail('overwrote storage') } }),
         SyntaxError);
 });
+
+async function createConflict(context) {
+    const queue = await context.open();
+    await queue.enqueue(write('saved'));
+    await queue.enqueue(write('draft'));
+    await queue.enqueue(write('waiting'));
+    await queue.flush(entry => entry.id === 'saved' ? { revision: 5 } : { status: 503 });
+    context.setTime(1100);
+    assert.deepEqual(await queue.flush(() => ({ status: 409 })), { status: 'conflict', revision: 5 });
+    return queue;
+}
+
+const resolution = (overrides = {}) => ({
+    action: 'discard', expectedConflictId: 'draft', latestRevision: 8, ...overrides
+});
+
+test('resolution requires an idle queue, the current draft id, a valid action and a confirmed revision', async () => {
+    const context = fixture();
+    const empty = await context.open();
+    await assert.rejects(empty.resolveConflict(resolution()), /No offline conflict/);
+    assert.equal(context.stored(), undefined);
+
+    const queue = await createConflict(context);
+    const before = context.stored();
+    const flushing = queue.flush(() => assert.fail('sent while a draft is unresolved'));
+    await assert.rejects(queue.resolveConflict(resolution()), /while flushing/);
+    assert.equal((await flushing).status, 'conflict');
+
+    for (const id of [undefined, 'previous-draft']) {
+        await assert.rejects(queue.resolveConflict(resolution({ expectedConflictId: id })), /id does not match/);
+    }
+    for (const revision of [undefined, -1, 4, 5.5, '8', Number.MAX_SAFE_INTEGER + 1]) {
+        await assert.rejects(queue.resolveConflict(resolution({ latestRevision: revision })), /revision/);
+    }
+    await assert.rejects(queue.resolveConflict(resolution({ action: 'replace' })), /action/);
+    assert.equal(context.stored(), before);
+    assert.deepEqual(await queue.snapshot(), JSON.parse(before));
+});
+
+test('discard clears the draft and records the server revision while preserving the pending base', async () => {
+    const context = fixture();
+    const queue = await createConflict(context);
+    const before = await queue.snapshot();
+    await queue.resolveConflict(resolution());
+    const reopened = await context.open();
+    assert.deepEqual(await reopened.snapshot(), { ...before, latestRevision: 8, conflictDraft: null });
+    assert.deepEqual(await reopened.flush(entry => {
+        assert.equal(entry.id, 'waiting');
+        assert.equal(entry.expectedRevision, 4);
+        return { status: 409 };
+    }), { status: 'conflict', revision: 8 });
+});
+
+test('requeue rebases only the draft at the front and allows immediate flush after reopening', async () => {
+    const context = fixture();
+    const queue = await createConflict(context);
+    const before = await queue.snapshot();
+    await queue.resolveConflict(resolution({ action: 'requeue' }));
+    const reopened = await context.open();
+    const rebased = { ...before.conflictDraft, baseRevision: 8, expectedRevision: 8, retryCount: 0, nextRetryAt: null };
+    assert.deepEqual(await reopened.snapshot(), {
+        ...before, latestRevision: 8, pending: [rebased, ...before.pending], conflictDraft: null
+    });
+    const sent = [];
+    assert.deepEqual(await reopened.flush(entry => {
+        sent.push([entry.id, entry.expectedRevision]);
+        return entry.id === 'draft' ? { revision: 9 } : { status: 409 };
+    }), { status: 'conflict', revision: 9 });
+    assert.deepEqual(sent, [['draft', 8], ['waiting', 4]]);
+});
+
+test('failed conflict resolution persistence leaves the draft blocked and can be retried', async () => {
+    const context = fixture();
+    const queue = await createConflict(context);
+    const before = context.stored();
+    const error = new Error('storage unavailable');
+    context.failSave(error);
+    await assert.rejects(queue.resolveConflict(resolution({ action: 'requeue' })), error);
+    assert.equal(context.stored(), before);
+    assert.deepEqual(await queue.snapshot(), JSON.parse(before));
+    assert.equal((await queue.flush(() => assert.fail('sent after failed resolution'))).status, 'conflict');
+    await queue.resolveConflict(resolution());
+    assert.equal((await queue.snapshot()).conflictDraft, null);
+});

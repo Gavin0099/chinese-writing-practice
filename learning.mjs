@@ -1,7 +1,7 @@
 import { courseKey, lookupCharacters } from './characterLookup.mjs';
 import { confirmCourse, curriculumStorageKey, importCourses, isPediaSource, isWritingHistory, lookupReferenceLessons,
     lookupScope, mergeCourses, progressStorageKey, readProgress, readStoredValue, writingStorageKey } from './learningData.mjs';
-import { cloudPageUrl, connectCloud, openPageStorage, readCloudSettings, readCurriculumCatalog } from './cloudStorage.mjs';
+import { cloudPageUrl, connectCloud, formatCloudSaveNotice, openPageStorage, readCloudSettings, readCurriculumCatalog } from './cloudStorage.mjs';
 import { syncPageUrl } from './googleAuth.mjs';
 import { lookupWordReviews, readAttempts } from './reviewData.mjs';
 import { mergeReviewAttempts } from './reviewSync.mjs';
@@ -248,7 +248,7 @@ function renderResult(result, references, lessonEvidence, records) {
             const saveResult = await recordStorage.setItem(writingStorageKey, JSON.stringify({ ...current, [char]: next }));
             byId('showRecords').hidden = false;
             updateWritingHistory(card, next);
-            showNotice(notice, cloud ? (saveResult?.status === 'queued' ? '已暫存於本機，待連線後同步' : '已同步') : '已儲存');
+            showNotice(notice, cloud ? formatCloudSaveNotice(saveResult) : '已儲存');
         } catch (error) {
             writingField.value = readWriting()[char]?.at(-1)?.status ?? 'not_assessed';
             const message = error instanceof DOMException ? '儲存失敗，請檢查瀏覽器儲存空間。'
@@ -394,9 +394,12 @@ byId('progressForm').addEventListener('submit', async event => {
     try {
         const updated = confirmCourse(readProgress(readLocal(progressStorageKey)), currentCourse(), Number(fields.lesson.value));
         byId('progressFields').disabled = true;
-        await recordStorage.setItem(progressStorageKey, JSON.stringify(updated));
+        const saveResult = await recordStorage.setItem(progressStorageKey, JSON.stringify(updated));
         progress = updated;
         updateLessonPicker();
+        if (cloud && saveResult?.status === 'queued') {
+            showNotice(byId('progressNotice'), formatCloudSaveNotice(saveResult));
+        }
     } catch (error) {
         showNotice(byId('progressNotice'), error instanceof DOMException ? '儲存失敗，請檢查瀏覽器儲存空間。' : error.message, true);
     } finally {

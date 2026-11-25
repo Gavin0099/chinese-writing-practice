@@ -4,8 +4,31 @@ import { syncPageUrl } from './googleAuth.mjs';
 import { openOfflineFamilyStorage } from './offlineFamilySync.mjs';
 
 const settingsKey = 'write_practice_supabase_settings';
+const offlineFlagKey = 'write_practice_offline_sync';
 const sdk = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/+esm';
 const sectionsByKey = new Map(Object.entries(backupSections).map(([section, key]) => [key, section]));
+
+export function formatCloudSaveNotice(outcome) {
+    return outcome?.status === 'queued' ? '已暫存於本機，待連線後同步' : '已同步';
+}
+
+export function isOfflineSyncEnabled(pageUrl = globalThis.location?.href, deployment = deploymentCloud, storage = globalThis.localStorage) {
+    if (pageUrl) {
+        try {
+            const flag = new URL(pageUrl).searchParams.get('offline');
+            if (flag === '0') return false;
+            if (flag === '1') return true;
+        } catch {
+            // Ignore malformed URL and fall through to explicit deployment/local flag.
+        }
+    }
+    if (deployment?.offlineSync === true) return true;
+    try {
+        return storage?.getItem?.(offlineFlagKey) === '1';
+    } catch {
+        return false;
+    }
+}
 
 export function readCloudSettings() {
     if (deploymentCloud.url && deploymentCloud.key) return deploymentCloud;
@@ -464,7 +487,8 @@ export async function openPageStorage({ home = false, resumeSession = home } = {
             draftNotice.hidden = false;
             window.addEventListener('beforeunload', protectDraft);
         };
-        const canOffline = typeof globalThis.indexedDB?.open === 'function' &&
+        const canOffline = isOfflineSyncEnabled(page.href) &&
+            typeof globalThis.indexedDB?.open === 'function' &&
             typeof globalThis.navigator?.locks?.request === 'function';
         const offlineStatusText = outcome => {
             if (outcome?.status === 'queued') {
@@ -550,7 +574,7 @@ export async function openPageStorage({ home = false, resumeSession = home } = {
             }
         });
         main.inert = false;
-        return { ...context, readCurriculumCatalog: () => readCurriculumCatalog(client, true) };
+        return Object.assign(context, { readCurriculumCatalog: () => readCurriculumCatalog(client, true) });
     } catch (error) {
         if (!openingCloud && !home) return null;
         main.inert = true;

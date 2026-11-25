@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { openFamilyStorage } from '../cloudStorage.mjs';
+import { formatCloudSaveNotice, isOfflineSyncEnabled, openFamilyStorage } from '../cloudStorage.mjs';
 import { exportBackup } from '../backupData.mjs';
 import { writingStorageKey } from '../learningData.mjs';
 
@@ -231,4 +231,24 @@ test('openFamilyStorage offline mode cleans up offlineStore if session is lost d
         }),
         /Cannot read properties of undefined/
     );
+});
+
+test('formatCloudSaveNotice never reports synced when offline write is queued', () => {
+    const queuedText = formatCloudSaveNotice({ status: 'queued', revision: 1 });
+    assert.equal(queuedText.includes('已同步'), false);
+    assert.match(queuedText, /本機|待連線/);
+    assert.equal(formatCloudSaveNotice({ status: 'synced', revision: 2 }), '已同步');
+    assert.equal(formatCloudSaveNotice(undefined), '已同步');
+});
+
+test('isOfflineSyncEnabled defaults to false for production safety and requires explicit opt-in', () => {
+    const mem = new Map();
+    const storage = { getItem: k => mem.get(k) ?? null };
+    assert.equal(isOfflineSyncEnabled('https://example.pages.dev/vocabulary.html?cloud=1', { offlineSync: false }, storage), false);
+    assert.equal(isOfflineSyncEnabled('https://example.pages.dev/vocabulary.html?cloud=1&offline=1', { offlineSync: false }, storage), true);
+    mem.set('write_practice_offline_sync', '1');
+    assert.equal(isOfflineSyncEnabled('https://example.pages.dev/vocabulary.html?cloud=1', { offlineSync: false }, storage), true);
+    assert.equal(isOfflineSyncEnabled('https://example.pages.dev/vocabulary.html?cloud=1&offline=0', { offlineSync: false }, storage), false);
+    mem.clear();
+    assert.equal(isOfflineSyncEnabled('https://example.pages.dev/vocabulary.html?cloud=1', { offlineSync: true }, storage), true);
 });

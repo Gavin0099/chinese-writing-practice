@@ -4,7 +4,8 @@ export const deploymentCloud = {
     url: '',
     key: '',
     allowGoogleLink: false,
-    photoImport: false
+    photoImport: false,
+    offlineSync: false
 };
 
 // Keep the managed development preview on the existing Google callback origin.

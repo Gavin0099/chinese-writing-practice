@@ -1,6 +1,7 @@
 import { backupSections, downloadBackupFile, exportBackup, validateBackup } from './backupData.mjs';
 import { deploymentCloud } from './cloudConfig.mjs';
 import { syncPageUrl } from './googleAuth.mjs';
+import { openOfflineFamilyStorage } from './offlineFamilySync.mjs';
 
 const settingsKey = 'write_practice_supabase_settings';
 const sdk = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/+esm';
@@ -70,22 +71,174 @@ async function authenticatedSession(client) {
     return session;
 }
 
+const RETRYABLE_HTTP = new Set([408, 429, 500, 502, 503, 504]);
+const CONFLICT_CODES = new Set(['PT409', '40001']);
+
+function isTransientNetworkError(error) {
+    if (!error) return false;
+    if (error.retryable === true || RETRYABLE_HTTP.has(error.status)) return true;
+    const message = String(error.message ?? '');
+    return error.name === 'TypeError' || error.name === 'AbortError' ||
+        /failed to fetch|networkerror|load failed|fetch failed|timeout/i.test(message);
+}
+
 async function readFamilyBackup(client, session) {
-    const { data, error } = await client.rpc('read_family_backup')
-        .setHeader('Authorization', `Bearer ${session.access_token}`);
-    if (error || !Number.isSafeInteger(data?.revision)) throw new Error('無法讀取雲端資料。請檢查專案連線及資料庫設定。');
+    let data;
+    let error;
+    try {
+        ({ data, error } = await client.rpc('read_family_backup')
+            .setHeader('Authorization', `Bearer ${session.access_token}`));
+    } catch (caught) {
+        if (isTransientNetworkError(caught)) {
+            throw Object.assign(new Error('無法讀取雲端資料。請檢查網路連線。', { cause: caught }), { retryable: true });
+        }
+        throw caught;
+    }
+    if (error) {
+        if (isTransientNetworkError(error)) {
+            throw Object.assign(new Error('無法讀取雲端資料。請檢查網路連線。', { cause: error }), {
+                retryable: true, status: error.status
+            });
+        }
+        throw new Error('無法讀取雲端資料。請檢查專案連線及資料庫設定。', { cause: error });
+    }
+    if (!Number.isSafeInteger(data?.revision)) throw new Error('無法讀取雲端資料。請檢查專案連線及資料庫設定。');
     const backup = data.backup === null ? exportBackup({ getItem: () => null }) : validateBackup(data.backup);
     return { revision: data.revision, backup };
 }
 
-export async function openFamilyStorage(client, onSessionLost = () => {}, onUnconfirmedSave = () => {}) {
+export async function openFamilyStorage(client, onSessionLost = () => {}, onUnconfirmedSave = () => {}, options = {}) {
     const initialSession = await authenticatedSession(client);
     const owner = initialSession.user.id;
+    let active = true;
+    const sessionChanged = '登入已變更。請重新開啟雲端頁面。';
+
+    if (options.offline === true) {
+        let offlineStore;
+        const { data: listener } = client.auth.onAuthStateChange((_event, session) => {
+            if (active && (!session || session.user.id !== owner || session.user.is_anonymous)) {
+                active = false;
+                offlineStore?.close();
+                onSessionLost();
+            }
+        });
+        const activeSession = async () => {
+            if (!active) throw new Error(sessionChanged);
+            const session = await authenticatedSession(client);
+            if (!active || session.user.id !== owner) throw new Error(sessionChanged);
+            return session;
+        };
+        try {
+            if ((await authenticatedSession(client)).user.id !== owner || !active) throw new Error(sessionChanged);
+            offlineStore = await openOfflineFamilyStorage({
+                ownerId: owner,
+                storage: options.storage,
+                indexedDB: options.indexedDB,
+                locks: options.locks,
+                requireLocks: options.requireLocks ?? false,
+                channel: options.channel,
+                onStateChange: options.onStateChange,
+                now: options.now ?? (() => Date.now()),
+                newId: options.newId ?? (() => globalThis.crypto.randomUUID()),
+                baseDelayMs: options.baseDelayMs,
+                maxDelayMs: options.maxDelayMs,
+                async readBackup() {
+                    const session = await activeSession();
+                    return readFamilyBackup(client, session);
+                },
+                async saveBackup({ expectedRevision, backup }) {
+                    const session = await activeSession();
+                    let savedRevision;
+                    let error;
+                    try {
+                        ({ data: savedRevision, error } = await client.rpc('save_family_backup', {
+                            p_expected_revision: expectedRevision, p_backup: backup
+                        }).setHeader('Authorization', `Bearer ${session.access_token}`));
+                    } catch (caught) {
+                        if (isTransientNetworkError(caught)) return { retryable: true };
+                        throw caught;
+                    }
+                    if (!active) throw new Error(sessionChanged);
+                    if (error) {
+                        if (CONFLICT_CODES.has(error.code) || error.status === 409) {
+                            return { code: error.code, status: 409 };
+                        }
+                        if (isTransientNetworkError(error)) return { retryable: true, status: error.status };
+                        throw new Error('這次儲存尚未確認。請稍後重試。', { cause: error });
+                    }
+                    return { revision: savedRevision };
+                }
+            });
+        } catch (error) {
+            active = false;
+            listener.subscription.unsubscribe();
+            throw error;
+        }
+        const handleOutcome = outcome => {
+            options.onSyncOutcome?.(outcome);
+            if (outcome?.status === 'conflict' && outcome.conflictDraft?.payload) {
+                onUnconfirmedSave(outcome.conflictDraft.payload, outcome.conflictDraft);
+            }
+            return outcome;
+        };
+        const reviewRequest = async query => {
+            const session = await activeSession();
+            const result = await query()
+                .setHeader('Authorization', `Bearer ${session.access_token}`)
+                .abortSignal(AbortSignal.timeout(10000));
+            if (!active) throw new Error(sessionChanged);
+            return result;
+        };
+        const readReviewAttempts = async () => {
+            const attempts = [];
+            const size = 100;
+            let after;
+            for (;;) {
+                const { data, error } = await reviewRequest(() => {
+                    const query = client.from('review_attempts').select('attempt_id,attempt')
+                        .eq('owner_id', owner).order('attempt_id').limit(size);
+                    return after === undefined ? query : query.gt('attempt_id', after);
+                });
+                if (error || !Array.isArray(data)) throw new Error('無法讀取雲端批改紀錄。', { cause: error });
+                attempts.push(...data.map(row => row.attempt));
+                if (data.length < size) return attempts;
+                after = data.at(-1).attempt_id;
+            }
+        };
+        const appendReviewAttempts = async attempts => {
+            const { data, error } = await reviewRequest(() =>
+                client.rpc('append_review_attempts', { p_attempts: attempts }));
+            if (error?.message === 'review_attempt_conflict') throw new Error('同一筆批改紀錄有不同內容，請保留此瀏覽器的紀錄。');
+            if (error || data !== attempts.length) throw new Error('尚未確認雲端儲存。', { cause: error });
+        };
+        return {
+            ownerId: owner,
+            offlineEnabled: true,
+            readReviewAttempts,
+            appendReviewAttempts,
+            getItem: key => active ? offlineStore.getItem(key) : null,
+            async setItem(key, value) {
+                if (!active) throw new Error(sessionChanged);
+                return handleOutcome(await offlineStore.setItem(key, value));
+            },
+            async sync() {
+                if (!active) throw new Error(sessionChanged);
+                return handleOutcome(await offlineStore.sync());
+            },
+            get conflictDraft() { return active ? offlineStore.conflictDraft : null; },
+            readLatest: () => active ? offlineStore.readLatest() : Promise.reject(new Error(sessionChanged)),
+            resolveConflict: opts => active ? offlineStore.resolveConflict(opts) : Promise.reject(new Error(sessionChanged)),
+            async close() {
+                active = false;
+                listener.subscription.unsubscribe();
+                await offlineStore.close();
+            }
+        };
+    }
+
     let { revision, backup } = await readFamilyBackup(client, initialSession);
     let saving = false;
-    let active = true;
     let needsReload = false;
-    const sessionChanged = '登入已變更。請重新開啟雲端頁面。';
     const { data: listener } = client.auth.onAuthStateChange((_event, session) => {
         if (active && (!session || session.user.id !== owner || session.user.is_anonymous)) {
             active = false;
@@ -270,6 +423,27 @@ export async function openPageStorage({ home = false, resumeSession = home } = {
             explanation.textContent = '已交給瀏覽器下載。可在本機備份與還原頁開啟這份備份，核對後再把需要的修改輸入雲端。';
         });
         reload.addEventListener('click', () => location.reload());
+        const syncNow = document.createElement('button');
+        syncNow.type = 'button';
+        syncNow.textContent = '立即同步';
+        syncNow.hidden = true;
+        const canOffline = typeof globalThis.indexedDB?.open === 'function' &&
+            typeof globalThis.navigator?.locks?.request === 'function';
+        const offlineStatusText = outcome => {
+            if (outcome?.status === 'queued') {
+                status.textContent = '離線待同步：修改已安全暫存於本機 IndexedDB，連線恢復後會自動同步。';
+                syncNow.hidden = false;
+            } else if (outcome?.status === 'offline') {
+                status.textContent = '目前離線：正顯示本機已確認的家庭資料。';
+                syncNow.hidden = false;
+            } else if (outcome?.status === 'conflict') {
+                status.textContent = '偵測到雲端版本衝突：本機修改已保留草稿，請核對後處理。';
+                syncNow.hidden = true;
+            } else if (outcome?.status === 'synced') {
+                status.textContent = home ? '已連線到家庭帳號（已同步）。' : '雲端模式（已同步）。';
+                syncNow.hidden = true;
+            }
+        };
         const context = await openFamilyStorage(client, () => {
             draft = null;
             window.removeEventListener('beforeunload', protectDraft);
@@ -281,7 +455,21 @@ export async function openPageStorage({ home = false, resumeSession = home } = {
             explanation.textContent = '這次修改已保留在此頁。請下載備份，再重新載入雲端資料。';
             draftNotice.hidden = false;
             window.addEventListener('beforeunload', protectDraft);
-        });
+        }, canOffline ? {
+            offline: true,
+            indexedDB: globalThis.indexedDB,
+            locks: globalThis.navigator.locks,
+            requireLocks: true,
+            onSyncOutcome: offlineStatusText,
+            onStateChange: () => {
+                status.textContent = '另一個分頁已更新家庭資料，請重新整理以顯示最新內容。';
+            }
+        } : {});
+        syncNow.addEventListener('click', () => { context.sync?.().catch(() => {}); });
+        status.after(syncNow);
+        if (context.offlineEnabled) {
+            window.addEventListener('online', () => { context.sync?.().catch(() => {}); });
+        }
         useCloudNavigation();
         status.textContent = home ? '已連線到家庭帳號。' : '雲端模式。看到已同步後，即可在其他裝置開啟這筆資料。';
         window.addEventListener('pagehide', event => {

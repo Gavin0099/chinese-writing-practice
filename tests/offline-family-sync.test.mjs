@@ -338,3 +338,144 @@ test('close hides data immediately, rejects queued calls and ignores late cloud 
     assert.equal(JSON.parse(f.records.values().next().value).confirmed.revision, 3);
     await reopened.close();
 });
+
+function createMemoryLocks() {
+    const tails = new Map();
+    const events = [];
+    return {
+        events,
+        request(name, optionsOrCallback, maybeCallback) {
+            const callback = typeof optionsOrCallback === 'function' ? optionsOrCallback : maybeCallback;
+            const prev = tails.get(name) ?? Promise.resolve();
+            const run = prev.then(async () => {
+                events.push(['acquire', name]);
+                try {
+                    return await callback({ name });
+                } finally {
+                    events.push(['release', name]);
+                }
+            });
+            tails.set(name, run.catch(() => {}));
+            return run;
+        }
+    };
+}
+
+function createSharedStorage(records) {
+    return {
+        async getItem(key) { return records.get(key); },
+        async setItem(key, value) { records.set(key, value); }
+    };
+}
+
+test('multi-tab offline edits on different sections serialize via Web Locks without lost updates', async () => {
+    const f = fixture();
+    const locks = createMemoryLocks();
+    const tabA = await f.open({ storage: createSharedStorage(f.records), locks });
+    const tabB = await f.open({ storage: createSharedStorage(f.records), locks });
+
+    f.saveWith(() => { throw unavailable(); });
+    const [resA, resB] = await Promise.all([
+        edit(tabA, practice('天'), writing),
+        edit(tabB, words, vocabulary)
+    ]);
+    assert.equal(resA.status, 'queued');
+    assert.equal(resB.status, 'queued');
+
+    // Sync from tabA after network returns: both tabA's writingRecords and tabB's vocabulary must be preserved.
+    f.advance(100);
+    f.saveWith(({ expectedRevision }) => ({ revision: expectedRevision + 1 }));
+    const synced = await tabA.sync();
+    assert.equal(synced.status, 'synced');
+    assert.equal(synced.revision, 5);
+    assert.deepEqual(f.writes.at(-1).backup.writingRecords, practice('天'));
+    assert.deepEqual(f.writes.at(-1).backup.vocabulary, words);
+
+    await tabA.close();
+    await tabB.close();
+});
+
+test('multi-tab offline edit on the same section fails closed instead of silently overwriting another tab', async () => {
+    const f = fixture();
+    const locks = createMemoryLocks();
+    let tabBNotified = 0;
+    const tabA = await f.open({ storage: createSharedStorage(f.records), locks });
+    const tabB = await f.open({
+        storage: createSharedStorage(f.records),
+        locks,
+        onStateChange: () => { tabBNotified++; }
+    });
+
+    f.saveWith(() => { throw unavailable(); });
+    assert.equal((await edit(tabA, practice('天'), writing)).status, 'queued');
+
+    // tabB has not refreshed yet and tries to overwrite the same writingRecords section with stale view.
+    await assert.rejects(
+        edit(tabB, practice('地'), writing),
+        error => error?.code === 'STALE_TAB_SECTION'
+    );
+    // tabB refreshes its local view to include tabA's edit and preserves '天' without lost update.
+    assert.deepEqual(section(tabB, writing), practice('天'));
+    assert.ok(tabBNotified >= 1);
+
+    await tabA.close();
+    await tabB.close();
+});
+
+test('requireLocks fails closed when Web Locks API is unavailable', async () => {
+    const f = fixture();
+    await assert.rejects(
+        f.open({ locks: null, requireLocks: true }),
+        /Web Locks API is required/
+    );
+});
+
+test('BroadcastChannel background reload still blocks stale same-section write until tab re-reads via getItem', async () => {
+    const f = fixture();
+    const locks = createMemoryLocks();
+    const peers = new Set();
+    const makeChannel = () => {
+        const listeners = new Set();
+        const ch = {
+            postMessage(data) {
+                for (const peer of peers) {
+                    if (peer !== ch) peer.dispatch(data);
+                }
+            },
+            addEventListener(_type, fn) { listeners.add(fn); },
+            removeEventListener(_type, fn) { listeners.delete(fn); },
+            dispatch(data) { for (const fn of listeners) fn({ data }); },
+            close() { peers.delete(ch); }
+        };
+        peers.add(ch);
+        return ch;
+    };
+    let tabBNotified = 0;
+    const tabA = await f.open({ storage: createSharedStorage(f.records), locks, channel: makeChannel() });
+    const tabB = await f.open({
+        storage: createSharedStorage(f.records),
+        locks,
+        channel: makeChannel(),
+        onStateChange: () => { tabBNotified++; }
+    });
+
+    f.saveWith(() => { throw unavailable(); });
+    assert.equal((await edit(tabA, practice('天'), writing)).status, 'queued');
+    // Allow BroadcastChannel background reload on tabB to finish before tabB attempts stale write.
+    await new Promise(resolve => setTimeout(resolve, 10));
+    assert.ok(tabBNotified >= 1);
+
+    await assert.rejects(
+        edit(tabB, practice('地'), writing),
+        error => error?.code === 'STALE_TAB_SECTION'
+    );
+    // Once tabB explicitly re-reads via getItem, it sees '天' and can merge and save '天'+'地'.
+    const seen = section(tabB, writing);
+    assert.deepEqual(seen, practice('天'));
+    const merged = { ...seen, ...practice('地') };
+    assert.equal((await edit(tabB, merged, writing)).status, 'queued');
+    assert.deepEqual(section(tabB, writing), merged);
+
+    await tabA.close();
+    await tabB.close();
+});

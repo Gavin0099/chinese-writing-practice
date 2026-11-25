@@ -8,6 +8,15 @@ const isUnavailable = error => error?.retryable === true || [408, 429, 500, 502,
 const hasWork = queue => queue?.pending.length > 0 || Boolean(queue?.conflictDraft);
 const activeOwners = new WeakMap();
 
+function canonicalJson(value) {
+    if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+    if (value && typeof value === 'object') {
+        const keys = Object.keys(value).sort();
+        return `{${keys.map(k => `${JSON.stringify(k)}:${canonicalJson(value[k])}`).join(',')}}`;
+    }
+    return JSON.stringify(value);
+}
+
 function readSnapshot(value, ownerId, minimumRevision = 0) {
     if (!isRevision(value?.revision) || value.revision < minimumRevision ||
         (value.ownerId !== undefined && value.ownerId !== ownerId)) {
@@ -27,12 +36,22 @@ function readSnapshot(value, ownerId, minimumRevision = 0) {
  * decision, optionally checking the previewed revision. Requeued writes wait for sync.
  */
 export async function openOfflineFamilyStorage({
-    ownerId, storage, indexedDB, readBackup, saveBackup, now, newId, baseDelayMs, maxDelayMs
+    ownerId, storage, indexedDB, locks, requireLocks = false, channel, onStateChange,
+    readBackup, saveBackup, now, newId, baseDelayMs, maxDelayMs
 } = {}) {
     if (typeof ownerId !== 'string' || !ownerId.trim() || typeof readBackup !== 'function' ||
         typeof saveBackup !== 'function' || typeof now !== 'function' || typeof newId !== 'function' ||
         (storage != null && indexedDB != null)) {
         throw new TypeError('Invalid offline family storage configuration.');
+    }
+    const lockManager = locks !== undefined
+        ? locks
+        : (typeof globalThis.navigator?.locks?.request === 'function' ? globalThis.navigator.locks : null);
+    if (lockManager !== null && typeof lockManager?.request !== 'function') {
+        throw new TypeError('Invalid Web Locks manager.');
+    }
+    if (requireLocks && !lockManager) {
+        throw new TypeError('Web Locks API is required for multi-tab offline family storage.');
     }
     const ownsStorage = storage == null;
     const backend = storage ?? createIndexedDbQueueStorage({ indexedDB });
@@ -46,15 +65,35 @@ export async function openOfflineFamilyStorage({
     owners.add(ownerId);
     activeOwners.set(backingStore, owners);
 
+    const ownsChannel = channel === undefined && ownsStorage && typeof globalThis.BroadcastChannel === 'function';
+    let bus = channel ?? null;
+
     let record;
     let nextConfirmed;
     let queue;
     let closed = false;
     let operations = Promise.resolve();
     let closing;
+    const seenSections = new Map();
+
+    function markAllSectionsSeen() {
+        const current = currentBackup();
+        if (!current) return;
+        for (const section of sections.values()) {
+            seenSections.set(section, canonicalJson(current[section]));
+        }
+    }
 
     function requireOpen() {
         if (closed) throw new Error('Offline family storage is closed.');
+    }
+
+    function withLock(operation) {
+        if (!lockManager) return operation();
+        return lockManager.request(key, { mode: 'exclusive' }, () => {
+            requireOpen();
+            return operation();
+        });
     }
 
     function run(operation) {
@@ -66,6 +105,55 @@ export async function openOfflineFamilyStorage({
         return result;
     }
 
+    function currentBackup() {
+        const current = record?.queue?.pending.at(-1) ?? record?.queue?.conflictDraft;
+        return current?.payload ?? record?.confirmed?.backup ?? null;
+    }
+
+    function stateFingerprint() {
+        if (!record) return null;
+        return JSON.stringify([
+            record.confirmed?.revision ?? null,
+            record.queue?.pending?.at(-1)?.id ?? null,
+            record.queue?.conflictDraft?.id ?? null
+        ]);
+    }
+
+    async function loadFromBackend() {
+        const serialized = await backend.getItem(key);
+        requireOpen();
+        if (serialized == null) {
+            record = { ownerId, confirmed: null, queue: null };
+        } else {
+            if (typeof serialized !== 'string') throw new TypeError('Offline family snapshot must be JSON text.');
+            const saved = JSON.parse(serialized);
+            if (saved?.ownerId !== ownerId || !Object.hasOwn(saved, 'queue') ||
+                (saved.queue !== null && typeof saved.queue !== 'object')) {
+                throw new Error('Invalid offline family snapshot.');
+            }
+            record = { ownerId, confirmed: readSnapshot(saved.confirmed, ownerId), queue: saved.queue };
+        }
+        queue = await createOfflineQueue({ key, now, baseDelayMs, maxDelayMs, storage: {
+            getItem: () => record.queue === null ? null : JSON.stringify(record.queue),
+            setItem(_key, value) {
+                const state = JSON.parse(value);
+                const confirmed = nextConfirmed?.revision === state.latestRevision
+                    ? nextConfirmed : record.confirmed;
+                nextConfirmed = undefined;
+                return persist(confirmed, state);
+            }
+        } });
+        if (record.queue) {
+            const { pending, conflictDraft, latestRevision } = await queue.snapshot();
+            const entries = conflictDraft ? [conflictDraft, ...pending] : pending;
+            const { revision } = record.confirmed;
+            if (latestRevision > revision || entries.some(entry => entry.resource !== key || entry.expectedRevision > revision)) {
+                throw new Error('Offline queue does not match the confirmed family snapshot.');
+            }
+            for (const entry of entries) validateBackup(entry.payload);
+        }
+    }
+
     async function persist(confirmed, queueState = record.queue) {
         requireOpen();
         // Commit the confirmed backup and queue transition together, including remote acknowledgments.
@@ -73,6 +161,11 @@ export async function openOfflineFamilyStorage({
         await backend.setItem(key, JSON.stringify(next));
         record = next;
         requireOpen();
+        try {
+            bus?.postMessage({ type: 'updated', ownerId });
+        } catch {
+            // Broadcast notification is best-effort; Web Locks + reload guarantee durability.
+        }
     }
 
     async function fetchLatest(minimumRevision = record.confirmed?.revision ?? 0) {
@@ -125,81 +218,86 @@ export async function openOfflineFamilyStorage({
     }
 
     try {
-        const serialized = await backend.getItem(key);
-        if (serialized == null) {
-            record = { ownerId, confirmed: null, queue: null };
-        } else {
-            if (typeof serialized !== 'string') throw new TypeError('Offline family snapshot must be JSON text.');
-            const saved = JSON.parse(serialized);
-            if (saved?.ownerId !== ownerId || !Object.hasOwn(saved, 'queue') ||
-                (saved.queue !== null && typeof saved.queue !== 'object')) {
-                throw new Error('Invalid offline family snapshot.');
-            }
-            record = { ownerId, confirmed: readSnapshot(saved.confirmed, ownerId), queue: saved.queue };
-        }
-        queue = await createOfflineQueue({ key, now, baseDelayMs, maxDelayMs, storage: {
-            getItem: () => record.queue === null ? null : JSON.stringify(record.queue),
-            setItem(_key, value) {
-                const state = JSON.parse(value);
-                const confirmed = nextConfirmed?.revision === state.latestRevision
-                    ? nextConfirmed : record.confirmed;
-                nextConfirmed = undefined;
-                return persist(confirmed, state);
-            }
-        } });
-        if (record.queue) {
-            const { pending, conflictDraft, latestRevision } = await queue.snapshot();
-            const entries = conflictDraft ? [conflictDraft, ...pending] : pending;
-            const { revision } = record.confirmed;
-            if (latestRevision > revision || entries.some(entry => entry.resource !== key || entry.expectedRevision > revision)) {
-                throw new Error('Offline queue does not match the confirmed family snapshot.');
-            }
-            for (const entry of entries) validateBackup(entry.payload);
-        }
-        if (!hasWork(record.queue)) await refresh();
+        if (ownsChannel) bus = new globalThis.BroadcastChannel(key);
+        await withLock(async () => {
+            await loadFromBackend();
+            if (!hasWork(record.queue)) await refresh();
+            markAllSectionsSeen();
+        });
     } catch (error) {
         owners.delete(ownerId);
+        if (ownsChannel) bus?.close();
         if (ownsStorage) backend.close();
         throw error;
     }
 
+    const onBusMessage = event => {
+        if (closed || event?.data?.type !== 'updated' || event?.data?.ownerId !== ownerId) return;
+        run(() => withLock(async () => {
+            const before = stateFingerprint();
+            await loadFromBackend();
+            if (stateFingerprint() !== before) onStateChange?.();
+        })).catch(() => {});
+    };
+    bus?.addEventListener?.('message', onBusMessage);
+
     return {
         ownerId,
+        get hasPending() { return !closed && Boolean(record?.queue?.pending?.length); },
         getItem(key) {
             const section = sections.get(key);
             if (closed || !section) return null;
-            const current = record.queue?.pending.at(-1) ?? record.queue?.conflictDraft;
-            return JSON.stringify((current?.payload ?? record.confirmed.backup)[section]);
+            const value = currentBackup()[section];
+            seenSections.set(section, canonicalJson(value));
+            return JSON.stringify(value);
         },
         setItem(sectionKey, value) {
-            return run(async () => {
+            return run(() => withLock(async () => {
                 const section = sections.get(sectionKey);
                 if (!section) throw new Error('Unknown family backup section.');
-                if (record.queue?.conflictDraft) throw new Error('Resolve the offline family conflict before editing.');
                 if (typeof value !== 'string') throw new TypeError('Family backup section must be JSON text.');
+                if (lockManager) {
+                    const previousVersion = stateFingerprint();
+                    await loadFromBackend();
+                    if (stateFingerprint() !== previousVersion) {
+                        onStateChange?.();
+                    }
+                    const latestSection = canonicalJson(currentBackup()?.[section]);
+                    if (seenSections.has(section) && seenSections.get(section) !== latestSection) {
+                        throw Object.assign(
+                            new Error('Another tab updated this section. Refresh before saving.'),
+                            { code: 'STALE_TAB_SECTION', section }
+                        );
+                    }
+                }
+                if (record.queue?.conflictDraft) throw new Error('Resolve the offline family conflict before editing.');
                 const pending = record.queue?.pending.at(-1);
                 const current = pending?.payload ?? record.confirmed.backup;
                 const payload = validateBackup({ ...current, [section]: JSON.parse(value),
                     exportedAt: new Date(now()).toISOString() });
                 const baseRevision = pending?.baseRevision ?? record.confirmed.revision;
                 await queue.enqueue({ id: newId(), resource: key, baseRevision, payload });
-                return syncOutcome(await flush());
-            });
+                const outcome = syncOutcome(await flush());
+                seenSections.set(section, canonicalJson(currentBackup()?.[section]));
+                return outcome;
+            }));
         },
         sync() {
-            return run(async () => {
+            return run(() => withLock(async () => {
+                if (lockManager) await loadFromBackend();
                 if (hasWork(record.queue)) return syncOutcome(await flush());
                 const online = await refresh();
                 requireOpen();
                 return { status: online ? 'synced' : 'offline', revision: record.confirmed.revision };
-            });
+            }));
         },
         get conflictDraft() { return closed ? null : draft(); },
         readLatest() {
             return run(() => fetchLatest());
         },
         resolveConflict(options = {}) {
-            return run(async () => {
+            return run(() => withLock(async () => {
+                if (lockManager) await loadFromBackend();
                 const { action, expectedConflictId, latestRevision } = options;
                 const entry = record.queue?.conflictDraft;
                 if (!entry || entry.id !== expectedConflictId) throw new Error('Offline conflict id does not match.');
@@ -216,14 +314,16 @@ export async function openOfflineFamilyStorage({
                 }
                 requireOpen();
                 return structuredClone(latest);
-            });
+            }));
         },
         close() {
             if (!closing) {
                 closed = true;
+                bus?.removeEventListener?.('message', onBusMessage);
                 closing = operations.then(() => {
                     owners.delete(ownerId);
                     record = null;
+                    if (ownsChannel) bus?.close();
                     if (ownsStorage) backend.close();
                 });
             }

@@ -1,6 +1,6 @@
 import { bookLabel, makeBook, makeWord, previewBatch, readVocabulary, saveWord, updateVocabulary, vocabularyStorageKey } from './vocabularyData.mjs';
 import { makeExam, questionPool, usesLessonCharacters } from './examData.mjs';
-import { cloudPageUrl, openPageStorage } from './cloudStorage.mjs';
+import { cloudPageUrl, formatCloudSaveNotice, openPageStorage } from './cloudStorage.mjs';
 import { readAttempts, recentWrongTerms } from './reviewData.mjs';
 import { mergeReviewAttempts } from './reviewSync.mjs';
 import { applyVocabularyShare, compatibleShareBooks, createVocabularyShare, parseVocabularyShare,
@@ -54,26 +54,35 @@ function notice(id, message = '', error = false) {
 
 async function persist(update, messageId) {
     try {
+        let outcome;
         if (cloud) {
             main.inert = true;
             main.setAttribute('aria-busy', 'true');
             const next = readVocabulary(cloud);
             update(next);
-            await cloud.setItem(vocabularyStorageKey, JSON.stringify(next));
+            outcome = await cloud.setItem(vocabularyStorageKey, JSON.stringify(next));
             data = next;
         } else {
             data = updateVocabulary(update);
         }
-        return true;
+        return { ok: true, outcome };
     } catch (error) {
         notice(messageId, error instanceof DOMException ? '無法儲存。請檢查瀏覽器是否允許儲存網站資料。' : error.message, true);
-        return false;
+        return null;
     } finally {
         if (cloud) {
             main.inert = false;
             main.removeAttribute('aria-busy');
         }
     }
+}
+
+function saveVerb(saved) {
+    return cloud ? formatCloudSaveNotice(saved?.outcome) : '已儲存';
+}
+
+function queuedSuffix(saved) {
+    return cloud && saved?.outcome?.status === 'queued' ? '（已暫存於本機，待連線後同步）' : '';
 }
 
 async function readBookCatalog() {
@@ -237,12 +246,13 @@ function renderWords() {
         remove.setAttribute('aria-label', `刪除第 ${entry.lesson} 課 ${entry.word}`);
         remove.addEventListener('click', async () => {
             if (!window.confirm(`刪除第 ${entry.lesson} 課的「${entry.word}」？`)) return;
-            if (!await persist(state => { state.words = state.words.filter(word => word.id !== entry.id); }, 'listCount')) return;
+            const saved = await persist(state => { state.words = state.words.filter(word => word.id !== entry.id); }, 'listCount');
+            if (!saved) return;
             if (editingId === entry.id) clearEditor();
             renderWords();
             if (ownWords().length) filter.focus();
             else byId('goToWord').focus();
-            notice('listCount', `已刪除「${entry.word}」，目前有 ${ownWords().length} 個詞語。`);
+            notice('listCount', `已刪除「${entry.word}」，目前有 ${ownWords().length} 個詞語${queuedSuffix(saved)}。`);
         });
         actions.append(edit, remove);
         row.append(text, actions);
@@ -292,7 +302,8 @@ bookForm.addEventListener('submit', async event => {
     if (!discardEditor(true)) return;
     try {
         const book = makeBook({ ...Object.fromEntries(new FormData(bookForm)), id: crypto.randomUUID() });
-        if (!await persist(state => state.books.push(book), 'bookNotice')) return;
+        const saved = await persist(state => state.books.push(book), 'bookNotice');
+        if (!saved) return;
         activeId = book.id;
         bookForm.elements.name.value = '';
         byId('bookDetails').open = false;
@@ -300,7 +311,7 @@ bookForm.addEventListener('submit', async event => {
         batchForm.reset();
         clearBatch();
         renderBooks();
-        notice('bookNotice', `已建立「${book.name}」。`);
+        notice('bookNotice', `已建立「${book.name}」${queuedSuffix(saved)}。`);
         bookSelect.focus();
     } catch (error) {
         notice('bookNotice', error.message, true);
@@ -333,11 +344,12 @@ wordForm.addEventListener('submit', async event => {
     try {
         const entry = makeWord({ ...Object.fromEntries(new FormData(wordForm)),
             id: editingId ?? crypto.randomUUID(), bookId: activeId, blanks: selectedBlanks(), confirmed: wordFields.confirmed.checked });
-        if (!await persist(state => saveWord(state, entry), 'wordNotice')) return;
+        const saved = await persist(state => saveWord(state, entry), 'wordNotice');
+        if (!saved) return;
         filter.value = '';
         clearEditor(entry.lesson);
         renderWords();
-        notice('wordNotice', `${cloud ? '已同步' : '已儲存'}「${entry.word}」。`);
+        notice('wordNotice', `${saveVerb(saved)}「${entry.word}」。`);
         wordFields.word.focus();
     } catch (error) {
         notice('wordNotice', error.message, true);
@@ -376,15 +388,16 @@ byId('commitBatch').addEventListener('click', async () => {
     const accepted = batch.filter(row => row.entry);
     const confirmed = byId('batchConfirm').checked;
     const ready = confirmed ? accepted.filter(row => row.entry.pronunciation.length).length : 0;
-    if (!accepted.length || !await persist(state => {
+    const saved = accepted.length ? await persist(state => {
         for (const { entry } of accepted) saveWord(state, { ...entry, id: crypto.randomUUID(),
             confirmed: confirmed && Boolean(entry.pronunciation.length) });
-    }, 'batchNotice')) return;
+    }, 'batchNotice') : null;
+    if (!saved) return;
     const original = batchForm.elements.words.value.split(/\r?\n/u);
     batchForm.elements.words.value = batch.filter(row => row.error).map(row => original[row.line - 1]).join('\n');
     clearBatch();
     renderWords();
-    notice('batchNotice', `已儲存 ${accepted.length} 個詞語，${ready} 個可出題。`);
+    notice('batchNotice', `${saveVerb(saved)} ${accepted.length} 個詞語，${ready} 個可出題。`);
 });
 
 function examSettings() {
@@ -585,7 +598,7 @@ examForm.addEventListener('submit', async event => {
                 main.inert = false;
             }
         }
-        if (!await persist(state => {
+        const saved = await persist(state => {
             const book = state.books.find(candidate => candidate.id === bookId);
             if (!book) throw new Error('請重新選擇班級詞庫。');
             if (lessonRequest && (lessonRequest !== examLessonRequest ||
@@ -595,10 +608,11 @@ examForm.addEventListener('submit', async event => {
             }
             state.exams.push(makeExam({ ...settings, id: crypto.randomUUID(), createdAt: new Date().toISOString(),
                 book, words: state.words, seed, priorityWords }));
-        }, 'examNotice')) return;
+        }, 'examNotice');
+        if (!saved) return;
         renderExams();
         byId('examHistory').open = true;
-        notice('examNotice', `${cloud ? '已同步' : '已儲存'} ${settings.count} 題。可在下方開啟考卷與解答。`);
+        notice('examNotice', `${saveVerb(saved)} ${settings.count} 題。可在下方開啟考卷與解答。`);
         byId('examList').querySelector('a')?.focus();
     } catch (error) {
         notice('examNotice', error.message, true);
@@ -735,9 +749,10 @@ byId('shareImportForm').addEventListener('submit', async event => {
     if (!preview || !share || byId('shareApply').disabled || !discardEditor(true)) return;
     const confirmReadings = byId('shareConfirmReadings').checked;
     let result;
-    if (!await persist(state => {
+    const saved = await persist(state => {
         result = applyVocabularyShare(state, share, preview, { confirmReadings, nextId: () => crypto.randomUUID() });
-    }, 'shareImportNotice')) return;
+    }, 'shareImportNotice');
+    if (!saved) return;
     sharedVocabulary = null;
     importPreview = null;
     shareFile.value = '';
@@ -747,7 +762,7 @@ byId('shareImportForm').addEventListener('submit', async event => {
     batchForm.reset();
     clearBatch();
     renderBooks();
-    notice('shareImportNotice', `已將 ${result.count} 個詞語匯入「${result.book.name}」。`);
+    notice('shareImportNotice', `已將 ${result.count} 個詞語匯入「${result.book.name}」${queuedSuffix(saved)}。`);
 });
 
 window.addEventListener('beforeunload', event => {

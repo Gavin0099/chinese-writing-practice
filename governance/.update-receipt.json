@@ -1,16 +1,16 @@
 {
   "receipt_version": "0.1",
   "receipt_type": "ai_governance_update",
-  "tool": "external_governance_submodule_updater",
+  "tool": "f7_full_update",
   "tool_mode": "apply",
-  "repo_root": "E:\\BackUp\\CodexWorktrees\\chinese-writing-practice-f7-main-20261123",
-  "framework_root": "E:\\BackUp\\CodexWorktrees\\chinese-writing-practice-f7-main-20261123\\ai-governance-framework",
-  "framework_before": "acd0243f1ef6fd197666fa7502971d8fc0056955",
-  "framework_after": "1a30faedbaa8f4a4af14656b15797ccdbb6ed3fb",
-  "lock_adopted_commit": "1a30faedbaa8f4a4af14656b15797ccdbb6ed3fb",
+  "repo_root": "E:\\BackUp\\Git_EE\\_f7_work\\cwp-f7",
+  "framework_root": "E:\\BackUp\\Git_EE\\_f7_work\\cwp-f7\\ai-governance-framework",
+  "framework_before": "1a30faedbaa8f4a4af14656b15797ccdbb6ed3fb",
+  "framework_after": "5073bcf2d1ad3976f96d6baf419ea1752a5be518",
+  "lock_adopted_commit": "5073bcf2d1ad3976f96d6baf419ea1752a5be518",
   "lock_matches_checkout": true,
-  "update_status": "updated",
-  "generated_at_utc": "2026-11-23T06:20:16Z",
+  "update_status": "partially_updated",
+  "generated_at_utc": "2026-11-25T07:21:06Z",
   "claim_boundary": [
     "receipt is review evidence, not proof",
     "no fetch truth is implied unless explicitly recorded",
@@ -24,12 +24,12 @@
     "release readiness"
   ],
   "remote_evidence": {
-    "target_ref": "1a30faedbaa8f4a4af14656b15797ccdbb6ed3fb",
+    "target_ref": "origin/main",
     "fetch_remote": "origin",
     "fetch_ref": "main",
-    "target_source": "explicit_target_ref",
-    "target_fresh_upstream_verified": false,
-    "target_claim_boundary": "target resolved from explicit ref without upstream fetch; latest-framework freshness was not verified",
-    "target_head": "1a30faedbaa8f4a4af14656b15797ccdbb6ed3fb"
+    "target_source": "fresh_remote_fetch_head",
+    "target_fresh_upstream_verified": true,
+    "target_claim_boundary": "fresh upstream target verified; already_current/updated claims are allowed",
+    "target_head": "5073bcf2d1ad3976f96d6baf419ea1752a5be518"
   }
 }

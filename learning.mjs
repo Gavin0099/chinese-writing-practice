@@ -245,10 +245,10 @@ function renderResult(result, references, lessonEvidence, records) {
                 throw new Error('習寫紀錄格式異常，請先下載備份核對。');
             }
             const next = [...(current[char] ?? []), { status: writingField.value, at: new Date().toISOString() }];
-            await recordStorage.setItem(writingStorageKey, JSON.stringify({ ...current, [char]: next }));
+            const saveResult = await recordStorage.setItem(writingStorageKey, JSON.stringify({ ...current, [char]: next }));
             byId('showRecords').hidden = false;
             updateWritingHistory(card, next);
-            showNotice(notice, cloud ? '已同步' : '已儲存');
+            showNotice(notice, cloud ? (saveResult?.status === 'queued' ? '已暫存於本機，待連線後同步' : '已同步') : '已儲存');
         } catch (error) {
             writingField.value = readWriting()[char]?.at(-1)?.status ?? 'not_assessed';
             const message = error instanceof DOMException ? '儲存失敗，請檢查瀏覽器儲存空間。'

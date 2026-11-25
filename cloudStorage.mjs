@@ -77,9 +77,9 @@ const CONFLICT_CODES = new Set(['PT409', '40001']);
 function isTransientNetworkError(error) {
     if (!error) return false;
     if (error.retryable === true || RETRYABLE_HTTP.has(error.status)) return true;
+    if (error.name === 'AbortError') return true;
     const message = String(error.message ?? '');
-    return error.name === 'TypeError' || error.name === 'AbortError' ||
-        /failed to fetch|networkerror|load failed|fetch failed|timeout/i.test(message);
+    return /failed to fetch|networkerror|load failed|fetch failed|timeout/i.test(message);
 }
 
 async function readFamilyBackup(client, session) {
@@ -118,6 +118,7 @@ export async function openFamilyStorage(client, onSessionLost = () => {}, onUnco
         const { data: listener } = client.auth.onAuthStateChange((_event, session) => {
             if (active && (!session || session.user.id !== owner || session.user.is_anonymous)) {
                 active = false;
+                listener.subscription.unsubscribe();
                 offlineStore?.close();
                 onSessionLost();
             }
@@ -169,15 +170,27 @@ export async function openFamilyStorage(client, onSessionLost = () => {}, onUnco
                     return { revision: savedRevision };
                 }
             });
+            if (!active) {
+                await offlineStore.close();
+                throw new Error(sessionChanged);
+            }
         } catch (error) {
             active = false;
             listener.subscription.unsubscribe();
             throw error;
         }
-        const handleOutcome = outcome => {
+        const handleOutcome = (outcome, { throwOnConflict = false } = {}) => {
             options.onSyncOutcome?.(outcome);
-            if (outcome?.status === 'conflict' && outcome.conflictDraft?.payload) {
-                onUnconfirmedSave(outcome.conflictDraft.payload, outcome.conflictDraft);
+            if (outcome?.status === 'conflict') {
+                if (outcome.conflictDraft?.payload) {
+                    onUnconfirmedSave(outcome.conflictDraft.payload, outcome.conflictDraft);
+                }
+                if (throwOnConflict) {
+                    throw Object.assign(
+                        new Error('另一個裝置已儲存較新的資料。請下載未同步備份，再選擇保留本機重送或改用雲端版本。'),
+                        { code: 'OFFLINE_CONFLICT', outcome }
+                    );
+                }
             }
             return outcome;
         };
@@ -214,12 +227,13 @@ export async function openFamilyStorage(client, onSessionLost = () => {}, onUnco
         return {
             ownerId: owner,
             offlineEnabled: true,
+            get hasPending() { return active && offlineStore.hasPending; },
             readReviewAttempts,
             appendReviewAttempts,
             getItem: key => active ? offlineStore.getItem(key) : null,
             async setItem(key, value) {
                 if (!active) throw new Error(sessionChanged);
-                return handleOutcome(await offlineStore.setItem(key, value));
+                return handleOutcome(await offlineStore.setItem(key, value), { throwOnConflict: true });
             },
             async sync() {
                 if (!active) throw new Error(sessionChanged);
@@ -423,10 +437,33 @@ export async function openPageStorage({ home = false, resumeSession = home } = {
             explanation.textContent = '已交給瀏覽器下載。可在本機備份與還原頁開啟這份備份，核對後再把需要的修改輸入雲端。';
         });
         reload.addEventListener('click', () => location.reload());
+        const requeueConflict = document.createElement('button');
+        requeueConflict.type = 'button';
+        requeueConflict.textContent = '保留本機修改並重送';
+        requeueConflict.hidden = true;
+        const discardConflict = document.createElement('button');
+        discardConflict.type = 'button';
+        discardConflict.textContent = '放棄本機草稿、改用雲端版本';
+        discardConflict.hidden = true;
+        actions.append(requeueConflict, discardConflict);
+        let activeConflictDraft = null;
         const syncNow = document.createElement('button');
         syncNow.type = 'button';
         syncNow.textContent = '立即同步';
         syncNow.hidden = true;
+        const showConflictNotice = (attempted, conflictEntry) => {
+            draft = attempted;
+            activeConflictDraft = conflictEntry ?? null;
+            const hasResolver = Boolean(activeConflictDraft?.id);
+            requeueConflict.hidden = !hasResolver;
+            discardConflict.hidden = !hasResolver;
+            explanation.setAttribute('data-error', '');
+            explanation.textContent = hasResolver
+                ? '另一個裝置已儲存較新的雲端資料。請先下載未同步備份，再選擇「保留本機修改並重送」或「放棄本機草稿、改用雲端版本」。'
+                : '這次修改已保留在此頁。請下載備份，再重新載入雲端資料。';
+            draftNotice.hidden = false;
+            window.addEventListener('beforeunload', protectDraft);
+        };
         const canOffline = typeof globalThis.indexedDB?.open === 'function' &&
             typeof globalThis.navigator?.locks?.request === 'function';
         const offlineStatusText = outcome => {
@@ -446,16 +483,12 @@ export async function openPageStorage({ home = false, resumeSession = home } = {
         };
         const context = await openFamilyStorage(client, () => {
             draft = null;
+            activeConflictDraft = null;
             window.removeEventListener('beforeunload', protectDraft);
             draftNotice.remove();
             main.replaceChildren();
             location.replace(signIn());
-        }, attempted => {
-            draft = attempted;
-            explanation.textContent = '這次修改已保留在此頁。請下載備份，再重新載入雲端資料。';
-            draftNotice.hidden = false;
-            window.addEventListener('beforeunload', protectDraft);
-        }, canOffline ? {
+        }, showConflictNotice, canOffline ? {
             offline: true,
             indexedDB: globalThis.indexedDB,
             locks: globalThis.navigator.locks,
@@ -465,15 +498,50 @@ export async function openPageStorage({ home = false, resumeSession = home } = {
                 status.textContent = '另一個分頁已更新家庭資料，請重新整理以顯示最新內容。';
             }
         } : {});
+        const runConflictResolution = async action => {
+            if (!activeConflictDraft?.id || !context.resolveConflict) return;
+            requeueConflict.disabled = true;
+            discardConflict.disabled = true;
+            try {
+                const latest = await context.readLatest();
+                await context.resolveConflict({
+                    action,
+                    expectedConflictId: activeConflictDraft.id,
+                    latestRevision: latest.revision
+                });
+                if (action === 'requeue') await context.sync();
+                window.removeEventListener('beforeunload', protectDraft);
+                location.reload();
+            } catch (err) {
+                explanation.textContent = `衝突處理失敗：${err.message}`;
+                requeueConflict.disabled = false;
+                discardConflict.disabled = false;
+            }
+        };
+        requeueConflict.addEventListener('click', () => { runConflictResolution('requeue'); });
+        discardConflict.addEventListener('click', () => { runConflictResolution('discard'); });
         syncNow.addEventListener('click', () => { context.sync?.().catch(() => {}); });
         status.after(syncNow);
-        if (context.offlineEnabled) {
-            window.addEventListener('online', () => { context.sync?.().catch(() => {}); });
-        }
         useCloudNavigation();
         status.textContent = home ? '已連線到家庭帳號。' : '雲端模式。看到已同步後，即可在其他裝置開啟這筆資料。';
+        if (context.offlineEnabled) {
+            window.addEventListener('online', () => { context.sync?.().catch(() => {}); });
+            if (context.conflictDraft) {
+                showConflictNotice(context.conflictDraft.payload, context.conflictDraft);
+                offlineStatusText({ status: 'conflict', conflictDraft: context.conflictDraft });
+            } else if (context.hasPending) {
+                if (globalThis.navigator?.onLine === false) {
+                    offlineStatusText({ status: 'queued' });
+                } else {
+                    context.sync().catch(() => {});
+                }
+            }
+        }
         window.addEventListener('pagehide', event => {
-            if (event.persisted) main.hidden = true;
+            if (event.persisted) {
+                main.hidden = true;
+                context.close?.();
+            }
         });
         window.addEventListener('pageshow', event => {
             if (event.persisted) {

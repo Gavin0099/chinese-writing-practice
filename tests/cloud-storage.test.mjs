@@ -145,11 +145,19 @@ test('openFamilyStorage with offline mode queues writes while offline, recovers 
     assert.equal(synced.status, 'synced');
     assert.equal(synced.revision, 2);
 
-    // Another device advances cloud revision -> PT409 conflict preserved as conflictDraft.
+    // Another device advances cloud revision -> PT409 conflict throws OFFLINE_CONFLICT, invokes onUnconfirmedSave, and preserves conflictDraft.
+    const unconfirmed = [];
+    await store.close();
+    store = await openFamilyStorage(client, undefined, (payload, entry) => unconfirmed.push({ payload, entry }), {
+        offline: true, storage: makeStorage(), locks, now: () => nowMs, newId: () => `op-${++seq}`, baseDelayMs: 50
+    });
     revision = 3;
     const edit2 = { ...edit1, 地: [{ status: 'can_write', at: '2026-11-25T00:01:00.000Z' }] };
-    const conflicted = await store.setItem(writingStorageKey, JSON.stringify(edit2));
-    assert.equal(conflicted.status, 'conflict');
+    await assert.rejects(
+        store.setItem(writingStorageKey, JSON.stringify(edit2)),
+        err => err?.code === 'OFFLINE_CONFLICT'
+    );
+    assert.equal(unconfirmed.length, 1);
     assert.ok(store.conflictDraft);
 
     // Resolve conflict by requeuing on top of latest revision 3 and syncing to 4.
@@ -167,4 +175,60 @@ test('openFamilyStorage with offline mode queues writes while offline, recovers 
     // Session loss immediately closes offline store.
     onChange?.('SIGNED_OUT', null);
     assert.equal(store.getItem(writingStorageKey), null);
+});
+
+test('openFamilyStorage offline mode cleans up offlineStore if session is lost during open and does not treat programming TypeError as retryable', async () => {
+    const records = new Map();
+    const sharedStorage = {
+        async getItem(k) { return records.get(k); },
+        async setItem(k, v) { records.set(k, v); }
+    };
+    let session = { access_token: 'fixture-a', user: { id: 'a' } };
+    let onChange;
+    let triggerLossOnRead = false;
+    let throwProgrammingTypeError = false;
+    const client = {
+        auth: {
+            async getSession() { return { data: { session }, error: null }; },
+            onAuthStateChange(cb) {
+                onChange = cb;
+                return { data: { subscription: { unsubscribe() { onChange = null; } } } };
+            }
+        },
+        rpc() {
+            return {
+                async setHeader() {
+                    if (throwProgrammingTypeError) throw new TypeError('Cannot read properties of undefined');
+                    if (triggerLossOnRead) {
+                        triggerLossOnRead = false;
+                        onChange?.('SIGNED_OUT', null);
+                    }
+                    return { data: { revision: 1, backup: exportBackup({ getItem: () => null }) }, error: null };
+                }
+            };
+        }
+    };
+    const locks = { request: (_n, _o, cb) => (typeof _o === 'function' ? _o() : cb()) };
+
+    // 1) Session lost mid-open must abort and release offlineStore so reopening does not leak activeOwners.
+    triggerLossOnRead = true;
+    await assert.rejects(
+        openFamilyStorage(client, undefined, undefined, {
+            offline: true, storage: sharedStorage, locks, now: () => 1000, newId: () => 'id-1'
+        }),
+        /登入已變更/
+    );
+    const reopened = await openFamilyStorage(client, undefined, undefined, {
+        offline: true, storage: sharedStorage, locks, now: () => 1000, newId: () => 'id-2'
+    });
+    await reopened.close();
+
+    // 2) Programming TypeError (non-network) must NOT fall back to cached snapshot.
+    throwProgrammingTypeError = true;
+    await assert.rejects(
+        openFamilyStorage(client, undefined, undefined, {
+            offline: true, storage: sharedStorage, locks, now: () => 1000, newId: () => 'id-3'
+        }),
+        /Cannot read properties of undefined/
+    );
 });

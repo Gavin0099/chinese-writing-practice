@@ -66,7 +66,7 @@ export async function openOfflineFamilyStorage({
     activeOwners.set(backingStore, owners);
 
     const ownsChannel = channel === undefined && ownsStorage && typeof globalThis.BroadcastChannel === 'function';
-    const bus = channel ?? (ownsChannel ? new globalThis.BroadcastChannel(key) : null);
+    let bus = channel ?? null;
 
     let record;
     let nextConfirmed;
@@ -218,6 +218,7 @@ export async function openOfflineFamilyStorage({
     }
 
     try {
+        if (ownsChannel) bus = new globalThis.BroadcastChannel(key);
         await withLock(async () => {
             await loadFromBackend();
             if (!hasWork(record.queue)) await refresh();
@@ -233,14 +234,16 @@ export async function openOfflineFamilyStorage({
     const onBusMessage = event => {
         if (closed || event?.data?.type !== 'updated' || event?.data?.ownerId !== ownerId) return;
         run(() => withLock(async () => {
+            const before = stateFingerprint();
             await loadFromBackend();
-            onStateChange?.();
+            if (stateFingerprint() !== before) onStateChange?.();
         })).catch(() => {});
     };
     bus?.addEventListener?.('message', onBusMessage);
 
     return {
         ownerId,
+        get hasPending() { return !closed && Boolean(record?.queue?.pending?.length); },
         getItem(key) {
             const section = sections.get(key);
             if (closed || !section) return null;

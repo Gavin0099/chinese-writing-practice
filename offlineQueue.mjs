@@ -207,5 +207,35 @@ export async function createOfflineQueue({ storage, key, now, baseDelayMs = 1000
         }
     }
 
-    return { enqueue, flush, snapshot, restore };
+
+    // Resolve only the draft the caller reviewed, using a confirmed server revision.
+    async function resolveConflict(options = {}) {
+        if (options === null) throw new TypeError('Invalid offline conflict options.');
+        const { action, expectedConflictId, latestRevision } = options;
+        if (flushing) throw new Error('Cannot resolve a conflict while flushing.');
+        return withState(() => {
+            if (flushing) throw new Error('Cannot resolve a conflict while flushing.');
+            const { conflictDraft, pending } = state;
+            if (!conflictDraft) throw new Error('No offline conflict to resolve.');
+            if (expectedConflictId !== conflictDraft.id) throw new Error('Offline conflict id does not match.');
+            if (action !== 'discard' && action !== 'requeue') {
+                throw new TypeError('Invalid offline conflict action.');
+            }
+            if (!isCounter(latestRevision) ||
+                latestRevision < Math.max(state.latestRevision ?? 0, conflictDraft.expectedRevision)) {
+                throw new TypeError('Invalid offline conflict revision.');
+            }
+
+            const nextPending = action === 'requeue' ? [{
+                ...conflictDraft,
+                baseRevision: latestRevision,
+                expectedRevision: latestRevision,
+                retryCount: 0,
+                nextRetryAt: null
+            }, ...pending] : pending;
+            return persist({ ...state, latestRevision, pending: nextPending, conflictDraft: null });
+        });
+    }
+
+    return { enqueue, flush, snapshot, restore, resolveConflict };
 }

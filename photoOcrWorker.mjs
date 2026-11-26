@@ -1,4 +1,4 @@
-import { findCircledWords, findGlyphColumn, findTextRegions, glyphRows, isolateTextInk, redInkCrop, removeCircleInk } from './photoOcrGeometry.mjs';
+import { circledGlyphs, findCircledWords, findTextRegions, isolateTextInk, redInkCrop, removeCircleInk } from './photoOcrGeometry.mjs';
 import { cleanRecognizedWord } from './photoOcrText.mjs';
 import { groupNumberPatches, inkComponents, matchPhotoNumbers, numberDistance, numberPatchBounds, numberPatches } from './photoOcrNumbers.mjs';
 
@@ -59,47 +59,27 @@ async function loadRecognizer() {
     return { ort, session, alphabet: ['', ...characters, ' '] };
 }
 
-function prepare(source, circle, scale, blueOnly = false) {
-    const { width: sourceWidth, data } = source;
-    const { x, y, height, projection } = circle;
-    const { left, width } = findGlyphColumn(projection, scale);
-    const pixels = new Uint8Array(width * height * 3);
-    const counts = new Uint16Array(height);
-    const inside = blueOnly ? new Set(circle.interior) : null;
-    for (let row = 0; row < height; row++) {
-        for (let column = 0; column < width; column++) {
-            const start = 4 * ((y + row) * sourceWidth + x + left + column);
-            const dest = 3 * (row * width + column);
-            const red = data[start];
-            const green = data[start + 1];
-            const blue = data[start + 2];
-            const isBlue = Math.min(blue - red, green - red) > 18;
-            const within = !inside || inside.has(start / 4);
-            if (isBlue && within) counts[row]++;
-            const skip = red - green > 32 || (inside && (!isBlue || !within));
-            pixels[dest] = skip ? 255 : red;
-            pixels[dest + 1] = skip ? 255 : green;
-            pixels[dest + 2] = skip ? 255 : blue;
-        }
-    }
-    const rows = glyphRows(counts, scale);
-    const glyphHeight = Math.max(24, Math.round(36 * scale));
-    const stripWidth = 16 + rows.length * (width + 8);
-    const stripHeight = glyphHeight + 8;
+function prepare({ tones, width: cropWidth, column, rows }, binary = false) {
+    const { left, width } = column;
+    const glyphHeight = Math.max(width, ...rows.map(([from, to]) => to - from));
+    const padding = Math.max(3, Math.round(width * .16));
+    const stripWidth = padding + rows.length * (width + padding);
+    const stripHeight = glyphHeight + padding * 2;
     const strip = new Uint8Array(stripWidth * stripHeight * 3).fill(255);
     for (const [index, [from, to]] of rows.entries()) {
-        const start = Math.max(0, from - 2);
-        const length = Math.min(height, to + 2) - start;
-        const fitted = Math.min(glyphHeight, length);
-        const left = 11 + index * (width + 8);
-        const top = 4 + Math.floor((glyphHeight - fitted) / 2);
-        for (let row = 0; row < fitted; row++) {
-            const sourceOffset = 3 * width * (start + Math.floor(row * length / fitted));
-            const targetOffset = 3 * ((top + row) * stripWidth + left);
-            strip.set(pixels.subarray(sourceOffset, sourceOffset + 3 * width), targetOffset);
+        const targetX = padding + index * (width + padding);
+        const targetY = padding + Math.floor((glyphHeight - (to - from)) / 2);
+        for (let row = from; row < to; row++) {
+            const sourceOffset = row * cropWidth + left;
+            const targetOffset = 3 * ((targetY + row - from) * stripWidth + targetX);
+            for (let col = 0; col < width; col++) {
+                const tone = tones[sourceOffset + col];
+                if (tone === 255) continue;
+                strip.fill(binary ? 0 : tone, targetOffset + 3 * col, targetOffset + 3 * col + 3);
+            }
         }
     }
-    return { pixels: strip, width: stripWidth, height: stripHeight, glyphCount: rows.length };
+    return { pixels: strip, width: stripWidth, height: stripHeight };
 }
 
 function toTensor(strip, Tensor) {
@@ -192,7 +172,8 @@ async function recognizeNumbers(image, circles, ink, scale, recognize) {
     for (const { group, box } of groups.slice(0, 100)) {
         // Plain upright strokes often come back as I, l, or blank in the model.
         const ones = group.every(({ w, h }) => w / h < .36);
-        const { text, confidence } = ones ? { text: '1'.repeat(group.length), confidence: .77 }
+        const strokeConfidence = group.length === 1 && group[0].w / group[0].h < .3 ? .84 : .77;
+        const { text, confidence } = ones ? { text: '1'.repeat(group.length), confidence: strokeConfidence }
             : await recognize(prepareInk(group, box, image.width));
         const digits = text.normalize('NFKC').replace(/\s+/gu, '').replace(/^[Il](?=[0-9]$)/u, '1');
         if (/^[1-9][0-9]?$/u.test(digits)) marks.push({ ...box, group, number: Number(digits), confidence });
@@ -211,32 +192,50 @@ async function getRecognizer() {
 }
 
 async function recognizePrintedWord(image, circle, scale, recognize) {
-    const primary = prepare(image, circle, scale);
-    const clean = prepare(image, circle, scale, true);
-    const expected = clean.glyphCount;
+    const glyphs = circledGlyphs(image, circle, scale);
+    if (!glyphs?.rows.length || glyphs.rows.length > 10) return { word: '', uncertain: true };
+    const expected = glyphs.rows.length;
     async function read(strip) {
         const { text, confidence } = await recognize(strip);
         const word = cleanRecognizedWord(text);
-        return { word: [...word].length === expected ? word : '', confidence };
+        return { word, length: [...word].length, confidence };
     }
 
-    const first = await read(primary);
-    // Check short results against the isolated ink before treating them as reliable.
-    if (first.word && first.confidence >= .85 && primary.glyphCount === expected && expected > 1) {
+    const first = await read(prepare(glyphs));
+    if (first.length === expected && first.confidence >= .85 && expected > 1) return { word: first.word, uncertain: false };
+    const binary = await read(prepare(glyphs, true));
+    if (first.length === expected && first.word === binary.word && Math.max(first.confidence, binary.confidence) >= .72) {
         return { word: first.word, uncertain: false };
     }
-    const isolated = await read(clean);
-    if (first.word && first.word === isolated.word) return { word: first.word, uncertain: false };
-
-    const circleScale = circle.width / 62;
-    const retryScale = Math.abs(circleScale - scale) > scale * .12 ? circleScale : scale * 1.2;
-    const retry = await read(prepare(image, circle, Math.max(.45, Math.min(2.4, retryScale)), true));
-    if (retry.word && (retry.word === isolated.word || retry.word === first.word)) {
-        return { word: retry.word, uncertain: false };
-    }
-    const best = [isolated, retry, first].filter(reading => reading.word)
+    const best = [first, binary].filter(reading => reading.length === expected)
         .sort((a, b) => b.confidence - a.confidence)[0];
-    return { word: best?.confidence >= .72 ? best.word : '', uncertain: true };
+    if (best?.confidence >= .85 || expected === 1) {
+        return { word: best?.confidence >= .72 ? best.word : '', uncertain: true };
+    }
+
+    // Confirm a high-confidence short read against a crop excluding only a row
+    // that touches the outline. Keep the suggestion flagged for review.
+    const shorter = [first, binary].filter(reading => reading.length === expected - 1 && reading.confidence >= .87);
+    if (expected >= 3 && shorter.length) {
+        for (const rows of glyphs.edgeTrims) {
+            const trimmed = await read(prepare({ ...glyphs, rows }));
+            if (trimmed.confidence >= .87 && shorter.some(reading => reading.word === trimmed.word)) {
+                return { word: trimmed.word, uncertain: true };
+            }
+        }
+    }
+
+    // A weak line decode can hide a glyph even when the geometry found its row.
+    // Only use the isolated readings when every row produces a usable character.
+    const characters = [];
+    for (const row of glyphs.rows) {
+        const single = { ...glyphs, rows: [row] };
+        let result = await read(prepare(single));
+        if (result.length !== 1 || result.confidence < .72) result = await read(prepare(single, true));
+        if (result.length !== 1 || result.confidence < .72) return { word: best?.confidence >= .72 ? best.word : '', uncertain: true };
+        characters.push(result.word);
+    }
+    return { word: characters.join(''), uncertain: true };
 }
 
 async function recognizeHandwriting(image) {

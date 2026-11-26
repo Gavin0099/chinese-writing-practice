@@ -41,7 +41,9 @@ try {
 
     function renderChildren() {
         const children = readChildren(localStorage, owner, attempts);
-        if (!children.some(child => child.id === activeChildId)) activeChildId = defaultChildId;
+        if (activeChildId !== defaultChildId && !children.some(child => child.id === activeChildId)) {
+            children.push({ id: activeChildId, name: `孩子 ${activeChildId.slice(0, 8)}` });
+        }
         childPicker.replaceChildren(...children.map(child => new Option(child.name, child.id)));
         childPicker.value = activeChildId;
     }
@@ -192,6 +194,7 @@ try {
     bookPicker.addEventListener('change', () => renderBook());
     childPicker.addEventListener('change', () => {
         activeChildId = saveActiveChild(localStorage, owner, childPicker.value);
+        renderQuestions();
         renderHistory();
     });
     byId('childForm').addEventListener('submit', event => {
@@ -202,6 +205,7 @@ try {
             const created = saveChild(localStorage, owner, { id: crypto.randomUUID(), name });
             activeChildId = saveActiveChild(localStorage, owner, created.id);
             renderChildren();
+            renderQuestions();
             renderHistory();
             form.reset();
             byId('childDetails').open = false;
@@ -249,6 +253,7 @@ try {
         try {
             const input = Object.fromEntries(new FormData(form));
             const bookId = bookPicker.value;
+            const childId = activeChildId;
             if (cloud && !(await queueSync())) throw new Error('請先同步最新批改紀錄，再產生考卷。');
             const data = readVocabulary(records);
             const book = data.books.find(item => item.id === bookId);
@@ -256,7 +261,7 @@ try {
             const attempt = now();
             const exam = makeReviewExam({ id: attempt.id, createdAt: attempt.at, seed: crypto.randomUUID(), book, words: data.words,
                 attempts, mode: input.mode, size: input.size, wrongCount: Number(input.wrong), newCount: Number(input.fresh),
-                from: Number(input.from), to: Number(input.to), childId: activeChildId });
+                from: Number(input.from), to: Number(input.to), childId });
             await records.setItem(vocabularyStorageKey, JSON.stringify({ ...data, exams: [...data.exams, exam] }));
             const path = `exam.html?${new URLSearchParams({ id: exam.id })}`;
             location.href = cloud ? cloudPageUrl(path) : path;

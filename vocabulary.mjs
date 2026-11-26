@@ -416,17 +416,22 @@ async function readPriorityTerms(bookId, childId = defaultChildId) {
 
 const examChildSelect = byId('examChild');
 const examChildRow = byId('examChildRow');
-function renderExamChildren() {
+function renderExamChildren(extraAttempts = []) {
     if (!examChildSelect || !examChildRow) return;
     const owner = cloud?.ownerId ?? 'local';
-    const local = readAttempts(localStorage, owner);
-    const children = readChildren(localStorage, owner, local);
+    let local = [];
+    try { local = readAttempts(localStorage, owner); } catch { local = []; }
+    const children = readChildren(localStorage, owner, [...local, ...extraAttempts]);
     const active = readActiveChild(localStorage, owner);
+    if (active !== defaultChildId && !children.some(child => child.id === active)) {
+        children.push({ id: active, name: `孩子 ${active.slice(0, 8)}` });
+    }
     examChildSelect.replaceChildren(...children.map(child => new Option(child.name, child.id)));
     examChildSelect.value = children.some(child => child.id === active) ? active : defaultChildId;
     examChildRow.hidden = children.length <= 1;
 }
 renderExamChildren();
+if (cloud) cloud.readReviewAttempts().then(remote => renderExamChildren(remote)).catch(() => {});
 examChildSelect?.addEventListener('change', () => {
     saveActiveChild(localStorage, cloud?.ownerId ?? 'local', examChildSelect.value);
 });

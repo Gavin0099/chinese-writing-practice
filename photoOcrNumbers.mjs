@@ -39,7 +39,7 @@ export function inkComponents(mask, width, height, accepts) {
 
 export function numberPatches(mask, width, height, scale) {
     return inkComponents(mask, width, height, (w, h, area) =>
-        area >= 38 * scale ** 2 && h >= 14 * scale && h <= 66 * scale && w >= 3 * scale && w <= 65 * scale);
+        area >= 38 * scale ** 2 && h >= 14 * scale && h <= 82 * scale && w >= 3 * scale && w <= 65 * scale);
 }
 
 function horizontalGap(a, b) {
@@ -76,10 +76,22 @@ export function numberPatchBounds(group) {
 
 export function numberDistance(box, mark, scale) {
     const x = (mark.x + mark.right) / 2;
-    const horizontal = Math.max(0, box.x - x, x - box.x - box.width);
+    const y = (mark.y + mark.bottom) / 2;
+    const right = box.x + box.width;
+    const unit = Math.max(scale, box.width / 62);
+    const horizontal = Math.max(0, box.x - x, x - right);
     const vertical = box.y - mark.bottom;
-    if (horizontal > 45 * scale || vertical < -25 * scale || vertical > 122 * scale) return Infinity;
-    return (horizontal * 1.25 + Math.abs(vertical) + Math.abs(x - box.x - box.width * .75) * .18) / scale;
+    const above = y <= box.y + Math.min(box.height * .2, 10 * scale) &&
+        horizontal <= 45 * unit && vertical >= -25 * unit && vertical <= 122 * unit
+        ? (horizontal * 1.25 + Math.abs(vertical) + Math.abs(x - box.x - box.width * .75) * .18) / unit
+        : Infinity;
+    // A label beside the upper half can overlap the top in y. Measure its
+    // distance from the right edge instead of charging for that overlap.
+    const side = x >= right - box.width * .14 && x <= right + 45 * unit &&
+        y >= box.y - box.height * .45 && y <= box.y + box.height * .62
+        ? (Math.abs(x - right) * 1.25 + Math.abs(y - box.y - box.height * .12) * .8) / unit
+        : Infinity;
+    return Math.min(above, side);
 }
 
 export function readingOrder(circles, scale) {
@@ -141,7 +153,13 @@ export function matchPhotoNumbers(circles, marks, scale) {
     }
 
     const candidates = choices.flatMap((options, position) => options
-        .filter(mark => mark.confidence >= .81 && mark.distance <= 27)
+        .filter(mark => {
+            if (mark.confidence >= .81 && mark.distance <= 30) return true;
+            // A larger annotation can sit beyond an intervening red note.
+            // Use a distant read only if nearby circles cannot plausibly claim it.
+            return mark.confidence >= .94 && mark.distance <= 80 && choices.every((others, index) =>
+                index === position || !others.some(other => other.group === mark.group && other.distance < mark.distance + 20));
+        })
         .map(mark => ({ ...mark, index: order[position] })));
     candidates.sort((a, b) => markScore(b) - markScore(a));
     const result = {};

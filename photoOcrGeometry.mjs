@@ -29,24 +29,25 @@ export function redInkCrop({ data, width, height }) {
     return { mask, left, top, width: right - left + 1, height: bottom - top + 1 };
 }
 
+function printedTone(red, green, blue) {
+    // Reject pen ink, including the lighter red antialiasing along the outline.
+    if (red - green > 19 && red - blue > 16) return 255;
+    return Math.round((2 * red + green + blue) / 4);
+}
+
 export function findCircledWords({ data, width, height }) {
     const size = width * height;
     const redInk = new Uint8Array(size);
-    const blueInk = new Uint8Array(size);
     for (let index = 0; index < size; index++) {
         const offset = 4 * index;
         const red = data[offset];
         const green = data[offset + 1];
         const blue = data[offset + 2];
-        const max = Math.max(red, green, blue);
-        const difference = max - Math.min(red, green, blue);
-        const saturation = max ? difference * 255 / max : 0;
-        if (saturation < 95 || max < 70) continue;
-        const hue = inkHue(red, green, blue, max, difference);
-        if (isRedInk(red, green, blue, saturation, hue)) {
+        if (red - green <= 46 || red - blue <= 43) continue;
+        const difference = red - Math.min(green, blue);
+        if (isRedInk(red, green, blue, difference * 255 / red, inkHue(red, green, blue, red, difference))) {
             redInk[index] = 1;
         }
-        if (hue >= 87 && hue <= 119 && blue - red > 30 && green - red > 22) blueInk[index] = 1;
     }
 
     const remainingInk = redInk.slice();
@@ -61,7 +62,7 @@ export function findCircledWords({ data, width, height }) {
             queue[tail++] = point;
         };
         visit(index);
-        let left = width, top = height, right = -1, bottom = -1, blueCount = 0;
+        let left = width, top = height, right = -1, bottom = -1;
         for (let head = 0; head < tail; head++) {
             const point = queue[head];
             const x = point % width;
@@ -70,7 +71,6 @@ export function findCircledWords({ data, width, height }) {
             right = Math.max(right, x);
             top = Math.min(top, y);
             bottom = Math.max(bottom, y);
-            blueCount += blueInk[point];
             if (x > 0) visit(point - 1);
             if (x + 1 < width) visit(point + 1);
             if (y > 0) visit(point - width);
@@ -79,13 +79,19 @@ export function findCircledWords({ data, width, height }) {
         const w = right - left + 1;
         const h = bottom - top + 1;
         if (left === 0 || right + 1 === width || top === 0 || bottom + 1 === height) continue;
-        if (w < 16 || w > 200 || h < 12 || h > 240 || tail < w * h * .36 || blueCount < 20) continue;
-        const projection = new Uint16Array(w);
+        if (w < 16 || w > 200 || h < 12 || h > 240 || tail < w * h * .36) continue;
+        let paper = 0, text = 0;
         for (let head = 0; head < tail; head++) {
-            const point = queue[head];
-            if (blueInk[point]) projection[point % width - left]++;
+            const offset = queue[head] * 4;
+            const red = data[offset], green = data[offset + 1], blue = data[offset + 2];
+            const light = Math.min(red, green, blue);
+            if (light >= 150 && Math.max(red, green, blue) - light <= 45) paper++;
+            if (printedTone(red, green, blue) < 165) text++;
         }
-        circles.push({ x: left, y: top, width: w, height: h, projection, interior: queue.slice(0, tail) });
+        // A circle on a textbook combines a pale interior with printed strokes.
+        // Color alone also detects enclosed regions in illustrations.
+        if (paper < tail * .6 || text < 20) continue;
+        circles.push({ x: left, y: top, width: w, height: h, interior: queue.slice(0, tail) });
     }
     return { circles: circles.sort((a, b) => a.y - b.y || b.x - a.x).slice(0, 60), remainingInk };
 }
@@ -189,49 +195,96 @@ export function findTextRegions({ ink, width, height }, vertical) {
 }
 
 export function findGlyphColumn(projection, scale) {
-    const peak = Math.max(...projection);
-    const first = Math.max(0, projection.findIndex(value => value >= Math.max(2, peak * .25)) - 3);
-    let best = { left: first, width: projection.length - first, score: -Infinity };
-    for (const nominal of [29, 32, 35]) {
-        const width = Math.max(14, Math.round(nominal * scale));
-        for (let left = Math.max(0, first - 3); left <= first + 4 && left + width <= projection.length; left++) {
-            const score = projection.subarray(left, left + width).reduce((sum, value) => sum + value, 0) - width * .75;
-            if (score > best.score) best = { left, width, score };
-        }
+    const gap = Math.max(2, Math.round(2.5 * scale));
+    const columns = inkSpans(projection, 2, gap);
+    let best = null;
+    let bestInk = 0;
+    for (const [left, right] of columns) {
+        const ink = projection.subarray(left, right).reduce((sum, count) => sum + count, 0);
+        if (ink <= bestInk) continue;
+        best = { left, width: right - left };
+        bestInk = ink;
     }
     return best;
 }
 
-export function glyphRows(projection, scale) {
-    const minimum = Math.max(6, Math.round(8 * scale));
-    const gap = Math.max(3, Math.round(4 * scale));
-    const maxGlyph = Math.max(23, Math.round(38 * scale));
+export function glyphRows(projection, glyphWidth) {
+    const minimum = Math.max(4, Math.round(.33 * glyphWidth));
+    const gap = Math.max(2, Math.round(.14 * glyphWidth));
+    const maxGlyph = Math.max(12, Math.round(1.22 * glyphWidth));
     const ranges = [];
-    let start = -1, last = -1;
-    function addRange() {
-        if (last - start < minimum) return;
-        if (last - start + 1 <= maxGlyph) {
-            ranges.push([start, last + 1]);
+    let start = -1, last = -1, peak = 0;
+    const addRange = () => {
+        const end = last + 1;
+        // A short but wide stroke can be a complete glyph in a vertical column.
+        if (end - start < minimum && peak < .45 * glyphWidth) return;
+        if (end - start <= maxGlyph) {
+            ranges.push([start, end]);
             return;
         }
-        const margin = Math.max(10, Math.round(16 * scale));
-        let cut = Math.floor((start + last + 1) / 2);
-        for (let row = start + margin; row <= last - margin + 1; row++) {
+        const middle = (start + end) / 2;
+        let cut = Math.floor(middle);
+        for (let row = start + minimum; row <= end - minimum; row++) {
             if (projection[row] < projection[cut] ||
-                (projection[row] === projection[cut] && Math.abs(row - (start + last + 1) / 2) < Math.abs(cut - (start + last + 1) / 2))) {
-                cut = row;
-            }
+                (projection[row] === projection[cut] && Math.abs(row - middle) < Math.abs(cut - middle))) cut = row;
         }
-        ranges.push([start, cut], [cut, last + 1]);
-    }
+        if (projection[cut] <= peak * .25) ranges.push([start, cut], [cut, end]);
+        else ranges.push([start, end]);
+    };
     for (let row = 0; row < projection.length; row++) {
         if (projection[row] < 2) continue;
         if (start < 0 || row - last > gap) {
             if (start >= 0) addRange();
             start = row;
+            peak = 0;
         }
         last = row;
+        peak = Math.max(peak, projection[row]);
     }
     if (start >= 0) addRange();
-    return ranges.length ? ranges : [[0, projection.length]];
+    return ranges;
+}
+
+export function circledGlyphs(source, circle, scale) {
+    const { x, y, width, height, interior } = circle;
+    const tones = new Uint8Array(width * height).fill(255);
+    const projection = new Uint16Array(width);
+    for (const point of interior) {
+        const col = point % source.width - x, row = Math.floor(point / source.width) - y;
+        const offset = point * 4;
+        const tone = printedTone(source.data[offset], source.data[offset + 1], source.data[offset + 2]);
+        if (tone >= 175) continue;
+        tones[row * width + col] = tone;
+        projection[col]++;
+    }
+    const column = findGlyphColumn(projection, scale);
+    if (!column) return null;
+    const counts = new Uint16Array(height);
+    for (let row = 0; row < height; row++) {
+        for (let col = column.left; col < column.left + column.width; col++) {
+            if (tones[row * width + col] !== 255) counts[row]++;
+        }
+    }
+    const rows = glyphRows(counts, column.width);
+    const edgeTrims = [];
+    if (rows.length >= 3) {
+        const inside = new Set(interior);
+        const reach = Math.max(1, Math.round(.08 * column.width)) * source.width;
+        const clipped = ([from, to], outward) => {
+            let hits = 0;
+            for (let row = from; row < to; row++) {
+                for (let col = column.left; col < column.left + column.width; col++) {
+                    if (tones[row * width + col] === 255) continue;
+                    const point = (y + row) * source.width + x + col;
+                    if (!inside.has(point + outward * reach)) hits++;
+                }
+            }
+            return hits >= .1 * column.width;
+        };
+        // A neighboring character cut by the outline can still project as a row.
+        // Offer shorter strips only when ink at that end contacts the outline.
+        if (clipped(rows[0], -1)) edgeTrims.push(rows.slice(1));
+        if (clipped(rows.at(-1), 1)) edgeTrims.push(rows.slice(0, -1));
+    }
+    return { tones, width, column, rows, edgeTrims };
 }

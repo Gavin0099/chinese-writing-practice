@@ -23,6 +23,17 @@ test('grading stores separate attempts and distinguishes the same character in d
     assert.throws(() => gradeExam(oldExam, [3], mark('third', 12)), /有效題號/);
 });
 
+test('grading saved zhuyin and mixed exams keeps the existing wrong-word record by question number', () => {
+    const { id, createdAt, from, to, count, seed } = oldExam;
+    const options = { id, createdAt, book, words: [sky, weather], from, to, count, seed };
+    const grade = mark('same-grade', 11);
+    const expected = gradeExam(oldExam, [2], grade);
+    for (const examType of ['zhuyin', 'mixed']) {
+        const exam = makeExam({ ...options, examType });
+        assert.deepEqual(gradeExam(exam, [2], grade), expected);
+    }
+});
+
 test('paper mistakes can be mixed with new lesson questions without repeating the same prompt', () => {
     const attempt = recordPaperWord(sky, mark('paper', 12));
     const opts = { id: 'retake', createdAt: mark('a', 12).at, seed: 'repeatable', book, attempts: [attempt],

@@ -1,5 +1,6 @@
 import { bookLabel, readVocabulary } from './vocabularyData.mjs';
 import { cloudPageUrl, openPageStorage } from './cloudStorage.mjs';
+import { examTypeTitles, isExamType } from './examData.mjs';
 
 const byId = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -11,25 +12,31 @@ function node(tag, className, text) {
     return result;
 }
 
-function renderCell(char, pronunciation, blank) {
+function renderCell(char, pronunciation, target) {
     const cell = node('span', 'exam-cell');
-    const grid = node('span', 'exam-grid', blank ? '' : char);
-    if (blank) {
+    const grid = node('span', 'exam-grid', target === 'character' ? '' : char);
+    if (target === 'character') {
         grid.setAttribute('role', 'img');
         grid.setAttribute('aria-label', '填空');
     }
     const reading = node('span', 'exam-zhuyin');
     reading.setAttribute('role', 'img');
-    reading.setAttribute('aria-label', pronunciation);
-    const tone = pronunciation.match(/[ˊˇˋ˙]/u)?.[0];
-    if (tone) reading.append(node('span', `exam-tone${tone === '˙' ? ' neutral' : ''}`, tone));
-    for (const symbol of pronunciation.replace(/[ˊˇˋ˙]/u, '')) reading.append(node('span', 'symbol', symbol));
+    if (target === 'zhuyin') {
+        reading.classList.add('exam-zhuyin-blank');
+        reading.setAttribute('aria-label', '注音填空');
+    } else {
+        reading.setAttribute('aria-label', pronunciation);
+        const tone = pronunciation.match(/[ˊˇˋ˙]/u)?.[0];
+        if (tone) reading.append(node('span', `exam-tone${tone === '˙' ? ' neutral' : ''}`, tone));
+        for (const symbol of pronunciation.replace(/[ˊˇˋ˙]/u, '')) reading.append(node('span', 'symbol', symbol));
+    }
     cell.append(grid, reading);
     return cell;
 }
 
 function renderPage(exam, offset, perPage, answer) {
-    const title = answer ? '詞語測驗解答' : '看注音寫國字';
+    const examType = isExamType(exam.examType) ? exam.examType : 'character';
+    const title = answer ? '詞語測驗解答' : examTypeTitles[examType];
     const page = node('article', 'exam-page');
     page.setAttribute('aria-label', `${title}，第 ${offset / perPage + 1} 頁`);
     const header = node('div', 'exam-sheet-header');
@@ -47,8 +54,10 @@ function renderPage(exam, offset, perPage, answer) {
         const item = node('li', 'exam-question');
         item.dataset.number = String(offset + index + 1);
         const word = node('span', 'exam-word');
+        const target = examType === 'mixed' ? question.target ?? 'character' : examType;
         for (const [position, char] of Array.from(question.word).entries()) {
-            word.append(renderCell(char, question.pronunciation[position], !answer && question.blanks.includes(position + 1)));
+            const blank = !answer && question.blanks.includes(position + 1);
+            word.append(renderCell(char, question.pronunciation[position], blank ? target : null));
         }
         item.append(word);
         if (answer) {

@@ -138,6 +138,56 @@ test('exam blank modes write only the snapshot and count Unicode characters corr
     assert.throws(() => makeExam({ ...options, blankMode: 'invalid' }), /挖空方式/);
 });
 
+test('the default and explicit character exam keep the original snapshot shape', () => {
+    const options = { id: 'legacy', createdAt: '2026-11-11T00:00:00Z', book, words: [entry()],
+        from: 1, to: 1, count: 1, seed: 'legacy' };
+    const expected = { id: 'legacy', createdAt: options.createdAt, book, from: 1, to: 1, count: 1, seed: 'legacy',
+        questions: [{ word: '晴天', pronunciation: ['ㄑㄧㄥˊ', 'ㄊㄧㄢ'], blanks: [1], sources: [{ id: 'word-1', lesson: 1 }] }] };
+    assert.deepEqual(makeExam(options), expected);
+    assert.deepEqual(makeExam({ ...options, examType: 'character' }), expected);
+});
+
+test('zhuyin exams preserve all answer data and the chosen blank positions', () => {
+    const words = [entry({ word: '𠮷天', pronunciation: 'ㄐㄧˊ ㄊㄧㄢ', blanks: [2] })];
+    const options = { id: 'zhuyin', book, words, from: 1, to: 1, count: 1, seed: 'reading', examType: 'zhuyin' };
+    const exam = makeExam(options);
+    assert.equal(exam.examType, 'zhuyin');
+    assert.deepEqual(exam.questions, [
+        { word: '𠮷天', pronunciation: ['ㄐㄧˊ', 'ㄊㄧㄢ'], blanks: [2], sources: [{ id: 'word-1', lesson: 1 }] }
+    ]);
+    assert.deepEqual(makeExam({ ...options, blankMode: 'all' }).questions[0].blanks, [1, 2]);
+});
+
+test('mixed exams assign repeatable targets without changing the seeded question draw', () => {
+    const words = [entry(), entry({ id: 'rain', word: '下雨', pronunciation: 'ㄒㄧㄚˋ ㄩˇ', blanks: [2] }),
+        entry({ id: 'cloud', word: '白雲', pronunciation: 'ㄅㄞˊ ㄩㄣˊ' })];
+    const options = { id: 'mixed', book, words, from: 1, to: 1, count: 3, seed: 'mixed-0' };
+    const exam = makeExam({ ...options, examType: 'mixed' });
+    assert.equal(exam.examType, 'mixed');
+    assert.deepEqual(exam, makeExam({ ...options, words: words.toReversed(), examType: 'mixed' }));
+    assert.deepEqual(exam.questions.map(({ target, ...question }) => question), makeExam(options).questions);
+    assert.deepEqual(new Set(exam.questions.map(question => question.target)), new Set(['character', 'zhuyin']));
+
+    const firstTargets = new Set();
+    const singleTargets = new Set();
+    for (let index = 0; index < 32; index++) {
+        const settings = { ...options, seed: `mixed-${index}`, examType: 'mixed' };
+        const pair = makeExam({ ...settings, count: 2 }).questions.map(question => question.target);
+        assert.deepEqual(new Set(pair), new Set(['character', 'zhuyin']));
+        firstTargets.add(pair[0]);
+        singleTargets.add(makeExam({ ...settings, count: 1 }).questions[0].target);
+    }
+    assert.deepEqual(firstTargets, new Set(['character', 'zhuyin']));
+    assert.deepEqual(singleTargets, new Set(['character', 'zhuyin']));
+});
+
+test('exam generation rejects invalid exam type values in Traditional Chinese', () => {
+    const options = { id: 'invalid', book, words: [entry()], from: 1, to: 1, count: 1, seed: 'invalid' };
+    for (const examType of ['other', '', null, ['zhuyin'], 'constructor']) {
+        assert.throws(() => makeExam({ ...options, examType }), /請選擇有效的測驗類型/);
+    }
+});
+
 test('the selected mask controls prompt ambiguity and deduplication before drawing', () => {
     const words = [
         entry({ id: 'authority', word: '權力', pronunciation: 'ㄑㄩㄢˊ ㄌㄧˋ', blanks: [2] }),

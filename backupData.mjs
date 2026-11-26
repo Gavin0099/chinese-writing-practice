@@ -1,4 +1,5 @@
 import { courseKey } from './characterLookup.mjs';
+import { isExamType } from './examData.mjs';
 import { isWritingHistory, progressStorageKey, readProgress, writingStorageKey } from './learningData.mjs';
 import { makeBook, makeWord, readVocabulary, vocabularyStorageKey, wordIdentity } from './vocabularyData.mjs';
 
@@ -33,6 +34,8 @@ function readExam(exam, bookIds) {
         !isId(exam.seed) || exam.seed.length > 48 || !Array.isArray(exam.questions) || exam.questions.length !== exam.count) {
         throw new Error('考卷的班級、課次或題數有誤。');
     }
+    const { examType } = exam;
+    if (examType !== undefined && !isExamType(examType)) throw new Error('備份的考卷測驗類型有誤。');
     const questions = exam.questions.map(question => {
         if (!Array.isArray(question?.sources) || !question.sources.length || question.sources.some(source =>
             !isId(source?.id) || !integerIn(source.lesson, exam.from, exam.to))) {
@@ -40,10 +43,12 @@ function readExam(exam, bookIds) {
         }
         const { word, pronunciation, blanks } = readWord({ ...question, lesson: question.sources[0].lesson, confirmed: true });
         const sources = question.sources.map(({ id, lesson }) => ({ id, lesson }));
-        return { word, pronunciation, blanks, sources };
+        const { target } = question;
+        if (target !== undefined && !['character', 'zhuyin'].includes(target)) throw new Error('備份的考卷題目類型有誤。');
+        return { word, pronunciation, blanks, sources, ...(target !== undefined && { target }) };
     });
     return { id: exam.id, createdAt: exam.createdAt, book: readBook(exam.book), from: exam.from, to: exam.to,
-        count: exam.count, seed: exam.seed, questions };
+        count: exam.count, seed: exam.seed, questions, ...(examType !== undefined && { examType }) };
 }
 
 function readBackupVocabulary(data) {

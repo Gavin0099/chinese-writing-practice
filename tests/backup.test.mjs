@@ -56,6 +56,44 @@ test('backup and cloud validation keep a long class curriculum identifier and th
     assert.throws(() => makeBook({ ...books[0], curriculumSourceVersion: '' }), /教材版本識別/);
 });
 
+test('backup round trip preserves legacy, explicit character, zhuyin and mixed exam snapshots', () => {
+    const original = sampleRecords();
+    const { books: [book], words, exams } = original[vocabularyStorageKey];
+    exams.push({ ...exams[0], id: 'explicit-character', examType: 'character' });
+    for (const examType of ['zhuyin', 'mixed']) {
+        exams.push(makeExam({ id: examType, createdAt: at, book, words, from: 1, to: 8, count: 2,
+            seed: 'mode-recovery', examType }));
+    }
+
+    const backup = exportBackup(mockStorage(original));
+    const target = mockStorage();
+    restoreBackup(parseBackup(JSON.stringify(backup)), readBackupTarget(target), target);
+    const stored = JSON.parse(target.getItem(vocabularyStorageKey)).exams;
+    assert.deepEqual(stored, exams);
+    assert.equal(Object.hasOwn(stored[0], 'examType'), false);
+    assert.equal(Object.hasOwn(stored[0].questions[0], 'target'), false);
+    assert.deepEqual(new Set(stored[3].questions.map(question => question.target)), new Set(['character', 'zhuyin']));
+});
+
+test('backup rejects invalid exam types and targets before restoring any data', () => {
+    const storage = mockStorage(sampleRecords());
+    const before = readBackupTarget(storage);
+    const valid = exportBackup(storage);
+    for (const examType of ['other', null, ['mixed']]) {
+        const invalid = structuredClone(valid);
+        invalid.vocabulary.exams[0].examType = examType;
+        assert.throws(() => parseBackup(JSON.stringify(invalid)), /測驗類型/);
+        assert.throws(() => restoreBackup(invalid, before, storage), /測驗類型/);
+    }
+    for (const target of ['mixed', null, ['character']]) {
+        const invalid = structuredClone(valid);
+        invalid.vocabulary.exams[0].questions[0].target = target;
+        assert.throws(() => parseBackup(JSON.stringify(invalid)), /題目類型/);
+        assert.throws(() => restoreBackup(invalid, before, storage), /題目類型/);
+    }
+    assert.deepEqual(readBackupTarget(storage), before);
+});
+
 test('rejects a bad version, incorrect blank position and dangling class before touching storage', () => {
     const storage = mockStorage(sampleRecords());
     const before = readBackupTarget(storage);

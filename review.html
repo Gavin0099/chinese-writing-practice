@@ -36,6 +36,15 @@
         <div id="reviewWorkspace" hidden>
             <label for="reviewBook">班級詞庫</label>
             <select id="reviewBook"></select>
+            <label for="reviewChild">目前孩子</label>
+            <select id="reviewChild"></select>
+            <details id="childDetails" class="subpanel">
+                <summary>新增孩子（共用同班詞庫、分開記錄錯題）</summary>
+                <form id="childForm" class="entry-form" autocomplete="off">
+                    <label>孩子名稱 <input name="name" maxlength="20" placeholder="例如 哥哥、妹妹…" required></label>
+                    <button type="submit">新增孩子</button>
+                </form>
+            </details>
             <div class="panels results-section">
                 <section class="panel" aria-labelledby="gradeHeading">
                     <h2 id="gradeHeading">批改已存考卷</h2>

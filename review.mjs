@@ -1,10 +1,12 @@
 import { cloudPageUrl, openPageStorage } from './cloudStorage.mjs';
-import { gradeExam, makeReviewExam, readAttempts, recordPaperWord, reviewWordPools, saveAttempt } from './reviewData.mjs';
+import { defaultChildId, gradeExam, makeReviewExam, normalizeChildId, readActiveChild, readAttempts,
+    readChildren, recordPaperWord, reviewWordPools, saveActiveChild, saveAttempt, saveChild } from './reviewData.mjs';
 import { copyReviewAttempts, mergeReviewAttempts, splitLocalReviewAttempts, syncReviewAttempts } from './reviewSync.mjs';
 import { bookLabel, makeWord, readVocabulary, vocabularyStorageKey } from './vocabularyData.mjs';
 
 const byId = id => document.getElementById(id);
 const bookPicker = byId('reviewBook');
+const childPicker = byId('reviewChild');
 const examPicker = byId('reviewExam');
 const date = new Intl.DateTimeFormat('zh-TW', { dateStyle: 'medium', timeStyle: 'short' });
 const now = () => ({ id: crypto.randomUUID(), at: new Date().toISOString() });
@@ -35,6 +37,15 @@ try {
     const reviewMode = byId('reviewMode');
     let availableReviewCount = 0;
 
+    let activeChildId = readActiveChild(localStorage, owner);
+
+    function renderChildren() {
+        const children = readChildren(localStorage, owner, attempts);
+        if (!children.some(child => child.id === activeChildId)) activeChildId = defaultChildId;
+        childPicker.replaceChildren(...children.map(child => new Option(child.name, child.id)));
+        childPicker.value = activeChildId;
+    }
+
     function updateRetakeButton() {
         retake.disabled = Boolean(waiting) || creatingExam || (reviewMode.value !== 'mixed' && !availableReviewCount);
     }
@@ -44,7 +55,7 @@ try {
         const mixed = mode === 'mixed';
         byId('reviewMixed').hidden = byId('reviewMixed').disabled = !mixed;
         byId('reviewPreset').hidden = byId('reviewPreset').disabled = mixed;
-        const { recent, recovered } = reviewWordPools(attempts, bookPicker.value, mode);
+        const { recent, recovered } = reviewWordPools(attempts, bookPicker.value, mode, activeChildId);
         const candidates = [...recent, ...recovered];
         availableReviewCount = candidates.length;
         const list = candidates.slice(0, 8).map(item => item.word).join('、');
@@ -79,6 +90,7 @@ try {
 
     function refreshAttempts() {
         attempts = mergeReviewAttempts(synced, readAttempts(localStorage, owner));
+        renderChildren();
         renderHistory();
     }
 
@@ -139,7 +151,9 @@ try {
 
     function renderHistory() {
         renderReviewOptions();
-        const history = attempts.filter(item => item.bookId === bookPicker.value).slice().reverse();
+        const history = attempts
+            .filter(item => item.bookId === bookPicker.value && normalizeChildId(item.childId) === activeChildId)
+            .slice().reverse();
         byId('noReviewHistory').hidden = Boolean(history.length);
         byId('reviewHistory').replaceChildren(...history.map(item => {
             const row = document.createElement('li');
@@ -160,6 +174,7 @@ try {
     byId('reviewWorkspace').hidden = !vocabulary.books.length;
     bookPicker.replaceChildren(...vocabulary.books.map(book => new Option(bookLabel(book), book.id)));
     if (initialExam && vocabulary.books.some(book => book.id === initialExam.book.id)) bookPicker.value = initialExam.book.id;
+    renderChildren();
     renderBook(initialExam?.id);
     if (cloud) {
         byId('reviewSyncActions').hidden = syncStatus.hidden = false;
@@ -175,6 +190,24 @@ try {
         queueSync();
     }
     bookPicker.addEventListener('change', () => renderBook());
+    childPicker.addEventListener('change', () => {
+        activeChildId = saveActiveChild(localStorage, owner, childPicker.value);
+        renderHistory();
+    });
+    byId('childForm').addEventListener('submit', event => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        try {
+            const name = new FormData(form).get('name');
+            const created = saveChild(localStorage, owner, { id: crypto.randomUUID(), name });
+            activeChildId = saveActiveChild(localStorage, owner, created.id);
+            renderChildren();
+            renderHistory();
+            form.reset();
+            byId('childDetails').open = false;
+            notice(`已新增孩子「${created.name}」，並切換為目前孩子。`);
+        } catch (error) { notice(error.message, true); }
+    });
     reviewMode.addEventListener('change', renderReviewOptions);
     examPicker.addEventListener('change', renderQuestions);
     byId('gradeAgain').addEventListener('click', () => {
@@ -188,7 +221,7 @@ try {
         try {
             const exam = vocabulary.exams.find(item => item.id === examPicker.value && item.book.id === bookPicker.value);
             const wrong = new FormData(event.currentTarget).getAll('wrong').map(Number);
-            record(gradeExam(exam, wrong, now()));
+            record(gradeExam(exam, wrong, { ...now(), childId: activeChildId }));
             byId('saveReviewGrade').disabled = true;
             byId('gradeAgain').hidden = false;
         } catch (error) { notice(error.message, true); }
@@ -198,7 +231,7 @@ try {
         event.preventDefault();
         const form = event.currentTarget;
         try {
-            const attempt = now();
+            const attempt = { ...now(), childId: activeChildId };
             const input = Object.fromEntries(new FormData(form));
             const word = makeWord({ ...input, id: attempt.id, bookId: bookPicker.value, confirmed: true,
                 blanks: input.blanks.trim().split(/[\s,、]+/u).map(Number) });
@@ -223,7 +256,7 @@ try {
             const attempt = now();
             const exam = makeReviewExam({ id: attempt.id, createdAt: attempt.at, seed: crypto.randomUUID(), book, words: data.words,
                 attempts, mode: input.mode, size: input.size, wrongCount: Number(input.wrong), newCount: Number(input.fresh),
-                from: Number(input.from), to: Number(input.to) });
+                from: Number(input.from), to: Number(input.to), childId: activeChildId });
             await records.setItem(vocabularyStorageKey, JSON.stringify({ ...data, exams: [...data.exams, exam] }));
             const path = `exam.html?${new URLSearchParams({ id: exam.id })}`;
             location.href = cloud ? cloudPageUrl(path) : path;

@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { makeExam } from '../examData.mjs';
-import { gradeExam, lookupWordReviews, makeReviewExam, pendingWords, readAttempts, recordPaperWord, saveAttempt } from '../reviewData.mjs';
+import { defaultChildId, gradeExam, lookupWordReviews, makeReviewExam, pendingWords, readActiveChild,
+    readAttempts, readChildren, recentWrongTerms, recordPaperWord, saveActiveChild, saveAttempt, saveChild } from '../reviewData.mjs';
 import { makeBook, makeWord } from '../vocabularyData.mjs';
 
 const book = makeBook({ id: 'class', name: '驗收班', publisher: '康軒', year: 115, grade: 2, semester: 1, edition: '' });
@@ -127,4 +128,58 @@ test('retake leaves out different answers that would produce the same printed pr
     const exam = makeReviewExam({ id: 'retake', createdAt: mark('a', 13).at, seed: 'repeatable', book,
         attempts, words: [], mode: 'recent' });
     assert.deepEqual(exam.questions.map(question => question.word), ['山路']);
+});
+
+test('two children sharing one class book keep isolated wrong-word priority and review exams', () => {
+    const legacyDefault = recordPaperWord(sky, mark('legacy', 10));
+    const childA = recordPaperWord(weather, { ...mark('child-a-1', 11), childId: 'child-a' });
+    const childB = recordPaperWord(mountain, { ...mark('child-b-1', 12), childId: 'child-b' });
+    const allAttempts = [legacyDefault, childA, childB];
+
+    // Legacy attempts without childId belong to defaultChildId only.
+    assert.deepEqual([...recentWrongTerms(allAttempts, book.id, defaultChildId)], ['天空']);
+    assert.deepEqual([...recentWrongTerms(allAttempts, book.id, 'child-a')], ['天氣']);
+    assert.deepEqual([...recentWrongTerms(allAttempts, book.id, 'child-b')], ['山路']);
+
+    assert.deepEqual(pendingWords(allAttempts, book.id, 'child-a').map(w => w.word), ['天氣']);
+    assert.deepEqual(pendingWords(allAttempts, book.id, 'child-b').map(w => w.word), ['山路']);
+
+    const examA = makeReviewExam({
+        id: 'exam-a', createdAt: mark('a', 13).at, seed: 'same-seed', book,
+        attempts: allAttempts, words: [sky, weather, mountain], mode: 'recent', childId: 'child-a'
+    });
+    const examB = makeReviewExam({
+        id: 'exam-b', createdAt: mark('b', 13).at, seed: 'same-seed', book,
+        attempts: allAttempts, words: [sky, weather, mountain], mode: 'recent', childId: 'child-b'
+    });
+    assert.deepEqual(examA.questions.map(q => q.word), ['天氣']);
+    assert.deepEqual(examB.questions.map(q => q.word), ['山路']);
+
+    // Lookup also isolates per child when childId is provided.
+    const hitsA = lookupWordReviews(['天', '山'], [sky, weather, mountain], allAttempts, 'child-a');
+    assert.equal(hitsA.get('天').find(r => r.word === '天氣').lastWrong, true);
+    assert.equal(hitsA.get('天').find(r => r.word === '天空').lastWrong, null);
+    assert.equal(hitsA.get('山').find(r => r.word === '山路').lastWrong, null);
+});
+
+test('child profile storage persists per owner, rejects invalid names, and discovers synced childIds', () => {
+    const values = new Map();
+    const storage = {
+        getItem: key => values.get(key) ?? null,
+        setItem: (key, value) => values.set(key, value)
+    };
+    assert.deepEqual(readChildren(storage, 'owner-a'), [{ id: defaultChildId, name: '預設孩子' }]);
+    assert.equal(readActiveChild(storage, 'owner-a'), defaultChildId);
+
+    const added = saveChild(storage, 'owner-a', { id: 'child-a', name: '哥哥' });
+    assert.deepEqual(added, { id: 'child-a', name: '哥哥' });
+    saveActiveChild(storage, 'owner-a', 'child-a');
+    assert.equal(readActiveChild(storage, 'owner-a'), 'child-a');
+    assert.throws(() => saveChild(storage, 'owner-a', { id: 'child-b', name: '   ' }), /名稱/);
+    assert.throws(() => saveChild(storage, 'owner-a', { id: 'bad id!', name: '妹妹' }), /識別/);
+
+    // Discovers a childId present in synced attempts even if not yet named locally.
+    const syncedAttempt = recordPaperWord(mountain, { ...mark('sync-1', 14), childId: 'child-remote' });
+    const list = readChildren(storage, 'owner-a', [syncedAttempt]);
+    assert.deepEqual(list.map(c => c.id), [defaultChildId, 'child-a', 'child-remote']);
 });

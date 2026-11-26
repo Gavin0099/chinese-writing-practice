@@ -1,5 +1,5 @@
 import { bookLabel, makeBook, makeWord, previewBatch, readVocabulary, saveWord, updateVocabulary, vocabularyStorageKey } from './vocabularyData.mjs';
-import { makeExam, questionPool, usesLessonCharacters } from './examData.mjs';
+import { examTypeTitles, isExamType, makeExam, questionPool, usesLessonCharacters } from './examData.mjs';
 import { cloudPageUrl, formatCloudSaveNotice, openPageStorage } from './cloudStorage.mjs';
 import { defaultChildId, readActiveChild, readAttempts, readChildren, recentWrongTerms, saveActiveChild } from './reviewData.mjs';
 import { mergeReviewAttempts } from './reviewSync.mjs';
@@ -403,7 +403,7 @@ byId('commitBatch').addEventListener('click', async () => {
 function examSettings() {
     const fields = examForm.elements;
     return { from: Number(fields.from.value), to: Number(fields.to.value), count: Number(fields.count.value),
-        blankMode: fields.blankMode?.value };
+        blankMode: fields.blankMode?.value, examType: fields.examType.value };
 }
 
 async function readPriorityTerms(bookId, childId = defaultChildId) {
@@ -538,7 +538,9 @@ function renderExams() {
         const item = document.createElement('li');
         const details = document.createElement('div');
         const heading = document.createElement('h4');
-        heading.textContent = `第 ${exam.from}～${exam.to} 課 · ${exam.count} 題`;
+        const type = exam.examType !== 'character' && isExamType(exam.examType) ? examTypeTitles[exam.examType] : '';
+        const title = `第 ${exam.from}～${exam.to} 課 · ${exam.count} 題`;
+        heading.textContent = type ? `${title} · ${type}` : title;
         const meta = document.createElement('p');
         meta.className = 'word-meta';
         const seed = document.createElement('code');
@@ -549,7 +551,7 @@ function renderExams() {
         const path = `exam.html?${new URLSearchParams({ id: exam.id })}`;
         link.href = cloud ? cloudPageUrl(path) : path;
         link.textContent = '開啟考卷與解答';
-        link.setAttribute('aria-label', `開啟第 ${exam.from} 至 ${exam.to} 課 ${exam.count} 題考卷，種子 ${exam.seed}`);
+        link.setAttribute('aria-label', `開啟第 ${exam.from} 至 ${exam.to} 課 ${exam.count} 題考卷，${type ? `${type}，` : ''}種子 ${exam.seed}`);
         item.append(details, link);
         return item;
     }));
@@ -606,7 +608,8 @@ examForm.addEventListener('submit', async event => {
             lessonRequest = loadExamLessonCharacters(bookId);
             if (!lessonRequest.characters) notice('examNotice', '正在查對本課的應寫生字表…');
             await lessonRequest.ready;
-            if (activeId !== bookId || examForm.elements.blankMode?.value !== settings.blankMode) return;
+            if (activeId !== bookId || examForm.elements.blankMode?.value !== settings.blankMode ||
+                examForm.elements.examType.value !== settings.examType) return;
             if (lessonRequest !== examLessonRequest) throw new Error('應寫生字表已更新，請確認可抽題數後再出卷。');
             if (lessonRequest.error) throw lessonRequest.error;
             settings.lessonCharacters = lessonRequest.characters;

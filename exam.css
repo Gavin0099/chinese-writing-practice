@@ -44,11 +44,13 @@
     text-align: center;
     font: 7pt / 1.1 'Worksheet Kai', 'Microsoft JhengHei', serif;
 }
+.exam-zhuyin-blank { width: 6mm; height: 11mm; padding: 0; border: .24mm solid #555e55; border-left: 0; }
 .exam-tone { position: absolute; right: 0; top: 49%; font: 7pt / 1 Arial, sans-serif; }
 .exam-tone.neutral { right: 1mm; left: 0; top: 0; }
 .exam-sources { display: inline-block; margin: 0 0 0 2mm; color: #4e574d; font-size: 8pt; overflow-wrap: anywhere; }
 .short-questions .exam-grid { width: 15mm; height: 15mm; font-size: 30pt; }
 .short-questions .exam-zhuyin { width: 4.5mm; height: 13mm; font-size: 8pt; }
+.short-questions .exam-zhuyin-blank { width: 5.5mm; height: 15mm; }
 .short-questions .exam-sources { display: block; margin: 1mm 0 0; }
 .exam-footer { display: flex; justify-content: space-between; border-top: .2mm solid #a4a9a2; margin-top: 4mm; padding-top: 1.2mm; font-size: 9pt; }
 

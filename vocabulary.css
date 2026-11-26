@@ -75,7 +75,7 @@
 .batch-rows [data-error] { color: #902f29; }
 .exam-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .55rem .65rem; }
 .exam-form label { min-width: 0; }
-.exam-blank-mode { grid-column: 1 / -1; max-width: 24rem; }
+.exam-type, .exam-blank-mode { grid-column: 1 / -1; max-width: 24rem; }
 .exam-curriculum { max-width: 34rem; }
 .exam-curriculum button { margin-top: .35rem; }
 .exam-form > :not(label) { grid-column: 1 / -1; }

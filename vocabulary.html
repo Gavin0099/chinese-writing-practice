@@ -189,6 +189,13 @@
                     <label>起始課次<input name="from" type="number" min="1" max="60" value="1" required></label>
                     <label>結束課次<input name="to" type="number" min="1" max="60" value="8" required></label>
                     <label>抽題數<input name="count" type="number" min="1" max="60" value="15" required></label>
+                    <label class="exam-type">測驗類型
+                        <select name="examType">
+                            <option value="character">看注音寫國字</option>
+                            <option value="zhuyin">看國字寫注音</option>
+                            <option value="mixed">國字與注音混合</option>
+                        </select>
+                    </label>
                     <label class="exam-blank-mode">挖空方式
                         <select name="blankMode">
                             <option value="vocabulary">沿用詞庫設定</option>

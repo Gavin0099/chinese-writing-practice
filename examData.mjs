@@ -1,3 +1,13 @@
+export const examTypeTitles = Object.freeze({
+    character: '看注音寫國字',
+    zhuyin: '看國字寫注音',
+    mixed: '國字與注音混合測驗'
+});
+
+export function isExamType(value) {
+    return typeof value === 'string' && Object.hasOwn(examTypeTitles, value);
+}
+
 export function questionKey(entry) {
     return JSON.stringify(Array.from(entry.word, (character, index) => [
         entry.blanks.includes(index + 1) ? null : character, entry.pronunciation[index]
@@ -170,7 +180,8 @@ function drawLessonQuestions(available, count, random, priorityWords) {
 }
 
 export function makeExam({ id, createdAt, book, words, from, to, count, seed, priorityWords = null,
-    blankMode = 'vocabulary', lessonCharacters }) {
+    blankMode = 'vocabulary', lessonCharacters, examType = 'character' }) {
+    if (!isExamType(examType)) throw new Error('請選擇有效的測驗類型。');
     if (!Number.isInteger(count) || count < 1 || count > 60) throw new Error('請輸入 1 至 60 題。');
     if (typeof seed !== 'string' || !seed.trim() || seed.length > 48) throw new Error('亂數種子須為 1 至 48 字元。');
     const { available, missingLessons } = questionPool(words, book.id, from, to, priorityWords !== null, blankMode, lessonCharacters);
@@ -196,5 +207,15 @@ export function makeExam({ id, createdAt, book, words, from, to, count, seed, pr
     const questions = selected.map(({ entry, sources }) => ({
         word: entry.word, pronunciation: [...entry.pronunciation], blanks: [...entry.blanks], sources
     }));
-    return { id, createdAt, book: { ...book }, from, to, count, seed, questions };
+    if (examType === 'mixed') {
+        const targetRandom = seededRandom(`${seed}:exam-target`);
+        for (const question of questions) question.target = targetRandom() < 0.5 ? 'character' : 'zhuyin';
+        const firstTarget = questions[0].target;
+        if (count >= 2 && questions.every(question => question.target === firstTarget)) {
+            questions[Math.floor(targetRandom() * count)].target = firstTarget === 'character' ? 'zhuyin' : 'character';
+        }
+    }
+    const exam = { id, createdAt, book: { ...book }, from, to, count, seed, questions };
+    if (examType !== 'character') exam.examType = examType;
+    return exam;
 }

@@ -1,6 +1,17 @@
 import { makeExam, questionKey, questionPool } from './examData.mjs';
 import { makeWord } from './vocabularyData.mjs';
 
+export const defaultChildId = 'default';
+const childIdPattern = /^[\w-]{1,64}$/;
+
+export function normalizeChildId(childId) {
+    if (childId == null || childId === '' || childId === defaultChildId) return defaultChildId;
+    if (typeof childId !== 'string' || !childIdPattern.test(childId)) {
+        throw new Error('孩子的識別資料有誤。');
+    }
+    return childId;
+}
+
 export function validateAttempt(attempt) {
     if (typeof attempt?.id !== 'string' || !/^[\w-]+$/.test(attempt.id) ||
         typeof attempt.bookId !== 'string' || !attempt.bookId || !Number.isFinite(Date.parse(attempt.at)) ||
@@ -9,6 +20,7 @@ export function validateAttempt(attempt) {
         !Array.isArray(attempt.items) || !attempt.items.length || attempt.items.length > 60) {
         throw new Error('這筆錯題紀錄的資料不完整。');
     }
+    const normalizedChild = attempt.childId === undefined ? defaultChildId : normalizeChildId(attempt.childId);
     const items = attempt.items.map(item => {
         if (typeof item?.wrong !== 'boolean' || !Array.isArray(item.pronunciation) || !Array.isArray(item.blanks)) {
             throw new Error('這筆作答紀錄的題目資料不完整。');
@@ -16,26 +28,83 @@ export function validateAttempt(attempt) {
         const word = makeWord({ ...item, bookId: attempt.bookId, pronunciation: item.pronunciation.join(' '), confirmed: true });
         return { lesson: word.lesson, word: word.word, pronunciation: word.pronunciation, blanks: word.blanks, wrong: item.wrong };
     });
-    return { id: attempt.id, bookId: attempt.bookId, at: attempt.at, source: attempt.source,
+    const record = { id: attempt.id, bookId: attempt.bookId, at: attempt.at, source: attempt.source,
         examId: attempt.source === 'exam' ? attempt.examId : null, items };
+    if (normalizedChild !== defaultChildId) record.childId = normalizedChild;
+    return record;
 }
 
-export function gradeExam(exam, wrongNumbers, { id, at }) {
+export function gradeExam(exam, wrongNumbers, { id, at, childId }) {
     if (!Array.isArray(exam?.questions) || !Array.isArray(wrongNumbers) || wrongNumbers.some(number =>
         !Number.isInteger(number) || number < 1 || number > exam.questions.length)) {
         throw new Error('請選擇已儲存的考卷和有效題號。');
     }
     const wrong = new Set(wrongNumbers);
-    return validateAttempt({ id, at, bookId: exam.book.id, source: 'exam', examId: exam.id,
+    return validateAttempt({ id, at, childId, bookId: exam.book.id, source: 'exam', examId: exam.id,
         items: exam.questions.map((question, index) => ({ ...question, lesson: question.sources[0]?.lesson, wrong: wrong.has(index + 1) })) });
 }
 
-export function recordPaperWord(word, { id, at }) {
-    return validateAttempt({ id, at, bookId: word.bookId, source: 'paper', items: [{ ...word, wrong: true }] });
+export function recordPaperWord(word, { id, at, childId }) {
+    return validateAttempt({ id, at, childId, bookId: word.bookId, source: 'paper', items: [{ ...word, wrong: true }] });
 }
 
 const reviewPrefix = owner => `write_practice_review_v1:${encodeURIComponent(owner)}:`;
+const childrenKey = owner => `write_practice_children_v1:${encodeURIComponent(owner)}`;
+const activeChildKey = owner => `write_practice_active_child_v1:${encodeURIComponent(owner)}`;
 export const compareAttempts = (a, b) => Date.parse(a.at) - Date.parse(b.at) || a.id.localeCompare(b.id);
+
+export function readChildren(storage, owner, attempts = []) {
+    const byId = new Map([[defaultChildId, { id: defaultChildId, name: '預設孩子' }]]);
+    try {
+        const raw = storage?.getItem?.(childrenKey(owner));
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+                for (const entry of parsed) {
+                    if (typeof entry?.id === 'string' && childIdPattern.test(entry.id) &&
+                        typeof entry?.name === 'string' && entry.name.trim()) {
+                        byId.set(entry.id, { id: entry.id, name: entry.name.trim().slice(0, 20) });
+                    }
+                }
+            }
+        }
+    } catch {
+        // Malformed local profile list falls back to default child without losing attempts.
+    }
+    for (const attempt of attempts) {
+        const cid = normalizeChildId(attempt?.childId);
+        if (!byId.has(cid)) {
+            byId.set(cid, { id: cid, name: `孩子 ${cid.slice(0, 8)}` });
+        }
+    }
+    return [...byId.values()];
+}
+
+export function saveChild(storage, owner, { id, name }) {
+    const normalizedId = normalizeChildId(id);
+    if (normalizedId === defaultChildId) throw new Error('不能覆寫預設孩子識別碼。');
+    const cleanName = typeof name === 'string' ? name.trim() : '';
+    if (!cleanName || cleanName.length > 20) throw new Error('請輸入 1 至 20 字的孩子名稱。');
+    const existing = readChildren(storage, owner).filter(entry => entry.id !== defaultChildId);
+    const updated = [...existing.filter(entry => entry.id !== normalizedId), { id: normalizedId, name: cleanName }];
+    storage.setItem(childrenKey(owner), JSON.stringify(updated));
+    return { id: normalizedId, name: cleanName };
+}
+
+export function readActiveChild(storage, owner) {
+    try {
+        const saved = storage?.getItem?.(activeChildKey(owner));
+        return saved ? normalizeChildId(saved) : defaultChildId;
+    } catch {
+        return defaultChildId;
+    }
+}
+
+export function saveActiveChild(storage, owner, childId) {
+    const normalized = normalizeChildId(childId);
+    storage?.setItem?.(activeChildKey(owner), normalized);
+    return normalized;
+}
 
 export function readAttempts(storage, owner) {
     const prefix = reviewPrefix(owner);
@@ -59,10 +128,12 @@ export function saveAttempt(storage, owner, attempt) {
     return value;
 }
 
-function summarizeGrading(attempts, bookId) {
+function summarizeGrading(attempts, bookId, childId) {
+    const targetChild = childId === undefined ? undefined : normalizeChildId(childId);
     const words = new Map();
     for (const attempt of [...attempts].sort(compareAttempts)) {
         if (bookId !== undefined && attempt.bookId !== bookId) continue;
+        if (targetChild !== undefined && normalizeChildId(attempt.childId) !== targetChild) continue;
         for (const [index, item] of attempt.items.entries()) {
             const grade = words.get(item.word) ?? { lastWrong: false, attemptId: null, lastMistake: null };
             grade.lastWrong = grade.attemptId === attempt.id ? grade.lastWrong || item.wrong : item.wrong;
@@ -76,12 +147,12 @@ function summarizeGrading(attempts, bookId) {
     return words;
 }
 
-export function recentWrongTerms(attempts, bookId) {
-    return new Set([...summarizeGrading(attempts, bookId)]
+export function recentWrongTerms(attempts, bookId, childId) {
+    return new Set([...summarizeGrading(attempts, bookId, childId)]
         .filter(([, grade]) => grade.lastWrong).map(([word]) => word));
 }
 
-export function lookupWordReviews(characters, words, attempts) {
+export function lookupWordReviews(characters, words, attempts, childId) {
     const hits = new Map([...characters].map(char => [char, []]));
     const matchingWords = new Map();
 
@@ -96,7 +167,7 @@ export function lookupWordReviews(characters, words, attempts) {
     }
 
     for (const entry of words) include(entry?.word);
-    for (const [word, grade] of summarizeGrading(attempts)) {
+    for (const [word, grade] of summarizeGrading(attempts, undefined, childId)) {
         const result = include(word);
         if (!result) continue;
         result.everWrong = grade.lastMistake !== null;
@@ -110,10 +181,10 @@ export function lookupWordReviews(characters, words, attempts) {
     return hits;
 }
 
-export function reviewWordPools(attempts, bookId, mode) {
+export function reviewWordPools(attempts, bookId, mode, childId) {
     const recent = [];
     const recovered = [];
-    for (const grade of summarizeGrading(attempts, bookId).values()) {
+    for (const grade of summarizeGrading(attempts, bookId, childId).values()) {
         if (!grade.lastMistake) continue;
         const pool = grade.lastWrong ? recent : recovered;
         pool.push(grade.lastMistake);
@@ -127,15 +198,15 @@ export function reviewWordPools(attempts, bookId, mode) {
     };
 }
 
-export function pendingWords(attempts, bookId) {
-    return reviewWordPools(attempts, bookId, 'recent').recent;
+export function pendingWords(attempts, bookId, childId) {
+    return reviewWordPools(attempts, bookId, 'recent', childId).recent;
 }
 
 export function makeReviewExam({ id, createdAt, seed, book, attempts, words, mode = 'mixed', size = 'all',
-    wrongCount, newCount, from, to }) {
+    wrongCount, newCount, from, to, childId }) {
     if (!['recent', 'history', 'mixed'].includes(mode)) throw new Error('請選擇複習範圍。');
     if (typeof seed !== 'string' || !seed.trim() || seed.length > 48) throw new Error('請重新產生考卷。');
-    const { recent, recovered, mistakes } = reviewWordPools(attempts, book.id, mode);
+    const { recent, recovered, mistakes } = reviewWordPools(attempts, book.id, mode, childId);
     const args = { id, createdAt, book };
     function draw(entries, count, suffix) {
         if (count === 0) return [];

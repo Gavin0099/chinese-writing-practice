@@ -1,7 +1,7 @@
 import { bookLabel, makeBook, makeWord, previewBatch, readVocabulary, saveWord, updateVocabulary, vocabularyStorageKey } from './vocabularyData.mjs';
 import { makeExam, questionPool, usesLessonCharacters } from './examData.mjs';
 import { cloudPageUrl, formatCloudSaveNotice, openPageStorage } from './cloudStorage.mjs';
-import { readAttempts, recentWrongTerms } from './reviewData.mjs';
+import { defaultChildId, readActiveChild, readAttempts, readChildren, recentWrongTerms, saveActiveChild } from './reviewData.mjs';
 import { mergeReviewAttempts } from './reviewSync.mjs';
 import { applyVocabularyShare, compatibleShareBooks, createVocabularyShare, parseVocabularyShare,
     previewVocabularyShare, vocabularyShareMaxBytes } from './vocabularyShare.mjs';
@@ -406,12 +406,35 @@ function examSettings() {
         blankMode: fields.blankMode?.value };
 }
 
-async function readPriorityTerms(bookId) {
-    const local = readAttempts(localStorage, cloud?.ownerId ?? 'local');
-    if (!cloud) return recentWrongTerms(local, bookId);
+async function readPriorityTerms(bookId, childId = defaultChildId) {
+    const owner = cloud?.ownerId ?? 'local';
+    const local = readAttempts(localStorage, owner);
+    if (!cloud) return recentWrongTerms(local, bookId, childId);
     const remote = await cloud.readReviewAttempts();
-    return recentWrongTerms(mergeReviewAttempts(local, remote), bookId);
+    return recentWrongTerms(mergeReviewAttempts(local, remote), bookId, childId);
 }
+
+const examChildSelect = byId('examChild');
+const examChildRow = byId('examChildRow');
+function renderExamChildren(extraAttempts = []) {
+    if (!examChildSelect || !examChildRow) return;
+    const owner = cloud?.ownerId ?? 'local';
+    let local = [];
+    try { local = readAttempts(localStorage, owner); } catch { local = []; }
+    const children = readChildren(localStorage, owner, [...local, ...extraAttempts]);
+    const active = readActiveChild(localStorage, owner);
+    if (active !== defaultChildId && !children.some(child => child.id === active)) {
+        children.push({ id: active, name: `孩子 ${active.slice(0, 8)}` });
+    }
+    examChildSelect.replaceChildren(...children.map(child => new Option(child.name, child.id)));
+    examChildSelect.value = children.some(child => child.id === active) ? active : defaultChildId;
+    examChildRow.hidden = children.length <= 1;
+}
+renderExamChildren();
+if (cloud) cloud.readReviewAttempts().then(remote => renderExamChildren(remote)).catch(() => {});
+examChildSelect?.addEventListener('change', () => {
+    saveActiveChild(localStorage, cloud?.ownerId ?? 'local', examChildSelect.value);
+});
 
 function updateCurriculumAction() {
     const version = examCurriculumVersion.value;
@@ -593,7 +616,7 @@ examForm.addEventListener('submit', async event => {
             notice('examNotice', '正在讀取最近的批改紀錄…');
             main.inert = true;
             try {
-                priorityWords = await readPriorityTerms(bookId);
+                priorityWords = await readPriorityTerms(bookId, examChildSelect?.value || defaultChildId);
             } finally {
                 main.inert = false;
             }

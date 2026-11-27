@@ -21,7 +21,7 @@
 - [x] REL-01／REL-02 的私人站來源封存、重建說明及審查紀錄已由 PR #17 整合；來源 `72f4be2` 已在 main 歷史中。此為來源交付狀態，非正式發布或實機 QA 完成。[交付工單](work/tickets/release-stabilization.md)
 - QA-01 驗證實體紙本與 iPhone Safari 備份還原，紀錄實機結果。
 - [x] 固定共用框架版本，套用框架 baseline 與專案規則。
-- [x] 初始導入時安裝 Git hooks，驗證治理設定、版本一致性及 runtime fixtures；本次 checkout 的 pre-commit／pre-push hooks 未安裝，見 Known Risks。
+- [x] 初始導入時安裝 Git hooks，驗證治理設定、版本一致性及 runtime fixtures；2026-11-27 integrator 已在本次 checkout 安裝 pre-commit／pre-push hooks 與 framework-root 設定，無 tracked-file 變更；本次重跑 hook validator 通過（exit 0，無 errors／warnings），見 Known Risks。
 - [x] Owner 確認契約領域為中文書寫練習與列印教材生成，repo 風險分級為低風險。
 - [x] D-01 取得並解析中研院 20260723 工作簿，以年度和學期欄位選取 115 上。
 - [x] D-02 建立以學年度、出版社、年級、學期與課次識別的本機候選資料。
@@ -51,7 +51,7 @@
 - [ ] V-05 多孩子共用班級詞庫、分開錯詞與優先出題已合併（#26 `2f1284a`），既有測試涵蓋孩子隔離、跨課複習與去重；孩子切換介面及實機同步驗收未確認。
 - [ ] 國字／注音／混合測驗已合併（#27 `cf3c2df`），出題、備份相容性與批改測試通過；新增題型的瀏覽器列印、iPhone 與紙本驗收未確認。
 - [ ] OCR 圈詞分割、黑藍印字與紅筆混合處理、右側題號配對已合併（#28 `f45968b6`），幾何及題號回歸測試通過；未據此宣稱真實圈詞作業或 iPhone 效能驗收完成。[實機驗收條件](work/tickets/data-backup-and-device-qa.md#ocr-01v-04-真實圈詞驗收)
-- [ ] V-06 匯出／匯入已隨私人站來源 `b6e079e` 經 #17 整合：`vocabularyShare.mjs` 與 `vocabulary.mjs` 支援選詞匯出、來源班級／版次／衝突預覽及確認後套用。4 項分享測試驗證僅輸出所選詞條與班級教材欄位、不含原圖或孩子紀錄、略過重複與衝突、預覽過期拒寫。瀏覽器下載／選檔／確認／重開及 iPhone Safari 操作驗收未確認；不列為完整完成。[V-06 規格](work/tickets/teacher-vocabulary-worksheets.md)
+- [ ] V-06 匯出／匯入已隨私人站來源 `b6e079e` 經 #17 整合。C334-S2 WI2 補測後，6 項分享單元與 8 項 Node VM DOM 接縫測試通過：選詞產生 JSON Blob、來源班級／版次／衝突預覽、確認後保存與模擬頁面重載、僅輸出所選詞條與教材欄位、不含原圖或孩子紀錄、錯檔／大小邊界／換檔競態／儲存失敗拒寫。本次未修改產品程式。DOM／下載／儲存使用 doubles；本機 Playwright／headless Chrome 啟動失敗，真實瀏覽器下載／選檔／確認／重開、iPhone Safari 與跨裝置交換仍待驗，不列完整完成。[驗收表與 Owner 清單](work/tickets/teacher-vocabulary-worksheets.md#v-06-匯出匯入驗收c334-s2-wi22026-11-27)
 - 2026-11-27 在上述 main 基線執行 `node --test tests/*.test.mjs`，132 項通過、0 失敗。這是本次本機測試證據；GitHub PR 本文、checks 與 review 因網路限制未能取得，不推定各 PR 的歷史驗收或兩次獨立審查均已完成。
 - PR #23（`a74c8e2`）實際更新框架指標、lock 與 receipt 至 `5073bcf2`；receipt 為 `partially_updated`，不能視為完整治理採用證明。
 
@@ -67,7 +67,7 @@
 | 登入擴充 | AUTH-04、AUTH-05、AUTH-06、AUTH-07 | LINE 先完成 Go／No-Go，Email OTP 備援可並行準備。每次啟用重新執行回歸。 |
 | 離線同步 | DB-04 | #21／#22／#24／#25 已整合且自動測試通過，預設關閉；實機離線、重送、衝突及復原驗收待確認。IndexedDB 離線佇列、重送與衝突處理。 |
 | 拍照辨識 | OCR-01、OCR-02、V-04 | 匯入實作與 #28 分割／題號修正已在 main，自動測試通過；真實圈詞與實機效能驗收未確認。原順序保留：雲端同步驗收後接入拍照及匯入。家長確認後走同一查詢引擎或詞庫。 |
-| 詞語複習與交換 | V-05、V-06 | V-05 多孩子隔離及 V-06 選詞匯出／預覽匯入已有實作與自動測試，介面與實機驗收未確認。優先抽錯詞、跨課複習及避免重複。匯出／匯入可由家長自願分享同班詞庫。 |
+| 詞語複習與交換 | V-05、V-06 | V-05 多孩子隔離已有自動測試，介面與實機驗收未確認。V-06 分享單元與 DOM 接縫共 14 項通過，真實瀏覽器及 iPhone／跨裝置交換待驗，見工單驗收表。優先抽錯詞、跨課複習及避免重複；匯出／匯入由家長自願分享同班詞庫。 |
 | 照片與分享 | DB-05、DB-06 | 經同意的照片存入私有儲存區，詞庫由家長明確發起分享。 |
 | M4 考卷 | EX-01、EX-02、EX-03、EX-04 | 私人保存考卷、人工校正題目、乾淨版 A4 重組，並將已確認的測驗結果寫回學習紀錄。 |
 
@@ -97,7 +97,7 @@ M2 凍結出卷功能。M3 依專用開發環境的 Auth、雙家庭權限測試
 - Supabase 開發專案的 Free 預設寄信服務不接受自訂驗證碼範本。Email 收碼驗收等候該專案的自訂 SMTP。
 - Google Provider 已於 2026-11-12 啟用，手動身份連結及 iPhone → Windows 同步出卷已有工單證據；同 Email 自動連結未實測，正式發布仍需 Owner review。[AUTH 工單](work/tickets/google-auth.md)
 - 離線同步僅明確啟用且有 IndexedDB／Web Locks 時走新路徑；目前測試使用注入的儲存、鎖與雲端介面，不能取代真實瀏覽器多分頁、離線重連或跨裝置驗收。新增出卷題型與 OCR 修正也仍須各自的實機／輸出證據。
-- #23 receipt 僅記錄 `partially_updated`；本次治理漂移檢查通過，但此 checkout 的 hook validator 因缺少 pre-commit／pre-push hooks 失敗，未修復或宣稱完整採用。初始導入與歷史驗證不代表目前所有 clone 都已安裝 hooks。
+- #23 receipt 僅記錄 `partially_updated`，不能視為完整治理採用證明；本次治理漂移檢查通過，2026-11-27 integrator 已在此 checkout 安裝 pre-commit／pre-push hooks 與 framework-root 設定，無 tracked-file 變更；本次重跑 hook validator 通過（exit 0，無 errors／warnings）。其他 clone 仍可能未安裝 hooks，初始導入與本次驗證不代表所有 clone 均已安裝。
 - 舊 Draft PR #10／#11 的來源均已由 #17 納入 main；依 Owner 提供的 PR 資訊，base 為 `codex/ux-review`，非 main。即時 PR 狀態與驗收討論未能連線核對，保留／關閉由 Owner 決定，不以來源已整合推定草稿已關閉或實機 QA 已完成。
 
 ## Anti-Goals

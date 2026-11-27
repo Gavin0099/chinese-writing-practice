@@ -78,3 +78,31 @@ test('malformed files and a changed preview cannot partially write vocabulary', 
     assert.throws(() => updateVocabulary(state => applyVocabularyShare(state, share, preview, { nextId: ids() }), storage), /重新核對/);
     assert.deepEqual(readVocabulary(storage), changed);
 });
+
+test('share word-count boundaries accept 2000 distinct entries and reject 2001 entries', () => {
+    const words = Array.from({ length: 2000 }, (_, index) => entry(source.id, `boundary-${index}`, {
+        word: String.fromCodePoint(0x4e00 + index), pronunciation: '', blanks: [1], confirmed: false
+    }));
+    const share = createVocabularyShare(source, words);
+    assert.equal(parseVocabularyShare(JSON.stringify(share)).words.length, 2000);
+    const extra = { lesson: 3, word: '天空', pronunciation: [], blanks: [1] };
+    assert.throws(() => parseVocabularyShare(JSON.stringify({ ...share, words: [...share.words, extra] })), /1 至 2000/);
+});
+
+test('untrusted extra fields are stripped on import as well as export and never reach recipient storage', () => {
+    const share = createVocabularyShare(source, [sky]);
+    const parsed = parseVocabularyShare(JSON.stringify({ ...share,
+        photo: 'private-photo', children: [{ name: 'private-child' }], reviewAttempts: ['private-review'],
+        exams: ['private-exam'], futureField: 'private-future',
+        source: { ...share.source, id: 'private-book-id', ownerId: 'private-owner', photo: 'private-image' },
+        words: [{ ...share.words[0], id: 'private-word-id', bookId: 'private-book-id', childId: 'private-child',
+            confirmed: true, photo: 'private-image', results: [true], futureField: 'private-future' }]
+    }));
+    assert.deepEqual(parsed, share);
+    const values = new Map();
+    const storage = { getItem: key => values.get(key) ?? null, setItem: (key, data) => values.set(key, data) };
+    const preview = previewVocabularyShare(readVocabulary(storage), parsed, { name: '接收班級' });
+    updateVocabulary(state => applyVocabularyShare(state, parsed, preview, { nextId: ids() }), storage);
+    assert.deepEqual(readVocabulary(storage).words, [{ ...sky, id: 'new-2', bookId: 'new-1', confirmed: false }]);
+    assert.doesNotMatch(JSON.stringify([...values.values()]), /private-/);
+});

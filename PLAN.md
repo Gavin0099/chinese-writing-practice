@@ -1,12 +1,13 @@
 # 中文書寫練習開發計畫
 
-> **最後更新**: 2026-11-11
+> **最後更新**: 2026-11-27
 > **Owner**: Gavin0099
 > **Freshness**: Phase (30d)
 
 ## Current Phase
 
 - Release Stabilization 聚焦首頁下載 PDF 與私人站可重建的交付版本。暫緩 OCR 新功能、額外 UI 改版與 OCR 實機效能測試。
+- 2026-11-27 狀態核對以 main `f45968b6` 為準：PR #21～#28 的合併內容及既有 Node 測試已核對；合併不代表實機、紙本或發布驗收完成。以下僅同步已發生的事實，原階段與執行順序不變。
 - [x] 完成 AI Governance 初始導入與本機驗證。
 - [x] 國字查詢 MVP 已通過本機使用流程驗收。
 - [x] M1 checkpoint `eb9670f` 已建立，含國字查詢程式、測試與工單。
@@ -16,11 +17,11 @@
 
 ## Active Sprint
 
-- PDF-01／PDF-02 獨立重現與修正首頁直接下載 PDF 裁切，保留原生列印驗收。
-- REL-01／REL-02 封存私人站執行版本，另建整合 Draft PR，從乾淨版本重建、驗證並交付審查。
+- [x] PDF-01／PDF-02 的裁切修正與桌面 Chrome 驗證紀錄已由 PR #17（`ceff1a4`）整合；main 保留 A4 擷取、等比縮放與置中。iPhone Safari 與紙本仍待驗。[PDF 工單](work/tickets/pdf-download-crop.md)
+- [x] REL-01／REL-02 的私人站來源封存、重建說明及審查紀錄已由 PR #17 整合；來源 `72f4be2` 已在 main 歷史中。此為來源交付狀態，非正式發布或實機 QA 完成。[交付工單](work/tickets/release-stabilization.md)
 - QA-01 驗證實體紙本與 iPhone Safari 備份還原，紀錄實機結果。
 - [x] 固定共用框架版本，套用框架 baseline 與專案規則。
-- [x] 安裝 Git hooks，驗證治理設定、版本一致性及 runtime fixtures。
+- [x] 初始導入時安裝 Git hooks，驗證治理設定、版本一致性及 runtime fixtures；本次 checkout 的 pre-commit／pre-push hooks 未安裝，見 Known Risks。
 - [x] Owner 確認契約領域為中文書寫練習與列印教材生成，repo 風險分級為低風險。
 - [x] D-01 取得並解析中研院 20260723 工作簿，以年度和學期欄位選取 115 上。
 - [x] D-02 建立以學年度、出版社、年級、學期與課次識別的本機候選資料。
@@ -30,7 +31,7 @@
 - [x] [D-05 開發驗收](work/tickets/d-05-curriculum-catalog.md)：115 上三家共 18 組、194 課已存入專用開發資料庫，僅供指定帳號載入；教學進度先選出版社。
 - [x] [首頁練習簿](work/tickets/d-05-curriculum-catalog.md#首頁練習簿)：依帳號已確認的教材與課次準備習寫字練習簿，可另選同版本課次複習。
 - [x] [UX 任務 2 排版](docs/UX_REVIEW.md#任務-2-排版驗收)：由 `4da5e86` 整合首頁、手機導覽和詞庫出卷排版，通過 Windows Chrome 390px、1280px 驗收。
-- [ ] UX 任務 2 配色待驗證，下載 PDF 裁切獨立修復。
+- [ ] UX 任務 2 配色待驗證；下載 PDF 裁切修正已整合，實機與紙本驗收仍待完成。
 - [ ] D-05 正式發布：確認准用欄位及署名後才開放其他使用者查詢。
 - [x] [F-00](work/tickets/f-00-separate-worksheet-history.md) 分開練習紙輸出紀錄及教學進度，完成本機遷移與 Chrome 驗證。實機 iOS Safari 待驗。
 - [x] [F-02](work/tickets/f-02-character-lookup-core.md) 以合成教材驗證純查詢核心。
@@ -46,20 +47,27 @@
 - [x] DB-03M 首次匯入可重試且保護既有雲端資料，習寫紀錄隨獨立 child ID 升級。不同課次的版本衝突已在真實 API 驗證，備份下載已在 Chrome 驗證。
 - [ ] QA-DEVICE／M3-Closeout 待 iPhone Safari、Windows 紙本與真實雲端結果，再建立 checkpoint。
 - [x] AUTH-07 Google 開發環境驗收通過。真實 Google 手動連結保留原家庭資料；iPhone 儲存第 8 課詞語後，Windows Chrome 同步並產生 15 題考卷與解答。原考卷也可重開。同 Email 自動連結的實測與正式發布審查另列於工單。[AUTH 工單](work/tickets/google-auth.md)
+- [ ] DB-04 已合併離線佇列（#21 `abffba0`）、IndexedDB 與衝突處置（#22 `62585fe`）、家庭同步協調（#24 `ba32c29`）、多分頁鎖與應用整合（#25 `55a17b3`）。佇列、儲存、同步及 cloudStorage 測試通過；`offlineSync` 預設關閉，真實瀏覽器離線／重連、跨裝置與備份復原驗收待確認。
+- [ ] V-05 多孩子共用班級詞庫、分開錯詞與優先出題已合併（#26 `2f1284a`），既有測試涵蓋孩子隔離、跨課複習與去重；孩子切換介面及實機同步驗收未確認。
+- [ ] 國字／注音／混合測驗已合併（#27 `cf3c2df`），出題、備份相容性與批改測試通過；新增題型的瀏覽器列印、iPhone 與紙本驗收未確認。
+- [ ] OCR 圈詞分割、黑藍印字與紅筆混合處理、右側題號配對已合併（#28 `f45968b6`），幾何及題號回歸測試通過；未據此宣稱真實圈詞作業或 iPhone 效能驗收完成。[實機驗收條件](work/tickets/data-backup-and-device-qa.md#ocr-01v-04-真實圈詞驗收)
+- [ ] V-06 匯出／匯入已隨私人站來源 `b6e079e` 經 #17 整合：`vocabularyShare.mjs` 與 `vocabulary.mjs` 支援選詞匯出、來源班級／版次／衝突預覽及確認後套用。4 項分享測試驗證僅輸出所選詞條與班級教材欄位、不含原圖或孩子紀錄、略過重複與衝突、預覽過期拒寫。瀏覽器下載／選檔／確認／重開及 iPhone Safari 操作驗收未確認；不列為完整完成。[V-06 規格](work/tickets/teacher-vocabulary-worksheets.md)
+- 2026-11-27 在上述 main 基線執行 `node --test tests/*.test.mjs`，132 項通過、0 失敗。這是本次本機測試證據；GitHub PR 本文、checks 與 review 因網路限制未能取得，不推定各 PR 的歷史驗收或兩次獨立審查均已完成。
+- PR #23（`a74c8e2`）實際更新框架指標、lock 與 receipt 至 `5073bcf2`；receipt 為 `partially_updated`，不能視為完整治理採用證明。
 
 ### Slice Backlog
 
 | 階段 | Slice | 交付條件 |
 | --- | --- | --- |
 | M0 教材 | D-03R、D-04、D-05 | 個別裁決與授權證據齊備後，以獨立版本接入准用的 115 上資料，保留 113 版列印。 |
-| M1 國字查詢 | F-00、F-01、F-02、F-03、F-04 | 分開輸出與教學進度，家長可設定教材、手動查詢並記錄孩子習寫。[國字學習查詢工單](work/tickets/2026-11-11-character-learning-lookup.md) |
-| M2 老師詞庫與出卷 | V-01、V-02、PRINT-FIX、V-03 | 私人班級詞庫、手動輸入與批次貼上、從確認的詞語抽題及輸出 A4 考卷與解答。[老師詞庫與出卷規格](work/tickets/teacher-vocabulary-worksheets.md) |
+| M1 國字查詢 | F-00、F-01、F-02、F-03、F-04 | 本機 MVP 與 checkpoint 已完成；F-04 習寫入口恢復已整合，實機回歸待驗。分開輸出與教學進度，家長可設定教材、手動查詢並記錄孩子習寫。[國字學習查詢工單](work/tickets/2026-11-11-character-learning-lookup.md) |
+| M2 老師詞庫與出卷 | V-01、V-02、PRINT-FIX、V-03 | 本機及 Windows 虛擬列印已有驗收，紙本待驗；#27 新題型已有自動測試，列印驗收未確認。私人班級詞庫、手動輸入與批次貼上、從確認的詞語抽題及輸出 A4 考卷與解答。[老師詞庫與出卷規格](work/tickets/teacher-vocabulary-worksheets.md) |
 | M3 雲端同步 | DATA-Backup、DB-01～DB-03、DB-03R、DB-03M、QA-DEVICE、M3-Closeout、P-03、P-04 | 備份可還原，兩個真實帳號可驗證家庭隔離。同一帳號可從 iPhone 建詞到 Windows 出卷和列印紙本。 |
-| Google 登入 MVP | AUTH-00、AUTH-01、AUTH-02、AUTH-03、AUTH-07 | 沿用 Supabase Auth 使用者 ID，驗證 Google 登入、既有帳號連結、家庭隔離及實機同步出卷。 |
+| Google 登入 MVP | AUTH-00、AUTH-01、AUTH-02、AUTH-03、AUTH-07 | 開發環境手動連結及 iPhone → Windows 出卷已有驗收；同 Email 自動連結與正式發布審查待辦。沿用 Supabase Auth 使用者 ID，驗證 Google 登入、既有帳號連結、家庭隔離及實機同步出卷。 |
 | 登入擴充 | AUTH-04、AUTH-05、AUTH-06、AUTH-07 | LINE 先完成 Go／No-Go，Email OTP 備援可並行準備。每次啟用重新執行回歸。 |
-| 離線同步 | DB-04 | IndexedDB 離線佇列、重送與衝突處理。 |
-| 拍照辨識 | OCR-01、OCR-02、V-04 | 雲端同步驗收後接入拍照及匯入。家長確認後走同一查詢引擎或詞庫。 |
-| 詞語複習與交換 | V-05、V-06 | 優先抽錯詞、跨課複習及避免重複。匯出／匯入可由家長自願分享同班詞庫。 |
+| 離線同步 | DB-04 | #21／#22／#24／#25 已整合且自動測試通過，預設關閉；實機離線、重送、衝突及復原驗收待確認。IndexedDB 離線佇列、重送與衝突處理。 |
+| 拍照辨識 | OCR-01、OCR-02、V-04 | 匯入實作與 #28 分割／題號修正已在 main，自動測試通過；真實圈詞與實機效能驗收未確認。原順序保留：雲端同步驗收後接入拍照及匯入。家長確認後走同一查詢引擎或詞庫。 |
+| 詞語複習與交換 | V-05、V-06 | V-05 多孩子隔離及 V-06 選詞匯出／預覽匯入已有實作與自動測試，介面與實機驗收未確認。優先抽錯詞、跨課複習及避免重複。匯出／匯入可由家長自願分享同班詞庫。 |
 | 照片與分享 | DB-05、DB-06 | 經同意的照片存入私有儲存區，詞庫由家長明確發起分享。 |
 | M4 考卷 | EX-01、EX-02、EX-03、EX-04 | 私人保存考卷、人工校正題目、乾淨版 A4 重組，並將已確認的測驗結果寫回學習紀錄。 |
 
@@ -87,7 +95,10 @@ M2 凍結出卷功能。M3 依專用開發環境的 Auth、雙家庭權限測試
 - 115 上候選資料仍須處理跨來源差異及確認公開再散布條件。生字欄位和詞語欄位有不同用途，看注音填國字需要核對語境下的讀音。
 - 作業、考卷照片與老師詞庫預設為私人。分享前需由家長確認內容及接收對象，辨識成功本身不提供教材再散布授權。
 - Supabase 開發專案的 Free 預設寄信服務不接受自訂驗證碼範本。Email 收碼驗收等候該專案的自訂 SMTP。
-- Supabase 開發專案已設定 Windows 本機回呼、臨時 iPhone HTTPS 回呼及手動身份連結。Google 端的專用 Web OAuth Client 與 Supabase 回呼已核對，Provider 等候 Owner 填入 Secret 並儲存。
+- Google Provider 已於 2026-11-12 啟用，手動身份連結及 iPhone → Windows 同步出卷已有工單證據；同 Email 自動連結未實測，正式發布仍需 Owner review。[AUTH 工單](work/tickets/google-auth.md)
+- 離線同步僅明確啟用且有 IndexedDB／Web Locks 時走新路徑；目前測試使用注入的儲存、鎖與雲端介面，不能取代真實瀏覽器多分頁、離線重連或跨裝置驗收。新增出卷題型與 OCR 修正也仍須各自的實機／輸出證據。
+- #23 receipt 僅記錄 `partially_updated`；本次治理漂移檢查通過，但此 checkout 的 hook validator 因缺少 pre-commit／pre-push hooks 失敗，未修復或宣稱完整採用。初始導入與歷史驗證不代表目前所有 clone 都已安裝 hooks。
+- 舊 Draft PR #10／#11 的來源均已由 #17 納入 main；依 Owner 提供的 PR 資訊，base 為 `codex/ux-review`，非 main。即時 PR 狀態與驗收討論未能連線核對，保留／關閉由 Owner 決定，不以來源已整合推定草稿已關閉或實機 QA 已完成。
 
 ## Anti-Goals
 

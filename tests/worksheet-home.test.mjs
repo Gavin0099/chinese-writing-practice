@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
+import { runInNewContext } from 'node:vm';
 import { courseKey } from '../characterLookup.mjs';
 import { resolveWorksheetCourse } from '../worksheetHome.mjs';
 
@@ -12,6 +14,46 @@ const course = { ...identity, expectedLessons: [1, 8, 9], lessons: [lesson] };
 const progress = (record = {}, activeKey = courseKey(identity)) => ({
     activeKey,
     records: [{ ...identity, lesson: 8, confirmed: true, ...record }]
+});
+
+const homeFile = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
+
+test('the legacy homepage shows its active curriculum metadata after a neutral placeholder', () => {
+    assert.match(homeFile('index.html'), /id="legacyWorksheetEdition">● 教材：載入中</);
+    const nodes = new Map();
+    const getNode = id => {
+        if (!nodes.has(id)) nodes.set(id, { style: {}, classList: { add() {} }, addEventListener() {} });
+        return nodes.get(id);
+    };
+    const window = {
+        storageManager: { getSettings: () => ({}) },
+        matchMedia: () => ({ matches: false })
+    };
+    const document = {
+        body: { appendChild() {}, classList: { add() {} } },
+        createElement: () => ({}), addEventListener() {},
+        getElementById: id => id === 'lessonSelect' ? null : getNode(id),
+        querySelector: selector => selector === '.grade-card.active' ? null : getNode(selector),
+        querySelectorAll: () => []
+    };
+    const context = { window, document, navigator: { userAgent: '' }, console: { log() {} } };
+    for (const path of ['curriculum_data.js', 'recommendationEngine.js', 'script.js']) {
+        runInNewContext(homeFile(path), context, { filename: path });
+    }
+    runInNewContext('initApp()', context);
+    assert.equal(getNode('legacyWorksheetEdition').textContent, '● 教材：康軒 113 學年度');
+    assert.equal(getNode('legacyWorksheetEdition').hidden, false);
+    assert.equal(getNode('heroSubTitle').innerText, '康軒 113 學年度 · 1 年級上學期');
+
+    Object.assign(window.CURRICULUM_KANGHSUAN, { publisher: '南一', version: '115_Academic_Year' });
+    runInNewContext('initApp()', context);
+    assert.equal(getNode('legacyWorksheetEdition').textContent, '● 教材：南一 115 學年度');
+    assert.equal(getNode('heroSubTitle').innerText, '南一 115 學年度 · 1 年級上學期');
+
+    window.CURRICULUM_DATA = { ...window.CURRICULUM_DATA };
+    runInNewContext('initApp()', context);
+    assert.equal(getNode('legacyWorksheetEdition').hidden, true);
+    assert.equal(getNode('heroSubTitle').innerText, '1 年級上學期');
 });
 
 test('the saved publisher and edition determine the writing characters for the confirmed lesson', () => {

@@ -43,8 +43,10 @@ export function makeBook({ id, name, publisher, year, grade, semester, edition, 
     return book;
 }
 
-export function bookLabel(book) {
-    return `${book.name} · ${book.year} 學年度 ${book.publisher} ${book.grade} 年級${book.semester === 1 ? '上' : '下'}學期${book.edition ? ` · ${book.edition}` : ''}`;
+export function bookLabel(book, { compact = false } = {}) {
+    const term = book.semester === 1 ? '上' : '下';
+    if (compact) return `${book.name} · ${book.year} ${book.publisher} ${book.grade}${term}`;
+    return `${book.name} · ${book.year} 學年度 ${book.publisher} ${book.grade} 年級${term}學期${book.edition ? ` · ${book.edition}` : ''}`;
 }
 
 export function makeWord({ id, bookId, lesson, word, pronunciation, blanks, confirmed }) {

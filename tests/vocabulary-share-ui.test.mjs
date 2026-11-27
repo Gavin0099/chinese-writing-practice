@@ -121,6 +121,24 @@ async function boot(values = new Map()) {
     };
 }
 
+test('the class picker uses compact labels and keeps full details for the active class', async () => {
+    const sandbox = { ...target, edition: '測試資料' };
+    const otherEdition = { ...source, id: 'other-edition', edition: '最新版' };
+    const stored = { books: [source, otherEdition, sandbox], words: [], exams: [] };
+    const { get } = await boot(new Map([[vocabularyStorageKey, JSON.stringify(stored)]]));
+    const select = get('bookSelect');
+    assert.deepEqual(Array.from(select.children, option => option.textContent), [
+        '來源班級 · 115 學年度 康軒 2 年級上學期 · 修訂版',
+        '來源班級 · 115 學年度 康軒 2 年級上學期 · 最新版',
+        '接收班級 · 115 康軒 2上'
+    ]);
+    assert.equal(select.value, sandbox.id);
+    assert.match(get('bookSelectionDetails').textContent, /接收班級.*測試資料$/);
+    select.value = otherEdition.id;
+    await select.fire('change');
+    assert.match(get('bookSelectionDetails').textContent, /來源班級.*最新版$/);
+});
+
 test('UI export selects one term, excludes all private fields, and its Blob imports only after confirmation then survives reboot', async () => {
     const original = { books: [{ ...source, ownerId: 'PRIVATE-owner', photo: 'PRIVATE-photo' }, target],
         words: [{ ...word(sunny, 'chosen', source.id), childId: 'PRIVATE-child', photo: 'PRIVATE-image', results: ['PRIVATE-result'], futureField: 'PRIVATE-unknown' },

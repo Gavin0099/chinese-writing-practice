@@ -3,6 +3,8 @@
 .skip-link:focus { transform: none; }
 .book-bar { margin-bottom: 1rem; }
 .book-bar select { max-width: 34rem; min-height: 44px; }
+#bookSelect { width: 100%; max-width: 42rem; padding-inline-end: 2rem; overflow: hidden; text-overflow: ellipsis; }
+#bookSelectionDetails { overflow-wrap: anywhere; }
 #examHeading { scroll-margin-top: 1rem; }
 .vocabulary-mode { margin: -.7rem 0 .9rem; }
 .vocabulary-actions { margin-bottom: .75rem; }

@@ -1,8 +1,10 @@
+import { localLocks } from './helpers/local-locks.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { makeBook, makeWord, previewBatch, readVocabulary, saveWord, updateVocabulary } from '../vocabularyData.mjs';
+import { makeBook, makeWord, previewBatch, readVocabulary, saveWord, updateVocabulary as updateLocalVocabulary } from '../vocabularyData.mjs';
 import { makeExam, questionPool } from '../examData.mjs';
 import { recentWrongTerms } from '../reviewData.mjs';
+const updateVocabulary = (update, storage) => updateLocalVocabulary(update, storage, localLocks);
 
 const book = makeBook({ id: 'room-a', name: '二年三班', publisher: '康軒', year: 115, grade: 2, semester: 1, edition: '' });
 const entry = fields => makeWord({ id: 'word-1', bookId: book.id, lesson: 1, word: '晴天',
@@ -44,12 +46,12 @@ test('explicit first-tone marks from mobile input are omitted from saved reading
     assert.throws(() => entry({ ...fields, pronunciation: 'ㄓˇ ˉ ㄔㄜ' }), /多打了其他符號/);
 });
 
-test('book and exam storage survives reopen and does not write a failed mutation', () => {
+test('book and exam storage survives reopen and does not write a failed mutation', async () => {
     const values = new Map();
     const storage = { getItem: name => values.get(name) ?? null, setItem: (name, data) => values.set(name, data) };
     assert.deepEqual(readVocabulary(storage), { books: [], words: [], exams: [] });
-    updateVocabulary(data => { data.books.push(book); saveWord(data, entry()); }, storage);
-    assert.throws(() => updateVocabulary(data => {
+    await updateVocabulary(data => { data.books.push(book); saveWord(data, entry()); }, storage);
+    await assert.rejects(() => updateVocabulary(data => {
         data.words.push(entry({ id: 'temporary' }));
         throw new Error('failed mutation');
     }, storage), /failed mutation/);

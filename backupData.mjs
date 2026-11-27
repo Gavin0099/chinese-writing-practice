@@ -1,7 +1,7 @@
 import { courseKey } from './characterLookup.mjs';
 import { isExamType } from './examData.mjs';
 import { isWritingHistory, progressStorageKey, readProgress, writingStorageKey } from './learningData.mjs';
-import { makeBook, makeWord, readVocabulary, vocabularyStorageKey, wordIdentity } from './vocabularyData.mjs';
+import { makeBook, makeWord, readVocabulary, vocabularyStorageKey, withLocalVocabularyLock, wordIdentity } from './vocabularyData.mjs';
 
 const format = 'chinese-writing-practice-backup';
 const version = 1;
@@ -138,8 +138,12 @@ export function readBackupTarget(storage = localStorage) {
     return Object.fromEntries(Object.values(backupSections).map(key => [key, storage.getItem(key)]));
 }
 
-export function restoreBackup(backup, expected, storage = localStorage) {
+export async function restoreBackup(backup, expected, storage = localStorage, locks = globalThis.navigator?.locks) {
     const data = validateBackup(backup);
+    return withLocalVocabularyLock(() => restoreValidatedBackup(data, expected, storage), locks);
+}
+
+function restoreValidatedBackup(data, expected, storage) {
     const before = readBackupTarget(storage);
     if (Object.keys(before).some(key => before[key] !== expected[key])) {
         throw new Error('選擇備份後，本機資料已變更。請重新選檔再確認還原。');

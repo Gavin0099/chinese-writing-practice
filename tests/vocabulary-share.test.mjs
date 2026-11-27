@@ -1,8 +1,10 @@
+import { localLocks } from './helpers/local-locks.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { makeBook, makeWord, updateVocabulary, readVocabulary } from '../vocabularyData.mjs';
+import { makeBook, makeWord, updateVocabulary as updateLocalVocabulary, readVocabulary } from '../vocabularyData.mjs';
 import { applyVocabularyShare, compatibleShareBooks, createVocabularyShare, parseVocabularyShare,
     previewVocabularyShare } from '../vocabularyShare.mjs';
+const updateVocabulary = (update, storage) => updateLocalVocabulary(update, storage, localLocks);
 
 const source = makeBook({ id: 'source-id', name: '來源班級', publisher: '康軒', year: 115, grade: 2, semester: 1, edition: '修訂版' });
 const target = { ...source, id: 'destination-id', name: '接收班級' };
@@ -62,7 +64,7 @@ test('new-class import assigns new IDs and keeps readings pending until the reci
     }
 });
 
-test('malformed files and a changed preview cannot partially write vocabulary', () => {
+test('malformed files and a changed preview cannot partially write vocabulary', async () => {
     const share = createVocabularyShare(source, [sky, ungraded]);
     assert.throws(() => parseVocabularyShare('['), /JSON/);
     assert.throws(() => parseVocabularyShare(JSON.stringify({ ...share, version: 9 })), /本站匯出/);
@@ -70,12 +72,12 @@ test('malformed files and a changed preview cannot partially write vocabulary', 
     assert.throws(() => parseVocabularyShare(JSON.stringify({ ...share, words: [{ ...share.words[0], blanks: [9] }] })), /挖空字/);
     const values = new Map();
     const storage = { getItem: key => values.get(key) ?? null, setItem: (key, data) => values.set(key, data) };
-    updateVocabulary(state => state.books.push(target), storage);
+    await updateVocabulary(state => state.books.push(target), storage);
     const preview = previewVocabularyShare(readVocabulary(storage), share, { id: target.id });
-    updateVocabulary(state => state.words.push(entry(target.id, 'new-from-another-tab',
+    await updateVocabulary(state => state.words.push(entry(target.id, 'new-from-another-tab',
         { word: '天空', pronunciation: 'ㄊㄧㄢ ㄎㄨㄥ', blanks: [2] })), storage);
     const changed = readVocabulary(storage);
-    assert.throws(() => updateVocabulary(state => applyVocabularyShare(state, share, preview, { nextId: ids() }), storage), /重新核對/);
+    await assert.rejects(() => updateVocabulary(state => applyVocabularyShare(state, share, preview, { nextId: ids() }), storage), /重新核對/);
     assert.deepEqual(readVocabulary(storage), changed);
 });
 
@@ -89,7 +91,7 @@ test('share word-count boundaries accept 2000 distinct entries and reject 2001 e
     assert.throws(() => parseVocabularyShare(JSON.stringify({ ...share, words: [...share.words, extra] })), /1 至 2000/);
 });
 
-test('untrusted extra fields are stripped on import as well as export and never reach recipient storage', () => {
+test('untrusted extra fields are stripped on import as well as export and never reach recipient storage', async () => {
     const share = createVocabularyShare(source, [sky]);
     const parsed = parseVocabularyShare(JSON.stringify({ ...share,
         photo: 'private-photo', children: [{ name: 'private-child' }], reviewAttempts: ['private-review'],
@@ -102,7 +104,7 @@ test('untrusted extra fields are stripped on import as well as export and never 
     const values = new Map();
     const storage = { getItem: key => values.get(key) ?? null, setItem: (key, data) => values.set(key, data) };
     const preview = previewVocabularyShare(readVocabulary(storage), parsed, { name: '接收班級' });
-    updateVocabulary(state => applyVocabularyShare(state, parsed, preview, { nextId: ids() }), storage);
+    await updateVocabulary(state => applyVocabularyShare(state, parsed, preview, { nextId: ids() }), storage);
     assert.deepEqual(readVocabulary(storage).words, [{ ...sky, id: 'new-2', bookId: 'new-1', confirmed: false }]);
     assert.doesNotMatch(JSON.stringify([...values.values()]), /private-/);
 });

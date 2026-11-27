@@ -1,22 +1,9 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
-import { runInNewContext } from 'node:vm';
 import { vocabularyStorageKey } from '../vocabularyData.mjs';
 import { vocabularyShareMaxBytes } from '../vocabularyShare.mjs';
 
-// DOM seam test using the repo's existing node:vm approach. Run the whole page
-// script, replacing import bindings and unrelated cloud/photo entry points only.
-// Nodes, FormData, downloads and file selection are doubles, not a browser.
-const html = await readFile(new URL('../vocabulary.html', import.meta.url), 'utf8');
-const pageSource = await readFile(new URL('../vocabulary.mjs', import.meta.url), 'utf8');
-const imports = [...pageSource.matchAll(/^import\s+\{([^}]+)\}\s+from\s+'([^']+)';/gm)];
-const bindings = {};
-for (const [, names, path] of imports) {
-    const module = await import(new URL(path, new URL('../vocabulary.mjs', import.meta.url)));
-    for (const name of names.split(',').map(name => name.trim())) bindings[name] = module[name];
-}
-const executable = pageSource.replace(/^import\s+\{[^}]+\}\s+from\s+'[^']+';/gm, '');
+import { boot } from './helpers/vocabulary-page.mjs';
 
 const source = { id: 'source', name: '來源班級', publisher: '康軒', year: 115, grade: 2, semester: 1, edition: '修訂版' };
 const target = { ...source, id: 'target', name: '接收班級' };
@@ -28,98 +15,6 @@ const share = { format: 'chinese-writing-practice-vocabulary', version: 1,
 const word = (fields, id, bookId = target.id) => ({ ...fields, id, bookId, confirmed: true });
 const file = (text = JSON.stringify(share)) => new File([text], '詞庫.json', { type: 'application/json' });
 const snapshot = values => [...values.entries()];
-
-class NodeDouble {
-    constructor(tag = '') {
-        Object.assign(this, { tag, value: '', textContent: '', checked: false, disabled: false,
-            hidden: false, open: false, children: [], dataset: {}, files: [], elements: {}, listeners: new Map(), attributes: new Map() });
-        this.classList = { toggle() {} };
-    }
-    addEventListener(type, callback) {
-        const callbacks = this.listeners.get(type) ?? [];
-        callbacks.push(callback);
-        this.listeners.set(type, callbacks);
-    }
-    async fire(type, target = this) {
-        for (const callback of this.listeners.get(type) ?? []) await callback({ target, preventDefault() {} });
-    }
-    append(...nodes) { this.children.push(...nodes); }
-    replaceChildren(...nodes) { this.children = nodes; }
-    add(node) { this.append(node); }
-    setAttribute(key, value) { this.attributes.set(key, String(value)); }
-    removeAttribute(key) { this.attributes.delete(key); }
-    hasAttribute(key) { return this.attributes.has(key); }
-    toggleAttribute(key, force) { if (force) this.setAttribute(key, ''); else this.removeAttribute(key); }
-    querySelectorAll(selector) {
-        assert.ok(['input', 'input:checked'].includes(selector), `unsupported test selector: ${selector}`);
-        const descendants = this.children.filter(child => child instanceof NodeDouble)
-            .flatMap(child => [child, ...child.querySelectorAll('input')]);
-        return descendants.filter(child => child.tag === 'input' && (selector !== 'input:checked' || child.checked));
-    }
-    focus() {}
-    reset() { for (const node of Object.values(this.elements)) { node.value = ''; node.checked = false; } }
-    remove() {}
-}
-
-async function boot(values = new Map()) {
-    const nodes = new Map([...html.matchAll(/<([\w-]+)\b([^>]*\bid="([^"]+)"[^>]*)>/g)]
-        .map(([, tag, attributes, id]) => {
-            const node = new NodeDouble(tag);
-            for (const flag of ['hidden', 'disabled', 'checked']) node[flag] = new RegExp(`\\s${flag}(?:\\s|$)`).test(attributes);
-            return [id, node];
-        }));
-    const get = id => { assert.ok(nodes.has(id), `missing HTML id: ${id}`); return nodes.get(id); };
-    for (const [id, fields] of Object.entries({
-        bookForm: { year: '' }, wordForm: { word: '', pronunciation: '', lesson: '1', confirmed: '' },
-        batchForm: { words: '', lesson: '1' }, examForm: { from: '1', to: '8', count: '15', blankMode: 'vocabulary', examType: 'character', prioritize: '' }
-    })) {
-        get(id).elements = Object.fromEntries(Object.entries(fields).map(([name, value]) => {
-            const node = new NodeDouble('input'); node.value = value; return [name, node];
-        }));
-    }
-    const storage = { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) };
-    const urls = new Map();
-    const downloads = [];
-    class TestURL extends URL {
-        static createObjectURL(blob) { const url = `blob:test-${urls.size}`; urls.set(url, blob); return url; }
-        static revokeObjectURL(url) { urls.delete(url); }
-    }
-    const document = {
-        getElementById: get,
-        querySelector: selector => { assert.equal(selector, 'main'); return get('main'); },
-        body: new NodeDouble('body'),
-        createElement(tag) {
-            const node = new NodeDouble(tag);
-            if (tag === 'a') node.click = () => downloads.push({ name: node.download, blob: urls.get(node.href) });
-            return node;
-        }
-    };
-    const timers = [];
-    let sequence = 0;
-    const context = { ...bindings, document, localStorage: storage, URL: TestURL, URLSearchParams, Blob, DOMException,
-        location: { href: 'http://localhost/vocabulary.html?local=1' }, history: { replaceState() {} },
-        window: { addEventListener() {}, confirm: () => true },
-        crypto: { randomUUID: () => `import-${++sequence}` },
-        Option: function (label, value) { const option = new NodeDouble('option'); option.textContent = label; option.value = String(value); return option; },
-        FormData: class {
-            constructor(form) { assert.equal(form, get('shareExportForm')); }
-            getAll(name) { return get('shareExportWords').querySelectorAll('input:checked').filter(node => node.name === name).map(node => node.value); }
-        },
-        setTimeout: callback => timers.push(callback),
-        openPageStorage: async () => null, initPhotoImport: () => ({ reset() {} }),
-        readVocabulary: (supplied = storage) => bindings.readVocabulary(supplied),
-        updateVocabulary: (update, supplied = storage) => bindings.updateVocabulary(update, supplied)
-    };
-    await runInNewContext(`(async () => {${executable}\n})()`, context, { filename: 'vocabulary.mjs' });
-    assert.equal(get('bookNotice').textContent, '', 'page initialization must succeed');
-    get('shareDetails').open = true;
-    await get('shareDetails').fire('toggle');
-    return { get, values, storage, downloads, timers,
-        read: () => values.has(vocabularyStorageKey) ? JSON.parse(values.get(vocabularyStorageKey)) : null,
-        async choose(selectedFile) { get('shareFile').files = selectedFile ? [selectedFile] : []; await get('shareFile').fire('change'); },
-        async submit() { await get('shareImportForm').fire('submit'); }
-    };
-}
 
 test('UI export selects one term, excludes all private fields, and its Blob imports only after confirmation then survives reboot', async () => {
     const original = { books: [{ ...source, ownerId: 'PRIVATE-owner', photo: 'PRIVATE-photo' }, target],

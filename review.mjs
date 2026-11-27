@@ -2,7 +2,7 @@ import { cloudPageUrl, openPageStorage } from './cloudStorage.mjs';
 import { defaultChildId, gradeExam, makeReviewExam, normalizeChildId, readActiveChild, readAttempts,
     readChildren, recordPaperWord, reviewWordPools, saveActiveChild, saveAttempt, saveChild } from './reviewData.mjs';
 import { copyReviewAttempts, mergeReviewAttempts, splitLocalReviewAttempts, syncReviewAttempts } from './reviewSync.mjs';
-import { bookLabel, makeWord, readVocabulary, vocabularyStorageKey } from './vocabularyData.mjs';
+import { bookLabel, makeWord, readVocabulary, updateVocabulary, vocabularyStorageKey } from './vocabularyData.mjs';
 
 const byId = id => document.getElementById(id);
 const bookPicker = byId('reviewBook');
@@ -255,14 +255,24 @@ try {
             const bookId = bookPicker.value;
             const childId = activeChildId;
             if (cloud && !(await queueSync())) throw new Error('請先同步最新批改紀錄，再產生考卷。');
-            const data = readVocabulary(records);
-            const book = data.books.find(item => item.id === bookId);
-            if (!book) throw new Error('請重新選擇班級。');
             const attempt = now();
-            const exam = makeReviewExam({ id: attempt.id, createdAt: attempt.at, seed: crypto.randomUUID(), book, words: data.words,
-                attempts, mode: input.mode, size: input.size, wrongCount: Number(input.wrong), newCount: Number(input.fresh),
-                from: Number(input.from), to: Number(input.to), childId });
-            await records.setItem(vocabularyStorageKey, JSON.stringify({ ...data, exams: [...data.exams, exam] }));
+            const seed = crypto.randomUUID();
+            let exam;
+            const appendExam = data => {
+                const book = data.books.find(item => item.id === bookId);
+                if (!book) throw new Error('請重新選擇班級。');
+                exam = makeReviewExam({ id: attempt.id, createdAt: attempt.at, seed, book, words: data.words,
+                    attempts, mode: input.mode, size: input.size, wrongCount: Number(input.wrong), newCount: Number(input.fresh),
+                    from: Number(input.from), to: Number(input.to), childId });
+                data.exams.push(exam);
+            };
+            if (cloud) {
+                const data = readVocabulary(records);
+                appendExam(data);
+                await records.setItem(vocabularyStorageKey, JSON.stringify(data));
+            } else {
+                await updateVocabulary(appendExam, records);
+            }
             const path = `exam.html?${new URLSearchParams({ id: exam.id })}`;
             location.href = cloud ? cloudPageUrl(path) : path;
         } catch (error) { notice(error.message, true); }

@@ -186,6 +186,7 @@
             </section>
             <section class="panel exam-panel" id="examPanel" aria-labelledby="examHeading">
                 <h2 id="examHeading" tabindex="-1">製作考卷</h2>
+                <p class="hint">產生考卷時會自動私人保存，可從下方「私人考卷」重開或刪除。</p>
                 <form id="examForm" class="exam-form" autocomplete="off">
                     <label>起始課次<input name="from" type="number" min="1" max="60" value="1" required></label>
                     <label>結束課次<input name="to" type="number" min="1" max="60" value="8" required></label>
@@ -260,8 +261,10 @@
                 </div>
             </section>
 
-            <details id="examHistory" class="panel vocabulary-disclosure" hidden>
-                <summary>重新列印已儲存的考卷</summary>
+            <details id="examHistory" class="panel vocabulary-disclosure">
+                <summary>私人考卷 · 開啟與管理</summary>
+                <p id="examPrivacy" class="hint"></p>
+                <p id="examHistoryNotice" class="notice" role="status"></p>
                 <ul id="examList" class="word-list"></ul>
             </details>
             <details id="wordListDetails" class="panel vocabulary-disclosure">

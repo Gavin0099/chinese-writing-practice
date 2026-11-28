@@ -1,9 +1,11 @@
+import { localLocks } from './helpers/local-locks.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { backupCounts, exportBackup, parseBackup, readBackupTarget, restoreBackup } from '../backupData.mjs';
+import { backupCounts, exportBackup, parseBackup, readBackupTarget, restoreBackup as restoreLocalBackup } from '../backupData.mjs';
 import { makeExam } from '../examData.mjs';
 import { confirmCourse, curriculumStorageKey, progressStorageKey, readProgress, writingStorageKey } from '../learningData.mjs';
 import { makeBook, makeWord, vocabularyStorageKey } from '../vocabularyData.mjs';
+const restoreBackup = (backup, expected, storage) => restoreLocalBackup(backup, expected, storage, localLocks);
 
 const at = '2026-11-11T03:20:00.000Z';
 
@@ -25,7 +27,7 @@ function sampleRecords() {
         [writingStorageKey]: { 天: [{ status: 'missing_strokes', at }, { status: 'can_write', at }] } };
 }
 
-test('backup round trip restores 30 words, the saved 15-question exam, progress and writing history', () => {
+test('backup round trip restores 30 words, the saved 15-question exam, progress and writing history', async () => {
     const original = sampleRecords();
     const firstSource = original[vocabularyStorageKey].exams[0].questions[0].sources[0].id;
     const changed = original[vocabularyStorageKey].words.find(entry => entry.id === firstSource);
@@ -36,7 +38,7 @@ test('backup round trip restores 30 words, the saved 15-question exam, progress 
     const file = JSON.stringify(backup);
     assert.doesNotMatch(file, /local textbook data/);
     const to = mockStorage({ [curriculumStorageKey]: [{ contents: 'existing textbook data' }] });
-    restoreBackup(parseBackup(file), readBackupTarget(to), to);
+    await restoreBackup(parseBackup(file), readBackupTarget(to), to);
     for (const [key, value] of Object.entries(original)) assert.deepEqual(JSON.parse(to.getItem(key)), value);
     assert.deepEqual(JSON.parse(to.getItem(curriculumStorageKey)), [{ contents: 'existing textbook data' }]);
 });
@@ -56,7 +58,7 @@ test('backup and cloud validation keep a long class curriculum identifier and th
     assert.throws(() => makeBook({ ...books[0], curriculumSourceVersion: '' }), /教材版本識別/);
 });
 
-test('backup round trip preserves legacy, explicit character, zhuyin and mixed exam snapshots', () => {
+test('backup round trip preserves legacy, explicit character, zhuyin and mixed exam snapshots', async () => {
     const original = sampleRecords();
     const { books: [book], words, exams } = original[vocabularyStorageKey];
     exams.push({ ...exams[0], id: 'explicit-character', examType: 'character' });
@@ -67,7 +69,7 @@ test('backup round trip preserves legacy, explicit character, zhuyin and mixed e
 
     const backup = exportBackup(mockStorage(original));
     const target = mockStorage();
-    restoreBackup(parseBackup(JSON.stringify(backup)), readBackupTarget(target), target);
+    await restoreBackup(parseBackup(JSON.stringify(backup)), readBackupTarget(target), target);
     const stored = JSON.parse(target.getItem(vocabularyStorageKey)).exams;
     assert.deepEqual(stored, exams);
     assert.equal(Object.hasOwn(stored[0], 'examType'), false);
@@ -75,7 +77,7 @@ test('backup round trip preserves legacy, explicit character, zhuyin and mixed e
     assert.deepEqual(new Set(stored[3].questions.map(question => question.target)), new Set(['character', 'zhuyin']));
 });
 
-test('backup rejects invalid exam types and targets before restoring any data', () => {
+test('backup rejects invalid exam types and targets before restoring any data', async () => {
     const storage = mockStorage(sampleRecords());
     const before = readBackupTarget(storage);
     const valid = exportBackup(storage);
@@ -83,18 +85,18 @@ test('backup rejects invalid exam types and targets before restoring any data', 
         const invalid = structuredClone(valid);
         invalid.vocabulary.exams[0].examType = examType;
         assert.throws(() => parseBackup(JSON.stringify(invalid)), /測驗類型/);
-        assert.throws(() => restoreBackup(invalid, before, storage), /測驗類型/);
+        await assert.rejects(() => restoreBackup(invalid, before, storage), /測驗類型/);
     }
     for (const target of ['mixed', null, ['character']]) {
         const invalid = structuredClone(valid);
         invalid.vocabulary.exams[0].questions[0].target = target;
         assert.throws(() => parseBackup(JSON.stringify(invalid)), /題目類型/);
-        assert.throws(() => restoreBackup(invalid, before, storage), /題目類型/);
+        await assert.rejects(() => restoreBackup(invalid, before, storage), /題目類型/);
     }
     assert.deepEqual(readBackupTarget(storage), before);
 });
 
-test('rejects a bad version, incorrect blank position and dangling class before touching storage', () => {
+test('rejects a bad version, incorrect blank position and dangling class before touching storage', async () => {
     const storage = mockStorage(sampleRecords());
     const before = readBackupTarget(storage);
     const backup = exportBackup(storage);
@@ -102,14 +104,14 @@ test('rejects a bad version, incorrect blank position and dangling class before 
     assert.throws(() => parseBackup('{'), /無法讀取/);
     const invalidQuestion = structuredClone(backup);
     invalidQuestion.vocabulary.exams[0].questions[0].blanks = [3];
-    assert.throws(() => restoreBackup(invalidQuestion, before, storage), /挖空字/);
+    await assert.rejects(() => restoreBackup(invalidQuestion, before, storage), /挖空字/);
     const invalidBook = structuredClone(backup);
     invalidBook.vocabulary.words[0].bookId = 'missing';
-    assert.throws(() => restoreBackup(invalidBook, before, storage), /無法對應/);
+    await assert.rejects(() => restoreBackup(invalidBook, before, storage), /無法對應/);
     assert.deepEqual(readBackupTarget(storage), before);
 });
 
-test('a failed restore rolls back an earlier successful write and keeps unrelated data', () => {
+test('a failed restore rolls back an earlier successful write and keeps unrelated data', async () => {
     const original = sampleRecords();
     const target = mockStorage({ ...original, [curriculumStorageKey]: [{ contents: 'separate' }] });
     const before = readBackupTarget(target);
@@ -120,17 +122,17 @@ test('a failed restore rolls back an earlier successful write and keeps unrelate
         if (++count === 2) throw new Error('simulated quota limit');
         write(key, value);
     };
-    assert.throws(() => restoreBackup(backup, before, target), /原有資料已保留/);
+    await assert.rejects(() => restoreBackup(backup, before, target), /原有資料已保留/);
     assert.deepEqual(readBackupTarget(target), before);
     assert.deepEqual(JSON.parse(target.getItem(curriculumStorageKey)), [{ contents: 'separate' }]);
 });
 
-test('refuses to replace records written after the restore preview', () => {
+test('refuses to replace records written after the restore preview', async () => {
     const target = mockStorage();
     const before = readBackupTarget(target);
     const backup = exportBackup(mockStorage(sampleRecords()));
     target.setItem(writingStorageKey, JSON.stringify({ 天: [{ status: 'can_write', at }] }));
-    assert.throws(() => restoreBackup(backup, before, target), /本機資料已變更/);
+    await assert.rejects(() => restoreBackup(backup, before, target), /本機資料已變更/);
     assert.equal(target.getItem(vocabularyStorageKey), null);
     assert.deepEqual(JSON.parse(target.getItem(writingStorageKey)), { 天: [{ status: 'can_write', at }] });
 });

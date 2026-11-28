@@ -18,11 +18,22 @@ export function readVocabulary(storage = localStorage) {
     return data;
 }
 
-export function updateVocabulary(update, storage = localStorage) {
-    const data = readVocabulary(storage);
-    update(data);
-    storage.setItem(vocabularyStorageKey, JSON.stringify(data));
-    return data;
+// All local writers (including restore and review exams) share this origin lock.
+// Never fall back to an unprotected whole-collection overwrite.
+export async function withLocalVocabularyLock(operation, locks = globalThis.navigator?.locks) {
+    if (typeof locks?.request !== 'function') {
+        throw new Error('此瀏覽器無法安全協調多分頁儲存（需要 Web Locks）。本次未寫入；請改用支援 Web Locks 的瀏覽器並以 HTTPS 或 localhost 開啟網站。');
+    }
+    return locks.request(vocabularyStorageKey, { mode: 'exclusive' }, operation);
+}
+
+export async function updateVocabulary(update, storage = localStorage, locks = globalThis.navigator?.locks) {
+    return withLocalVocabularyLock(() => {
+        const data = readVocabulary(storage);
+        update(data);
+        storage.setItem(vocabularyStorageKey, JSON.stringify(data));
+        return data;
+    }, locks);
 }
 
 const integerIn = (value, min, max) => Number.isInteger(value) && value >= min && value <= max;

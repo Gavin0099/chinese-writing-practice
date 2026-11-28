@@ -45,6 +45,9 @@ let examLessonRequest = null;
 byId('vocabularyMode').textContent = cloud
     ? '雲端資料 · 詞庫與考卷同步到此帳號'
     : '本機資料 · 詞庫與考卷儲存在此瀏覽器';
+byId('examPrivacy').textContent = cloud
+    ? '私人考卷儲存於此帳號的家庭資料；沿用雲端同步，不會加入詞庫分享檔。'
+    : '私人考卷儲存於此瀏覽器，不會加入詞庫分享檔。清除網站資料前，請先下載完整備份。';
 
 function notice(id, message = '', error = false) {
     const element = byId(id);
@@ -63,7 +66,7 @@ async function persist(update, messageId) {
             outcome = await cloud.setItem(vocabularyStorageKey, JSON.stringify(next));
             data = next;
         } else {
-            data = updateVocabulary(update);
+            data = await updateVocabulary(update);
         }
         return { ok: true, outcome };
     } catch (error) {
@@ -542,7 +545,8 @@ function renderPool() {
 function renderExams() {
     renderPool();
     const exams = data.exams.filter(exam => exam.book.id === activeId).slice().reverse();
-    byId('examHistory').hidden = !exams.length;
+    byId('examHistory').hidden = false;
+    notice('examHistoryNotice', exams.length ? `已保存 ${exams.length} 份私人考卷。` : '這個班級尚未保存考卷。');
     byId('examList').replaceChildren(...exams.map(exam => {
         const item = document.createElement('li');
         const details = document.createElement('div');
@@ -561,7 +565,33 @@ function renderExams() {
         link.href = cloud ? cloudPageUrl(path) : path;
         link.textContent = '開啟考卷與解答';
         link.setAttribute('aria-label', `開啟第 ${exam.from} 至 ${exam.to} 課 ${exam.count} 題考卷，${type ? `${type}，` : ''}種子 ${exam.seed}`);
-        item.append(details, link);
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'delete';
+        remove.textContent = '刪除';
+        remove.setAttribute('aria-label', `刪除第 ${exam.from} 至 ${exam.to} 課 ${exam.count} 題私人考卷，種子 ${exam.seed}`);
+        remove.addEventListener('click', async () => {
+            if (remove.disabled) return;
+            if (!window.confirm(`刪除第 ${exam.from}～${exam.to} 課 ${exam.count} 題私人考卷（種子 ${exam.seed}）？只刪除此考卷，不會刪除詞庫或既有錯題紀錄。`)) return;
+            remove.disabled = true;
+            try {
+                const saved = await persist(state => {
+                    const index = state.exams.findIndex(record => record.id === exam.id && record.book.id === exam.book.id);
+                    if (index < 0) throw new Error('這份考卷已不存在，請重新載入清單。');
+                    state.exams.splice(index, 1);
+                }, 'examHistoryNotice');
+                if (!saved) return;
+                renderExams();
+                notice('examHistoryNotice', `已刪除私人考卷${queuedSuffix(saved)}。${data.exams.some(record => record.book.id === activeId) ? '' : '這個班級尚未保存考卷。'}`);
+                byId('examHistory').querySelector('summary')?.focus();
+            } finally {
+                remove.disabled = false;
+            }
+        });
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+        actions.append(link, remove);
+        item.append(details, actions);
         return item;
     }));
 }
@@ -647,7 +677,7 @@ examForm.addEventListener('submit', async event => {
         if (!saved) return;
         renderExams();
         byId('examHistory').open = true;
-        notice('examNotice', `${saveVerb(saved)} ${settings.count} 題。可在下方開啟考卷與解答。`);
+        notice('examNotice', `${saveVerb(saved)} ${settings.count} 題私人考卷。可在下方開啟考卷與解答。`);
         byId('examList').querySelector('a')?.focus();
     } catch (error) {
         notice('examNotice', error.message, true);

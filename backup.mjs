@@ -64,15 +64,18 @@ fileInput.addEventListener('change', async () => {
     }
 });
 
-restoreButton.addEventListener('click', () => {
-    if (!pending) return;
+restoreButton.addEventListener('click', async () => {
+    if (!pending || restoreButton.disabled) return;
     if (pending.replaces && !window.confirm('要用這份備份取代目前的詞庫、考卷與學習紀錄嗎？')) return;
+    restoreButton.disabled = true;
     try {
-        restoreBackup(pending.backup, pending.target);
+        await restoreBackup(pending.backup, pending.target);
         existingRecords();
         notice('restoreNotice', '還原完成。重新開啟詞庫或學習查詢即可看到紀錄。');
     } catch (error) {
         notice('restoreNotice', error.message, true);
+    } finally {
+        restoreButton.disabled = false;
     }
     fileInput.value = '';
     resetPreview();

@@ -183,6 +183,18 @@ test('mixed exams assign repeatable targets without changing the seeded question
     assert.deepEqual(singleTargets, new Set(['character', 'zhuyin']));
 });
 
+test('the single-blank mode leaves one target slot per word in a mixed exam', () => {
+    const words = [entry({ blanks: [1, 2] }),
+        entry({ id: 'rain', word: '下雨', pronunciation: 'ㄒㄧㄚˋ ㄩˇ', blanks: [1, 2] })];
+    const exam = makeExam({ id: 'mixed-single', book, words, from: 1, to: 1, count: 2,
+        seed: 'mixed-single', examType: 'mixed', blankMode: 'single' });
+    assert.deepEqual(new Set(exam.questions.map(question => question.target)), new Set(['character', 'zhuyin']));
+    for (const question of exam.questions) {
+        assert.equal(question.blanks.length, 1);
+        assert.ok([1, 2].includes(question.blanks[0]));
+    }
+});
+
 test('exam generation rejects invalid exam type values in Traditional Chinese', () => {
     const options = { id: 'invalid', book, words: [entry()], from: 1, to: 1, count: 1, seed: 'invalid' };
     for (const examType of ['other', '', null, ['zhuyin'], 'constructor']) {

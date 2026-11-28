@@ -271,8 +271,17 @@ function renderWords() {
 }
 
 function renderBooks() {
-    if (!data.books.some(book => book.id === activeId)) activeId = data.books.at(-1)?.id ?? null;
-    bookSelect.replaceChildren(...data.books.map(book => new Option(bookLabel(book), book.id)));
+    const active = data.books.find(book => book.id === activeId) ?? data.books.at(-1);
+    activeId = active?.id ?? null;
+    const labelCounts = new Map();
+    const choices = data.books.map(book => {
+        const label = bookLabel(book, { compact: true });
+        labelCounts.set(label, (labelCounts.get(label) ?? 0) + 1);
+        return { book, label };
+    });
+    bookSelect.replaceChildren(...choices.map(({ book, label }) =>
+        new Option(labelCounts.get(label) > 1 ? bookLabel(book) : label, book.id)));
+    byId('bookSelectionDetails').textContent = active ? bookLabel(active) : '';
     bookSelect.disabled = !activeId;
     byId('bookWorkspace').hidden = !activeId;
     workspaceView = 'exam';

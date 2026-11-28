@@ -35,7 +35,8 @@
         <section class="panel book-bar" aria-labelledby="bookHeading">
             <h2 id="bookHeading">班級詞庫</h2>
             <label for="bookSelect">目前班級</label>
-            <select id="bookSelect" name="book" disabled></select>
+            <select id="bookSelect" name="book" aria-describedby="bookSelectionDetails" disabled></select>
+            <p class="notice" id="bookSelectionDetails"></p>
             <details id="bookDetails" class="subpanel">
                 <summary>新增班級詞庫</summary>
                 <form id="bookForm" class="entry-form" autocomplete="off">
@@ -200,7 +201,7 @@
                     <label class="exam-blank-mode">挖空方式
                         <select name="blankMode">
                             <option value="vocabulary">沿用詞庫設定</option>
-                            <option value="single">每題只挖一字</option>
+                            <option value="single">每題挖一格（國字或注音）</option>
                             <option value="lesson">每題挖一個本課生字</option>
                             <option value="lesson-preferred">優先挖本課生字</option>
                             <option value="all">整詞挖空</option>

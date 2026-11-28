@@ -157,6 +157,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     initApp();
 });
 
+function legacyWorksheetEditionLabel() {
+    const curriculum = window.CURRICULUM_KANGHSUAN;
+    if (!curriculum?.structure || curriculum.structure !== window.CURRICULUM_DATA) return '';
+    const publisher = curriculum.publisher === 'KangHsuan' ? '康軒' : curriculum.publisher;
+    const year = /^(\d{1,3})_Academic_Year$/.exec(curriculum.version)?.[1];
+    return [publisher, year && `${year} 學年度`].filter(Boolean).join(' ');
+}
+
 function initApp() {
     const mainScript = () => {
         // 1. Init Storage
@@ -172,8 +180,14 @@ function initApp() {
         const cardContent = document.querySelector('.card-content');
         const legacyControls = document.getElementById('legacyControls');
         const toggleCustomBtn = document.getElementById('toggleCustomBtn');
+        const editionLabel = legacyWorksheetEditionLabel();
+        const edition = document.getElementById('legacyWorksheetEdition');
+        edition.textContent = `● 教材：${editionLabel}`;
+        edition.hidden = !editionLabel;
 
         if (rec && smartCard) {
+            const subtitle = (prefix = '') => [editionLabel,
+                `${prefix}${rec.grade} 年級${rec.semester === 'A' ? '上學期' : '下學期'}`].filter(Boolean).join(' · ');
             console.log(`🎯 [Smart Core] 推薦: ${rec.grade}年級 ${rec.semester}學期 第${rec.lesson}課 (${rec.title})`);
 
             // v1.1 Platform Check (Updated: iOS Patch + Width Fallback)
@@ -183,11 +197,11 @@ function initApp() {
             let cleanTitle = rec.title ? rec.title.split('\n')[0] : "";
 
             if (rec.isNewSemester) {
-                heroSubTitle.innerText = `康軒 113 學年度 · 準備開始 ${rec.grade} 年級${rec.semester === 'A' ? '上學期' : '下學期'}`;
+                heroSubTitle.innerText = subtitle('準備開始 ');
                 heroTitle.innerText = "✨ 新的開始";
                 cleanTitle = "新的開始";
             } else {
-                heroSubTitle.innerText = `康軒 113 學年度 · ${rec.grade} 年級${rec.semester === 'A' ? '上學期' : '下學期'}`;
+                heroSubTitle.innerText = subtitle();
                 heroTitle.innerText = `第 ${rec.lesson} 課：${cleanTitle}`;
             }
 
@@ -438,7 +452,7 @@ function initApp() {
 
                 const hSub = document.getElementById('heroSubTitle');
                 const hTitle = document.getElementById('heroTitle');
-                if (hSub) hSub.innerText = `康軒 113 學年度 · ${rec.grade} 年級${rec.semester === 'A' ? '上學期' : '下學期'}`;
+                if (hSub) hSub.innerText = subtitle();
                 if (hTitle) hTitle.innerText = `第 ${rec.lesson} 課：${rec.title}`;
 
                 const isToday = settings.lastOutputAt && new Date(settings.lastOutputAt).toDateString() === new Date().toDateString();

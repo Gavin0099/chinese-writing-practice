@@ -1,16 +1,16 @@
 {
   "receipt_version": "0.1",
   "receipt_type": "ai_governance_update",
-  "tool": "f7_full_update",
+  "tool": "external_governance_submodule_updater",
   "tool_mode": "apply",
-  "repo_root": "E:\\BackUp\\Git_EE\\_f7_work\\cwp-f7",
-  "framework_root": "E:\\BackUp\\Git_EE\\_f7_work\\cwp-f7\\ai-governance-framework",
-  "framework_before": "1a30faedbaa8f4a4af14656b15797ccdbb6ed3fb",
-  "framework_after": "5073bcf2d1ad3976f96d6baf419ea1752a5be518",
-  "lock_adopted_commit": "5073bcf2d1ad3976f96d6baf419ea1752a5be518",
+  "repo_root": "D:\\cwp-f7-primary",
+  "framework_root": "D:\\cwp-f7-primary\\ai-governance-framework",
+  "framework_before": "5073bcf2d1ad3976f96d6baf419ea1752a5be518",
+  "framework_after": "7944eb7406f2b689392e1d00aae07dc6dba536ba",
+  "lock_adopted_commit": "7944eb7406f2b689392e1d00aae07dc6dba536ba",
   "lock_matches_checkout": true,
-  "update_status": "partially_updated",
-  "generated_at_utc": "2026-11-25T07:21:06Z",
+  "update_status": "updated",
+  "generated_at_utc": "2026-11-28T13:50:40Z",
   "claim_boundary": [
     "receipt is review evidence, not proof",
     "no fetch truth is implied unless explicitly recorded",
@@ -24,12 +24,12 @@
     "release readiness"
   ],
   "remote_evidence": {
-    "target_ref": "origin/main",
+    "target_ref": "7944eb7406f2b689392e1d00aae07dc6dba536ba",
     "fetch_remote": "origin",
     "fetch_ref": "main",
-    "target_source": "fresh_remote_fetch_head",
-    "target_fresh_upstream_verified": true,
-    "target_claim_boundary": "fresh upstream target verified; already_current/updated claims are allowed",
-    "target_head": "5073bcf2d1ad3976f96d6baf419ea1752a5be518"
+    "target_source": "explicit_target_ref",
+    "target_fresh_upstream_verified": false,
+    "target_claim_boundary": "target resolved from explicit ref without upstream fetch; latest-framework freshness was not verified",
+    "target_head": "7944eb7406f2b689392e1d00aae07dc6dba536ba"
   }
 }
